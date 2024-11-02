@@ -20,7 +20,6 @@ function signinScreen() {
     // const navigate = useNavigate();
 
     let currentUser = localStorage.getItem(import.meta.env.VITE_ACCESS_TOKEN) || null;
-    let profile = "/character-profile";
 
     useEffect(() => {
         if (currentUser) {
@@ -44,7 +43,7 @@ function signinScreen() {
             <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="overflow-hidden">
                 <BoxSection styles="w-full p-5 flex-col text-start gap-2 overflow-y-scroll pt-0">
                    <h1>Welcome {JSON.parse(currentUser).user.email}</h1>
-                   <Link to={profile}>Enter</Link>
+                   <Link to="/character-profile">Enter</Link>
                 </BoxSection>
             </motion.main>
         );
