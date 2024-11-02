@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useCharacterStore } from "../store/characterStore";
+import { useCharacterStore } from "../zustand/stores";
 import { Trait } from "../components/Trait";
 import { BoxSection } from "../components/BoxSection";
 import { useState } from "react";

@@ -1,63 +1,69 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
-
 import { motion } from "framer-motion";
 import { BoxSection } from "../components/BoxSection";
-import { CharacterProfile } from "../sections/CharacterProfile";
-import { HPBar } from "../sections/HPBar/HPBar";
-import { Stats } from "../sections/Stats/Stats";
 import { useEffect, useState } from "react";
-import { useCharacterStore } from "../store/characterStore";
+
+import { useUserStore } from "../zustand/stores";
+import { useCharacterStore } from "../zustand/stores";
+
 
 export const Route = createLazyFileRoute("/")({
-    component: Home,
+    component: signinScreen,
 });
 
-function Home() {
-    const [isLoading, setIsLoading] = useState(true);
-    const { character }: CharacterStore = useCharacterStore();
+function signinScreen() {
+    const { getUser, setUser }: UserStore = useUserStore();
+    const { setCharacter }: CharacterStore = useCharacterStore();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    // const navigate = useNavigate();
+
+    let currentUser = localStorage.getItem(import.meta.env.VITE_ACCESS_TOKEN) || null;
+    let profile = "/character-profile";
 
     useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
+        if (currentUser) {
+            setUser(currentUser);
+        }
     }, []);
 
-    if (!character) {
-        return <div>{isLoading ? "" : "Loading..."}</div>;
+    useEffect(() => {
+        if (currentUser) {
+            setCharacter(JSON.parse(currentUser).user.id);
+        }
+    }, [currentUser]);
+
+    const login = async (e: any) => {
+        e.preventDefault();
+        await getUser(email, password);
+    };
+
+    if (currentUser) {
+        return (
+            <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="overflow-hidden">
+                <BoxSection styles="w-full p-5 flex-col text-start gap-2 overflow-y-scroll pt-0">
+                   <h1>Welcome {JSON.parse(currentUser).user.email}</h1>
+                   <Link to={profile}>Enter</Link>
+                </BoxSection>
+            </motion.main>
+        );
     }
+
     return (
-        <motion.main
-            className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-5`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-        >
-            <CharacterProfile
-                primaryStats={character.stats.primaryStats}
-                primaryMods={character.stats.primaryMods}
-                characterProfile={character.characterProfile}
-            />
-            <section className={`flex gap-5`}>
-                <BoxSection styles="w-[40%] flex flex-col gap-5 p-5">
-                    <Stats saveThrows={character.stats.saveThrows} skills={character.stats.skills} />
-                </BoxSection>
-                <div className={`flex h-full w-[50%] flex-col gap-5`}>
-                    <BoxSection styles="w-full flex justify-around items-center p-5">
-                        <HPBar
-                            maxHP={character.stats.maxHP}
-                            currentHP={character.currentHP}
-                            characterID={character.id}
-                        />
-                    </BoxSection>
-                    <BoxSection styles="w-full p-5">a</BoxSection>
-                </div>
-                <BoxSection styles="w-[10%] flex flex-col py-5">
-                    <nav className="flex flex-col gap-5 p-3">
-                        <Link to="/traits" className="btn btn-primary">
-                            Traits
-                        </Link>
-                    </nav>
-                </BoxSection>
-            </section>
+        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="overflow-hidden">
+            <BoxSection styles="w-full p-5 flex-col text-start gap-2 overflow-y-scroll pt-0">
+                <form onSubmit={(e) => login(e)}>
+                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button onClick={login}>Login</button>
+                </form>
+            </BoxSection>
         </motion.main>
     );
 }

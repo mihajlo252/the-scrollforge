@@ -79,5 +79,11 @@ interface Character {
 
 interface CharacterStore  {
     character: Character;
-    setCharacter: () => Promise<void>;
+    setCharacter: (string) => Promise<void>;
+  }
+
+  interface UserStore {
+    user: any;
+    getUser: (string, string) => Promise<void>;
+    setUser: ({}) => Promise<void>;
   }
