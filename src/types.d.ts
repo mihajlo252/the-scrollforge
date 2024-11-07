@@ -43,8 +43,6 @@ interface CharacterProfile {
     subrace: string;
 }
 
-
-
 interface Stats {
     ac: number;
     hitDice: string;
@@ -77,13 +75,12 @@ interface Character {
     descriptions: Descriptions;
 }
 
-interface CharacterStore  {
-    character: Character;
-    setCharacter: (string) => Promise<void>;
-  }
+interface CharactersStore {
+    characters: Character[];
+    setCharacters: (string) => Promise<void>;
+}
 
-  interface UserStore {
-    user: any;
-    getUser: (string, string) => Promise<void>;
-    setUser: ({}) => Promise<void>;
-  }
+interface CharacterStore {
+    character: Character;
+    setCharacter: (character: Character) => void;
+}

@@ -1,23 +1,32 @@
-import { create } from 'zustand'
-import { getData } from '../utilities/getData';
-import { signIn } from '../utilities/signIn';
+import { create } from "zustand";
+import { getData } from "../utilities/getData";
+import { persist } from "zustand/middleware";
 
-export const useCharacterStore = create<CharacterStore>((set) => ({
-  character: <Character>{},
-  setCharacter: async (id: string) => {
-    const res = await getData("characters", id);
-    set({ character: res[0] });
-  }
-  
-}))
+export const useCharactersStore = create<CharactersStore>()(
+    persist(
+        (set) => ({
+            characters: [],
+            setCharacters: async (id: string) => {
+                const res = await getData("characters", id);
+                set({ characters: res });
+            }
+        }),
+        {
+            name: "characters",
+        }
+    )
+);
 
-export const useUserStore = create<UserStore>((set) => ({
-  user: {},
-  getUser: async (email: string, password: string) => {
-    const res = await signIn(email, password);
-    set(res);
-  },
-  setUser: async (currentUser: {}) => {
-    set({ user: currentUser});
-  }
-}))
+export const useCharacterStore = create<CharacterStore>()(
+    persist(
+        (set) => ({
+            character: <Character>{},
+            setCharacter: async (char: Character) => {
+                set({ character: char });
+            }
+        }),
+        {
+            name: "character",
+        }
+    )
+);

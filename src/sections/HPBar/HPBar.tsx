@@ -4,6 +4,7 @@ export const HPBar = ({ maxHP, currentHP, characterID }: { maxHP: number; curren
     const [scale, setScale] = useState((currentHP / 100) * (100 / maxHP));
     const [HP, setHP] = useState(currentHP);
     const [save, setSave] = useState(false);
+
     const scaleHP = (e: any) => {
         setScale((parseInt(e.target.value) / 100) * (100 / maxHP));
         setHP(parseInt(e.target.value));
@@ -14,6 +15,9 @@ export const HPBar = ({ maxHP, currentHP, characterID }: { maxHP: number; curren
             setSave(false);
         }
     };
+
+
+    let currentCharacter: any = JSON.parse(JSON.stringify(localStorage.getItem("character")));
 
     const decreaseHP = () => {
         if (HP !== 0) {
@@ -44,6 +48,8 @@ export const HPBar = ({ maxHP, currentHP, characterID }: { maxHP: number; curren
     const saveCurrentHP = (e: HTMLFormElement, health: number) => {
         e.preventDefault();
         sendData("characters", characterID, health);
+        currentCharacter.currentHP = health;
+        localStorage.setItem("character", JSON.stringify({state: {character: currentCharacter}}));
         if (save === true) {
             setSave(false);
         }

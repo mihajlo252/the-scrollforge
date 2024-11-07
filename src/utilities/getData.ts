@@ -5,6 +5,5 @@ export const getData = async (table: string, id: string) => {
     if (error) {
         throw error;
     }
-    console.log(data);
     return data
 }
