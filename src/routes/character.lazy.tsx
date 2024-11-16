@@ -40,7 +40,6 @@ function Character() {
                     <BoxSection styles="w-full flex justify-around items-center p-5">
                         <HPBar
                             maxHP={state.character.stats.maxHP}
-                            currentHP={state.character.currentHP}
                             characterID={state.character.id}
                         />
                     </BoxSection>

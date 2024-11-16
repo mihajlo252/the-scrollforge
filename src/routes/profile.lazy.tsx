@@ -40,7 +40,7 @@ function Profile() {
             animate={{ opacity: 1 }}
         >
             <BoxSection styles="w-full flex flex-col gap-5 p-5">
-                <h1>{"user.user.email"} Characters</h1>
+                <h1>{user.email} - Characters</h1>
                 <ul>
                     {characters.map((character) => (
                         <li key={character.id}>

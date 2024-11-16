@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { sendData } from "../../utilities/sendData";
-export const HPBar = ({ maxHP, currentHP, characterID }: { maxHP: number; currentHP: number; characterID: string }) => {
-    const [scale, setScale] = useState((currentHP / 100) * (100 / maxHP));
-    const [HP, setHP] = useState(currentHP);
+export const HPBar = ({ maxHP, characterID }: { maxHP: number; characterID: string }) => {
+    const { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))))
+    const [scale, setScale] = useState((state.character.currentHP / 100) * (100 / maxHP));
+    const [HP, setHP] = useState(state.character.currentHP);
+    const [newHP, setNewHP] = useState(state.character.currentHP);
     const [save, setSave] = useState(false);
+
+
+
 
     const scaleHP = (e: any) => {
         setScale((parseInt(e.target.value) / 100) * (100 / maxHP));
@@ -11,13 +16,10 @@ export const HPBar = ({ maxHP, currentHP, characterID }: { maxHP: number; curren
         if (save === false) {
             setSave(true);
         }
-        if (save === true && parseInt(e.target.value) === currentHP) {
+        if (save === true && parseInt(e.target.value) === newHP) {
             setSave(false);
         }
     };
-
-
-    let currentCharacter: any = JSON.parse(JSON.stringify(localStorage.getItem("character")));
 
     const decreaseHP = () => {
         if (HP !== 0) {
@@ -26,7 +28,7 @@ export const HPBar = ({ maxHP, currentHP, characterID }: { maxHP: number; curren
             if (save === false) {
                 setSave(true);
             }
-            if (save === true && HP - 1 === currentHP) {
+            if (save === true && HP - 1 === newHP) {
                 setSave(false);
             }
         }
@@ -39,17 +41,19 @@ export const HPBar = ({ maxHP, currentHP, characterID }: { maxHP: number; curren
             if (save === false) {
                 setSave(true);
             }
-            if (save === true && HP + 1 === currentHP) {
+            if (save === true && HP + 1 === newHP) {
                 setSave(false);
             }
         }
     };
 
-    const saveCurrentHP = (e: HTMLFormElement, health: number) => {
+    const saveCurrentHP = async (e: HTMLFormElement, health: number) => {
         e.preventDefault();
-        sendData("characters", characterID, health);
-        currentCharacter.currentHP = health;
-        localStorage.setItem("character", JSON.stringify({state: {character: currentCharacter}}));
+        await sendData("characters", characterID, health);
+        
+        setNewHP(health);
+        state.character.currentHP = health
+        localStorage.setItem("character", JSON.stringify({state: state}));
         if (save === true) {
             setSave(false);
         }
