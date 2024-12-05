@@ -6,6 +6,7 @@ import { CharacterProfile } from "../sections/CharacterProfile";
 import { HPBar } from "../sections/HPBar/HPBar";
 import { Stats } from "../sections/Stats/Stats";
 import { Load } from "../components/Load";
+import { Notes } from "../components/Notes";
 
 
 export const Route = createLazyFileRoute("/character")({
@@ -43,7 +44,9 @@ function Character() {
                             characterID={state.character.id}
                         />
                     </BoxSection>
-                    <BoxSection styles="w-full p-5">a</BoxSection>
+                    <BoxSection styles="w-full p-5">
+                        <Notes />
+                    </BoxSection>
                 </div>
                 <BoxSection styles="w-[10%] flex flex-col py-5">
                     <nav className="flex flex-col gap-5 p-3">
