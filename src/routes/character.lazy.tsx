@@ -2,11 +2,11 @@ import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
 import { BoxSection } from "../components/BoxSection";
-import { CharacterProfile } from "../sections/CharacterProfile";
+import { CharacterProfile } from "../sections/CharacterProfile/CharacterProfile";
 import { HPBar } from "../sections/HPBar/HPBar";
 import { Stats } from "../sections/Stats/Stats";
 import { Load } from "../components/Load";
-import { Notes } from "../components/Notes";
+import { Notes } from "../sections/Notes/Notes";
 
 export const Route = createLazyFileRoute("/character")({
     component: Character,

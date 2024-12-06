@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { sendData } from "../utilities/sendData";
+import { sendData } from "../../utilities/sendData";
 
 export const Notes = () => {
     const [notes, setNotes] = useState<string>("");
