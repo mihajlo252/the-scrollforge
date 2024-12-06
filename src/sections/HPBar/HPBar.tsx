@@ -49,7 +49,7 @@ export const HPBar = ({ maxHP, characterID }: { maxHP: number; characterID: stri
 
     const saveCurrentHP = async (e: HTMLFormElement, health: number) => {
         e.preventDefault();
-        await sendData("characters", characterID, health);
+        await sendData("characters", characterID, { currentHP: health });
         
         setNewHP(health);
         state.character.currentHP = health

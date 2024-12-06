@@ -8,20 +8,17 @@ import { Stats } from "../sections/Stats/Stats";
 import { Load } from "../components/Load";
 import { Notes } from "../components/Notes";
 
-
 export const Route = createLazyFileRoute("/character")({
     component: Character,
 });
 
 function Character() {
-
-
-    const { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))))
+    const { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))));
 
     if (!state.character) {
         return <Load />;
     }
-    
+
     return (
         <motion.main
             className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-5`}
@@ -39,14 +36,9 @@ function Character() {
                 </BoxSection>
                 <div className={`flex h-full w-[50%] flex-col gap-5`}>
                     <BoxSection styles="w-full flex justify-around items-center p-5">
-                        <HPBar
-                            maxHP={state.character.stats.maxHP}
-                            characterID={state.character.id}
-                        />
+                        <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
                     </BoxSection>
-                    <BoxSection styles="w-full p-5">
-                        <Notes />
-                    </BoxSection>
+                    <Notes />
                 </div>
                 <BoxSection styles="w-[10%] flex flex-col py-5">
                     <nav className="flex flex-col gap-5 p-3">
