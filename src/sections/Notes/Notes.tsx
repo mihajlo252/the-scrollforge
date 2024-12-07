@@ -35,7 +35,7 @@ export const Notes = () => {
         <form className="relative h-full w-full" onSubmit={(e) => handleSubmit(e)}>
 
             <textarea
-                className="text-md h-full w-full touch-none resize-none overflow-y-auto rounded-lg border-2 border-slate-900 bg-base-300 p-5"
+                className="text-md h-full w-full resize-none overflow-y-auto rounded-lg border-2 border-slate-900 bg-base-300 p-5"
                 placeholder="What's on your mind?"
                 value={notes}
                 onChange={(e) => handleSetNotes(e)}
