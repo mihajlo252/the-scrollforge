@@ -6,6 +6,14 @@ interface Values {
     wis: number;
     cha: number;
 }
+interface Inspiration {
+    purple: number,
+    pink: number,
+    white: number,
+    red: number,
+    yellow: number,
+    regular: number
+}
 
 interface Skills {
     acrobatics: number;
@@ -71,6 +79,7 @@ interface Character {
         primaryStats: Values;
         saveThrows: Values;
         skills: Skills;
+        inspiration: Inspiration
     };
     descriptions: Descriptions;
 }

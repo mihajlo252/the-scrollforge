@@ -7,6 +7,7 @@ import { HPBar } from "../sections/HPBar/HPBar";
 import { Stats } from "../sections/Stats/Stats";
 import { Load } from "../components/Load";
 import { Notes } from "../sections/Notes/Notes";
+import { Bonuses } from "../sections/Bonuses/Bonuses";
 
 export const Route = createLazyFileRoute("/character")({
     component: Character,
@@ -15,9 +16,11 @@ export const Route = createLazyFileRoute("/character")({
 function Character() {
     const { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))));
 
+
     if (!state.character) {
         return <Load />;
     }
+
 
     return (
         <motion.main
@@ -36,6 +39,13 @@ function Character() {
                 </BoxSection>
                 <div className={`flex h-full w-[50%] flex-col gap-5`}>
                     <BoxSection styles="w-full flex justify-around items-center p-5">
+                        <Bonuses
+                            proficiency={state.character.stats.proficiencyBonus}
+                            initiative={state.character.stats.initiative}
+                            ac={state.character.stats.ac}
+                            hitDice={state.character.stats.hitDice}
+                            passivePerception={state.character.stats.passivePerception}
+                        />
                         <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
                     </BoxSection>
                     <Notes />
@@ -44,6 +54,9 @@ function Character() {
                     <nav className="flex flex-col gap-5 p-3">
                         <Link to="/traits" className="btn btn-primary">
                             Traits
+                        </Link>
+                        <Link to="/inspiration" className="btn btn-primary">
+                            Inspiration
                         </Link>
                     </nav>
                 </BoxSection>

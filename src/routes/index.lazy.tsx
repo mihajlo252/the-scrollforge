@@ -58,7 +58,14 @@ function signinScreen() {
                             className="text-neutral-content"
                         />
                     </div>
-                    <button onClick={login} className="btn btn-primary">Login</button>
+                    <button type="submit" onClick={login} className="btn btn-primary">Login</button>
+                    
+                    {/* Development */}
+                    <button type="submit" onClick={ async () => {
+                        await signIn("beca252@gmail.com", "beca123");
+                        navigate({to: "/welcome"})
+                    }} className="btn btn-primary">Quick Login</button>
+                    
                 </form>
             </BoxSection>
         </motion.main>
