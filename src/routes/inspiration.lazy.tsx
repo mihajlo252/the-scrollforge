@@ -29,45 +29,67 @@ function Inspiration() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        localStorage.setItem("character", JSON.stringify({state: {...state, character: {...state.character, stats: {...state.character.stats, inspiration: inspValue}}}}));
-        await sendData("characters", state.character.id, { stats: {...state.character.stats, inspiration: inspValue} });
+        localStorage.setItem(
+            "character",
+            JSON.stringify({
+                state: {
+                    ...state,
+                    character: { ...state.character, stats: { ...state.character.stats, inspiration: inspValue } },
+                },
+            })
+        );
+        await sendData("characters", state.character.id, {
+            stats: { ...state.character.stats, inspiration: inspValue },
+        });
     };
 
     return (
-      <BoxSection styles="w-full flex flex-col gap-5 p-5 relative" >
-
-        <form className="flex h-full flex-col items-center justify-center" onSubmit={(e) => handleSubmit(e)}>
-            <motion.ul className="flex h-full w-full items-center justify-around" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                {Object.entries(inspiration).map(([key]) => {
-                    return (
-                        <li key={key} className="flex flex-col gap-2">
-                            <p>
-                                <span className="capitalize">{key}</span>: {inspValue[key as keyof Inspiration]}
-                            </p>
-                            <div>
-                                <button
-                                    type="button"
-                                    className="btn btn-ghost"
-                                    onClick={() => handleIncrease(key, inspValue[key as keyof Inspiration])}
-                                >
-                                    +
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-ghost"
-                                    onClick={() => handleDecrease(key, inspValue[key as keyof Inspiration])}
-                                >
-                                    -
-                                </button>
-                            </div>
-                        </li>
-                    );
-                })}
-            </motion.ul>
-            <button type="submit" className="btn btn-primary">
-                Save
-            </button>
-        </form>
-      </BoxSection>
+        <BoxSection styles="w-full flex flex-col gap-5 p-5 relative">
+            <form className="flex h-full flex-col items-center justify-center" onSubmit={(e) => handleSubmit(e)}>
+                <motion.ul
+                    className="flex h-full w-full items-center justify-around"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                >
+                    {Object.entries(inspiration).map(([key]) => {
+                        return (
+                            <li key={key} className="flex flex-col gap-2">
+                                <div className="">
+                                    <img
+                                        src={`dash-and-play/assets/gems/${key}.svg`}
+                                        alt={`${key} inspiration gem`}
+                                        width={150}
+                                        height={150}
+                                    />
+                                </div>
+                                <p>
+                                    {/* <span className="capitalize">{key}</span>:  */}
+                                    {inspValue[key as keyof Inspiration]}
+                                </p>
+                                <div>
+                                    <button
+                                        type="button"
+                                        className="btn btn-ghost"
+                                        onClick={() => handleIncrease(key, inspValue[key as keyof Inspiration])}
+                                    >
+                                        +
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-ghost"
+                                        onClick={() => handleDecrease(key, inspValue[key as keyof Inspiration])}
+                                    >
+                                        -
+                                    </button>
+                                </div>
+                            </li>
+                        );
+                    })}
+                </motion.ul>
+                <button type="submit" className="btn btn-primary">
+                    Save
+                </button>
+            </form>
+        </BoxSection>
     );
 }
