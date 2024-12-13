@@ -56,7 +56,7 @@ function Inspiration() {
                             <li key={key} className="flex flex-col gap-2">
                                 <div className="">
                                     <img
-                                        src={`dash-and-play/assets/gems/${key}.svg`}
+                                        src={`assets/gems/${key}.svg`}
                                         alt={`${key} inspiration gem`}
                                         width={150}
                                         height={150}
