@@ -1,0 +1,1 @@
+import{j as o}from"./index-Bny84ZkB.js";const t=({styles:e,children:r})=>o.jsx("div",{className:`flex h-full rounded-lg border-2 border-base-300 bg-base-300 text-neutral ${e}`,children:r});export{t as B};
