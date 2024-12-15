@@ -14,6 +14,7 @@ function Inspiration() {
     let inspiration: Inspiration = state.character.stats.inspiration;
 
     const [inspValue, setInspValue]: [Inspiration, any] = useState(inspiration);
+    const [isSaved, setIsSaved] = useState(false);
 
     const handleIncrease = (key: string) => {
         let newValue: number;
@@ -52,14 +53,14 @@ function Inspiration() {
         await sendData("characters", state.character.id, {
             stats: { ...state.character.stats, inspiration: inspValue },
         });
+        setIsSaved(true);
+        setTimeout(() => setIsSaved(false), 2000);
     };
 
     return (
         <BoxSection styles="w-full flex gap-5 p-5 relative">
             <form className="flex h-full w-full flex-col justify-center" onSubmit={(e) => handleSubmit(e)}>
-                <button type="submit" className="btn btn-primary absolute right-5 top-5">
-                    Save
-                </button>
+                
                 <motion.ul
                     className="flex w-full flex-col-reverse items-start gap-2"
                     initial={{ opacity: 0 }}
@@ -89,6 +90,12 @@ function Inspiration() {
                         );
                     })}
                 </motion.ul>
+                <div className="absolute right-5 top-5 flex items-center gap-2">
+                    <p className={`opacity-0 select-none pointer-events-none text-sm text-success transition-opacity duration-500 ${isSaved ? "opacity-100 select-auto pointer-events-auto" : ""}`}>Saved</p>
+                    <button type="submit" className="btn btn-primary">
+                        Save
+                    </button>
+                </div>
             </form>
         </BoxSection>
     );
