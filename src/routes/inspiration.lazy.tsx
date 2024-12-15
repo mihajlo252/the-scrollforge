@@ -60,7 +60,7 @@ function Inspiration() {
                     Save
                 </button>
                 <motion.ul
-                    className="flex h-full w-full flex-col-reverse items-start"
+                    className="flex h-full w-full flex-col-reverse items-start gap-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                 >
@@ -74,7 +74,7 @@ function Inspiration() {
                                     height={80}
                                 />
                                 
-                                <div className="flex items-center gap-2">
+                                <BoxSection styles={`flex items-center gap-2 border-primary ${key === "regular" ? 'border-accent' : ''}`}>
                                     <button type="button" className="btn btn-ghost text-3xl" onClick={() => handleDecrease(key)}>
                                         -
                                     </button>
@@ -82,7 +82,7 @@ function Inspiration() {
                                     <button type="button" className="btn btn-ghost text-3xl" onClick={() => handleIncrease(key)}>
                                         +
                                     </button>
-                                </div>
+                                </BoxSection>
                                 <p>{state.character.descriptions.inspiration[key as keyof Descriptions]}</p>
                             </li>
                         );
