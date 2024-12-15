@@ -23,7 +23,6 @@ function Inspiration() {
             inspValue.regular -= 3;
             setInspValue({ ...inspValue, regular: inspValue.regular });
             state.character.stats.inspiration = { ...inspiration, regular: inspValue.regular };
-            return;
         }
 
         newValue = inspValue[key as keyof Inspiration] + 1;
