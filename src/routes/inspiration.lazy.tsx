@@ -74,7 +74,7 @@ function Inspiration() {
                                     height={80}
                                 />
                                 
-                                <BoxSection styles={`flex items-center gap-2 border-primary ${key === "regular" ? 'border-accent' : ''}`}>
+                                <BoxSection styles="items-center gap-2">
                                     <button type="button" className="btn btn-ghost text-3xl" onClick={() => handleDecrease(key)}>
                                         -
                                     </button>
