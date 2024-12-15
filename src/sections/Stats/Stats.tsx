@@ -33,7 +33,7 @@ export const Stats = ({ saveThrows, skills,}: {saveThrows: Values, skills: Skill
                 <h3 className="text-[1.875rem] underline">Skills</h3>
 
                 <div className="flex items-center gap-1">
-                    <ul className="flex flex-col text-[0.75rem]">
+                    <ul className="flex flex-col text-[0.85rem]">
                         <li className="flex gap-2 border-b-2">
                             <span className="border-r-2 pr-2">
                                 +{skills.acrobatics}
@@ -89,7 +89,7 @@ export const Stats = ({ saveThrows, skills,}: {saveThrows: Values, skills: Skill
                             Investigation (Int)
                         </li>
                     </ul>
-                    <ul className="flex flex-col text-[0.75rem]">
+                    <ul className="flex flex-col text-[0.85rem]">
                         <li className="flex gap-2 border-b-2">
                             <span className="border-r-2 pr-2">
                                 +{skills.medicine}
