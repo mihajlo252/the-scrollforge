@@ -10,7 +10,7 @@ export default {
 	daisyui: {
 		themes: [
 			{
-				light: {
+				dark: {
 					primary: "#88b5e4",
 					secondary: "#831e29",
 					accent: "#d0a732",
