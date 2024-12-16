@@ -76,11 +76,11 @@ function Inspiration() {
                                     height={80}
                                 />
                                 
-                                <BoxSection styles="items-center gap-2">
+                                <BoxSection styles="items-center justify-center gap-5">
                                     <button type="button" className="btn btn-ghost text-3xl" onClick={() => handleDecrease(key)}>
                                         -
                                     </button>
-                                    <p className="text-3xl">{inspValue[key as keyof Inspiration]}</p>
+                                    <p className="flex w-[1ch] justify-center text-center text-3xl">{inspValue[key as keyof Inspiration]}</p>
                                     <button type="button" className="btn btn-ghost text-3xl" onClick={() => handleIncrease(key)}>
                                         +
                                     </button>
