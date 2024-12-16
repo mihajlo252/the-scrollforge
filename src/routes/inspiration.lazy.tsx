@@ -70,7 +70,7 @@ function Inspiration() {
                         return (
                             <li key={key} className="flex items-center gap-10">
                                 <img
-                                    src={`assets/gems/${key}.svg`}
+                                    src={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/gems/${key}.svg`}
                                     alt={`${key} inspiration gem`}
                                     width={80}
                                     height={80}
