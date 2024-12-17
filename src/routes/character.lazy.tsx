@@ -58,6 +58,9 @@ function Character() {
                         <Link to="/inspiration" className="btn btn-primary">
                             Inspiration
                         </Link>
+                        <Link to="/attacks" className="btn btn-primary">
+                            Attacks
+                        </Link>
                     </nav>
                 </BoxSection>
             </section>

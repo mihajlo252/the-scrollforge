@@ -39,6 +39,15 @@ interface Skills {
 interface Descriptions {
     racialTraits: string[];
     featureTraits: string[];
+    attacks: Attack[];
+}
+
+interface Attack {
+    name: string;
+    range: string;
+    attack: string;
+    damage: string;
+    description: string;
 }
 
 interface CharacterProfile {
