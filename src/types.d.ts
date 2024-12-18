@@ -44,6 +44,7 @@ interface Descriptions {
 
 interface Attack {
     name: string;
+    type: string;
     range: string;
     attack: string;
     damage: string;
