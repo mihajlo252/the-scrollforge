@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { getData } from "../utilities/getData";
 import { persist } from "zustand/middleware";
+import { signIn } from "../utilities/signIn";
 
 export const useCharactersStore = create<CharactersStore>()(
     persist(
@@ -27,6 +28,23 @@ export const useCharacterStore = create<CharacterStore>()(
         }),
         {
             name: "character",
+        }
+    )
+);
+
+export const useUserStore = create<UserStore>()(
+    persist(
+        (set) => ({
+            user: "",
+            setUser: async (email: string, password: string) => {
+                
+                const data = await signIn(email, password);
+                set({ user: data.user.id });
+            },
+            removeUser: () => set({ user: "" }),
+        }),
+        {
+            name: "characters",
         }
     )
 );

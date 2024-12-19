@@ -93,11 +93,17 @@ interface Character {
     };
     descriptions: Descriptions;
 }
+interface UserStore {
+    user: string;
+    setUser: (string, string) => Promise<void>;
+    removeUser: () => void;
+}
 
 interface CharactersStore {
     characters: Character[];
     setCharacters: (string) => Promise<void>;
 }
+
 
 interface CharacterStore {
     character: Character;

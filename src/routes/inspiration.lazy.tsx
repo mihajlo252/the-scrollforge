@@ -5,7 +5,7 @@ import { sendData } from "../utilities/sendData";
 import { BoxSection } from "../components/BoxSection";
 
 export const Route = createLazyFileRoute("/inspiration")({
-    component: () => <Inspiration />,
+    component: Inspiration,
 });
 
 function Inspiration() {

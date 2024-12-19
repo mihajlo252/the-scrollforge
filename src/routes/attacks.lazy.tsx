@@ -4,7 +4,7 @@ import { BoxSection } from "../components/BoxSection";
 import { useCharacterStore } from "../zustand/stores";
 
 export const Route = createLazyFileRoute("/attacks")({
-    component: () => <Attacks />,
+    component: Attacks,
 });
 
 function Attacks() {

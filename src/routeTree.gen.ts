@@ -18,6 +18,8 @@ import { Route as rootRoute } from './routes/__root'
 
 const WelcomeLazyImport = createFileRoute('/welcome')()
 const TraitsLazyImport = createFileRoute('/traits')()
+const ThanksLazyImport = createFileRoute('/thanks')()
+const SignupLazyImport = createFileRoute('/signup')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const InspirationLazyImport = createFileRoute('/inspiration')()
 const CharacterLazyImport = createFileRoute('/character')()
@@ -35,6 +37,16 @@ const TraitsLazyRoute = TraitsLazyImport.update({
   path: '/traits',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/traits.lazy').then((d) => d.Route))
+
+const ThanksLazyRoute = ThanksLazyImport.update({
+  path: '/thanks',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/thanks.lazy').then((d) => d.Route))
+
+const SignupLazyRoute = SignupLazyImport.update({
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/signup.lazy').then((d) => d.Route))
 
 const ProfileLazyRoute = ProfileLazyImport.update({
   path: '/profile',
@@ -100,6 +112,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/thanks': {
+      id: '/thanks'
+      path: '/thanks'
+      fullPath: '/thanks'
+      preLoaderRoute: typeof ThanksLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/traits': {
       id: '/traits'
       path: '/traits'
@@ -125,6 +151,8 @@ export const routeTree = rootRoute.addChildren({
   CharacterLazyRoute,
   InspirationLazyRoute,
   ProfileLazyRoute,
+  SignupLazyRoute,
+  ThanksLazyRoute,
   TraitsLazyRoute,
   WelcomeLazyRoute,
 })
@@ -142,6 +170,8 @@ export const routeTree = rootRoute.addChildren({
         "/character",
         "/inspiration",
         "/profile",
+        "/signup",
+        "/thanks",
         "/traits",
         "/welcome"
       ]
@@ -160,6 +190,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/profile": {
       "filePath": "profile.lazy.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.lazy.tsx"
+    },
+    "/thanks": {
+      "filePath": "thanks.lazy.tsx"
     },
     "/traits": {
       "filePath": "traits.lazy.tsx"
