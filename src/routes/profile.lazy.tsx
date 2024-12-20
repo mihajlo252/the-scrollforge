@@ -25,7 +25,7 @@ function Profile() {
 
     const handleNavigateToCharacter = (char: Character) => {
         setCharacter(char);
-        navigate({to: "/character"})
+        navigate({ to: "/character" });
     };
 
     useEffect(() => {
@@ -34,18 +34,29 @@ function Profile() {
     }, []);
 
     return (
-        <motion.main
-            className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-5`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-        >
-            <BoxSection styles="w-full flex flex-col gap-5 p-5">
-                <h1>{user.email} - Characters</h1>
+        <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <BoxSection styles="w-full flex flex-col items-start gap-10 p-5 overflow-y-scroll">
+                <section className="flex w-full justify-between">
+                    <h1 className="text-5xl text-accent">{user.user_metadata.username}</h1>
+                    <a href="#" className="btn btn-primary">
+                        Create Character
+                    </a>
+                </section>
                 <ul>
                     {characters.map((character) => (
-                        <li key={character.id}>
+                        <li key={character.id} className="flex gap-5">
+                            <div className="text-start">
+                                <p>
+                                    {character.characterProfile.name}, {character.characterProfile.level}
+                                </p>
+                                <hr />
+                                <p>
+                                    {character.characterProfile.class} {character.characterProfile.subclass},{" "}
+                                    {character.characterProfile.race} {character.characterProfile.subrace}
+                                </p>
+                            </div>
                             <button className="btn btn-ghost" onClick={() => handleNavigateToCharacter(character)}>
-                            {character.characterProfile.name}
+                                Select
                             </button>
                         </li>
                     ))}
