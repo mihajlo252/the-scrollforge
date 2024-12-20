@@ -21,12 +21,12 @@ function signinScreen() {
     const login = async (e: any) => {
         e.preventDefault();
         await setUser(email, password);
-        navigate({ to: "/welcome" });
+        navigate({ to: "/profile" });
     };
 
     useEffect(() => {
         if (user) {
-            navigate({ to: "/welcome" });
+            navigate({ to: "/profile" });
         }
     }, []);
 
@@ -68,7 +68,7 @@ function signinScreen() {
                     type="button"
                     onClick={async () => {
                         await setUser("beca252@gmail.com", "beca123");
-                        navigate({ to: "/welcome" });
+                        navigate({ to: "/profile" });
                     }}
                     className="visibility-hidden btn btn-primary absolute top-5 w-1/3 opacity-0"
                 >

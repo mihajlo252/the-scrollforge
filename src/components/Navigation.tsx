@@ -11,16 +11,19 @@ export const Navigation = () => {
 
     const { user, removeUser } = useUserStore();
 
-    const [newUser, setNewUser] = useState(getUserFromLocal() || {});
+    const [newUser, setNewUser] = useState(getUserFromLocal() || "");
 
     const handleSignOut = async () => {
         await signOut();
         removeUser();
+        setNewUser("");
         navigate({ to: "/" });
     };
 
     useEffect(() => {
-        setNewUser(user);
+        if(user) {
+            setNewUser(user);
+        }
     }, [user]);
 
     return (
