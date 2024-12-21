@@ -1,13 +1,9 @@
-import {supabase} from "../supabase/supabase";
+import { supabase } from "../supabase/supabase";
 
 export const signOut = async () => {
-   const { error } = await supabase.auth.signOut()
-   localStorage.removeItem("character");
-   localStorage.removeItem("characters");
-
-   if (error) {
-       throw error  
-   }
-
-   
-}
+    const { error } = await supabase.auth.signOut();
+    localStorage.clear();
+    if (error) {
+        throw error;
+    }
+};
