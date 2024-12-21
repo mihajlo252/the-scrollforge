@@ -11,9 +11,9 @@ export default {
 		themes: [
 			{
 				dark: {
-					primary: "#88b5e4",
+					primary: "#d0a732",
 					secondary: "#831e29",
-					accent: "#d0a732",
+					accent: "#88b5e4",
 					neutral: "#dfecf8",
 					"base-100": "#010b14",
 					info: "#3ABFF8",
