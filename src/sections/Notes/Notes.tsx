@@ -39,7 +39,7 @@ export const Notes = () => {
                 value={notes}
                 onChange={(e) => handleSetNotes(e)}
                 />
-            {save && <button type="submit" className="btn btn-ghost absolute right-5 top-5">Save</button>}
+            {save && <button type="submit"  className="btn btn-ghost absolute right-5 top-5 border-2 border-accent text-accent hover:border-accent hover:bg-accent hover:text-base-100">Save</button>}
         </form>
     );
 };

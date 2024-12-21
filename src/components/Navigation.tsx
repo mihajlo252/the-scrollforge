@@ -31,9 +31,9 @@ export const Navigation = () => {
             <Link to={newUser ? "/profile" : "/"} className="uppercase text-neutral no-underline [&.active]:font-bold">
                 Dash&Play
             </Link>
-            {!newUser && <Link to="/signup" className="btn btn-ghost m-0 h-min min-h-0 px-4 py-2 uppercase text-neutral no-underline [&.active]:font-bold">Sign Up</Link>}
+            {!newUser && <Link to="/signup" className="btn btn-ghost m-0 h-min min-h-0 border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 [&.active]:font-bold">Sign Up</Link>}
 
-            {newUser && <button className="btn btn-ghost m-0 h-min min-h-0 px-4 py-2 uppercase text-neutral no-underline [&.active]:font-bold" onClick={handleSignOut}>Sign Out</button>}
+            {newUser && <button className="btn btn-ghost m-0 h-min min-h-0 border-2 border-secondary px-4 py-2 text-secondary hover:border-secondary hover:bg-secondary hover:text-base-100 [&.active]:font-bold" onClick={handleSignOut}>Sign Out</button>}
         </motion.nav>
     );
 };

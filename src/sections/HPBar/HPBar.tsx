@@ -63,7 +63,7 @@ export const HPBar = ({ maxHP, characterID }: { maxHP: number; characterID: stri
         <div className="relative flex h-full w-full items-center justify-end gap-5 pl-2">
             {save && (
                 <form onSubmit={(e: any) => saveCurrentHP(e, HP)}>
-                    <button type="submit" className="btn btn-accent">
+                    <button type="submit" className="btn btn-ghost border-2 border-accent text-accent hover:border-accent hover:bg-accent hover:text-base-100">
                         Save
                     </button>
                 </form>

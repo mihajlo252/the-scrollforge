@@ -92,7 +92,7 @@ function Inspiration() {
                 </motion.ul>
                 <div className="absolute right-5 top-5 flex items-center gap-2">
                     <p className={`opacity-0 select-none pointer-events-none text-sm text-success transition-opacity duration-500 ${isSaved ? "opacity-100 select-auto pointer-events-auto" : ""}`}>Saved</p>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-ghost border-2 border-accent text-accent hover:border-accent hover:bg-accent hover:text-base-100">
                         Save
                     </button>
                 </div>
