@@ -26,7 +26,7 @@ function signUpScreen() {
     };
 
     if(user) {
-        navigate({to: "/welcome"})
+        navigate({to: "/profile"})
     }
     
 
