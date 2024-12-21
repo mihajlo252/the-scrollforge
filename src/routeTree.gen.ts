@@ -16,7 +16,6 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const WelcomeLazyImport = createFileRoute('/welcome')()
 const TraitsLazyImport = createFileRoute('/traits')()
 const ThanksLazyImport = createFileRoute('/thanks')()
 const SignupLazyImport = createFileRoute('/signup')()
@@ -27,11 +26,6 @@ const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
-
-const WelcomeLazyRoute = WelcomeLazyImport.update({
-  path: '/welcome',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/welcome.lazy').then((d) => d.Route))
 
 const TraitsLazyRoute = TraitsLazyImport.update({
   path: '/traits',
@@ -133,13 +127,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TraitsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/welcome': {
-      id: '/welcome'
-      path: '/welcome'
-      fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeLazyImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -154,7 +141,6 @@ export const routeTree = rootRoute.addChildren({
   SignupLazyRoute,
   ThanksLazyRoute,
   TraitsLazyRoute,
-  WelcomeLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -172,8 +158,7 @@ export const routeTree = rootRoute.addChildren({
         "/profile",
         "/signup",
         "/thanks",
-        "/traits",
-        "/welcome"
+        "/traits"
       ]
     },
     "/": {
@@ -199,9 +184,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/traits": {
       "filePath": "traits.lazy.tsx"
-    },
-    "/welcome": {
-      "filePath": "welcome.lazy.tsx"
     }
   }
 }

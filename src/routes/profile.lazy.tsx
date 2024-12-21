@@ -30,7 +30,6 @@ function Profile() {
 
     useEffect(() => {
         handleGetCharacter();
-        console.log(characters);
     }, []);
 
     return (
@@ -38,29 +37,35 @@ function Profile() {
             <BoxSection styles="w-full flex flex-col items-start gap-10 p-5 overflow-y-scroll">
                 <section className="flex w-full justify-between">
                     <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
-                    <a href="#" className="btn btn-ghost border-2 border-primary text-primary hover:border-primary hover:bg-primary hover:text-base-100">
+                    <a
+                        href="#"
+                        className="btn btn-ghost border-2 border-primary text-primary hover:border-primary hover:bg-primary hover:text-base-100"
+                    >
                         Create Character
                     </a>
                 </section>
                 <ul className="w-full text-xl">
                     {characters.map((character) => (
-                        <li key={character.id} className="flex w-full justify-between gap-5">
+                        <li
+                            key={character.id}
+                            className="flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
+                            onClick={() => handleNavigateToCharacter(character)}
+                        >
+                            <img
+                                src={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/${character.characterProfile.name.toLowerCase()}.png`}
+                                alt={character.characterProfile.name}
+                                className="h-[80px] w-[80px] rounded-badge border-2 border-slate-900"
+                            />
                             <div className="text-start">
                                 <p>
                                     {character.characterProfile.name}, {character.characterProfile.level}
                                 </p>
-                                <hr />
+                                <div className="h-[.5px] w-full bg-neutral"></div>
                                 <p>
                                     {character.characterProfile.race} {character.characterProfile?.subrace},{" "}
                                     {character.characterProfile.class} {character.characterProfile?.subclass}
                                 </p>
                             </div>
-                            <button
-                                className="btn btn-primary"
-                                onClick={() => handleNavigateToCharacter(character)}
-                            >
-                                Enter World
-                            </button>
                         </li>
                     ))}
                 </ul>

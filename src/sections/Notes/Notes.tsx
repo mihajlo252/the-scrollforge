@@ -12,7 +12,6 @@ export const Notes = () => {
         await sendData("characters", state.character.id, { notes });
         state.character.notes = notes;
         localStorage.setItem("character", JSON.stringify({state: state}));
-        console.log(state);
         setSave(false);
     }
 
