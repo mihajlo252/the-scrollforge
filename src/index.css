@@ -14,3 +14,14 @@
     font-size: 60%;
   }
 }
+
+.dice-box-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+  touch-action: none;
+  pointer-events: none;
+  transition: opacity 500ms ease-in-out;
+}

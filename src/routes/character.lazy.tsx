@@ -8,6 +8,7 @@ import { Stats } from "../sections/Stats/Stats";
 import { Load } from "../components/Load";
 import { Notes } from "../sections/Notes/Notes";
 import { Bonuses } from "../sections/Bonuses/Bonuses";
+import { DiceBoxComponent } from "../components/DiceBox";
 
 export const Route = createLazyFileRoute("/character")({
     component: Character,
@@ -61,6 +62,7 @@ function Character() {
                         <Link to="/attacks" className="btn btn-primary">
                             Attacks
                         </Link>
+                        <DiceBoxComponent />
                     </nav>
                 </BoxSection>
             </section>
