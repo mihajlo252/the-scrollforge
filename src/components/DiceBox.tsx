@@ -45,7 +45,7 @@ export const DiceBoxComponent = () => {
             <button type="button" className="btn btn-primary w-full" onClick={showDiceBox}>
                 Dice
             </button>
-
+            <div className={`${show ? "visible opacity-1" : "invisible opacity-0"} transition-all inset-0 absolute`} onClick={showDiceBox}></div>
             <div
                 className={`${show ? "visible opacity-1" : "invisible opacity-0"} transition-all rounded-md border-slate-700 border-2 bg-slate-900 flex flex-col gap-2 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-max p-2 h-max`}
             >
