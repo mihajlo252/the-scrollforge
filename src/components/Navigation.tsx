@@ -41,6 +41,8 @@ export const Navigation = () => {
         navigate({ to: path });
     };
 
+    
+
     useEffect(() => {
         if (user) {
             setNewUser(user);
@@ -48,7 +50,7 @@ export const Navigation = () => {
     }, [user]);
 
     return (
-        <motion.nav className="flex justify-between gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.nav className="flex justify-between gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onDoubleClick={() => handleRedirect("/bug-report")}>
             <Link to={newUser ? "/profile" : "/"} className="uppercase text-neutral no-underline [&.active]:font-bold">
                 Dash&Play
             </Link>

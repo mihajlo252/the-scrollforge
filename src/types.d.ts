@@ -109,3 +109,10 @@ interface CharacterStore {
     character: Character;
     setCharacter: (character: Character) => void;
 }
+
+interface BugReport {
+    title: string;
+    description: string;
+    priority: string;
+    user_id: string;
+}

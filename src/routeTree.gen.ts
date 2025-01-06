@@ -22,6 +22,7 @@ const SignupLazyImport = createFileRoute('/signup')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const InspirationLazyImport = createFileRoute('/inspiration')()
 const CharacterLazyImport = createFileRoute('/character')()
+const BugReportLazyImport = createFileRoute('/bug-report')()
 const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
 
@@ -57,6 +58,11 @@ const CharacterLazyRoute = CharacterLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/character.lazy').then((d) => d.Route))
 
+const BugReportLazyRoute = BugReportLazyImport.update({
+  path: '/bug-report',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/bug-report.lazy').then((d) => d.Route))
+
 const AttacksLazyRoute = AttacksLazyImport.update({
   path: '/attacks',
   getParentRoute: () => rootRoute,
@@ -83,6 +89,13 @@ declare module '@tanstack/react-router' {
       path: '/attacks'
       fullPath: '/attacks'
       preLoaderRoute: typeof AttacksLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/bug-report': {
+      id: '/bug-report'
+      path: '/bug-report'
+      fullPath: '/bug-report'
+      preLoaderRoute: typeof BugReportLazyImport
       parentRoute: typeof rootRoute
     }
     '/character': {
@@ -135,6 +148,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AttacksLazyRoute,
+  BugReportLazyRoute,
   CharacterLazyRoute,
   InspirationLazyRoute,
   ProfileLazyRoute,
@@ -153,6 +167,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/attacks",
+        "/bug-report",
         "/character",
         "/inspiration",
         "/profile",
@@ -166,6 +181,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/attacks": {
       "filePath": "attacks.lazy.tsx"
+    },
+    "/bug-report": {
+      "filePath": "bug-report.lazy.tsx"
     },
     "/character": {
       "filePath": "character.lazy.tsx"
