@@ -37,7 +37,7 @@ export const CharacterProfile = ({primaryStats, primaryMods, characterProfile}: 
                     alt=""
                 /> */}
                 <div className="text-start">
-                    <p>{characterProfile.name}, {characterProfile.level}</p>
+                    <p>{characterProfile.name}, Level {characterProfile.level}</p>
                     <hr />
                     <p>{characterProfile.class} {characterProfile.subclass}, {characterProfile.race} {characterProfile.subrace}</p>
                 </div>

@@ -25,6 +25,12 @@ const CharacterLazyImport = createFileRoute('/character')()
 const BugReportLazyImport = createFileRoute('/bug-report')()
 const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
+const CreateCharacterPage2LazyImport = createFileRoute(
+  '/create-character/page2',
+)()
+const CreateCharacterPage1LazyImport = createFileRoute(
+  '/create-character/page1',
+)()
 
 // Create/Update Routes
 
@@ -72,6 +78,20 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const CreateCharacterPage2LazyRoute = CreateCharacterPage2LazyImport.update({
+  path: '/create-character/page2',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/create-character/page2.lazy').then((d) => d.Route),
+)
+
+const CreateCharacterPage1LazyRoute = CreateCharacterPage1LazyImport.update({
+  path: '/create-character/page1',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/create-character/page1.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -140,6 +160,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TraitsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/create-character/page1': {
+      id: '/create-character/page1'
+      path: '/create-character/page1'
+      fullPath: '/create-character/page1'
+      preLoaderRoute: typeof CreateCharacterPage1LazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/create-character/page2': {
+      id: '/create-character/page2'
+      path: '/create-character/page2'
+      fullPath: '/create-character/page2'
+      preLoaderRoute: typeof CreateCharacterPage2LazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -155,6 +189,8 @@ export const routeTree = rootRoute.addChildren({
   SignupLazyRoute,
   ThanksLazyRoute,
   TraitsLazyRoute,
+  CreateCharacterPage1LazyRoute,
+  CreateCharacterPage2LazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -173,7 +209,9 @@ export const routeTree = rootRoute.addChildren({
         "/profile",
         "/signup",
         "/thanks",
-        "/traits"
+        "/traits",
+        "/create-character/page1",
+        "/create-character/page2"
       ]
     },
     "/": {
@@ -202,6 +240,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/traits": {
       "filePath": "traits.lazy.tsx"
+    },
+    "/create-character/page1": {
+      "filePath": "create-character/page1.lazy.tsx"
+    },
+    "/create-character/page2": {
+      "filePath": "create-character/page2.lazy.tsx"
     }
   }
 }

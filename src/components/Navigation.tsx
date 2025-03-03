@@ -51,7 +51,7 @@ export const Navigation = () => {
 
     return (
         <motion.nav className="flex justify-between gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onDoubleClick={() => handleRedirect("/bug-report")}>
-            <Link to={newUser ? "/profile" : "/"} className="uppercase text-neutral no-underline [&.active]:font-bold">
+            <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline">
                 Dash&Play
             </Link>
             {!newUser && (
