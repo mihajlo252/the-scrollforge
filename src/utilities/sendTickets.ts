@@ -1,8 +1,8 @@
 import { supabase } from "../supabase/supabase";
 
-export const sendBug = async (bug: any) => {
+export const sendTicket = async (ticket: any) => {
     try {
-        const { error } = await supabase.from("bug_tickets").insert(bug)
+        const { error } = await supabase.from("tickets").insert(ticket)
         if (error) {
             throw error.message;
         }

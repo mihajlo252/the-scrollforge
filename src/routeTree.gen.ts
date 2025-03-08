@@ -17,12 +17,12 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const TraitsLazyImport = createFileRoute('/traits')()
+const TicketsLazyImport = createFileRoute('/tickets')()
 const ThanksLazyImport = createFileRoute('/thanks')()
 const SignupLazyImport = createFileRoute('/signup')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const InspirationLazyImport = createFileRoute('/inspiration')()
 const CharacterLazyImport = createFileRoute('/character')()
-const BugReportLazyImport = createFileRoute('/bug-report')()
 const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
 const CreateCharacterPage2LazyImport = createFileRoute(
@@ -38,6 +38,11 @@ const TraitsLazyRoute = TraitsLazyImport.update({
   path: '/traits',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/traits.lazy').then((d) => d.Route))
+
+const TicketsLazyRoute = TicketsLazyImport.update({
+  path: '/tickets',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/tickets.lazy').then((d) => d.Route))
 
 const ThanksLazyRoute = ThanksLazyImport.update({
   path: '/thanks',
@@ -63,11 +68,6 @@ const CharacterLazyRoute = CharacterLazyImport.update({
   path: '/character',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/character.lazy').then((d) => d.Route))
-
-const BugReportLazyRoute = BugReportLazyImport.update({
-  path: '/bug-report',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/bug-report.lazy').then((d) => d.Route))
 
 const AttacksLazyRoute = AttacksLazyImport.update({
   path: '/attacks',
@@ -111,13 +111,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AttacksLazyImport
       parentRoute: typeof rootRoute
     }
-    '/bug-report': {
-      id: '/bug-report'
-      path: '/bug-report'
-      fullPath: '/bug-report'
-      preLoaderRoute: typeof BugReportLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/character': {
       id: '/character'
       path: '/character'
@@ -153,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThanksLazyImport
       parentRoute: typeof rootRoute
     }
+    '/tickets': {
+      id: '/tickets'
+      path: '/tickets'
+      fullPath: '/tickets'
+      preLoaderRoute: typeof TicketsLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/traits': {
       id: '/traits'
       path: '/traits'
@@ -182,12 +182,12 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AttacksLazyRoute,
-  BugReportLazyRoute,
   CharacterLazyRoute,
   InspirationLazyRoute,
   ProfileLazyRoute,
   SignupLazyRoute,
   ThanksLazyRoute,
+  TicketsLazyRoute,
   TraitsLazyRoute,
   CreateCharacterPage1LazyRoute,
   CreateCharacterPage2LazyRoute,
@@ -203,12 +203,12 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/attacks",
-        "/bug-report",
         "/character",
         "/inspiration",
         "/profile",
         "/signup",
         "/thanks",
+        "/tickets",
         "/traits",
         "/create-character/page1",
         "/create-character/page2"
@@ -219,9 +219,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/attacks": {
       "filePath": "attacks.lazy.tsx"
-    },
-    "/bug-report": {
-      "filePath": "bug-report.lazy.tsx"
     },
     "/character": {
       "filePath": "character.lazy.tsx"
@@ -237,6 +234,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/thanks": {
       "filePath": "thanks.lazy.tsx"
+    },
+    "/tickets": {
+      "filePath": "tickets.lazy.tsx"
     },
     "/traits": {
       "filePath": "traits.lazy.tsx"
