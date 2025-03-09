@@ -9,11 +9,29 @@
 	font-family: "K2D", sans-serif;
 }
 
-@media (max-height: 475px) {
+html {
+  font-size: 120%;
+}
+
+@media (max-width: 350px) {
   html {
     font-size: 60%;
   }
 }
+
+@media (max-width: 1024px) {
+  html {
+    font-size: 100%;
+  }
+}
+
+@media (max-width: 1440px) {
+  html {
+    font-size: 110%;
+  }
+}
+  
+
 
 .dice-box-canvas {
   position: absolute;

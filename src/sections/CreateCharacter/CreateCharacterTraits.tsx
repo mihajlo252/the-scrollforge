@@ -1,0 +1,85 @@
+import React, { useEffect } from "react";
+import { BoxSection } from "../../components/BoxSection";
+
+export const CreateCharacterTraits = ({
+    traits,
+    setTraits,
+    isSave,
+    setIsSave,
+    description,
+}: {
+    traits: string[];
+    setTraits: React.Dispatch<React.SetStateAction<string[]>>;
+    isSave: boolean;
+    setIsSave: React.Dispatch<React.SetStateAction<boolean>>
+    description: string;
+}) => {
+    const [traitValue, setTraitValue] = React.useState("");
+
+    const [isToggled, setIsToggled] = React.useState(false);
+
+    const handleAddTrait = () => {
+        setTraits([...traits, traitValue]);
+        setTraitValue("");
+        setIsSave(true);
+    };
+
+    const handleSave = () => {
+        // e.preventDefault();
+
+        localStorage.setItem(
+            "newCharacter",
+            JSON.stringify({
+                state: {
+                    character: {
+                        ...JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character,
+
+                        descriptions: {
+                            ...JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character.descriptions,
+                            [description]: traits,
+                        }
+                    },
+                },
+            })
+        );
+        setIsSave(false);
+    };
+
+    useEffect(() => {
+        if(isSave) handleSave()
+    }, [isSave])
+    
+
+    return (
+        <div className="relative flex h-full w-full flex-col gap-2">
+            <button
+                type="button"
+                className="btn btn-accent sticky top-5 z-20 self-end"
+                onClick={() => setIsToggled(!isToggled)}
+            >
+                {isToggled ? "Close" : "Add New"}
+            </button>
+            {traits.map((trait: string, index: number) => (
+                <p key={index}>{trait}</p>
+            ))}
+            <div
+                className={`flex w-full justify-center bg-opacity-20 items-center gap-5 absolute inset-0 ${isToggled ? "block" : "hidden"}`}
+            >
+                <BoxSection styles="h-[unset] w-full w-max px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-center text-start">
+                    <textarea
+                        className="textarea textarea-bordered max-w-lg resize-none"
+                        placeholder="Trait"
+                        name="trait"
+                        cols={100}
+                        rows={10}
+                        value={traitValue}
+                        onChange={(e) => setTraitValue(e.target.value)}
+                    />
+                    <button type="button" className="btn btn-primary w-full" onClick={handleAddTrait}>
+                        Add
+                    </button>
+                </BoxSection>
+            </div>
+        </div>
+    );
+};

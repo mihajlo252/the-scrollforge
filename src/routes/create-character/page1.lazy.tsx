@@ -6,7 +6,7 @@ import { CreateCharacterStats } from "../../sections/CreateCharacter/CreateChara
 import { CreateCharacterProfile } from "../../sections/CreateCharacter/CreateCharacterProfile";
 import { useState } from "react";
 import { CreateCharacterPassiveStats } from "../../sections/CreateCharacter/CreateCharacterPassiveStats";
-import { CreateCharacterAvatar } from "../../sections/CreateCharacter/CreateCharacterAvatar";
+// import { CreateCharacterAvatar } from "../../sections/CreateCharacter/CreateCharacterAvatar";
 
 export const Route = createLazyFileRoute("/create-character/page1")({
     component: CreateCharacter,
@@ -148,15 +148,15 @@ function CreateCharacter() {
                             isContinue={isContinue}
                         />
                     </BoxSection>
-                    <BoxSection styles="w-full h-1/2 flex justify-start items-center p-5 text-start relative">
+                    {/* <BoxSection styles="w-full h-1/2 flex justify-start items-center p-5 text-start relative">
                         <CreateCharacterAvatar />
-                    </BoxSection>
+                    </BoxSection> */}
                     {/* <Notes /> */}
                 </div>
 
                 <button
                     type="submit"
-                    className="align-self-end btn btn-ghost w-[5%] self-center rounded-lg border-2 border-slate-900 bg-base-300 text-neutral"
+                    className="align-self-end btn btn-ghost w-[2%] self-center rounded-lg border-2 border-slate-900 bg-base-300 text-neutral"
                     onClick={() => setIsSave(true)}
                 >
                     {`>`}

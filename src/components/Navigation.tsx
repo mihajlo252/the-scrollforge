@@ -5,6 +5,7 @@ import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
 import { BorderButton } from "./BorderButton";
+import { TicketsButton } from "./TicketsButton";
 
 export const Navigation = () => {
     const navigate = useNavigate();
@@ -41,8 +42,6 @@ export const Navigation = () => {
         navigate({ to: path });
     };
 
-    
-
     useEffect(() => {
         if (user) {
             setNewUser(user);
@@ -50,7 +49,7 @@ export const Navigation = () => {
     }, [user]);
 
     return (
-        <motion.nav className="flex justify-between gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onDoubleClick={() => handleRedirect("/bug-report")}>
+        <motion.nav className="flex justify-between gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline">
                 Dash&Play
             </Link>
@@ -80,6 +79,7 @@ export const Navigation = () => {
                         style="border-secondary text-secondary hover:border-secondary hover:bg-secondary"
                         event={handleSignOut}
                     />
+                    <TicketsButton styles="cursor-pointer hover:scale-110 transition-all duration-150 ease-in absolute left-3 bottom-3 opacity-50 z-[99999]" color={"#d0a732"} size={50} strokeWidth={5} />
                 </div>
             )}
         </motion.nav>

@@ -72,7 +72,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
         <>
             <ul>
                 <li>
-                    {" "}
+                    
                     Passive Perception: +
                     <input
                         type="text"
@@ -84,7 +84,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     />
                 </li>
                 <li>
-                    {" "}
+                    
                     Proficiency: +
                     <input
                         type="text"
@@ -96,7 +96,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     />
                 </li>
                 <li>
-                    {" "}
+                    
                     Initiative: +
                     <input
                         type="text"
@@ -108,7 +108,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     />
                 </li>
                 <li>
-                    {" "}
+                    
                     AC:{" "}
                     <input
                         type="text"
@@ -120,7 +120,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     />
                 </li>
                 <li>
-                    {" "}
+                    
                     Hit Dice:{" "}
                     <input
                         type="text"
@@ -132,7 +132,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     />
                 </li>
                 <li>
-                    {" "}
+                    
                     MaxHP:{" "}
                     <input
                         type="text"
