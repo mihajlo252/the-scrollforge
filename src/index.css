@@ -13,21 +13,21 @@ html {
   font-size: 130%;
 }
 
-@media (max-width: 350px) {
+@media (max-width: 1680px) {
   html {
-    font-size: 60%;
+    font-size: 110%;
   }
 }
 
 @media (max-width: 1200px) {
   html {
-    font-size: 90%;
+    font-size: 100%;
   }
 }
 
-@media (max-width: 1680px) {
+@media (max-width: 350px) {
   html {
-    font-size: 110%;
+    font-size: 60%;
   }
 }
   
