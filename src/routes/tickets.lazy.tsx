@@ -16,6 +16,10 @@ function Tickets() {
 
     const { user } = JSON.parse(getUserFromLocal());
 
+    /*Temporary feature*/
+    const [screenSize, _] = useState([window.innerWidth, window.innerHeight]);
+    /*Temporary feature*/
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -82,6 +86,10 @@ function Tickets() {
                         Submit
                     </button>
                 </form>
+
+                /*Temporary feature*/
+                <p className="absolute right-0 top-0">Screen Size: {screenSize[0]} x {screenSize[1]} </p>
+                /*Temporary feature*/
             </BoxSection>
         </motion.div>
     );
