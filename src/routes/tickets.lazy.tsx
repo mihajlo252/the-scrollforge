@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { BoxSection } from "../components/BoxSection";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { sendTicket } from "../utilities/sendTickets";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { motion } from "framer-motion";
@@ -15,10 +15,6 @@ function Tickets() {
     const [bugOrFeature, setBugOrFeature] = useState<string>("Bug Report");
 
     const { user } = JSON.parse(getUserFromLocal());
-
-    /*Temporary feature*/
-    const [screenSize, setSceenSize] = useState<number[]>([]);
-    /*Temporary feature*/
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,10 +39,6 @@ function Tickets() {
         setShort("");
         setTicket("");
     };
-
-    useEffect(() => {
-        setSceenSize([window.innerWidth, window.innerHeight])
-    }, [])
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full">
@@ -90,10 +82,6 @@ function Tickets() {
                         Submit
                     </button>
                 </form>
-
-                /*Temporary feature*/
-                <p className="absolute right-0 top-0">Screen Size: {screenSize[0]} x {screenSize[1]} </p>
-                /*Temporary feature*/
             </BoxSection>
         </motion.div>
     );
