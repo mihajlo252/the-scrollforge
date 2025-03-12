@@ -74,7 +74,7 @@ export const CreateCharacterAttacks = ({
             {attacks.map((attack: Attack, index: number) => (
                 <BoxSection
                     key={index}
-                    styles="grid w-full grid-cols-[1fr_3fr] h-min gap-5 text-[18px] px-10 py-5 border-accent"
+                    styles="grid w-full grid-cols-[1fr_3fr] h-min gap-5 px-10 py-5 border-accent"
                 >
                     <div className="flex flex-col gap-2">
                         <p className="grid text-sm">

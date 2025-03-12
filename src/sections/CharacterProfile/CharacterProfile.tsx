@@ -33,7 +33,7 @@ export const CharacterProfile = ({primaryStats, primaryMods, characterProfile}: 
             <div className="flex gap-2">
                 {/* <img
                     src={`./assets/${"bag.png"}`}
-                    className="h-[50px] w-[50px]"
+                    className="h-12 w-12"
                     alt=""
                 /> */}
                 <div className="text-start">

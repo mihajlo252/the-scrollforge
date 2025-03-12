@@ -18,5 +18,5 @@ export const ImageWithFallback = ({ source, alt, fallbackSrc } : { source: strin
       }
     };
   
-    return <img src={imageSrc} alt={alt} onError={handleError} className={`h-[80px] w-[80px] rounded-badge border-2 border-slate-900 ${attemptedJpg ? 'opacity-50 p-2' : ''}`} />
+    return <img src={imageSrc} alt={alt} onError={handleError} className={`h-20 w-20 rounded-badge border-2 border-slate-900 ${attemptedJpg ? 'opacity-50 p-2' : ''}`} />
   }
