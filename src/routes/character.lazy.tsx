@@ -56,11 +56,11 @@ function Character() {
                         <Link to="/traits" className="btn btn-primary">
                             Traits
                         </Link>
-                        <Link to="/inspiration" className="btn btn-primary">
-                            Inspiration
-                        </Link>
                         <Link to="/attacks" className="btn btn-primary">
                             Attacks
+                        </Link>
+                        <Link to="/inspiration" className="btn btn-primary">
+                            Inspiration
                         </Link>
                         <DiceBoxComponent />
                     </nav>
