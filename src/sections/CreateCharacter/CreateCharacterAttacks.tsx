@@ -61,7 +61,7 @@ export const CreateCharacterAttacks = ({
     useEffect(() => {
         if (isSave) handleSave();
     }, [isSave]);
-    
+
     return (
         <div className="relative flex h-full w-full flex-col gap-5">
             <button
@@ -72,10 +72,7 @@ export const CreateCharacterAttacks = ({
                 {isToggled ? "Close" : "Add New"}
             </button>
             {attacks.map((attack: Attack, index: number) => (
-                <BoxSection
-                    key={index}
-                    styles="grid w-full grid-cols-[1fr_3fr] h-min gap-5 px-10 py-5 border-accent"
-                >
+                <BoxSection key={index} styles="grid w-full grid-cols-[1fr_3fr] h-min gap-5 px-10 py-5 border-accent">
                     <div className="flex flex-col gap-2">
                         <p className="grid text-sm">
                             <span className="text-3xl underline">{attack.name}</span>
@@ -85,18 +82,21 @@ export const CreateCharacterAttacks = ({
                         <p>Attack: {attack.attack}</p>
                         <p>Damage: {attack.damage}</p>
                     </div>
-                    <p>
-                        {attack.description.split("\n").map((line: string, index: number) => (
+                    <pre>
+                        <p className="text-wrap break-words">
+                            {/* {attack.description.split("\n").map((line: string, index: number) => (
                             <span className="block indent-5" key={index}>
                                 {line}
                             </span>
-                        ))}
-                    </p>
+                        ))} */}
+                            {attack.description}
+                        </p>
+                    </pre>
                 </BoxSection>
             ))}
 
             <div
-                className={`flex flex-col justify-center items-center absolute inset-0 ${isToggled ? "block" : "hidden"}`}
+                className={`flex flex-col justify-center items-center fixed left-1/2 -translate-x-1/2  ${isToggled ? "block" : "hidden"}`}
             >
                 <BoxSection styles="h-[unset] px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-start text-start">
                     <input

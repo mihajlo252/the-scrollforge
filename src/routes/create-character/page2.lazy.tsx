@@ -22,7 +22,7 @@ function Page2() {
 
     return (
         <motion.div
-            className={`flex h-full w-full gap-2`}
+            className={`flex h-full w-full gap-2 overflow-hidden`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
         >
@@ -33,7 +33,7 @@ function Page2() {
                 >
                     {`<`}
                 </button>
-            <BoxSection styles="w-full h-full p-5 flex-col text-start gap-2 overflow-y-scroll pt-0">
+            <BoxSection styles="w-full px-5 flex-col text-start gap-2 overflow-y-scroll pt-0">
                 <div className="sticky -top-5 z-10 flex w-full gap-2 bg-base-300 pt-5">
                     <button type="button" onClick={() => changeDescription("racialTraits")} className="btn btn-ghost">
                         Racial Traits

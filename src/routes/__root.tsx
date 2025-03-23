@@ -5,7 +5,7 @@ import { Navigation } from '../components/Navigation';
 
 export const Route = createRootRoute({
   component: () => (
-    <div className="flex h-screen flex-col gap-5 overflow-hidden px-10 py-5">
+    <div className="flex h-[100svh] flex-col gap-5 px-10 py-5">
       <Navigation />
 
       <Outlet/>

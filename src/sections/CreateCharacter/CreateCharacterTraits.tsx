@@ -11,7 +11,7 @@ export const CreateCharacterTraits = ({
     traits: string[];
     setTraits: React.Dispatch<React.SetStateAction<string[]>>;
     isSave: boolean;
-    setIsSave: React.Dispatch<React.SetStateAction<boolean>>
+    setIsSave: React.Dispatch<React.SetStateAction<boolean>>;
     description: string;
 }) => {
     const [traitValue, setTraitValue] = React.useState("");
@@ -37,7 +37,7 @@ export const CreateCharacterTraits = ({
                         descriptions: {
                             ...JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character.descriptions,
                             [description]: traits,
-                        }
+                        },
                     },
                 },
             })
@@ -46,12 +46,11 @@ export const CreateCharacterTraits = ({
     };
 
     useEffect(() => {
-        if(isSave) handleSave()
-    }, [isSave])
-    
+        if (isSave) handleSave();
+    }, [isSave]);
 
     return (
-        <div className="relative flex h-full w-full flex-col gap-2">
+        <div className="relative flex h-full w-full flex-col gap-8">
             <button
                 type="button"
                 className="btn btn-accent sticky top-5 z-20 self-end"
@@ -60,12 +59,16 @@ export const CreateCharacterTraits = ({
                 {isToggled ? "Close" : "Add New"}
             </button>
             {traits.map((trait: string, index: number) => (
-                <p key={index}>{trait}</p>
+                <pre key={index}>
+                    <p className="w-full text-wrap break-words">
+                        {trait}
+                    </p>
+                </pre>
             ))}
             <div
-                className={`flex w-full justify-center bg-opacity-20 items-center gap-5 absolute inset-0 ${isToggled ? "block" : "hidden"}`}
+                className={`flex flex-col justify-center items-center fixed left-1/2 -translate-x-1/2 ${isToggled ? "block" : "hidden"}`}
             >
-                <BoxSection styles="h-[unset] w-full w-max px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-center text-start">
+                <BoxSection styles="h-[unset] w-max px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-center text-start">
                     <textarea
                         className="textarea textarea-bordered max-w-lg resize-none"
                         placeholder="Trait"
