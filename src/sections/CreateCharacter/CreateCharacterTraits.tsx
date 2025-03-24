@@ -66,7 +66,7 @@ export const CreateCharacterTraits = ({
                 </pre>
             ))}
             <div
-                className={`flex flex-col justify-center items-center fixed left-1/2 -translate-x-1/2 ${isToggled ? "block" : "hidden"}`}
+                className={`flex flex-col justify-center items-center fixed top-1/2 -translate-y-1/2 py-10 z-50 left-1/2 -translate-x-1/2 ${isToggled ? "block" : "hidden"}`}
             >
                 <BoxSection styles="h-[unset] w-max px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-center text-start">
                     <textarea
@@ -78,7 +78,7 @@ export const CreateCharacterTraits = ({
                         value={traitValue}
                         onChange={(e) => setTraitValue(e.target.value)}
                     />
-                    <button type="button" className="btn btn-primary w-full" onClick={handleAddTrait}>
+                    <button type="button" className="btn btn-accent w-full" onClick={handleAddTrait}>
                         Add
                     </button>
                 </BoxSection>

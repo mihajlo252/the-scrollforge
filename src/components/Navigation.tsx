@@ -79,7 +79,7 @@ export const Navigation = () => {
                         style="border-secondary text-secondary hover:border-secondary hover:bg-secondary"
                         event={handleSignOut}
                     />
-                    <TicketsButton styles="cursor-pointer hover:scale-110 transition-all duration-150 ease-in absolute left-3 bottom-3 opacity-50 z-[99999]" color={"#d0a732"} size={50} strokeWidth={5} />
+                    
                 </div>
             )}
         </motion.nav>

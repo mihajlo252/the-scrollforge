@@ -35,16 +35,16 @@ function Page2() {
                 </button>
             <BoxSection styles="w-full px-5 flex-col text-start gap-2 overflow-y-scroll pt-0">
                 <div className="sticky -top-5 z-10 flex w-full gap-2 bg-base-300 pt-5">
-                    <button type="button" onClick={() => changeDescription("racialTraits")} className="btn btn-ghost">
+                    <button type="button" onClick={() => changeDescription("racialTraits")} className={`btn ${description === "racialTraits" ? "btn-primary" : ""}`}>
                         Racial Traits
                     </button>
-                    <button type="button" onClick={() => changeDescription("featureTraits")} className="btn btn-ghost">
+                    <button type="button" onClick={() => changeDescription("featureTraits")} className={`btn ${description === "featureTraits" ? "btn-primary" : ""}`}>
                         Features & Traits
                     </button>
-                    <button type="button" onClick={() => changeDescription("attacks")} className="btn btn-ghost">
+                    <button type="button" onClick={() => changeDescription("attacks")} className={`btn ${description === "attacks" ? "btn-primary" : ""}`}>
                         Attacks
                     </button>
-                    <button type="button" onClick={() => changeDescription("spells")} className="btn btn-ghost">
+                    <button type="button" onClick={() => changeDescription("spells")} className={`btn ${description === "spells" ? "btn-primary" : ""}`}>
                         Spells
                     </button>
                 </div>
