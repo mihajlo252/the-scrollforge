@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CreateCharacterTraits } from "./CreateCharacterTraits";
 import { CreateCharacterAttacks } from "./CreateCharacterAttacks";
+import { CreateCharacterSpells } from "./CreateCharacterSpells";
 
 export const CreateCharacterDescriptions = ({ description }: { description: string }) => {
     const { state } = JSON.parse(localStorage.getItem("newCharacter") || "{}");
@@ -9,7 +10,7 @@ export const CreateCharacterDescriptions = ({ description }: { description: stri
     const [racialTraits, setRacialTraits] = useState<string[]>(state?.character.descriptions.racialTraits);
     const [featureTraits, setFeatureTraits] = useState<string[]>(state?.character.descriptions.featureTraits);
     const [attacks, setAttacks] = useState<Attack[]>(state?.character.descriptions.attacks);
-    // const [spells, setSpells] = useState<Spell[]>([]);
+    const [spells, setSpells] = useState<Spell[]>([]);
 
 
     if (description === "racialTraits") {
@@ -25,6 +26,6 @@ export const CreateCharacterDescriptions = ({ description }: { description: stri
     }
 
     if (description === "spells") {
-        return <h1>Spells</h1>;
+        return <CreateCharacterSpells spells={spells} setSpells={setSpells} isSave={isSave} setIsSave={setIsSave} description={description}/>;
     }
 };

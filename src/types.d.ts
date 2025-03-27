@@ -7,12 +7,12 @@ interface Values {
     cha: number;
 }
 interface Inspiration {
-    purple: number,
-    pink: number,
-    white: number,
-    red: number,
-    yellow: number,
-    regular: number
+    purple: number;
+    pink: number;
+    white: number;
+    red: number;
+    yellow: number;
+    regular: number;
 }
 
 interface Skills {
@@ -48,6 +48,16 @@ interface Attack {
     range: string;
     attack: string;
     damage: string;
+    description: string;
+}
+
+interface Spell {
+    name: string;
+    type: string;
+    castingTime: string;
+    range: string;
+    duration: string;
+    components: string;
     description: string;
 }
 
@@ -89,7 +99,7 @@ interface Character {
         primaryStats: Values;
         saveThrows: Values;
         skills: Skills;
-        inspiration: Inspiration
+        inspiration: Inspiration;
     };
     descriptions: Descriptions;
 }
@@ -103,7 +113,6 @@ interface CharactersStore {
     characters: Character[];
     setCharacters: (string) => Promise<void>;
 }
-
 
 interface CharacterStore {
     character: Character;

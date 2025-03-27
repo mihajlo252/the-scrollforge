@@ -45,6 +45,7 @@ function CreateCharacter() {
                             attacks: [],
                             featureTraits: [],
                             racialTraits: [],
+                            spells: [],
                         },
                         name: "",
                         currentHP: "",
