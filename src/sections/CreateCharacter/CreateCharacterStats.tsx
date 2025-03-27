@@ -72,6 +72,7 @@ export const CreateCharacterStats = ({
                                 history: history,
                                 insight: insight,
                                 intimidation: intimidation,
+                                investigation: investigation,
                                 medicine: medicine,
                                 nature: nature,
                                 perception: perception,
