@@ -10,6 +10,14 @@ export const Route = createLazyFileRoute("/inspiration")({
 
 function Inspiration() {
     let { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))));
+    const inspirations = {
+    red: "Auto natural 20!",
+    pink: "+10 to AC and saving throw for two rounds.",
+    white: "Dead? Not dead!",
+    purple: "Get one straight answer from the DM.",
+    yellow: "One Legendary action or Legendary resistance.",
+    regular: "Exchange three of these for one of the colored ones."
+  }
 
     let inspiration: Inspiration = state.character.stats.inspiration;
 
@@ -85,7 +93,7 @@ function Inspiration() {
                                         +
                                     </button>
                                 </BoxSection>
-                                <p>{state.character.descriptions.inspiration[key as keyof Descriptions]}</p>
+                                <p>{inspirations[key as keyof Inspiration]}</p>
                             </li>
                         );
                     })}
