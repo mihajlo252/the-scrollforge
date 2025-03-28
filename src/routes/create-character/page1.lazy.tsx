@@ -56,7 +56,6 @@ function CreateCharacter() {
                             maxHP: "",
                             passivePerception: "",
                             proficiencyBonus: "",
-
                             primaryStats: {
                                 str: "",
                                 dex: "",

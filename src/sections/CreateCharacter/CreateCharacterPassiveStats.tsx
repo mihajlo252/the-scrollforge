@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue} : {isSave: boolean, isNewCharacter: boolean, isContinue: boolean}) => {
     const { state } = JSON.parse(localStorage.getItem("newCharacter") || "{}");
     const [passivePerception, setPassivePerception] = useState<number>(state?.character.stats.passivePerception);
-    const [proficiency, setProficiency] = useState<number>(state?.character.stats.proficiency);
+    const [proficiencyBonus, setProficiencyBonus] = useState<number>(state?.character.stats.proficiency);
     const [initiative, setInitiative] = useState<number>(state?.character.stats.initiative);
     const [ac, setAc] = useState<number>(state?.character.stats.ac);
     const [hitDice, setHitDice] = useState(state?.character.stats.hitDice);
@@ -30,7 +30,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                         stats: {
                             ...JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character.stats,
                             passivePerception: passivePerception,
-                            proficiency: proficiency,
+                            proficiencyBonus: proficiencyBonus,
                             initiative: initiative,
                             ac: ac,
                             hitDice: hitDice,
@@ -59,7 +59,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                         input.value = "";
                     });
                     handleSetNull({ setFunc: setPassivePerception });
-                    handleSetNull({ setFunc: setProficiency });
+                    handleSetNull({ setFunc: setProficiencyBonus });
                     handleSetNull({ setFunc: setInitiative });
                     handleSetNull({ setFunc: setAc });
                     handleSetNull({ setFunc: setHitDice });
@@ -91,8 +91,8 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                         // required
                         placeholder="Proficiency"
                         className="bg-transparent text-primary focus-within:outline-0"
-                        value={proficiency ?? ""}
-                        onChange={(e) => handleChange(e, setProficiency)}
+                        value={proficiencyBonus ?? ""}
+                        onChange={(e) => handleChange(e, setProficiencyBonus)}
                     />
                 </li>
                 <li>
