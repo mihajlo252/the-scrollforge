@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue} : {isSave: boolean, isNewCharacter: boolean, isContinue: boolean}) => {
     const { state } = JSON.parse(localStorage.getItem("newCharacter") || "{}");
     const [passivePerception, setPassivePerception] = useState<number>(state?.character.stats.passivePerception);
-    const [proficiencyBonus, setProficiencyBonus] = useState<number>(state?.character.stats.proficiency);
+    const [proficiencyBonus, setProficiencyBonus] = useState<number>(state?.character.stats.proficiencyBonus);
     const [initiative, setInitiative] = useState<number>(state?.character.stats.initiative);
     const [ac, setAc] = useState<number>(state?.character.stats.ac);
     const [hitDice, setHitDice] = useState(state?.character.stats.hitDice);

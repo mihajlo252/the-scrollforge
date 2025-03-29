@@ -14,7 +14,15 @@ export const CreateCharacterSpells = ({
     setIsSave: React.Dispatch<React.SetStateAction<boolean>>;
     description: string;
 }) => {
-    const [spellValue, setSpellValue] = useState<Spell>();
+    const [spellValue, setSpellValue] = useState<Spell>({
+        name: "",
+        type: "",
+        castingTime: "",
+        range: "",
+        duration: "",
+        components: "",
+        description: "",
+    });
 
     const [isToggled, setIsToggled] = useState(false);
 
@@ -51,7 +59,7 @@ export const CreateCharacterSpells = ({
 
     const handleAddSpell = (e: any) => {
         e.preventDefault();
-        if (spellValue) {
+        if (spellValue.name || spellValue.type || spellValue.castingTime || spellValue.range || spellValue.duration || spellValue.components || spellValue.description) {
             setSpells([...spells, spellValue]);
             setSpellValue({
                 name: "",

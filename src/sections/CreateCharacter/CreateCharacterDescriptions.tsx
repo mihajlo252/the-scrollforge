@@ -10,7 +10,7 @@ export const CreateCharacterDescriptions = ({ description }: { description: stri
     const [racialTraits, setRacialTraits] = useState<string[]>(state?.character.descriptions.racialTraits);
     const [featureTraits, setFeatureTraits] = useState<string[]>(state?.character.descriptions.featureTraits);
     const [attacks, setAttacks] = useState<Attack[]>(state?.character.descriptions.attacks);
-    const [spells, setSpells] = useState<Spell[]>([]);
+    const [spells, setSpells] = useState<Spell[]>(state?.character.descriptions.spells);
 
 
     if (description === "racialTraits") {

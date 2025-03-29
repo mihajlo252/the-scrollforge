@@ -19,6 +19,7 @@ export const CreateCharacterTraits = ({
     const [isToggled, setIsToggled] = React.useState(false);
 
     const handleAddTrait = () => {
+        if (traitValue === "") return;
         setTraits([...traits, traitValue]);
         setTraitValue("");
         setIsSave(true);
