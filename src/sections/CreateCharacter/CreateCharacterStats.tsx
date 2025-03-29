@@ -147,7 +147,7 @@ export const CreateCharacterStats = ({
                             +
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                 value={str ?? ""}
@@ -161,7 +161,7 @@ export const CreateCharacterStats = ({
                             +
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                 value={dex ?? ""}
@@ -175,7 +175,7 @@ export const CreateCharacterStats = ({
                             +
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                 value={con ?? ""}
@@ -189,7 +189,7 @@ export const CreateCharacterStats = ({
                             +
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                 value={int ?? ""}
@@ -203,7 +203,7 @@ export const CreateCharacterStats = ({
                             +
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                 value={wis ?? ""}
@@ -217,7 +217,7 @@ export const CreateCharacterStats = ({
                             +
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                 value={cha ?? ""}
@@ -237,7 +237,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={acrobatics ?? ""}
@@ -251,7 +251,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={animalHandling ?? ""}
@@ -265,7 +265,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={arcana ?? ""}
@@ -279,7 +279,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={athletics ?? ""}
@@ -293,7 +293,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={deception ?? ""}
@@ -307,7 +307,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={history ?? ""}
@@ -321,7 +321,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={insight ?? ""}
@@ -335,7 +335,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={intimidation ?? ""}
@@ -349,7 +349,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={investigation ?? ""}
@@ -365,7 +365,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={medicine ?? ""}
@@ -379,7 +379,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={nature ?? ""}
@@ -393,7 +393,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={perception ?? ""}
@@ -407,7 +407,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={performance ?? ""}
@@ -421,7 +421,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={persuasion ?? ""}
@@ -435,7 +435,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={religion ?? ""}
@@ -449,7 +449,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={sleightOfHand ?? ""}
@@ -463,7 +463,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={survival ?? ""}
@@ -477,7 +477,7 @@ export const CreateCharacterStats = ({
                                 +
                                 <input
                                     type="text"
-                                    // required
+                                    required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
                                     value={stealth ?? ""}

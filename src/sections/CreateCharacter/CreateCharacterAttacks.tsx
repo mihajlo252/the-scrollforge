@@ -14,7 +14,14 @@ export const CreateCharacterAttacks = ({
     setIsSave: React.Dispatch<React.SetStateAction<boolean>>;
     description: string;
 }) => {
-    const [attackValue, setAttackValue] = useState<Attack>();
+    const [attackValue, setAttackValue] = useState<Attack>({
+        name: "",
+        type: "",
+        range: "",
+        attack: "",
+        damage: "",
+        description: "",
+    });
 
     const [isToggled, setIsToggled] = useState(false);
 
@@ -51,7 +58,7 @@ export const CreateCharacterAttacks = ({
 
     const handleAddAttack = (e: any) => {
         e.preventDefault();
-        if (attackValue) {
+        if (attackValue.name || attackValue.type || attackValue.range || attackValue.attack || attackValue.damage) {
             setAttacks([...attacks, attackValue]);
             setAttackValue({ name: "", type: "", range: "", attack: "", damage: "", description: "" });
         }

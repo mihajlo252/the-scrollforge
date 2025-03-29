@@ -76,7 +76,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     Passive Perception: +
                     <input
                         type="text"
-                        // required
+                        required
                         placeholder="Passive Perception"
                         className="bg-transparent text-primary focus-within:outline-0"
                         value={passivePerception ?? ""}
@@ -88,7 +88,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     Proficiency: +
                     <input
                         type="text"
-                        // required
+                        required
                         placeholder="Proficiency"
                         className="bg-transparent text-primary focus-within:outline-0"
                         value={proficiencyBonus ?? ""}
@@ -100,7 +100,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     Initiative: +
                     <input
                         type="text"
-                        // required
+                        required
                         placeholder="Initiative"
                         className="bg-transparent text-primary focus-within:outline-0"
                         value={initiative ?? ""}
@@ -112,7 +112,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     AC:{" "}
                     <input
                         type="text"
-                        // required
+                        required
                         placeholder="AC"
                         className="bg-transparent text-primary focus-within:outline-0"
                         value={ac ?? ""}
@@ -124,7 +124,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     Hit Dice:{" "}
                     <input
                         type="text"
-                        // required
+                        required
                         placeholder="Hit Dice (eg. 1d8)"
                         className="bg-transparent text-primary focus-within:outline-0"
                         value={hitDice ?? ""}
@@ -136,7 +136,7 @@ export const CreateCharacterPassiveStats = ({isSave, isNewCharacter, isContinue}
                     MaxHP:{" "}
                     <input
                         type="text"
-                        // required
+                        required
                         placeholder="MaxHP"
                         className="bg-transparent text-primary focus-within:outline-0"
                         value={maxHP ?? ""}

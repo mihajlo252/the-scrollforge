@@ -26,9 +26,8 @@ function Page2() {
         e.preventDefault();
         const character = JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character
         const { user } = JSON.parse(getUserFromLocal());
-        console.log(user);
-        const data = submitCharacter(character, user.id);
-        console.log(data);
+        submitCharacter(character, user.id);
+        navigate({ to:"/profile"});
     };
 
     return (

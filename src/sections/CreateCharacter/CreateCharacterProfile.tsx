@@ -121,7 +121,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex">
                             <input
                                 type="text"
-                                // required
+                                required
                                 placeholder="Name"
                                 className="w-[7ch] bg-transparent text-primary focus-within:outline-0"
                                 value={characterName}
@@ -130,7 +130,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             , &nbsp;Level &nbsp;
                             <input
                                 type="text"
-                                // required
+                                required
                                 placeholder="0"
                                 className="w-[7ch] bg-transparent text-primary focus-within:outline-0"
                                 value={characterLevel}
@@ -141,7 +141,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex">
                             <input
                                 type="text"
-                                // required
+                                required
                                 placeholder="Class"
                                 className="w-[7ch] bg-transparent text-primary focus-within:outline-0"
                                 value={characterClass}
@@ -157,7 +157,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             , &nbsp;
                             <input
                                 type="text"
-                                // required
+                                required
                                 placeholder="Race"
                                 className="w-[7ch] bg-transparent text-primary focus-within:outline-0"
                                 value={characterRace}
@@ -187,7 +187,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex items-center justify-center gap-0">
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-primary focus-within:outline-0"
                                 value={str}
@@ -196,7 +196,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             <span className="text-sm">+</span>
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-sm text-primary focus-within:outline-0"
                                 value={strMod ?? ""}
@@ -206,7 +206,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex items-center justify-center gap-0">
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-primary focus-within:outline-0"
                                 value={dex ?? ""}
@@ -215,7 +215,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             <span className="text-sm">+</span>
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-sm text-primary focus-within:outline-0"
                                 value={dexMod ?? ""}
@@ -225,7 +225,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex items-center justify-center gap-0">
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-primary focus-within:outline-0"
                                 value={con ?? ""}
@@ -234,7 +234,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             <span className="text-sm">+</span>
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-sm text-primary focus-within:outline-0"
                                 value={conMod ?? ""}
@@ -244,7 +244,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex items-center justify-center gap-0">
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-primary focus-within:outline-0"
                                 value={int ?? ""}
@@ -253,7 +253,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             <span className="text-sm">+</span>
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-sm text-primary focus-within:outline-0"
                                 value={intMod ?? ""}
@@ -263,7 +263,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex items-center justify-center gap-0">
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-primary focus-within:outline-0"
                                 value={wis ?? ""}
@@ -272,7 +272,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             <span className="text-sm">+</span>
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-sm text-primary focus-within:outline-0"
                                 value={wisMod ?? ""}
@@ -282,7 +282,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                         <div className="flex items-center justify-center gap-0">
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-primary focus-within:outline-0"
                                 value={cha ?? ""}
@@ -291,7 +291,7 @@ export const CreateCharacterProfile = ({isSave, isNewCharacter, isContinue} : {i
                             <span className="text-sm">+</span>
                             <input
                                 type="number"
-                                // required
+                                required
                                 placeholder="0"
                                 className="max-w-[2ch] bg-transparent text-center text-sm text-primary focus-within:outline-0"
                                 value={chaMod ?? ""}
