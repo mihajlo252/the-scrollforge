@@ -26,8 +26,9 @@ function Page2() {
         e.preventDefault();
         const character = JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character
         const { user } = JSON.parse(getUserFromLocal());
-        submitCharacter(character, user.id);
+        const data = await submitCharacter(character, user.id);
         navigate({ to:"/profile"});
+        console.log("Here is the data: ", data);
     };
 
     return (
