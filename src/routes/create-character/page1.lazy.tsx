@@ -194,7 +194,6 @@ function CreateCharacter() {
                 <button
                     type="submit"
                     className="align-self-end btn btn-ghost w-[2%] self-center rounded-lg border-2 border-slate-900 bg-base-300 text-neutral"
-                    onClick={() => setIsSave(true)}
                 >
                     {`>`}
                 </button>
