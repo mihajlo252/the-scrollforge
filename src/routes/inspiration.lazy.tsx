@@ -80,8 +80,7 @@ function Inspiration() {
                                 <img
                                     src={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/gems/${key}.svg`}
                                     alt={`${key} inspiration gem`}
-                                    width={80}
-                                    height={80}
+                                    className="h-[4.5rem] w-[4.5rem]"
                                 />
                                 
                                 <BoxSection styles="items-center justify-center gap-5">

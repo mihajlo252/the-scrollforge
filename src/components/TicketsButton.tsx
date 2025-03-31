@@ -9,10 +9,10 @@ export const TicketsButton = ({color, size, strokeWidth, styles} : {color: strin
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
+            viewBox="494,267,110,110"
             width={size}
             height={size}
-            viewBox="494,267,110,110"
-            className="btn h-max w-max cursor-pointer bg-transparent hover:bg-transparent"
+            className={`btn h-max w-max cursor-pointer bg-transparent hover:bg-transparent`}
         >
             <g id="document" fillOpacity="0" fill="#ffffff" fillRule="nonzero" stroke="#000000">
                 <rect
