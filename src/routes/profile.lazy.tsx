@@ -2,11 +2,12 @@ import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCharactersStore, useCharacterStore } from "../zustand/stores";
 import { BoxSection } from "../components/BoxSection";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { ImageWithFallback } from "../components/ImageWithFallback";
+import { deleteCharacter } from "../utilities/deleteCharacter";
 
 export const Route = createLazyFileRoute("/profile")({
     component: Profile,
@@ -15,6 +16,7 @@ export const Route = createLazyFileRoute("/profile")({
 function Profile() {
     const { characters, setCharacters }: CharactersStore = useCharactersStore();
     const { setCharacter }: CharacterStore = useCharacterStore();
+    const [isDeleted, setIsDeleted] = useState(false);
 
     const { user } = JSON.parse(getUserFromLocal());
 
@@ -29,9 +31,22 @@ function Profile() {
         navigate({ to: "/character" });
     };
 
+    const handleDeletePopup = (char: Character) => {
+        const confirm = window.confirm("Are you sure you want to delete this character?");
+        if (confirm) {
+            handleDeleteCharacter(char);
+        }
+    };
+
+    const handleDeleteCharacter = async (char: Character) => {
+        await deleteCharacter(char.id);
+        setIsDeleted(true);
+    };
+
     useEffect(() => {
         handleGetCharacter();
-    }, []);
+        setIsDeleted(false);
+    }, [isDeleted]);
 
     return (
         <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -47,24 +62,38 @@ function Profile() {
                 </section>
                 <ul className="w-full text-xl">
                     {characters.map((character) => (
-                        <li
-                            key={character.id}
-                            className="flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
-                            onClick={() => handleNavigateToCharacter(character)}
-                        >
-                            <ImageWithFallback source={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/${character.characterProfile.name.toLowerCase()}.png`} alt={character.characterProfile.name} fallbackSrc={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/avatarplaceholder.png`}/>
+                        <div key={character.id} className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800">
+                            <li
+                                className="flex h-full w-full items-center gap-5"
+                                onClick={() => handleNavigateToCharacter(character)}
+                            >
+                                <ImageWithFallback
+                                    source={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/${character.characterProfile.name.toLowerCase()}.png`}
+                                    alt={character.characterProfile.name}
+                                    fallbackSrc={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/avatarplaceholder.png`}
+                                />
 
-                            <div className="text-start">
-                                <p>
-                                    {character.characterProfile.name}, {character.characterProfile.level}
-                                </p>
-                                <div className="h-[.5px] w-full bg-neutral"></div>
-                                <p>
-                                    {character.characterProfile.race} {character.characterProfile?.subrace},{" "}
-                                    {character.characterProfile.class} {character.characterProfile?.subclass}
-                                </p>
-                            </div>
-                        </li>
+                                <div className="text-start">
+                                    <p>
+                                        {character.characterProfile.name}, {character.characterProfile.level}
+                                    </p>
+                                    <div className="h-[.5px] w-full bg-neutral"></div>
+                                    <p>
+                                        {character.characterProfile.race} {character.characterProfile?.subrace},{" "}
+                                        {character.characterProfile.class} {character.characterProfile?.subclass}
+                                    </p>
+                                </div>
+                            </li>
+                                {character.id != "fc42a10e-cba9-467b-adee-03ae8046ea78" && (
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDeletePopup(character)}
+                                        className="btn btn-secondary absolute right-5 top-1/2 z-20 -translate-y-1/2"
+                                    >
+                                        Delete
+                                    </button>
+                                )}
+                        </div>
                     ))}
                 </ul>
             </BoxSection>
