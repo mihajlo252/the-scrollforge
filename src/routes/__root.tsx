@@ -1,17 +1,33 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { Navigation } from '../components/Navigation';
-import { TicketsButton } from '../components/TicketsButton';
-
+import { Navigation } from "../components/Navigation";
+import { TicketsButton } from "../components/TicketsButton";
+import { BoxSection } from "../components/BoxSection";
+import { ErrComp } from "../components/ErrComp";
 
 export const Route = createRootRoute({
-  component: () => (
-    <div className="flex h-[100svh] flex-col gap-5 px-10 py-5">
-      <Navigation />
+    component: () => (
+        <div className="flex h-[100svh] flex-col gap-5 px-10 py-5">
+            <Navigation />
 
-      <Outlet/>
-      {/* <TanStackRouterDevtools /> */}
-      <TicketsButton styles="cursor-pointer hover:scale-110 transition-all duration-150 ease-in absolute left-3 bottom-3 opacity-50 z-[99999]" color={"#d0a732"} size={30} strokeWidth={5} />
-    </div>
-  ),
-})
+            <Outlet />
+            {/* <TanStackRouterDevtools /> */}
+            <TicketsButton
+                styles="cursor-pointer hover:scale-110 transition-all duration-150 ease-in absolute left-3 bottom-3 opacity-50 z-[99999]"
+                color={"#d0a732"}
+                size={30}
+                strokeWidth={5}
+            />
+        </div>
+    ),
+    errorComponent: () => (
+        <BoxSection styles="w-full h-full flex flex-col place-self-center">
+            <ErrComp />
+        </BoxSection>
+    ),
+    notFoundComponent: () => (
+        <BoxSection styles="w-full h-full flex flex-col justify-center items-center">
+            <ErrComp />
+        </BoxSection>
+    ),
+});
