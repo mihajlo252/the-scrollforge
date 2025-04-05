@@ -236,7 +236,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -250,7 +250,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -264,7 +264,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -278,7 +278,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -292,7 +292,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -306,7 +306,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -320,7 +320,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -334,7 +334,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -348,7 +348,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -364,7 +364,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -378,7 +378,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -392,7 +392,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -406,7 +406,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -420,7 +420,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -434,7 +434,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -448,7 +448,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -462,7 +462,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"
@@ -476,7 +476,7 @@ export const CreateCharacterStats = ({
                             <span className="border-r-2 pr-2">
                                 +
                                 <input
-                                    type="text"
+                                    type="number"
                                     required
                                     placeholder="0"
                                     className="w-[1ch] max-w-[2ch] bg-transparent text-primary focus-within:outline-0"

@@ -7,7 +7,9 @@ import { useCharactersStore, useCharacterStore } from "../zustand/stores";
 import { BoxSection } from "../components/BoxSection";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { ImageWithFallback } from "../components/ImageWithFallback";
-import { deleteCharacter } from "../utilities/deleteCharacter";
+// import { deleteCharacter } from "../utilities/deleteCharacter";
+import { DeletePopup } from "../components/DeletePopup";
+import { DeleteButton } from "../components/DeleteButton";
 
 export const Route = createLazyFileRoute("/profile")({
     component: Profile,
@@ -17,6 +19,7 @@ function Profile() {
     const { characters, setCharacters }: CharactersStore = useCharactersStore();
     const { setCharacter }: CharacterStore = useCharacterStore();
     const [isDeleted, setIsDeleted] = useState(false);
+    const [characterDelete, setCharacterDelete] = useState("");
 
     const { user } = JSON.parse(getUserFromLocal());
 
@@ -32,16 +35,17 @@ function Profile() {
     };
 
     const handleDeletePopup = (char: Character) => {
-        const confirm = window.confirm("Are you sure you want to delete this character?");
-        if (confirm) {
-            handleDeleteCharacter(char);
-        }
+        setCharacterDelete(char.id);
+        // const confirm = window.confirm("Are you sure you want to delete this character?");
+        // if (confirm) {
+        //     handleDeleteCharacter(char);
+        // }
     };
 
-    const handleDeleteCharacter = async (char: Character) => {
-        await deleteCharacter(char.id);
-        setIsDeleted(true);
-    };
+    // const handleDeleteCharacter = async (char: Character) => {
+    //     await deleteCharacter(char.id);
+    //     setIsDeleted(true);
+    // };
 
     useEffect(() => {
         handleGetCharacter();
@@ -88,18 +92,22 @@ function Profile() {
                                         </p>
                                     </div>
                                 </li>
-                                {character.id != "fc42a10e-cba9-467b-adee-03ae8046ea78" && (
-                                    <button
-                                        type="button"
-                                        onClick={() => handleDeletePopup(character)}
-                                        className="btn btn-secondary absolute right-5 top-1/2 z-20 -translate-y-1/2"
-                                    >
-                                        Delete
-                                    </button>
-                                )}
+                                <DeleteButton size={60} styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary" event={() => handleDeletePopup(character)} />
+                                {/* <button
+                                    type="button"
+                                    onClick={() => handleDeletePopup(character)}
+                                    className="btn btn-secondary"
+                                >
+                                    Delete
+                                </button> */}
                             </div>
                         ))}
                     </ul>
+                    <DeletePopup
+                        deleteID={characterDelete}
+                        setDeleteID={setCharacterDelete}
+                        setIsDeleted={setIsDeleted}
+                    />
                 </BoxSection>
             </motion.main>
         </CatchBoundary>
