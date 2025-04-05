@@ -5,6 +5,7 @@ import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
 import { BorderButton } from "./BorderButton";
+import logo from "/logo.png"
 
 export const Navigation = () => {
     const navigate = useNavigate();
@@ -50,7 +51,7 @@ export const Navigation = () => {
     return (
         <motion.nav className="flex justify-between gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline">
-                Dash&Play
+                <img src={logo} className="w-28" alt="Dash&Play Logo" />
             </Link>
             {!newUser && (
                 <BorderButton
