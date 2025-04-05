@@ -7,7 +7,6 @@ import { useCharactersStore, useCharacterStore } from "../zustand/stores";
 import { BoxSection } from "../components/BoxSection";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { ImageWithFallback } from "../components/ImageWithFallback";
-// import { deleteCharacter } from "../utilities/deleteCharacter";
 import { DeletePopup } from "../components/DeletePopup";
 import { DeleteButton } from "../components/DeleteButton";
 
@@ -36,16 +35,7 @@ function Profile() {
 
     const handleDeletePopup = (char: Character) => {
         setCharacterDelete(char.id);
-        // const confirm = window.confirm("Are you sure you want to delete this character?");
-        // if (confirm) {
-        //     handleDeleteCharacter(char);
-        // }
     };
-
-    // const handleDeleteCharacter = async (char: Character) => {
-    //     await deleteCharacter(char.id);
-    //     setIsDeleted(true);
-    // };
 
     useEffect(() => {
         handleGetCharacter();
@@ -93,13 +83,6 @@ function Profile() {
                                     </div>
                                 </li>
                                 <DeleteButton size={60} styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary" event={() => handleDeletePopup(character)} />
-                                {/* <button
-                                    type="button"
-                                    onClick={() => handleDeletePopup(character)}
-                                    className="btn btn-secondary"
-                                >
-                                    Delete
-                                </button> */}
                             </div>
                         ))}
                     </ul>

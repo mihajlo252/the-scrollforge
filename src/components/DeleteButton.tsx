@@ -18,40 +18,33 @@ export const DeleteButton = ({
                 width={size}
                 height={size}
                 viewBox="493.5,266.5,110,110"
-                
             >
                 <g
                     id="document"
-                    
-                    stroke-width="0"
-                    stroke-linecap="butt"
-                    stroke-linejoin="miter"
-                    stroke-miterlimit="10"
-                    stroke-dasharray=""
-                    stroke-dashoffset="0"
-                    font-family="none"
-                    font-weight="none"
-                    font-size="none"
-                    text-anchor="none"
-                    
+                    strokeWidth="0"
+                    strokeLinecap="butt"
+                    strokeLinejoin="miter"
+                    strokeMiterlimit="10"
+                    strokeDasharray=""
+                    strokeDashoffset="0"
+                    fontFamily="none"
+                    fontWeight="none"
+                    fontSize="none"
+                    textAnchor="none"
                 >
                     <rect
                         x="3140.45455"
                         y="1211.36364"
                         transform="scale(0.15714,0.22)"
-                       
                         id="Shape 1 1"
-                        vector-effect="non-scaling-stroke"
+                        vectorEffect="non-scaling-stroke"
                     />
                 </g>
                 <g
-                    
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-dashoffset="0"
-                   
-                    
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeDashoffset="0"
                 >
                     <g id="stage">
                         <g id="layer1 1">
@@ -64,8 +57,7 @@ export const DeleteButton = ({
                             <path d="M559.53362,318.13648v33.5043" id="Path 1" />
                             <path
                                 d="M530.85942,305.69258c-0.16321,-0.26721 -0.24787,-0.54095 -0.24787,-0.81971c0,-2.94415 9.44578,-5.33086 21.09772,-5.33086c11.65195,0 21.09772,2.38671 21.09772,5.33086c0,0.27874 -0.08467,0.5525 -0.24787,0.81971c-1.56054,2.555 -10.30109,4.51115 -20.84985,4.51115c-10.54876,0 -19.28931,-1.95616 -20.84985,-4.51115z"
-                                id="Path 1"
-                                
+                                id="Path 1"              
                             />
                             <path
                                 d="M526.99843,299.96332l-0.62718,2.33336c-0.20632,-0.66738 0.08483,-1.417 0.62718,-2.33336z"
