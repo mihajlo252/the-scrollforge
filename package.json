@@ -2,7 +2,7 @@
   "homepage": "https://mihajlo252.github.io/dash-and-play/",
   "name": "dash-and-play",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "predeploy": "npm run build",
