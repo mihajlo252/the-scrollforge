@@ -9,6 +9,7 @@ import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 import { DeletePopup } from "../components/DeletePopup";
 import { DeleteButton } from "../components/DeleteButton";
+import avatarPlaceholder from "/assets/avatarplaceholder.png";
 
 export const Route = createLazyFileRoute("/profile")({
     component: Profile,
@@ -55,7 +56,7 @@ function Profile() {
                             Create Character
                         </button>
                     </section>
-                    <ul className="w-full text-xl">
+                    <ul className="flex w-full flex-col gap-2 text-xl">
                         {characters.map((character) => (
                             <div
                                 key={character.id}
@@ -66,9 +67,9 @@ function Profile() {
                                     onClick={() => handleNavigateToCharacter(character)}
                                 >
                                     <ImageWithFallback
-                                        source={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/${character.characterProfile.name.toLowerCase()}.png`}
+                                        source={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/${character.avatar}`}
                                         alt={character.characterProfile.name}
-                                        fallbackSrc={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/avatarplaceholder.png`}
+                                        fallbackSrc={avatarPlaceholder}
                                     />
 
                                     <div className="text-start">

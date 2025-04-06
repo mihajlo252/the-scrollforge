@@ -5,7 +5,7 @@ import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
 import { BorderButton } from "./BorderButton";
-import logo from "/logo.png"
+import logo from "/assets/logo.png"
 
 export const Navigation = () => {
     const navigate = useNavigate();

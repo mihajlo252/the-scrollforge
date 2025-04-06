@@ -102,6 +102,7 @@ interface Character {
         inspiration: Inspiration;
     };
     descriptions: Descriptions;
+    avatar: string;
 }
 interface UserStore {
     user: string;
