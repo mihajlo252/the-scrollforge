@@ -40,6 +40,7 @@ interface Descriptions {
     racialTraits: string[];
     featureTraits: string[];
     attacks: Attack[];
+    spells: Spell[];
 }
 
 interface Attack {

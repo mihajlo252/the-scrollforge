@@ -59,6 +59,9 @@ function Character() {
                         <Link to="/attacks" className="btn btn-primary">
                             Attacks
                         </Link>
+                        <Link to="/spells" className="btn btn-primary">
+                            Spells
+                        </Link>
                         <Link to="/inspiration" className="btn btn-primary">
                             Inspiration
                         </Link>
