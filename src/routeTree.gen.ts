@@ -26,6 +26,9 @@ const InspirationLazyImport = createFileRoute('/inspiration')()
 const CharacterLazyImport = createFileRoute('/character')()
 const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
+const CreateCharacterPage3LazyImport = createFileRoute(
+  '/create-character/page3',
+)()
 const CreateCharacterPage2LazyImport = createFileRoute(
   '/create-character/page2',
 )()
@@ -84,6 +87,13 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const CreateCharacterPage3LazyRoute = CreateCharacterPage3LazyImport.update({
+  path: '/create-character/page3',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/create-character/page3.lazy').then((d) => d.Route),
+)
 
 const CreateCharacterPage2LazyRoute = CreateCharacterPage2LazyImport.update({
   path: '/create-character/page2',
@@ -187,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateCharacterPage2LazyImport
       parentRoute: typeof rootRoute
     }
+    '/create-character/page3': {
+      id: '/create-character/page3'
+      path: '/create-character/page3'
+      fullPath: '/create-character/page3'
+      preLoaderRoute: typeof CreateCharacterPage3LazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -205,6 +222,7 @@ export const routeTree = rootRoute.addChildren({
   TraitsLazyRoute,
   CreateCharacterPage1LazyRoute,
   CreateCharacterPage2LazyRoute,
+  CreateCharacterPage3LazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -226,7 +244,8 @@ export const routeTree = rootRoute.addChildren({
         "/tickets",
         "/traits",
         "/create-character/page1",
-        "/create-character/page2"
+        "/create-character/page2",
+        "/create-character/page3"
       ]
     },
     "/": {
@@ -264,6 +283,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/create-character/page2": {
       "filePath": "create-character/page2.lazy.tsx"
+    },
+    "/create-character/page3": {
+      "filePath": "create-character/page3.lazy.tsx"
     }
   }
 }

@@ -6,8 +6,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { BoxSection } from "../../components/BoxSection";
 import { CreateCharacterDescriptions } from "../../sections/CreateCharacter/CreateCharacterDescriptions";
-import { submitCharacter } from "../../utilities/submitCharacter";
-import { getUserFromLocal } from "../../utilities/getUserFromLocal";
+// import { submitCharacter } from "../../utilities/submitCharacter";
+// import { getUserFromLocal } from "../../utilities/getUserFromLocal";
 
 export const Route = createLazyFileRoute("/create-character/page2")({
     component: Page2,
@@ -22,14 +22,14 @@ function Page2() {
         setDescription(d);
     };
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        const character = JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character
-        const { user } = JSON.parse(getUserFromLocal());
-        const data = await submitCharacter(character, user.id);
-        navigate({ to:"/profile"});
-        console.log("Here is the data: ", data);
-    };
+    // const handleSubmit = async (e: any) => {
+    //     e.preventDefault();
+    //     const character = JSON.parse(localStorage.getItem("newCharacter") || "{}").state.character
+    //     const { user } = JSON.parse(getUserFromLocal());
+    //     const data = await submitCharacter(character, user.id);
+    //     navigate({ to:"/profile"});
+    //     console.log("Here is the data: ", data);
+    // };
 
     return (
         <motion.div
@@ -64,8 +64,8 @@ function Page2() {
             <button
                     type="submit"
                     className="align-self-end btn btn-ghost w-[2%] self-center rounded-lg border-2 border-slate-900 bg-base-300 text-neutral"
-                    // onClick={() => navigate({ to="/create-character/page3"})}
-                    onClick={handleSubmit}
+                    onClick={() => navigate({ to: "/create-character/page3"})}
+                    // onClick={handleSubmit}
                 >
                     {`>`}
                 </button>
