@@ -67,7 +67,9 @@ function Profile() {
                                     onClick={() => handleNavigateToCharacter(character)}
                                 >
                                     <ImageWithFallback
-                                        source={`https://iyfoqgbhaxcedpmuvfkr.supabase.co/storage/v1/object/public/characters/${character.avatar}`}
+                                        bucket="characters"
+                                        folder={""}
+                                        name={character.avatar}
                                         alt={character.characterProfile.name}
                                         fallbackSrc={avatarPlaceholder}
                                     />
