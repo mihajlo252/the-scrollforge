@@ -1,16 +1,13 @@
 import { supabase } from "../supabase/supabase";
 
-export const submitCharacter = async (character: any, user: string) => {
+export const submitCharacter = async (characterProfile: any, user: string) => {
     
     try {
         const { error } = await supabase
             .from("characters")
             .insert({
-                name: character.name,
-                characterProfile: character.characterProfile,
-                stats: character.stats,
-                descriptions: character.descriptions,
-                currentHP: character.currentHP,
+                name: characterProfile.name,
+                characterProfile: characterProfile,
                 profileID: user
             });
         if (error) {

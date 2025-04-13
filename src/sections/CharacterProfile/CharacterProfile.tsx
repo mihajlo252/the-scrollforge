@@ -1,33 +1,88 @@
+import React, { useState } from "react";
+import { calculateModifiers } from "../../utilities/calculateStats";
 
-interface Primary {
-    str: number,
-    dex: number,
-    con: number,
-    int: number,
-    wis: number,
-    cha: number,
-}
+// interface Primary {
+//     str: number,
+//     dex: number,
+//     con: number,
+//     int: number,
+//     wis: number,
+//     cha: number,
+// }
 
-interface Mods {
-    str: number,
-    dex: number,
-    con: number,
-    int: number,
-    wis: number,
-    cha: number,
-}
+// interface Mods {
+//     str: number,
+//     dex: number,
+//     con: number,
+//     int: number,
+//     wis: number,
+//     cha: number,
+// }
 
-interface Profile {
-    class: string,
-    level: string,
-    name: string,
-    pastLife: string,
-    race: string,
-    subclass: string,
-    subrace: string,
-}
+// interface Profile {
+//     class: string,
+//     level: string,
+//     name: string,
+//     pastLife: string,
+//     race: string,
+//     subclass: string,
+//     subrace: string,
+// }
 
-export const CharacterProfile = ({primaryStats, primaryMods, characterProfile}: {primaryStats: Primary, primaryMods: Mods, characterProfile: Profile}) => {
+export const CharacterProfile = ({ character, setStatChange }: { character: Character, setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
+    if (!character) return;
+
+    const {
+        characterProfile,
+        stats: { primaryStats },
+    } = character;
+
+    const [str, setStr] = useState<number>(primaryStats.str);
+    const [dex, setDex] = useState<number>(primaryStats.dex);
+    const [con, setCon] = useState<number>(primaryStats.con);
+    const [int, setInt] = useState<number>(primaryStats.int);
+    const [wis, setWis] = useState<number>(primaryStats.wis);
+    const [cha, setCha] = useState<number>(primaryStats.cha);
+    const [characterLevel, setCharacterLevel] = useState(characterProfile.level);
+
+    const handleChangeStats = (e: any, setFunc: any) => {
+        e.target.style.width = e.target.value.length + "ch";
+        if (e.target.value.length == 0) {
+            e.target.style.width = "7ch";
+        }
+        setFunc(e.target.value);
+        localStorage.setItem(
+            "character",
+            JSON.stringify({
+                state: {
+                    character: {
+                        ...character,
+                        stats: { ...character.stats, primaryStats: { ...character.stats.primaryStats, [e.target.name]: parseInt(e.target.value)}},
+                    },
+                },
+                version: 0,
+            })
+        );
+        setStatChange(true);
+    };
+
+    const handleChangeLevel = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCharacterLevel(parseInt(e.target.value) || 0);
+        localStorage.setItem(
+            "character",
+            JSON.stringify({
+                state: {
+                    character: {
+                        ...character,
+                        characterProfile: { ...character.characterProfile, level: parseInt(e.target.value) || 0 },
+                    },
+                },
+                version: 0,
+            })
+        );
+        setStatChange(true);
+    };
+
     return (
         <header className="grid h-full w-full grid-cols-2 items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
             <div className="flex gap-2">
@@ -37,12 +92,22 @@ export const CharacterProfile = ({primaryStats, primaryMods, characterProfile}: 
                     alt=""
                 /> */}
                 <div className="text-start">
-                    <p>{characterProfile.name}, Level {characterProfile.level}</p>
+                    <p>
+                        {characterProfile.name}, Level <input
+                                type="text"
+                                placeholder="0"
+                                className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center focus-within:outline-0"
+                                value={characterLevel ?? 0}
+                                onChange={(e) => handleChangeLevel(e)}
+                            />
+                    </p>
                     <hr />
-                    <p>{characterProfile.class} {characterProfile.subclass}, {characterProfile.race} {characterProfile.subrace}</p>
+                    <p>
+                        {characterProfile.class} {characterProfile.subclass}, {characterProfile.race} {characterProfile.subrace}
+                    </p>
                 </div>
             </div>
-            <div className="text-2xl">
+            <div className="flex flex-col gap-[5px] text-2xl">
                 <div className="grid grid-cols-6">
                     <p>STR</p>
                     <p>DEX</p>
@@ -53,12 +118,72 @@ export const CharacterProfile = ({primaryStats, primaryMods, characterProfile}: 
                 </div>
                 <hr />
                 <div className="grid grid-cols-6">
-                    <p>{primaryStats.str}<span className="text-sm">+{primaryMods.str}</span></p>
-                    <p>{primaryStats.dex}<span className="text-sm">+{primaryMods.dex}</span></p>
-                    <p>{primaryStats.con}<span className="text-sm">+{primaryMods.con}</span></p>
-                    <p>{primaryStats.int}<span className="text-sm">+{primaryMods.int}</span></p>
-                    <p>{primaryStats.wis}<span className="text-sm">+{primaryMods.wis}</span></p>
-                    <p>{primaryStats.cha}<span className="text-sm">+{primaryMods.cha}</span></p>
+                    <div className="flex items-center justify-center gap-0">
+                        <input
+                            type="number"
+                            placeholder="0"
+                            className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center text-base-content focus-within:outline-0"
+                            value={str ?? 0}
+                            name="str"
+                            onChange={(e) => handleChangeStats(e, setStr)}
+                        />
+                        <span className="text-sm text-primary">+{calculateModifiers({ stat: str })}</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-0">
+                        <input
+                            type="number"
+                            placeholder="0"
+                            name="dex"
+                            className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center text-base-content focus-within:outline-0"
+                            value={dex ?? 0}
+                            onChange={(e) => handleChangeStats(e, setDex)}
+                        />
+                        <span className="text-sm text-primary">+{calculateModifiers({ stat: dex })}</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-0">
+                        <input
+                            type="number"
+                            placeholder="0"
+                            name="con"
+                            className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center text-base-content focus-within:outline-0"
+                            value={con ?? 0}
+                            onChange={(e) => handleChangeStats(e, setCon)}
+                        />
+                        <span className="text-sm text-primary">+{calculateModifiers({ stat: con })}</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-0">
+                        <input
+                            type="number"
+                            placeholder="0"
+                            name="int"
+                            className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center text-base-content focus-within:outline-0"
+                            value={int ?? 0}
+                            onChange={(e) => handleChangeStats(e, setInt, )}
+                        />
+                        <span className="text-sm text-primary">+{calculateModifiers({ stat: int })}</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-0">
+                        <input
+                            type="number"
+                            placeholder="0"
+                            name="wis"
+                            className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center text-base-content focus-within:outline-0"
+                            value={wis ?? 0}
+                            onChange={(e) => handleChangeStats(e, setWis)}
+                        />
+                        <span className="text-sm text-primary">+{calculateModifiers({ stat: wis })}</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-0">
+                        <input
+                            type="number"
+                            placeholder="0"
+                            name="cha"
+                            className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center text-base-content focus-within:outline-0"
+                            value={cha ?? 0}
+                            onChange={(e) => handleChangeStats(e, setCha)}
+                        />
+                        <span className="text-sm text-primary">+{calculateModifiers({ stat: cha })}</span>
+                    </div>
                 </div>
             </div>
         </header>

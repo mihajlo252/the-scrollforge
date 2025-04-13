@@ -26,15 +26,6 @@ const InspirationLazyImport = createFileRoute('/inspiration')()
 const CharacterLazyImport = createFileRoute('/character')()
 const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
-const CreateCharacterPage3LazyImport = createFileRoute(
-  '/create-character/page3',
-)()
-const CreateCharacterPage2LazyImport = createFileRoute(
-  '/create-character/page2',
-)()
-const CreateCharacterPage1LazyImport = createFileRoute(
-  '/create-character/page1',
-)()
 
 // Create/Update Routes
 
@@ -97,30 +88,6 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
-
-const CreateCharacterPage3LazyRoute = CreateCharacterPage3LazyImport.update({
-  id: '/create-character/page3',
-  path: '/create-character/page3',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/create-character/page3.lazy').then((d) => d.Route),
-)
-
-const CreateCharacterPage2LazyRoute = CreateCharacterPage2LazyImport.update({
-  id: '/create-character/page2',
-  path: '/create-character/page2',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/create-character/page2.lazy').then((d) => d.Route),
-)
-
-const CreateCharacterPage1LazyRoute = CreateCharacterPage1LazyImport.update({
-  id: '/create-character/page1',
-  path: '/create-character/page1',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/create-character/page1.lazy').then((d) => d.Route),
-)
 
 // Populate the FileRoutesByPath interface
 
@@ -196,27 +163,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TraitsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/create-character/page1': {
-      id: '/create-character/page1'
-      path: '/create-character/page1'
-      fullPath: '/create-character/page1'
-      preLoaderRoute: typeof CreateCharacterPage1LazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/create-character/page2': {
-      id: '/create-character/page2'
-      path: '/create-character/page2'
-      fullPath: '/create-character/page2'
-      preLoaderRoute: typeof CreateCharacterPage2LazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/create-character/page3': {
-      id: '/create-character/page3'
-      path: '/create-character/page3'
-      fullPath: '/create-character/page3'
-      preLoaderRoute: typeof CreateCharacterPage3LazyImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -233,9 +179,6 @@ export interface FileRoutesByFullPath {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/traits': typeof TraitsLazyRoute
-  '/create-character/page1': typeof CreateCharacterPage1LazyRoute
-  '/create-character/page2': typeof CreateCharacterPage2LazyRoute
-  '/create-character/page3': typeof CreateCharacterPage3LazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -249,9 +192,6 @@ export interface FileRoutesByTo {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/traits': typeof TraitsLazyRoute
-  '/create-character/page1': typeof CreateCharacterPage1LazyRoute
-  '/create-character/page2': typeof CreateCharacterPage2LazyRoute
-  '/create-character/page3': typeof CreateCharacterPage3LazyRoute
 }
 
 export interface FileRoutesById {
@@ -266,9 +206,6 @@ export interface FileRoutesById {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/traits': typeof TraitsLazyRoute
-  '/create-character/page1': typeof CreateCharacterPage1LazyRoute
-  '/create-character/page2': typeof CreateCharacterPage2LazyRoute
-  '/create-character/page3': typeof CreateCharacterPage3LazyRoute
 }
 
 export interface FileRouteTypes {
@@ -284,9 +221,6 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/traits'
-    | '/create-character/page1'
-    | '/create-character/page2'
-    | '/create-character/page3'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -299,9 +233,6 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/traits'
-    | '/create-character/page1'
-    | '/create-character/page2'
-    | '/create-character/page3'
   id:
     | '__root__'
     | '/'
@@ -314,9 +245,6 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/traits'
-    | '/create-character/page1'
-    | '/create-character/page2'
-    | '/create-character/page3'
   fileRoutesById: FileRoutesById
 }
 
@@ -331,9 +259,6 @@ export interface RootRouteChildren {
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
   TraitsLazyRoute: typeof TraitsLazyRoute
-  CreateCharacterPage1LazyRoute: typeof CreateCharacterPage1LazyRoute
-  CreateCharacterPage2LazyRoute: typeof CreateCharacterPage2LazyRoute
-  CreateCharacterPage3LazyRoute: typeof CreateCharacterPage3LazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -347,9 +272,6 @@ const rootRouteChildren: RootRouteChildren = {
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
   TraitsLazyRoute: TraitsLazyRoute,
-  CreateCharacterPage1LazyRoute: CreateCharacterPage1LazyRoute,
-  CreateCharacterPage2LazyRoute: CreateCharacterPage2LazyRoute,
-  CreateCharacterPage3LazyRoute: CreateCharacterPage3LazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -371,10 +293,7 @@ export const routeTree = rootRoute
         "/spells",
         "/thanks",
         "/tickets",
-        "/traits",
-        "/create-character/page1",
-        "/create-character/page2",
-        "/create-character/page3"
+        "/traits"
       ]
     },
     "/": {
@@ -406,15 +325,6 @@ export const routeTree = rootRoute
     },
     "/traits": {
       "filePath": "traits.lazy.tsx"
-    },
-    "/create-character/page1": {
-      "filePath": "create-character/page1.lazy.tsx"
-    },
-    "/create-character/page2": {
-      "filePath": "create-character/page2.lazy.tsx"
-    },
-    "/create-character/page3": {
-      "filePath": "create-character/page3.lazy.tsx"
     }
   }
 }

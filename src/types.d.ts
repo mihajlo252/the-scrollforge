@@ -15,27 +15,6 @@ interface Inspiration {
     regular: number;
 }
 
-interface Skills {
-    acrobatics: number;
-    animalHandling: number;
-    arcana: number;
-    athletics: number;
-    deception: number;
-    history: number;
-    insight: number;
-    intimidation: number;
-    investigation: number;
-    medicine: number;
-    nature: number;
-    perception: number;
-    performance: number;
-    persuasion: number;
-    religion: number;
-    sleightOfHand: number;
-    stealth: number;
-    survival: number;
-}
-
 interface Descriptions {
     racialTraits: string[];
     featureTraits: string[];
@@ -64,12 +43,32 @@ interface Spell {
 
 interface CharacterProfile {
     class: string;
-    level: string;
+    level: number;
     name: string;
-    pastLife: string;
     race: string;
     subclass: string;
     subrace: string;
+}
+
+interface SkillProficiency {
+    acrobatics: string;
+    animalHandling: string;
+    arcana: string;
+    athletics: string;
+    deception: string;
+    history: string;
+    insight: string;
+    intimidation: string;
+    investigation: string;
+    medicine: string;
+    nature: string;
+    perception: string;
+    performance: string;
+    persuasion: string;
+    religion: string;
+    sleightOfHand: string;
+    stealth: string;
+    survival: string;
 }
 
 interface Stats {
@@ -79,29 +78,17 @@ interface Stats {
     maxHP: number;
     passivePerception: number;
     proficiencyBonus: number;
-    primaryMods: Values;
     primaryStats: Values;
-    saveThrows: Values;
-    skills: Skills;
+    inspiration: Inspiration;
+    saveThrowsProficiency: { str: boolean; dex: boolean; con: boolean; int: boolean; wis: boolean; cha: boolean };
+    skillProficiency: SkillProficiency;
 }
 
 interface Character {
     id: string;
     characterProfile: CharacterProfile;
     currentHP: number;
-    stats: {
-        ac: number;
-        hitDice: string;
-        initiative: number;
-        maxHP: number;
-        passivePerception: number;
-        proficiencyBonus: number;
-        primaryMods: Values;
-        primaryStats: Values;
-        saveThrows: Values;
-        skills: Skills;
-        inspiration: Inspiration;
-    };
+    stats: Stats;
     descriptions: Descriptions;
     avatar: string;
 }

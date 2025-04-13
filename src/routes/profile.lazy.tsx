@@ -10,6 +10,7 @@ import { ImageWithFallback } from "../components/ImageWithFallback";
 import { DeletePopup } from "../components/DeletePopup";
 import { DeleteButton } from "../components/DeleteButton";
 import avatarPlaceholder from "/assets/avatarplaceholder.png";
+import { CreateCharacter } from "../sections/CreateCharacter/CreateCharacter";
 
 export const Route = createLazyFileRoute("/profile")({
     component: Profile,
@@ -20,6 +21,8 @@ function Profile() {
     const { setCharacter }: CharacterStore = useCharacterStore();
     const [isDeleted, setIsDeleted] = useState(false);
     const [characterDelete, setCharacterDelete] = useState("");
+    const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
+    const [isSave, setIsSave] = useState(false);
 
     const { user } = JSON.parse(getUserFromLocal());
 
@@ -40,17 +43,27 @@ function Profile() {
 
     useEffect(() => {
         handleGetCharacter();
+    }, [])
+
+    useEffect(() => {
+        if (isDeleted) {
+            handleGetCharacter();
+            console.log("count");
+        }
         setIsDeleted(false);
-    }, [isDeleted]);
+        setIsSave(false);
+    }, [isDeleted, isSave]);
 
     return (
         <CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
             <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <BoxSection styles="w-full flex flex-col items-start gap-10 p-5 overflow-y-scroll">
+                <BoxSection styles="w-full flex flex-col items-start gap-10 p-5 overflow-y-scroll relative">
+                    {openCreateCharacter && <CreateCharacter openCreateCharacter={openCreateCharacter} setOpenCreateCharacter={setOpenCreateCharacter} setIsSave={setIsSave}/>}
                     <section className="flex w-full justify-between">
                         <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
                         <button
-                            onClick={() => navigate({ to: "/create-character/page1" })}
+                            // onClick={() => navigate({ to: "/create-character/page1" })}
+                            onClick={() => setOpenCreateCharacter(true)}
                             className="btn btn-ghost border-2 border-primary text-primary hover:border-primary hover:bg-primary hover:text-base-100"
                         >
                             Create Character
