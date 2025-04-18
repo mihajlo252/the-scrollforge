@@ -71,7 +71,7 @@ export const HPBar = ({ maxHP, characterID }: { maxHP: number; characterID: stri
             <div className="flex items-center gap-1">
                 <div className="relative h-[7.5rem] w-[7.5rem] overflow-hidden rounded-[100vh] border-[.3rem] border-neutral">
                     <div
-                        className={`h-full w-full origin-bottom bg-gradient-to-b from-[#560000] to-[#980000]`}
+                        className={`h-full w-full origin-bottom bg-gradient-to-b from-[#5f0000] to-[#290a0a]`}
                         style={{ transform: `scaleY(${scale})` }}
                     ></div>
                     <p className="user-select-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">

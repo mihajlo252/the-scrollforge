@@ -101,131 +101,131 @@ export const Stats = ({ character, setStatChange }: { character: Character, setS
                 <h3 className="text-[1.875rem] underline">Skills</h3>
 
                 <div className="flex flex-row items-center gap-2">
-                    <ul className="flex flex-col items-end justify-end text-[0.85rem]">
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${acrobaticsProficiency === "proficient" ? "text-primary" : acrobaticsProficiency === "expert" ? "text-secondary" : ""}`}>
+                    <ul className="flex flex-col items-end justify-end border-r-[1px] border-primary border-opacity-50 text-[0.85rem]">
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${acrobaticsProficiency === "proficient" ? "text-primary" : acrobaticsProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("acrobatics", setAcrobaticsProficiency)}></button>
                             Acrobatics (Dex)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.acrobatics })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${animalHandlingProficiency === "proficient" ? "text-primary" : animalHandlingProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${animalHandlingProficiency === "proficient" ? "text-primary" : animalHandlingProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("animalHandling", setAnimalHandlingProficiency)}></button>
                             Animal Handling (Wis)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.animalHandling })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${arcanaProficiency === "proficient" ? "text-primary" : arcanaProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${arcanaProficiency === "proficient" ? "text-primary" : arcanaProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("arcana", setArcanaProficiency)}></button>
                             Arcana (Int)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.arcana })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${athleticsProficiency === "proficient" ? "text-primary" : athleticsProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${athleticsProficiency === "proficient" ? "text-primary" : athleticsProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("athletics", setAthleticsProficiency)}></button>
                             Athletics (Str)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.str, proficiencyBonus, proficiency: skillProficiency.athletics })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${deceptionProficiency === "proficient" ? "text-primary" : deceptionProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${deceptionProficiency === "proficient" ? "text-primary" : deceptionProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("deception", setDeceptionProficiency)}></button>
                             Deception (Cha)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.deception })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${historyProficiency === "proficient" ? "text-primary" : historyProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${historyProficiency === "proficient" ? "text-primary" : historyProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("history", setHistoryProficiency)}></button>
                             History (Int)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.history })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${insightProficiency === "proficient" ? "text-primary" : insightProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${insightProficiency === "proficient" ? "text-primary" : insightProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("insight", setInsightProficiency)}></button>
                             Insight (Wis)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.insight })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${intimidationProficiency === "proficient" ? "text-primary" : intimidationProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${intimidationProficiency === "proficient" ? "text-primary" : intimidationProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("intimidation", setIntimidationProficiency)}></button>
                             Intimidation (Cha)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.intimidation })}
                             </span>
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${investigationProficiency === "proficient" ? "text-primary" : investigationProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex ${investigationProficiency === "proficient" ? "text-primary" : investigationProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("investigation", setInvestigationProficiency)}></button>
                             Investigation (Int)
-                            <span className="w-[3ch] border-r-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.investigation })}
                             </span>
                         </li>
                     </ul>
-                    <ul className="flex flex-col items-start text-[0.85rem]">
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${medicineProficiency === "proficient" ? "text-primary" : medicineProficiency === "expert" ? "text-secondary" : ""}`}>
+                    <ul className="flex flex-col items-start border-l-[1px] border-primary border-opacity-50 text-[0.85rem]">
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${medicineProficiency === "proficient" ? "text-primary" : medicineProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("medicine", setMedicineProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.medicine })}
                             </span>
                             Medicine (Wis)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${natureProficiency === "proficient" ? "text-primary" : natureProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${natureProficiency === "proficient" ? "text-primary" : natureProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("nature", setNatureProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.nature })}
                             </span>
                             Nature (Int)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${perceptionProficiency === "proficient" ? "text-primary" : perceptionProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${perceptionProficiency === "proficient" ? "text-primary" : perceptionProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("perception", setPerceptionProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.perception })}
                             </span>
                             Perception (Wis)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${performanceProficiency === "proficient" ? "text-primary" : performanceProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${performanceProficiency === "proficient" ? "text-primary" : performanceProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("performance", setPerformanceProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.performance })}
                             </span>
                             Performance (Cha)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${persuasionProficiency === "proficient" ? "text-primary" : persuasionProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${persuasionProficiency === "proficient" ? "text-primary" : persuasionProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("persuasion", setPersuasionProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.persuasion })}
                             </span>
                             Persuasion (Cha)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${religionProficiency === "proficient" ? "text-primary" : religionProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${religionProficiency === "proficient" ? "text-primary" : religionProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("religion", setReligionProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.religion })}
                             </span>
                             Religion (Int)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${sleightOfHandProficiency === "proficient" ? "text-primary" : sleightOfHandProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${sleightOfHandProficiency === "proficient" ? "text-primary" : sleightOfHandProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("sleightOfHand", setSleightOfHandProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.sleightOfHand })}
                             </span>
                             Sleight of Hand (Dex)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${survivalProficiency === "proficient" ? "text-primary" : survivalProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex border-b-[1px] border-primary border-opacity-50 ${survivalProficiency === "proficient" ? "text-primary" : survivalProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("survival", setSurvivalProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.survival })}
                             </span>
                             Survival (Wis)
                         </li>
-                        <li className={`relative flex border-b-[1px] border-secondary border-opacity-50 ${stealthProficiency === "proficient" ? "text-primary" : stealthProficiency === "expert" ? "text-secondary" : ""}`}>
+                        <li className={`relative flex ${stealthProficiency === "proficient" ? "text-primary" : stealthProficiency === "expert" ? "text-secondary" : ""}`}>
                             <button type="button" className="absolute inset-0 left-0 top-0 m-0 p-0 opacity-0" onClick={() => toggleProficiency("stealth", setStealthProficiency)}></button>
-                            <span className="w-[3ch] border-l-[1px] border-secondary border-opacity-50 px-1 text-primary">
+                            <span className="w-[3ch] px-1 text-primary">
                                 +{calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.stealth })}
                             </span>
                             Stealth (Dex)
