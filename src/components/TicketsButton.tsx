@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-export const TicketsButton = ({color, size, strokeWidth, styles} : {color: string, size: number, strokeWidth: number, styles: string}) => {
+export const TicketsButton = ({size, strokeWidth, styles} : { size: number, strokeWidth: number, styles: string}) => {
     const navigate = useNavigate();
 
     return (
@@ -12,7 +12,7 @@ export const TicketsButton = ({color, size, strokeWidth, styles} : {color: strin
             viewBox="494,267,110,110"
             width={size}
             height={size}
-            className={`btn h-max w-max cursor-pointer bg-transparent hover:bg-transparent`}
+            className={`btn h-max w-max cursor-pointer border-none bg-transparent hover:bg-transparent`}
         >
             <g id="document" fillOpacity="0" fill="#ffffff" fillRule="nonzero" stroke="#000000">
                 <rect
@@ -22,11 +22,10 @@ export const TicketsButton = ({color, size, strokeWidth, styles} : {color: strin
                     width="700"
                     height="500"
                     id="Shape 1 1"
-                    vectorEffect="non-scaling-stroke"
                     className="fill-primary hover:fill-secondary"
                 />
             </g>
-            <g fillOpacity="0" fill="#000000" fillRule="nonzero" stroke={color} strokeWidth={strokeWidth}>
+            <g fillOpacity="0" fill="#000000" fillRule="nonzero" strokeWidth={strokeWidth}>
                 <g id="stage">
                     <g id="layer1 1">
                         <path
