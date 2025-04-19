@@ -4,11 +4,10 @@ export const calculateModifiers = ({ stat }: { stat: number }) => {
     return mod;
 };
 
-export const calculateSaves = ({ stat, proficiencyBonus, prificiency }: { stat: number; proficiencyBonus: number, prificiency: boolean }) => {
-    let saveMod
+export const calculateSaves = ({ stat, proficiencyBonus, proficiency }: { stat: number; proficiencyBonus: number, proficiency: boolean }) => {
     if (stat < 12) return 0
-    if (prificiency ? saveMod = calculateModifiers({ stat }) + proficiencyBonus : saveMod = calculateModifiers({ stat }))
-    return saveMod;
+    if (proficiency) return calculateModifiers({ stat }) + proficiencyBonus
+    return calculateModifiers({ stat })
 };
 
 export const calculateSkills = ({

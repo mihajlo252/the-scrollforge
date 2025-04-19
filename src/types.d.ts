@@ -70,6 +70,14 @@ interface SkillProficiency {
     stealth: string;
     survival: string;
 }
+interface SaveThrowsProficiency {
+    str: boolean;
+    dex: boolean;
+    con: boolean;
+    int: boolean;
+    wis: boolean;
+    cha: boolean;
+}
 
 interface Stats {
     ac: number;

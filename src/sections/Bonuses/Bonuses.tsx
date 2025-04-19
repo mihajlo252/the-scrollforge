@@ -1,15 +1,49 @@
+import React, { useState } from "react";
 import { calculateModifiers, calculatePassivePerception, calculateProficiencyBonus } from "../../utilities/calculateStats"
 
-export const Bonuses = ({character, ac, hitDice} : {character: Character, proficiency: number, initiative: number, ac: number, hitDice: string, passivePerception: number}) => {
-  const {primaryStats: {wis, dex}, proficiencyBonus, skillProficiency: {perception}} = character.stats
-  
+export const Bonuses = ({character} : {character: Character}) => {
+    const {characterProfile: {level}, stats: {ac, hitDice, primaryStats: {wis, dex}, skillProficiency: {perception}}} = character
+    const [characterAC, setCharacterAC] = useState<number>(ac);
+    const [characterHitDice, setCharacteHitDice] = useState<string>(hitDice);
+    let proficiencyBonus: number = parseInt(calculateProficiencyBonus({ level: level }) || "0");
+  const handleChange = (e: any, setFunc: React.Dispatch<React.SetStateAction<any>>) => {
+    setFunc(e.target.value);
+        localStorage.setItem(
+            "character",
+            JSON.stringify({
+                state: {
+                    character: {
+                        ...character,
+                        stats: { ...character.stats, [e.target.name]: e.target.value},
+                    },
+                },
+                version: 0,
+            })
+        );
+
+  }
+
   return (
         <ul className="flex w-full flex-col items-start">
           <li> Passive Perception: <span className="text-primary">+{calculatePassivePerception({stat: wis, proficiencyBonus, proficiency: perception })}</span></li>
-          <li> Proficiency: +{calculateProficiencyBonus({level: character.characterProfile.level})}</li>
-          <li> Initiative: +{calculateModifiers({stat: dex})}</li>
-          <li> AC: {ac}</li>
-          <li> Hit Dice: {hitDice}</li>
+          <li> Proficiency: <span className="text-primary">+{calculateProficiencyBonus({level: character.characterProfile.level})}</span></li>
+          <li> Initiative: <span className="text-primary">+{calculateModifiers({stat: dex})}</span></li>
+          <li> AC: <input
+                                type="number"
+                                placeholder="0"
+                                name="ac"
+                                className="max-w-[4ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center focus-within:outline-0"
+                                value={characterAC ?? 0}
+                                onChange={(e) => handleChange(e, setCharacterAC)}
+                            /></li>
+          <li> Hit Dice: <input
+                                type="text"
+                                placeholder="0"
+                                name="hitDice"
+                                className="max-w-[6ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center focus-within:outline-0"
+                                value={characterHitDice ?? 0}
+                                onChange={(e) => handleChange(e, setCharacteHitDice)}
+                            /></li>
         </ul>
   )
 }

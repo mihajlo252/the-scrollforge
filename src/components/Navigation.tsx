@@ -5,7 +5,7 @@ import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
 import { BorderButton } from "./BorderButton";
-import logo from "/assets/ObscurisGolden.png"
+import logo from "/assets/ObscurisGolden.png";
 
 export const Navigation = () => {
     const navigate = useNavigate();
@@ -64,6 +64,7 @@ export const Navigation = () => {
             {newUser && (
                 <div className="flex items-center gap-2">
                     <p className={`${charSelected} text-secondary transition-opacity`}>Select a Character</p>
+                    
                     <BorderButton
                         text="Character"
                         style="border-primary text-primary hover:border-primary hover:bg-primary"
@@ -79,7 +80,6 @@ export const Navigation = () => {
                         style="border-secondary text-secondary hover:border-secondary hover:bg-secondary"
                         event={handleSignOut}
                     />
-                    
                 </div>
             )}
         </motion.nav>

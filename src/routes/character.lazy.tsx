@@ -6,10 +6,11 @@ import { CharacterProfile } from "../sections/CharacterProfile/CharacterProfile"
 import { HPBar } from "../sections/HPBar/HPBar";
 import { Stats } from "../sections/Stats/Stats";
 import { Load } from "../components/Load";
-import { Notes } from "../sections/Notes/Notes";
 import { Bonuses } from "../sections/Bonuses/Bonuses";
 import { DiceBoxComponent } from "../components/DiceBox";
 import { useEffect, useState } from "react";
+import { sendData } from "../utilities/sendData";
+import { getUserFromLocal } from "../utilities/getUserFromLocal";
 
 export const Route = createLazyFileRoute("/character")({
     component: Character,
@@ -18,37 +19,44 @@ export const Route = createLazyFileRoute("/character")({
 function Character() {
     const { state } = JSON.parse(localStorage.getItem("character") ?? "{}");
     const [statChange, setStatChange] = useState(false);
-
-    
+    const [isSave, setIsSave] = useState(false);
+    const newUser = getUserFromLocal();
 
     if (!state.character) {
         return <Load />;
     }
 
+    const handleSaveCharacter = async () => {
+        const { state: character } = JSON.parse(localStorage.getItem("character") ?? "{}");
+        // console.log(data.state.character);
+        await sendData("characters", JSON.parse(newUser).user.id, { stats: character.stats });
+        setIsSave(false);
+    };
+
     useEffect(() => {
-        setStatChange(false)
-    }, [statChange])
-    
+        setStatChange(false);
+        if (statChange) setIsSave(true);
+    }, [statChange]);
     return (
         <motion.main className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {isSave && (
+                <button
+                    className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
+                    onClick={() => handleSaveCharacter()}
+                >Save Character</button>
+            )}
             <CharacterProfile setStatChange={setStatChange} character={state.character} />
             <section className={`flex gap-5`}>
-                <BoxSection styles="w-[40%] flex flex-col gap-5 p-5">
-                    <Stats character={state.character} setStatChange={setStatChange}/>
+                <BoxSection styles="w-[50%] flex flex-col gap-5 p-5">
+                    <Stats character={state.character} setStatChange={setStatChange} />
                 </BoxSection>
-                <div className={`flex h-full w-[50%] flex-col gap-5`}>
+                <div className={`flex h-full w-[40%] flex-col gap-5`}>
                     <BoxSection styles="w-full flex justify-around items-center p-5">
-                        <Bonuses
-                            character={state.character}
-                            proficiency={state.character.stats.proficiencyBonus}
-                            initiative={state.character.stats.initiative}
-                            ac={state.character.stats.ac}
-                            hitDice={state.character.stats.hitDice}
-                            passivePerception={state.character.stats.passivePerception}
-                        />
                         <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
                     </BoxSection>
-                    <Notes />
+                    <BoxSection styles="w-full flex justify-around items-center p-5">
+                        <Bonuses character={state.character} />
+                    </BoxSection>
                 </div>
                 <BoxSection styles="w-[10%] flex flex-col py-5">
                     <nav className="flex flex-col gap-5 p-3">
@@ -65,6 +73,9 @@ function Character() {
                             Inspiration
                         </Link>
                         <DiceBoxComponent />
+                        <Link to="/notes" className="btn btn-primary">
+                            Notes
+                        </Link>
                     </nav>
                 </BoxSection>
             </section>

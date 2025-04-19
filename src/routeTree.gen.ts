@@ -22,6 +22,7 @@ const ThanksLazyImport = createFileRoute('/thanks')()
 const SpellsLazyImport = createFileRoute('/spells')()
 const SignupLazyImport = createFileRoute('/signup')()
 const ProfileLazyImport = createFileRoute('/profile')()
+const NotesLazyImport = createFileRoute('/notes')()
 const InspirationLazyImport = createFileRoute('/inspiration')()
 const CharacterLazyImport = createFileRoute('/character')()
 const AttacksLazyImport = createFileRoute('/attacks')()
@@ -64,6 +65,12 @@ const ProfileLazyRoute = ProfileLazyImport.update({
   path: '/profile',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
+
+const NotesLazyRoute = NotesLazyImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/notes.lazy').then((d) => d.Route))
 
 const InspirationLazyRoute = InspirationLazyImport.update({
   id: '/inspiration',
@@ -121,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InspirationLazyImport
       parentRoute: typeof rootRoute
     }
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -173,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/attacks': typeof AttacksLazyRoute
   '/character': typeof CharacterLazyRoute
   '/inspiration': typeof InspirationLazyRoute
+  '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/signup': typeof SignupLazyRoute
   '/spells': typeof SpellsLazyRoute
@@ -186,6 +201,7 @@ export interface FileRoutesByTo {
   '/attacks': typeof AttacksLazyRoute
   '/character': typeof CharacterLazyRoute
   '/inspiration': typeof InspirationLazyRoute
+  '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/signup': typeof SignupLazyRoute
   '/spells': typeof SpellsLazyRoute
@@ -200,6 +216,7 @@ export interface FileRoutesById {
   '/attacks': typeof AttacksLazyRoute
   '/character': typeof CharacterLazyRoute
   '/inspiration': typeof InspirationLazyRoute
+  '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/signup': typeof SignupLazyRoute
   '/spells': typeof SpellsLazyRoute
@@ -215,6 +232,7 @@ export interface FileRouteTypes {
     | '/attacks'
     | '/character'
     | '/inspiration'
+    | '/notes'
     | '/profile'
     | '/signup'
     | '/spells'
@@ -227,6 +245,7 @@ export interface FileRouteTypes {
     | '/attacks'
     | '/character'
     | '/inspiration'
+    | '/notes'
     | '/profile'
     | '/signup'
     | '/spells'
@@ -239,6 +258,7 @@ export interface FileRouteTypes {
     | '/attacks'
     | '/character'
     | '/inspiration'
+    | '/notes'
     | '/profile'
     | '/signup'
     | '/spells'
@@ -253,6 +273,7 @@ export interface RootRouteChildren {
   AttacksLazyRoute: typeof AttacksLazyRoute
   CharacterLazyRoute: typeof CharacterLazyRoute
   InspirationLazyRoute: typeof InspirationLazyRoute
+  NotesLazyRoute: typeof NotesLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
   SignupLazyRoute: typeof SignupLazyRoute
   SpellsLazyRoute: typeof SpellsLazyRoute
@@ -266,6 +287,7 @@ const rootRouteChildren: RootRouteChildren = {
   AttacksLazyRoute: AttacksLazyRoute,
   CharacterLazyRoute: CharacterLazyRoute,
   InspirationLazyRoute: InspirationLazyRoute,
+  NotesLazyRoute: NotesLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
   SignupLazyRoute: SignupLazyRoute,
   SpellsLazyRoute: SpellsLazyRoute,
@@ -288,6 +310,7 @@ export const routeTree = rootRoute
         "/attacks",
         "/character",
         "/inspiration",
+        "/notes",
         "/profile",
         "/signup",
         "/spells",
@@ -307,6 +330,9 @@ export const routeTree = rootRoute
     },
     "/inspiration": {
       "filePath": "inspiration.lazy.tsx"
+    },
+    "/notes": {
+      "filePath": "notes.lazy.tsx"
     },
     "/profile": {
       "filePath": "profile.lazy.tsx"
