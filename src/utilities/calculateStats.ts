@@ -5,7 +5,6 @@ export const calculateModifiers = ({ stat }: { stat: number }) => {
 };
 
 export const calculateSaves = ({ stat, proficiencyBonus, proficiency }: { stat: number; proficiencyBonus: number, proficiency: boolean }) => {
-    if (stat < 12) return 0
     if (proficiency) return calculateModifiers({ stat }) + proficiencyBonus
     return calculateModifiers({ stat })
 };
@@ -24,7 +23,6 @@ export const calculateSkills = ({
     } else if (proficiency === "expert") {
         return calculateModifiers({ stat }) + proficiencyBonus * 2;
     }
-    if (stat < 12) return 0;
     return calculateModifiers({ stat });
 };
 
@@ -42,7 +40,6 @@ export const calculatePassivePerception = ({
     } else if (proficiency === "expert") {
         return 10 + calculateModifiers({ stat }) + proficiencyBonus * 2;
     }
-    if (stat < 12) return 10;
     return 10 + calculateModifiers({ stat }); 
 };
 

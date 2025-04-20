@@ -43,7 +43,9 @@ function Character() {
                 <button
                     className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
                     onClick={() => handleSaveCharacter()}
-                >Save Character</button>
+                >
+                    Save Character
+                </button>
             )}
             <CharacterProfile setStatChange={setStatChange} character={state.character} />
             <section className={`flex gap-5`}>
@@ -51,9 +53,14 @@ function Character() {
                     <Stats character={state.character} setStatChange={setStatChange} />
                 </BoxSection>
                 <div className={`flex h-full w-[40%] flex-col gap-5`}>
-                    <BoxSection styles="w-full flex justify-around items-center p-5">
-                        <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
-                    </BoxSection>
+                    <div className={`flex h-full w-full gap-5`}>
+                        <BoxSection styles="w-[50%] flex justify-around items-center p-2">
+                            <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
+                        </BoxSection>
+                        <BoxSection styles="w-[50%] flex justify-around items-center p-5">
+                            <DiceBoxComponent />
+                        </BoxSection>
+                    </div>
                     <BoxSection styles="w-full flex justify-around items-center p-5">
                         <Bonuses character={state.character} />
                     </BoxSection>
@@ -72,7 +79,7 @@ function Character() {
                         <Link to="/inspiration" className="btn btn-primary">
                             Inspiration
                         </Link>
-                        <DiceBoxComponent />
+
                         <Link to="/notes" className="btn btn-primary">
                             Notes
                         </Link>

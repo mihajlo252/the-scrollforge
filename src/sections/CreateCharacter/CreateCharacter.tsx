@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { BoxSection } from "../../components/BoxSection";
 import { getUserFromLocal } from "../../utilities/getUserFromLocal";
 import { submitCharacter } from "../../utilities/submitCharacter";
+import { Popup } from "../../components/Popup";
 
 export const CreateCharacter = ({
     openCreateCharacter,
@@ -33,12 +33,7 @@ export const CreateCharacter = ({
     };
 
     return (
-        <motion.div
-            className="absolute left-0 top-0 isolate z-50 flex h-full w-full items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-        >
-            <div className="fixed inset-0 z-[-1] bg-black/80" onClick={() => setOpenCreateCharacter(false)}></div>
+        <Popup closerFunc={setOpenCreateCharacter}>
             <BoxSection styles="relative h-min flex flex-col gap-5 justify-center items-center text-center px-20 py-10">
                 <h2 className="text-4xl font-bold">Create Your Character</h2>
                 <form className="flex w-full flex-col gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
@@ -93,6 +88,6 @@ export const CreateCharacter = ({
                     </div>
                 </form>
             </BoxSection>
-        </motion.div>
+        </Popup>
     );
 };

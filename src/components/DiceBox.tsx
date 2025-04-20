@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import DiceBox from "@3d-dice/dice-box";
+import { Popup } from "./Popup";
 
 const diceBox = new DiceBox({
     assetPath: "/dash-and-play/assets/",
@@ -10,12 +11,8 @@ diceBox.init();
 export const DiceBoxComponent = () => {
     const [diceResult, setDiceResult] = useState(0);
     const [resultArray, setResultArray] = useState<number[]>([]);
-    const [show, setShow] = useState(false);
-    const [quantity, setQuantity] = useState(1);
-
-    const showDiceBox = () => {
-        setShow(!show);
-    };
+    const [quantity, setQuantity] = useState(0);
+    const [showDice, setShowDice] = useState(false);
 
     const throwDice = (dice: number) => {
         setResultArray([]);
@@ -42,42 +39,43 @@ export const DiceBoxComponent = () => {
 
     return (
         <div className="w-full">
-            <button type="button" className="btn btn-primary w-full" onClick={showDiceBox}>
-                Dice
-            </button>
-            <div className={`${show ? "visible opacity-1" : "invisible opacity-0"} transition-all inset-0 absolute`} onClick={showDiceBox}></div>
             <div
-                className={`${show ? "visible opacity-1" : "invisible opacity-0"} transition-all rounded-md border-slate-700 border-2 bg-slate-900 flex flex-col gap-2 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-max p-2 h-max`}
+                className={`flex flex-col gap-2`}
             >
                 <input
                     type="number"
-                    className="input input-bordered w-full"
+                    className="input input-bordered h-min w-full"
                     onChange={(e) => setQuantity(parseInt(e.target.value))}
                     value={quantity}
                     placeholder="Quantity"
                 />
                 <div className="grid grid-cols-2 gap-2">
-                    <button type="button" className="btn btn-primary" onClick={() => throwDice(4)}>
+                    <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(4)}>
                         D4
                     </button>
-                    <button type="button" className="btn btn-primary" onClick={() => throwDice(6)}>
+                    <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(6)}>
                         D6
                     </button>
-                    <button type="button" className="btn btn-primary" onClick={() => throwDice(8)}>
+                    <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(8)}>
                         D8
                     </button>
-                    <button type="button" className="btn btn-primary" onClick={() => throwDice(10)}>
+                    <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(10)}>
                         D10
                     </button>
-                    <button type="button" className="btn btn-primary" onClick={() => throwDice(20)}>
+                    <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(20)}>
                         D20
                     </button>
-                    <button type="button" className="btn btn-primary" onClick={() => throwDice(100)}>
+                    <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(100)}>
                         D100
                     </button>
                 </div>
-                <p className="text-2xl text-neutral">{resultArray.join(" + ")} = {diceResult}</p>
+                <p className="text-neutral">{resultArray.length > 4 ? <button type="button" className="text-primary" onClick={() => setShowDice(true)}>Show Dice</button> : resultArray.join(" + ")} = {diceResult}</p>
             </div>
+            {showDice && (
+            <Popup closerFunc={setShowDice}>
+                <p className="text-2xl">{resultArray.join(" + ")} = {diceResult}</p>
+            </Popup>
+            )}
         </div>
     );
 };
