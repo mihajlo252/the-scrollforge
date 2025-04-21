@@ -50,7 +50,7 @@ export const CharacterProfile = ({ character, setStatChange }: { character: Char
         if (e.target.value.length == 0) {
             e.target.style.width = "7ch";
         }
-        setFunc(e.target.value);
+        setFunc(parseInt(e.target.value));
         localStorage.setItem(
             "character",
             JSON.stringify({
