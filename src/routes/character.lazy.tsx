@@ -10,7 +10,6 @@ import { Bonuses } from "../sections/Bonuses/Bonuses";
 import { DiceBoxComponent } from "../components/DiceBox";
 import { useEffect, useState } from "react";
 import { sendData } from "../utilities/sendData";
-import { getUserFromLocal } from "../utilities/getUserFromLocal";
 
 export const Route = createLazyFileRoute("/character")({
     component: Character,
@@ -20,16 +19,13 @@ function Character() {
     const { state } = JSON.parse(localStorage.getItem("character") ?? "{}");
     const [statChange, setStatChange] = useState(false);
     const [isSave, setIsSave] = useState(false);
-    const newUser = getUserFromLocal();
 
     if (!state.character) {
         return <Load />;
     }
 
-    const handleSaveCharacter = async () => {
-        const { state: character } = JSON.parse(localStorage.getItem("character") ?? "{}");
-        // console.log(data.state.character);
-        await sendData("characters", JSON.parse(newUser).user.id, { stats: character.stats });
+    const handleSaveCharacter = async (stats: Stats) => {
+        await sendData("characters", state.character.id, { stats: {...stats}});
         setIsSave(false);
     };
 
@@ -42,7 +38,7 @@ function Character() {
             {isSave && (
                 <button
                     className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
-                    onClick={() => handleSaveCharacter()}
+                    onClick={() => handleSaveCharacter(state.character.stats)}
                 >
                     Save Character
                 </button>
@@ -62,7 +58,7 @@ function Character() {
                         </BoxSection>
                     </div>
                     <BoxSection styles="w-full flex justify-around items-center p-5">
-                        <Bonuses character={state.character} />
+                        <Bonuses character={state.character} setStatChange={setStatChange}/>
                     </BoxSection>
                 </div>
                 <BoxSection styles="w-[10%] flex flex-col py-5">
