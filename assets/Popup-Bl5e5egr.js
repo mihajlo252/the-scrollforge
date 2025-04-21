@@ -1,1 +1,0 @@
-import{j as e,m as s}from"./index-DvBhQARo.js";const l=({children:i,closerFunc:t})=>e.jsxs(s.div,{className:"fixed left-0 top-0 isolate z-50 box-border flex h-full w-full flex-col items-center justify-center",initial:{opacity:0},animate:{opacity:1},children:[e.jsx("div",{className:"margin-0 padding-0 absolute inset-0 z-[-1] bg-black/80",onClick:()=>t(!1)}),i]});export{l as P};
