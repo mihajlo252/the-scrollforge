@@ -25,7 +25,7 @@ function Character() {
     }
 
     const handleSaveCharacter = async (stats: Stats) => {
-        await sendData("characters", state.character.id, { stats: {...stats}});
+        await sendData("characters", state.character.id, { stats: {...stats}, characterProfile: {...state.character.characterProfile} });
         setIsSave(false);
     };
 
