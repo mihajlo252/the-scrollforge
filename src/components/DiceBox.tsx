@@ -11,7 +11,7 @@ diceBox.init();
 export const DiceBoxComponent = () => {
     const [diceResult, setDiceResult] = useState(0);
     const [resultArray, setResultArray] = useState<number[]>([]);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const [showDice, setShowDice] = useState(false);
 
     const throwDice = (dice: number) => {
