@@ -16,8 +16,8 @@ interface Inspiration {
 }
 
 interface Descriptions {
-    racialTraits: string[];
-    featureTraits: string[];
+    racialTraits: string;
+    featureTraits: string;
     attacks: Attack[];
     spells: Spell[];
 }
