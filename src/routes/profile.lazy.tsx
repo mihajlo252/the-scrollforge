@@ -1,6 +1,6 @@
 import { CatchBoundary, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { useEffect, useState } from "react";
 import { useCharactersStore, useCharacterStore } from "../zustand/stores";
@@ -58,7 +58,15 @@ function Profile() {
         <CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
             <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <BoxSection styles="w-full flex flex-col items-start gap-10 p-5 overflow-y-scroll relative">
-                    {openCreateCharacter && <CreateCharacter openCreateCharacter={openCreateCharacter} setOpenCreateCharacter={setOpenCreateCharacter} setIsSave={setIsSave}/>}
+                    <AnimatePresence>
+                        {openCreateCharacter && (
+                            <CreateCharacter
+                                openCreateCharacter={openCreateCharacter}
+                                setOpenCreateCharacter={setOpenCreateCharacter}
+                                setIsSave={setIsSave}
+                            />
+                        )}
+                    </AnimatePresence>
                     <section className="flex w-full justify-between">
                         <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
                         <button
@@ -75,10 +83,7 @@ function Profile() {
                                 key={character.id}
                                 className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
                             >
-                                <li
-                                    className="flex h-full w-full items-center gap-5"
-                                    onClick={() => handleNavigateToCharacter(character)}
-                                >
+                                <li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
                                     <ImageWithFallback
                                         bucket="characters"
                                         folder={""}
@@ -98,15 +103,15 @@ function Profile() {
                                         </p>
                                     </div>
                                 </li>
-                                <DeleteButton size={60} styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary" event={() => handleDeletePopup(character)} />
+                                <DeleteButton
+                                    size={60}
+                                    styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary"
+                                    event={() => handleDeletePopup(character)}
+                                />
                             </div>
                         ))}
                     </ul>
-                    <DeletePopup
-                        deleteID={characterDelete}
-                        setDeleteID={setCharacterDelete}
-                        setIsDeleted={setIsDeleted}
-                    />
+                        {characterDelete && (<DeletePopup deleteID={characterDelete} setDeleteID={setCharacterDelete} setIsDeleted={setIsDeleted} />)}
                 </BoxSection>
             </motion.main>
         </CatchBoundary>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendData } from "../../utilities/sendData";
 import { Popup } from "../../components/Popup";
+import { AnimatePresence } from "framer-motion";
 
 export const HPBar = ({ maxHP: mHP, characterID }: { maxHP: number; characterID: string }) => {
     const { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))));
@@ -81,26 +82,34 @@ export const HPBar = ({ maxHP: mHP, characterID }: { maxHP: number; characterID:
 
     return (
         <div className="relative flex h-full w-full flex-col items-center justify-center gap-5">
-            {edit && (
-                <Popup closerFunc={setEdit}>
-                    <div className="flex flex-col items-center justify-center gap-2">
-                        <label htmlFor="maxHP">Max HP</label>
-                        <input type="number" value={maxHP || "0"} id="maxHP" onChange={(e) => saveMaxHP(e)} className="input input-bordered w-[10ch]" />
-                        <button type="button" className="btn btn-secondary mt-5 flex-1" onClick={() => setEdit(false)}>
-                            Close
-                        </button>
-                    </div>
-                </Popup>
-            )}
+            <AnimatePresence>
+                {edit && (
+                    <Popup closerFunc={setEdit}>
+                        <div className="flex flex-col items-center justify-center gap-2">
+                            <label htmlFor="maxHP">Max HP</label>
+                            <input
+                                type="number"
+                                value={maxHP || "0"}
+                                id="maxHP"
+                                onChange={(e) => saveMaxHP(e)}
+                                className="input input-bordered w-[10ch]"
+                            />
+                            <button type="button" className="btn btn-secondary mt-5 flex-1" onClick={() => setEdit(false)}>
+                                Close
+                            </button>
+                        </div>
+                    </Popup>
+                )}
+            </AnimatePresence>
 
             <div className="flex items-center gap-1">
-            <button
-                type="button"
-                className="btn btn-ghost absolute left-0 top-0 h-[2rem] min-h-[2rem] border-2 border-primary text-primary hover:bg-primary hover:text-base-100"
-                onClick={() => setEdit(true)}
-            >
-                Edit
-            </button>
+                <button
+                    type="button"
+                    className="btn btn-ghost absolute left-0 top-0 h-[2rem] min-h-[2rem] border-2 border-primary text-primary hover:bg-primary hover:text-base-100"
+                    onClick={() => setEdit(true)}
+                >
+                    Edit
+                </button>
                 {save && (
                     <form
                         className="absolute right-0 top-0 flex flex-col items-center justify-center gap-2"
@@ -141,7 +150,6 @@ export const HPBar = ({ maxHP: mHP, characterID }: { maxHP: number; characterID:
                     </button>
                 </div>
             </div>
-            
         </div>
     );
 };
