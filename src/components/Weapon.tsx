@@ -5,14 +5,46 @@ import { Popup } from "./Popup";
 import { useState } from "react";
 import { sendData } from "../utilities/sendData";
 
-export const Weapon = ({ attack, index, style, setAttacks }: { attack: any; index: number; style?: string, setAttacks: React.Dispatch<React.SetStateAction<any[]>> }) => {
+export const Weapon = ({
+    attack,
+    index,
+    style,
+    setAttacks,
+}: {
+    attack: any;
+    index: number;
+    style?: string;
+    setAttacks: React.Dispatch<React.SetStateAction<Attack[]>>;
+}) => {
     const [isDelete, setIsDelete] = useState(false);
-
     const { state } = JSON.parse(localStorage.getItem("character") ?? "{}");
-    const handleDelete = async (e: React.FormEvent) => {    
+
+    const handleDelete = async (e: React.FormEvent) => {
         e.preventDefault();
-        await sendData("characters", state.character.id, { descriptions: { ...state.character.descriptions, attacks: state.character.descriptions.attacks.filter((a: any) => a.name !== attack.name) } });
+        await sendData("characters", state.character.id, {
+            descriptions: {
+                ...state.character.descriptions,
+                attacks: state.character.descriptions.attacks.filter((a: any) => a.name !== attack.name),
+            },
+        });
         setAttacks(state.character.descriptions.attacks.filter((a: any) => a.name !== attack.name));
+        localStorage.setItem(
+            "character",
+            JSON.stringify({
+                state: {
+                    ...state,
+                    character: {
+                        ...state.character,
+                        descriptions: {
+                            ...state.character.descriptions,
+                            attacks: [
+                                ...state.character.descriptions.attacks.filter((a: any) => a.name !== attack.name),
+                            ],
+                        },
+                    },
+                },
+            })
+        );
         setIsDelete(false);
     };
 
@@ -29,22 +61,26 @@ export const Weapon = ({ attack, index, style, setAttacks }: { attack: any; inde
                 <DeleteButton
                     size={55}
                     styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary absolute bottom-5 right-0"
-                    event={() => {setIsDelete(true)}}
+                    event={() => {
+                        setIsDelete(true);
+                    }}
                 />
                 <AnimatePresence>
-                {isDelete && (
-                <Popup closerFunc={setIsDelete} >
-                    <form className="flex flex-col gap-10" onSubmit={(e) => handleDelete(e)}>
-                        <p>Are you sure you want to delete this attack?</p>
-                        <div className="flex w-full gap-5">
-                        <button type="button" className="btn btn-primary flex-grow" onClick={() => setIsDelete(false)}>Cancel</button>
-                        <button type="submit" className="btn btn-accent flex-grow">Delete</button>
-                        </div>
-                    </form>
-                </Popup>
-
-                )}
-
+                    {isDelete && (
+                        <Popup closerFunc={setIsDelete}>
+                            <form className="flex flex-col gap-10" onSubmit={(e) => handleDelete(e)}>
+                                <p>Are you sure you want to delete this attack?</p>
+                                <div className="flex w-full gap-5">
+                                    <button type="button" className="btn btn-primary flex-grow" onClick={() => setIsDelete(false)}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn btn-accent flex-grow">
+                                        Delete
+                                    </button>
+                                </div>
+                            </form>
+                        </Popup>
+                    )}
                 </AnimatePresence>
             </div>
             <p>
