@@ -9,7 +9,7 @@ export const Route = createLazyFileRoute("/tickets")({
 });
 
 function Tickets() {
-    const [short, setShort] = useState<string>("");
+    const [appSection, setAppSection] = useState<string>("");
     const [ticket, setTicket] = useState<string>("");
     const [bugOrFeature, setBugOrFeature] = useState<string>("Bug Report");
 
@@ -19,12 +19,12 @@ function Tickets() {
         e.preventDefault();
 
         const report: Ticket = {
-            title: short,
+            appSection: appSection,
             description: ticket,
             user_id: user.id,
             type: bugOrFeature
         };
-        if (report.title === "" || report.description === "") return;
+        if (report.appSection === "" || report.description === "") return;
 
         let error;
         try {
@@ -35,7 +35,7 @@ function Tickets() {
         }
         if (error) return;
 
-        setShort("");
+        setAppSection("");
         setTicket("");
     };
 
@@ -55,11 +55,11 @@ function Tickets() {
                     <div className="flex w-full flex-col gap-5">
                         <input
                             type="text"
-                            name="short"
-                            id="short"
-                            onChange={(e) => setShort(e.target.value)}
-                            value={short}
-                            placeholder="Short Description"
+                            name="appSection"
+                            id="appSection"
+                            onChange={(e) => setAppSection(e.target.value)}
+                            value={appSection}
+                            placeholder="App Section"
                             className="input input-bordered"
                         />
                         <textarea
@@ -69,7 +69,7 @@ function Tickets() {
                             value={ticket}
                             rows={3}
                             cols={50}
-                            placeholder="Describe your problem"
+                            placeholder="Ticket Description"
                             className="textarea textarea-bordered min-h-[1rem] resize-none"
                         />
                     </div>

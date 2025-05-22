@@ -117,7 +117,7 @@ interface CharacterStore {
 }
 
 interface Ticket {
-    title: string;
+    appSection: string;
     description: string;
     user_id: string;
     type: string;
