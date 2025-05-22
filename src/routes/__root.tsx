@@ -4,6 +4,7 @@ import { Navigation } from "../components/Navigation";
 import { TicketsButton } from "../components/TicketsButton";
 import { BoxSection } from "../components/BoxSection";
 import { ErrComp } from "../components/ErrComp";
+import { Toaster } from "sonner";
 
 export const Route = createRootRoute({
     component: () => (
@@ -17,6 +18,7 @@ export const Route = createRootRoute({
                 size={30}
                 strokeWidth={5}
             />
+            <Toaster theme="dark"/>
         </div>
     ),
     errorComponent: () => (

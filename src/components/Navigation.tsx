@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
 import { BorderButton } from "./BorderButton";
 import logo from "/assets/ObscurisGolden.png";
+import { toast } from "../utilities/toasterSonner";
+
+
+
 
 export const Navigation = () => {
     const navigate = useNavigate();
 
     const { user, removeUser } = useUserStore();
-    const [charSelected, setCharSelected] = useState("opacity-0");
+    // const [charSelected, setCharSelected] = useState("opacity-0");
     const [sign, setSign] = useState("Sign Up");
 
     const [newUser, setNewUser] = useState(getUserFromLocal() || "");
@@ -26,8 +30,7 @@ export const Navigation = () => {
         if (path === "/character") {
             let character = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character")))) || null;
             if (!character) {
-                setCharSelected("opacity-1");
-                setTimeout(() => setCharSelected("opacity-0"), 2000);
+                toast({ style: "", message: "Please select a character" });
                 return;
             }
         }
@@ -63,7 +66,6 @@ export const Navigation = () => {
 
             {newUser && (
                 <div className="flex items-center gap-2">
-                    <p className={`${charSelected} text-secondary transition-opacity`}>Select a Character</p>
                     
                     <BorderButton
                         text="Character"

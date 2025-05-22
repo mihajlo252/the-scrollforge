@@ -10,6 +10,7 @@ import purple from "/assets/purple.svg";
 import yellow from "/assets/yellow.svg";
 import red from "/assets/red.svg";
 import regular from "/assets/regular.svg";
+import { toast } from "../utilities/toasterSonner";
 
 export const Route = createLazyFileRoute("/inspiration")({ component: Inspiration });
 
@@ -27,7 +28,6 @@ function Inspiration() {
     let inspiration: Inspiration = state.character.stats.inspiration;
 
     const [inspValue, setInspValue]: [Inspiration, any] = useState(inspiration);
-    const [isSaved, setIsSaved] = useState(false);
 
     const handleIncrease = (key: string) => {
         let newValue: number;
@@ -66,8 +66,7 @@ function Inspiration() {
         await sendData("characters", state.character.id, {
             stats: { ...state.character.stats, inspiration: inspValue },
         });
-        setIsSaved(true);
-        setTimeout(() => setIsSaved(false), 2000);
+        toast({ style: "bg-success text-base-100", message: "Saved!" });
     };
 
     return (
@@ -124,11 +123,7 @@ function Inspiration() {
                     })}
                 </motion.ul>
                 <div className="absolute right-5 top-5 flex items-center gap-2">
-                    <p
-                        className={`opacity-0 select-none pointer-events-none text-sm text-success transition-opacity duration-500 ${isSaved ? "opacity-100 select-auto pointer-events-auto" : ""}`}
-                    >
-                        Saved
-                    </p>
+                    
                     <button
                         type="submit"
                         className="btn btn-ghost border-2 border-accent text-accent hover:border-accent hover:bg-accent hover:text-base-100"
