@@ -43,7 +43,7 @@ function Profile() {
 
     useEffect(() => {
         handleGetCharacter();
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (isDeleted || isSave) {
@@ -83,15 +83,16 @@ function Profile() {
                                 key={character.id}
                                 className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
                             >
+                                <ImageWithFallback
+                                    bucket="characters"
+                                    id={character.id}
+                                    characterName={character.characterProfile.name}
+                                    folder={""}
+                                    name={character.avatar}
+                                    alt={character.characterProfile.name}
+                                    fallbackSrc={avatarPlaceholder}
+                                />
                                 <li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
-                                    <ImageWithFallback
-                                        bucket="characters"
-                                        folder={""}
-                                        name={character.avatar}
-                                        alt={character.characterProfile.name}
-                                        fallbackSrc={avatarPlaceholder}
-                                    />
-
                                     <div className="text-start">
                                         <p>
                                             {character.characterProfile.name}, {character.characterProfile.level}
@@ -111,7 +112,7 @@ function Profile() {
                             </div>
                         ))}
                     </ul>
-                        {characterDelete && (<DeletePopup deleteID={characterDelete} setDeleteID={setCharacterDelete} setIsDeleted={setIsDeleted} />)}
+                    {characterDelete && <DeletePopup deleteID={characterDelete} setDeleteID={setCharacterDelete} setIsDeleted={setIsDeleted} />}
                 </BoxSection>
             </motion.main>
         </CatchBoundary>
