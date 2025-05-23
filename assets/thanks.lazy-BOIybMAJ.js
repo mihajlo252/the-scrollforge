@@ -1,0 +1,1 @@
+import{c as t,u as o,r as s,j as n}from"./index-Bh7AkYPZ.js";const r=t("/thanks")({component:a});function a(){const e=o();return s.useEffect(()=>{setTimeout(()=>{e({to:"/"})},1e4)},[e]),n.jsx("div",{children:"Thanks for signing up! You will be redirected to the home page in 10 seconds. Please confirm your email."})}export{r as Route};
