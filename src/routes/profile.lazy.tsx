@@ -22,7 +22,6 @@ function Profile() {
     const [characterDelete, setCharacterDelete] = useState("");
     const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
     const [isSave, setIsSave] = useState(false);
-    const [changeImage, setChangeImage] = useState(false);
 
     const { user } = JSON.parse(getUserFromLocal());
 
@@ -45,12 +44,6 @@ function Profile() {
         handleGetCharacter();
     }, []);
 
-    useEffect(() => {
-        if (changeImage) {
-            handleGetCharacter();
-            setChangeImage(false);
-        }
-    }, [changeImage]);
 
     useEffect(() => {
         if (isDeleted || isSave) {
@@ -77,7 +70,6 @@ function Profile() {
                     <section className="flex w-full justify-between">
                         <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
                         <button
-                            // onClick={() => navigate({ to: "/create-character/page1" })}
                             onClick={() => setOpenCreateCharacter(true)}
                             className="btn btn-ghost border-2 border-primary text-primary hover:border-primary hover:bg-primary hover:text-base-100"
                         >
@@ -92,11 +84,7 @@ function Profile() {
                             >
                                 <Avatar
                                     bucket="characters"
-                                    id={character.id}
-                                    characterName={character.characterProfile.name}
-                                    folder={""}
-                                    name={character.avatar}
-                                    setChangeImage={setChangeImage}
+                                    characterName={character.characterProfile.name.toLowerCase()}
                                 />
                                 <li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
                                     <div className="text-start">

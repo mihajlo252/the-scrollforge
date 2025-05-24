@@ -98,7 +98,6 @@ interface Character {
     currentHP: number;
     stats: Stats;
     descriptions: Descriptions;
-    avatar: string;
 }
 interface UserStore {
     user: string;
