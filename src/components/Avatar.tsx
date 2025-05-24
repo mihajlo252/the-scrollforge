@@ -15,6 +15,7 @@ export const Avatar = ({
 }) => {
     const [imageSrc, setImageSrc] = useState<string>("");
     const [edit, setEdit] = useState(false);
+    const [isAlt, setIsAlt] = useState(false);
 
     const handleGetImageFromStorage = async () => {
         const { publicUrl } = await getImageFromStorage({ bucket: bucket, name: `${characterName}.png` });
@@ -38,6 +39,7 @@ export const Avatar = ({
             return;
         }
         setEdit(false);
+        setIsAlt(false);
         setImageSrc((prev) => `${prev}?t=${Date.now()}`);
         toast({ style: "bg-primary text-base-100", message: "Image changed. It might take some time to update." });
     };
@@ -46,6 +48,7 @@ export const Avatar = ({
         await supabase.storage.from("characters").remove([`${characterName}.png`]);
         setImageSrc((prev) => `${prev}?t=${Date.now()}`);
         setEdit(false);
+        setIsAlt(true);
         toast({ style: "bg-primary text-base-100", message: "Image removed. It might take some time to update." });
     };
 
@@ -62,9 +65,13 @@ export const Avatar = ({
             >
                 <img
                     src={imageSrc}
+                    onError={() => setIsAlt(true)}
                     alt={(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}
-                    className={`object-cover object-top text-center text-4xl text-primary`}
+                    className={`object-cover object-top text-center text-4xl text-primary ${isAlt && 'opacity-0'}`}
                 />
+                <div className={`absolute inset-0 place-content-center text-center text-4xl text-primary opacity-0 ${isAlt && 'opacity-100'}`}>
+                    <p>{(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}</p>
+                </div>
                 <div className="absolute inset-0 place-content-center bg-black/50 text-lg opacity-0 transition-opacity hover:opacity-100">
                     <p>Edit</p>
                 </div>
