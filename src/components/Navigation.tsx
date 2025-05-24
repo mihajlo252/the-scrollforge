@@ -30,7 +30,7 @@ export const Navigation = () => {
         if (path === "/character") {
             let character = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character")))) || null;
             if (!character) {
-                toast({ style: "", message: "Please select a character" });
+                toast({ style: "bg-secondary text-white", message: "Please select a character" });
                 return;
             }
         }

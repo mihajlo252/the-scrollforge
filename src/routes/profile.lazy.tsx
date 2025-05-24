@@ -6,11 +6,10 @@ import { useEffect, useState } from "react";
 import { useCharactersStore, useCharacterStore } from "../zustand/stores";
 import { BoxSection } from "../components/BoxSection";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
-import { ImageWithFallback } from "../components/ImageWithFallback";
 import { DeletePopup } from "../components/DeletePopup";
 import { DeleteButton } from "../components/DeleteButton";
-import avatarPlaceholder from "/assets/avatarplaceholder.png";
 import { CreateCharacter } from "../sections/CreateCharacter/CreateCharacter";
+import { Avatar } from "../components/Avatar";
 
 export const Route = createLazyFileRoute("/profile")({
     component: Profile,
@@ -83,14 +82,12 @@ function Profile() {
                                 key={character.id}
                                 className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
                             >
-                                <ImageWithFallback
+                                <Avatar
                                     bucket="characters"
                                     id={character.id}
                                     characterName={character.characterProfile.name}
                                     folder={""}
                                     name={character.avatar}
-                                    alt={character.characterProfile.name}
-                                    fallbackSrc={avatarPlaceholder}
                                 />
                                 <li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
                                     <div className="text-start">
