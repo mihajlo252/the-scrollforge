@@ -22,6 +22,7 @@ function Profile() {
     const [characterDelete, setCharacterDelete] = useState("");
     const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
     const [isSave, setIsSave] = useState(false);
+    const [changeImage, setChangeImage] = useState(false);
 
     const { user } = JSON.parse(getUserFromLocal());
 
@@ -43,6 +44,13 @@ function Profile() {
     useEffect(() => {
         handleGetCharacter();
     }, []);
+
+    useEffect(() => {
+        if (changeImage) {
+            handleGetCharacter();
+            setChangeImage(false);
+        }
+    }, [changeImage]);
 
     useEffect(() => {
         if (isDeleted || isSave) {
@@ -88,6 +96,7 @@ function Profile() {
                                     characterName={character.characterProfile.name}
                                     folder={""}
                                     name={character.avatar}
+                                    setChangeImage={setChangeImage}
                                 />
                                 <li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
                                     <div className="text-start">

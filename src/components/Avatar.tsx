@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { getImageFromStorage } from "../utilities/getImageFromStorage";
 import { Popup } from "./Popup";
 import { AnimatePresence } from "framer-motion";
@@ -14,22 +14,24 @@ export const Avatar = ({
     folder,
     name,
     characterName,
+    setChangeImage
 }: {
     bucket: string;
     id: string;
     folder: string;
     name: string;
     characterName: string;
+    setChangeImage: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
     const [imageSrc, setImageSrc] = useState<string>("");
-    const [attemptedDB, setAttemptedDB] = useState<boolean>(false);
     const [edit, setEdit] = useState(false);
     const [isAlt, setIsAlt] = useState<boolean>(false);
+    const [_, startTransition] = useTransition();
+
     const handleGetImageFromStorage = async () => {
         const { publicUrl } = await getImageFromStorage({ bucket: bucket, folder: folder, name: name });
         if (publicUrl !== null) {
             if (!publicUrl.endsWith(".png")) {
-                setAttemptedDB(true);
                 setIsAlt(true);
                 return;
             }
@@ -56,16 +58,20 @@ export const Avatar = ({
         await sendData("characters", id, { avatar: `${randomId}.png` });
         handleGetImageFromStorage();
         setEdit(false);
-        setAttemptedDB(false);
         toast({ style: "bg-primary text-base-100", message: "Image changed. It might take some time to update." });
+        startTransition(() => {
+            setChangeImage(true);
+        })
     };
 
     const handleRemoveImage = async() => {
         await sendData("characters", id, { avatar: null });
         handleGetImageFromStorage();
         setEdit(false);
-        setAttemptedDB(false);
         toast({ style: "bg-primary text-base-100", message: "Image removed. It might take some time to update." });
+        startTransition(() => {
+            setChangeImage(true);
+        })
     }
 
     useEffect(() => {
@@ -80,7 +86,7 @@ export const Avatar = ({
                     <img
                         src={imageSrc}
                         alt={(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}
-                        className={`object-cover object-top ${attemptedDB ? "opacity-50 p-2" : ""}`}
+                        className={`object-cover object-top`}
                     />
                 ) : (
                     <p className="text-center text-4xl text-primary">
