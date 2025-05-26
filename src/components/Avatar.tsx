@@ -28,7 +28,7 @@ export const Avatar = ({ bucket, characterName }: { bucket: string; characterNam
         }
         const { error } = await supabase.storage
             .from("characters")
-            .upload(`${characterName}.png`, file as File, { upsert: true });
+            .upload(`${characterName}.png`, file as File, { cacheControl: "0", upsert: true });
         if (error) {
             return;
         }
