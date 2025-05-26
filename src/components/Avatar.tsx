@@ -1,40 +1,29 @@
 import { useEffect, useState } from "react";
-import { getImageFromStorage } from "../utilities/getImageFromStorage";
 import { Popup } from "./Popup";
 import { AnimatePresence } from "framer-motion";
 import { supabase } from "../supabase/supabase";
 import { toast } from "../utilities/toasterSonner";
 import { BorderButton } from "./BorderButton";
 
-export const Avatar = ({
-    bucket,
-    characterName,
-}: {
-    bucket: string;
-    characterName: string;
-}) => {
+export const Avatar = ({ bucket, characterName }: { bucket: string; characterName: string }) => {
     const [imageSrc, setImageSrc] = useState<string>("");
     const [edit, setEdit] = useState(false);
     const [isAlt, setIsAlt] = useState(false);
 
     const handleGetImageFromStorage = async () => {
-        const { publicUrl } = await getImageFromStorage({ bucket: bucket, name: `${characterName}.png` });
-        if (publicUrl !== null) {
-            setImageSrc(`${publicUrl}?t=${Date.now()}`);
-        }
+        const publicUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL + "/storage/v1/object/public/" + `${bucket}/${characterName}.png`;
+        setImageSrc(`${publicUrl}?t=${Date.now()}`);
     };
 
     const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const file = ((e.target as HTMLFormElement).elements[0] as HTMLInputElement).files?.[0];
         if (!file) return;
-        if (file?.size > 1048576) {
-            toast({ style: "bg-error text-base-100", message: "File is too large! Please keep file size below 1MB." });
+        if (file?.size > 307200) {
+            toast({ style: "bg-error text-base-100", message: "File is too large! Please keep file size below 300KB." });
             return;
         }
-        const { error } = await supabase.storage
-            .from("characters")
-            .upload(`${characterName}.png`, file as File, { cacheControl: "0", upsert: true });
+        const { error } = await supabase.storage.from("characters").upload(`${characterName}.png`, file as File, { cacheControl: "0", upsert: true });
         if (error) {
             return;
         }
@@ -67,9 +56,9 @@ export const Avatar = ({
                     src={imageSrc}
                     onError={() => setIsAlt(true)}
                     alt={(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}
-                    className={`object-cover object-top text-center text-4xl text-primary ${isAlt && 'opacity-0'}`}
+                    className={`object-cover object-top text-center text-4xl text-primary ${isAlt && "opacity-0"}`}
                 />
-                <div className={`absolute inset-0 place-content-center text-center text-4xl text-primary opacity-0 ${isAlt && 'opacity-100'}`}>
+                <div className={`absolute inset-0 place-content-center text-center text-4xl text-primary opacity-0 ${isAlt && "opacity-100"}`}>
                     <p>{(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}</p>
                 </div>
                 <div className="absolute inset-0 place-content-center bg-black/50 text-lg opacity-0 transition-opacity hover:opacity-100">
