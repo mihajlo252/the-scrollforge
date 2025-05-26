@@ -6,13 +6,16 @@ import { toast } from "../utilities/toasterSonner";
 import { BorderButton } from "./BorderButton";
 
 export const Avatar = ({ bucket, characterName }: { bucket: string; characterName: string }) => {
-    const [imageSrc, setImageSrc] = useState<string>("");
+    const [imageSrc, setImageSrc] = useState<string>(import.meta.env.VITE_PUBLIC_SUPABASE_URL + "/storage/v1/object/public/" + `${bucket}/${characterName}.png`);
     const [edit, setEdit] = useState(false);
-    const [isAlt, setIsAlt] = useState(false);
+    const [isAlt, setIsAlt] = useState(true);
 
     const handleGetImageFromStorage = async () => {
-        const publicUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL + "/storage/v1/object/public/" + `${bucket}/${characterName}.png`;
-        setImageSrc(`${publicUrl}?t=${Date.now()}`);
+        fetch(imageSrc, { method: "HEAD" }).then(async (r) => {
+            if (r.ok) {
+                setIsAlt(false);
+            }
+        });
     };
 
     const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,7 +26,9 @@ export const Avatar = ({ bucket, characterName }: { bucket: string; characterNam
             toast({ style: "bg-error text-base-100", message: "File is too large! Please keep file size below 300KB." });
             return;
         }
-        const { error } = await supabase.storage.from("characters").upload(`${characterName}.png`, file as File, { cacheControl: "0", upsert: true });
+        const { error } = await supabase.storage
+            .from("characters")
+            .upload(`${characterName}.png`, file as File, { upsert: true });
         if (error) {
             return;
         }
@@ -56,9 +61,9 @@ export const Avatar = ({ bucket, characterName }: { bucket: string; characterNam
                     src={imageSrc}
                     onError={() => setIsAlt(true)}
                     alt={(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}
-                    className={`object-cover object-top text-center text-4xl text-primary ${isAlt && "opacity-0"}`}
+                    className={`object-cover object-top text-center text-4xl text-primary transition-opacity ${isAlt && "opacity-0"}`}
                 />
-                <div className={`absolute inset-0 place-content-center text-center text-4xl text-primary opacity-0 ${isAlt && "opacity-100"}`}>
+                <div className={`absolute inset-0 place-content-center text-center text-4xl text-primary transition-opacity opacity-0 ${isAlt && "opacity-100"}`}>
                     <p>{(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}</p>
                 </div>
                 <div className="absolute inset-0 place-content-center bg-black/50 text-lg opacity-0 transition-opacity hover:opacity-100">
