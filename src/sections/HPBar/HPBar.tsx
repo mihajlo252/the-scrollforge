@@ -58,7 +58,13 @@ export const HPBar = ({ maxHP: mHP, characterID }: { maxHP: number; characterID:
 
         setNewHP(health);
         state.character.currentHP = health;
-        localStorage.setItem("character", JSON.stringify({ state: state }));
+        localStorage.setItem(
+            "character",
+            JSON.stringify({
+                state: { ...state, character: { ...state.character, currentHP: health, stats: { ...state.character.stats, maxHP: maxHP } } },
+                version: 1,
+            })
+        );
         if (save === true) {
             setSave(false);
         }
@@ -134,7 +140,7 @@ export const HPBar = ({ maxHP: mHP, characterID }: { maxHP: number; characterID:
                     <input
                         type="range"
                         value={HP}
-                        className={`absolute left-1/2 top-0 h-[7.5rem] w-full -translate-x-1/2 -rotate-90 touch-none opacity-0`}
+                        className={`absolute left-1/2 top-0 h-[5.5rem] w-full -translate-x-1/2 -rotate-90 touch-none opacity-0`}
                         min={0}
                         max={maxHP}
                         step={1}

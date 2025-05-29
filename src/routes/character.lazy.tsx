@@ -43,7 +43,7 @@ function Character() {
                     Save Character
                 </button>
             )}
-            <CharacterProfile setStatChange={setStatChange} character={state.character} />
+            <CharacterProfile setStatChange={setStatChange} />
             <section className={`flex gap-5`}>
                 <BoxSection styles="w-[50%] flex flex-col gap-5 p-5">
                     <Stats character={state.character} setStatChange={setStatChange} />

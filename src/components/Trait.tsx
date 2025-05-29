@@ -34,6 +34,13 @@ export const Trait = ({
         setFunc(e.target.value);
         if (save === false && e.target.value !== prevTraits) {
             setSave(true);
+            localStorage.setItem(
+                "character",
+                JSON.stringify({
+                    state: { character: { ...state.character, descriptions: { ...state.character.descriptions, [description]: e.target.value } } },
+                    version: 0,
+                })
+            );
         }
         if (save === true && e.target.value == prevTraits) {
             setSave(false);

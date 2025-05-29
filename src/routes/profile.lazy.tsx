@@ -22,6 +22,7 @@ function Profile() {
     const [characterDelete, setCharacterDelete] = useState("");
     const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
     const [isSave, setIsSave] = useState(false);
+    const [isDelete, setIsDelete] = useState(false);
 
     const { user } = JSON.parse(getUserFromLocal());
 
@@ -38,12 +39,12 @@ function Profile() {
 
     const handleDeletePopup = (char: Character) => {
         setCharacterDelete(char.id);
+        setIsDelete(true);
     };
 
     useEffect(() => {
         handleGetCharacter();
     }, []);
-
 
     useEffect(() => {
         if (isDeleted || isSave) {
@@ -82,10 +83,7 @@ function Profile() {
                                 key={character.id}
                                 className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
                             >
-                                <Avatar
-                                    bucket="characters"
-                                    characterName={character.characterProfile.name.toLowerCase()}
-                                />
+                                <Avatar bucket="characters" characterName={character.characterProfile.name.toLowerCase()} />
                                 <li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
                                     <div className="text-start">
                                         <p>
@@ -106,7 +104,11 @@ function Profile() {
                             </div>
                         ))}
                     </ul>
-                    {characterDelete && <DeletePopup deleteID={characterDelete} setDeleteID={setCharacterDelete} setIsDeleted={setIsDeleted} />}
+                    <AnimatePresence>
+                        {isDelete && (
+                            <DeletePopup deleteID={characterDelete} setDeleteID={setCharacterDelete} setIsDeleted={setIsDeleted} setIsDelete={setIsDelete} />
+                        )}
+                    </AnimatePresence>
                 </BoxSection>
             </motion.main>
         </CatchBoundary>

@@ -29,14 +29,16 @@ import { calculateModifiers } from "../../utilities/calculateStats";
 //     subrace: string,
 // }
 
-export const CharacterProfile = ({ character, setStatChange }: { character: Character, setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
+export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
+    const { state } = JSON.parse(localStorage.getItem("character")!);
+    const character = state.character;
     if (!character) return;
 
     const {
         characterProfile,
         stats: { primaryStats },
     } = character;
-
+    
     const [str, setStr] = useState<number>(primaryStats.str);
     const [dex, setDex] = useState<number>(primaryStats.dex);
     const [con, setCon] = useState<number>(primaryStats.con);
@@ -51,13 +53,15 @@ export const CharacterProfile = ({ character, setStatChange }: { character: Char
             e.target.style.width = "7ch";
         }
         setFunc(parseInt(e.target.value));
+        const {state} = JSON.parse(localStorage.getItem("character")!);
+        const mHP = state.character.stats.maxHP;
         localStorage.setItem(
             "character",
             JSON.stringify({
                 state: {
                     character: {
                         ...character,
-                        stats: { ...character.stats, primaryStats: { ...character.stats.primaryStats, [e.target.name]: parseInt(e.target.value)}},
+                        stats: { ...character.stats, maxHP: mHP, primaryStats: { ...character.stats.primaryStats, [e.target.name]: parseInt(e.target.value)}},
                     },
                 },
                 version: 0,
@@ -68,12 +72,15 @@ export const CharacterProfile = ({ character, setStatChange }: { character: Char
 
     const handleChangeLevel = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCharacterLevel(parseInt(e.target.value) || 0);
+        const {state} = JSON.parse(localStorage.getItem("character")!);
+        const mHP = state.character.stats.maxHP;
         localStorage.setItem(
             "character",
             JSON.stringify({
                 state: {
                     character: {
                         ...character,
+                        stats: { ...character.stats, maxHP: mHP},
                         characterProfile: { ...character.characterProfile, level: parseInt(e.target.value) || 0 },
                     },
                 },

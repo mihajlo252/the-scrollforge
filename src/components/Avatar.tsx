@@ -35,7 +35,7 @@ export const Avatar = ({ bucket, characterName }: { bucket: string; characterNam
         setEdit(false);
         setIsAlt(false);
         setImageSrc((prev) => `${prev}?t=${Date.now()}`);
-        toast({ style: "bg-primary text-base-100", message: "Image changed. It might take some time to update." });
+        toast({ style: "bg-primary text-base-100", message: "Image changed!" });
     };
 
     const handleRemoveImage = async () => {
@@ -43,7 +43,7 @@ export const Avatar = ({ bucket, characterName }: { bucket: string; characterNam
         setImageSrc((prev) => `${prev}?t=${Date.now()}`);
         setEdit(false);
         setIsAlt(true);
-        toast({ style: "bg-primary text-base-100", message: "Image removed. It might take some time to update." });
+        toast({ style: "bg-primary text-base-100", message: "Image removed!" });
     };
 
     useEffect(() => {

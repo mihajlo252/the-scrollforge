@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { sendData } from "../../utilities/sendData";
-
+import { motion } from "framer-motion";
 export const Notes = () => {
     const [notes, setNotes] = useState<string>("");
     const [save, setSave] = useState(false);
@@ -31,7 +31,7 @@ export const Notes = () => {
 
     return (
         // <button type="button" className="btn btn-ghost relative right-5 top-5" onClick={(e) => handleSubmit(e)}>Save</button>
-        <form className="relative h-full w-full" onSubmit={(e) => handleSubmit(e)}>
+        <motion.form className="relative h-full w-full" onSubmit={(e) => handleSubmit(e)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
 
             <textarea
                 className="text-md h-full w-full resize-none overflow-y-auto rounded-lg border-2 border-slate-900 bg-base-300 p-5"
@@ -40,6 +40,6 @@ export const Notes = () => {
                 onChange={(e) => handleSetNotes(e)}
                 />
             {save && <button type="submit"  className="btn btn-ghost absolute right-5 top-5 border-2 border-accent text-accent hover:border-accent hover:bg-accent hover:text-base-100">Save</button>}
-        </form>
+        </motion.form>
     );
 };
