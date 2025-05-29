@@ -58,7 +58,13 @@ export const HPBar = ({ maxHP: mHP, characterID }: { maxHP: number; characterID:
 
         setNewHP(health);
         state.character.currentHP = health;
-        localStorage.setItem("character", JSON.stringify({ state: state }));
+        localStorage.setItem(
+            "character",
+            JSON.stringify({
+                state: { ...state, character: { ...state.character, currentHP: health, stats: { ...state.character.stats, maxHP: maxHP } } },
+                version: 1,
+            })
+        );
         if (save === true) {
             setSave(false);
         }
