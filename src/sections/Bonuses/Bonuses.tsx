@@ -16,13 +16,15 @@ export const Bonuses = ({ character, setStatChange }: { character: Character; se
     let proficiencyBonus: number = parseInt(calculateProficiencyBonus({ level: level }) || "0");
     const handleChange = (e: any, setFunc: React.Dispatch<React.SetStateAction<any>>) => {
         setFunc(e.target.value);
+        const {state} = JSON.parse(localStorage.getItem("character")!);
+        const mHP = state.character.stats.maxHP;
         localStorage.setItem(
             "character",
             JSON.stringify({
                 state: {
                     character: {
                         ...character,
-                        stats: { ...character.stats, [e.target.name]: e.target.value },
+                        stats: { ...character.stats, [e.target.name]: e.target.value, maxHP: mHP },
                     },
                 },
                 version: 0,
