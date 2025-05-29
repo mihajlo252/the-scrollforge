@@ -33,13 +33,15 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
     const [chaProficiency, setChaProficiency] = useState(saveThrowsProficiency.cha);
 
     const setLocalProficiency = (skill: string, value: string) => {
+        const {state} = JSON.parse(localStorage.getItem("character")!);
+        const mHP = state.character.stats.maxHP;
         localStorage.setItem(
             "character",
             JSON.stringify({
                 state: {
                     character: {
                         ...character,
-                        stats: { ...character.stats, skillProficiency: { ...character.stats.skillProficiency, [skill]: value } },
+                        stats: { ...character.stats, maxHP: mHP, skillProficiency: { ...character.stats.skillProficiency, [skill]: value } },
                     },
                 },
                 version: 0,
@@ -47,13 +49,15 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
         );
     };
     const setLocalSaveProficiency = (save: string, value: boolean) => {
+        const {state} = JSON.parse(localStorage.getItem("character")!);
+        const mHP = state.character.stats.maxHP;
         localStorage.setItem(
             "character",
             JSON.stringify({
                 state: {
                     character: {
                         ...character,
-                        stats: { ...character.stats, saveThrowsProficiency: { ...character.stats.saveThrowsProficiency, [save]: value } },
+                        stats: { ...character.stats, maxHP: mHP, saveThrowsProficiency: { ...character.stats.saveThrowsProficiency, [save]: value } },
                     }
                 }
             })
