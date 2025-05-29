@@ -1,6 +1,6 @@
 {
-    "short_name": "Dash&Play",
-    "name": "Dash&Play",
+    "short_name": "The Scrollforge",
+    "name": "The Scrollforge",
     "icons": [
       {
         "src": "favicon.ico",
@@ -20,6 +20,6 @@
     ],
     "start_url": ".",
     "display": "standalone",
-    "theme_color": "#010417",
-    "background_color": "#010417"
+    "theme_color": "#060a15",
+    "background_color": "#060a15"
   }
