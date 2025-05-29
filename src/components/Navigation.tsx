@@ -5,17 +5,13 @@ import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
 import { BorderButton } from "./BorderButton";
-import logo from "/assets/ObscurisGolden.png";
+import logo from "/assets/the-scrollforge-logo.png";
 import { toast } from "../utilities/toasterSonner";
-
-
-
 
 export const Navigation = () => {
     const navigate = useNavigate();
 
     const { user, removeUser } = useUserStore();
-    // const [charSelected, setCharSelected] = useState("opacity-0");
     const [sign, setSign] = useState("Sign Up");
 
     const [newUser, setNewUser] = useState(getUserFromLocal() || "");
@@ -66,7 +62,6 @@ export const Navigation = () => {
 
             {newUser && (
                 <div className="flex items-center gap-2">
-                    
                     <BorderButton
                         text="Character"
                         style="border-primary text-primary hover:border-primary hover:bg-primary"

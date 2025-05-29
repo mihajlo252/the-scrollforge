@@ -49,7 +49,6 @@ function Profile() {
     useEffect(() => {
         if (isDeleted || isSave) {
             handleGetCharacter();
-            console.log("count");
         }
         setIsDeleted(false);
         setIsSave(false);

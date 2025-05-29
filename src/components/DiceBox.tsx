@@ -4,7 +4,7 @@ import DiceBox from "@3d-dice/dice-box";
 import { Popup } from "./Popup";
 
 const diceBox = new DiceBox({
-    assetPath: "/dash-and-play/assets/",
+    assetPath: "/the-scrollforge/assets/",
 });
 diceBox.init();
 
