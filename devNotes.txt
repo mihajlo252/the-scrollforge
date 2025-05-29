@@ -1,0 +1,34 @@
+DND Sheet
+
+1. Character Details
+2. Stats
+3. Skills
+4. Proficiencies
+5. Saves
+6. Equipment
+7. Notes
+8. Spells
+9. Feats
+10. Traits
+11. Background
+12. Backstory
+13. HP Bar/Bubble
+14. Spell Slots
+
+
+spells:
+name: string,
+type: string,
+castingTime: string,
+range: string,
+duration: string,
+components: string,
+description: string
+
+Spell costs:
+spell slot
+psy points
+etc.
+
+
+Custom sliders

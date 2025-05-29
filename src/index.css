@@ -5,6 +5,63 @@
 #root {
   max-width: 1920px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+	font-family: "K2D", sans-serif;
+  height: 100svh;
+  align-content: center;
+}
+
+body {
+  height: 100svh;
+}
+
+pre {
+  font-family: "K2D", sans-serif;
+}
+
+html {
+  font-size: 130%;
+}
+
+@media (max-width: 1680px) {
+  html {
+    font-size: 110%;
+  }
+}
+
+@media (max-width: 1200px) {
+  html {
+    font-size: 100%;
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 60%;
+  }
+}
+  
+
+
+.dice-box-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+  touch-action: none;
+  pointer-events: none;
+  transition: opacity 500ms ease-in-out;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

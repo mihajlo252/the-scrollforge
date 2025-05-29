@@ -1,44 +1,57 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { BoxSection } from "../components/BoxSection";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
-import { useUserStore } from "../zustand/stores";
+import { signUp } from "../utilities/signUp";
 
-export const Route = createLazyFileRoute("/")({
-    component: signinScreen,
+
+export const Route = createLazyFileRoute("/signup")({
+    component: signUpScreen,
 });
 
-function signinScreen() {
-    const { setUser } = useUserStore();
+function signUpScreen() {
 
     const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
     let user = getUserFromLocal();
-
-    const login = async (e: any) => {
+   
+    const newUserSignUp = async (e: any) => {
         e.preventDefault();
-        await setUser(email, password);
-        navigate({ to: "/profile" });
+        await signUp(email, password, username);
+        navigate({to: "/thanks"})
     };
 
-    useEffect(() => {
-        if (user) {
-            navigate({ to: "/profile" });
-        }
-    }, []);
+    if(user) {
+        navigate({to: "/profile"})
+    }
+    
 
     return (
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full overflow-hidden">
-            <BoxSection styles="relative w-full p-5 flex-col text-start overflow-y-hidden pt-0 justify-center items-center">
-                <form onSubmit={(e) => login(e)}>
+            <BoxSection styles="w-full p-5 flex-col text-start overflow-y-hidden pt-0 justify-center items-center">
+                <form
+                    onSubmit={(e) => newUserSignUp(e)}
+                >
                     <BoxSection styles="w-full flex flex-col gap-5 px-20 py-10">
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="username">Username:</label>
+                            <input
+                                type="text"
+                                placeholder="dave"
+                                id="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
+                            />
+                        </div>
                         <div className="flex flex-col gap-2">
                             <label htmlFor="email">Email:</label>
                             <input
-                                type="email" 
+                                type="email"
                                 placeholder="dave@email.com"
                                 id="email"
                                 value={email}
@@ -57,23 +70,10 @@ function signinScreen() {
                                 className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary">
-                            Login
-                        </button>
+                        <button type="submit" className="btn btn-primary">Submit</button>
 
                     </BoxSection>
                 </form>
-                {/* Development */}
-                <button
-                    type="button"
-                    onClick={async () => {
-                        await setUser("beca252@gmail.com", "beca123");
-                        navigate({ to: "/profile" });
-                    }}
-                    className="visibility-hidden btn btn-primary absolute top-5 w-1/3 opacity-0"
-                >
-                    Quick Login
-                </button>
             </BoxSection>
         </motion.main>
     );
