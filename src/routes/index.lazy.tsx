@@ -63,17 +63,6 @@ function signinScreen() {
 
                     </BoxSection>
                 </form>
-                {/* Development */}
-                <button
-                    type="button"
-                    onClick={async () => {
-                        await setUser("beca252@gmail.com", "beca123");
-                        navigate({ to: "/profile" });
-                    }}
-                    className="visibility-hidden btn btn-primary absolute top-5 w-1/3 opacity-0"
-                >
-                    Quick Login
-                </button>
             </BoxSection>
         </motion.main>
     );
