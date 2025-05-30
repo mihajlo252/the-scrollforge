@@ -28,11 +28,10 @@ export const Trait = ({
     const handleSetTraits = (
         e: React.ChangeEvent<HTMLTextAreaElement>,
         setFunc: React.Dispatch<React.SetStateAction<string>>,
-        prevTraits: string
     ) => {
         e.preventDefault();
         setFunc(e.target.value);
-        if (save === false && e.target.value !== prevTraits) {
+        if (save === false) {
             setSave(true);
             localStorage.setItem(
                 "character",
@@ -42,7 +41,7 @@ export const Trait = ({
                 })
             );
         }
-        if (save === true && e.target.value == prevTraits) {
+        if (save === true) {
             setSave(false);
         }
     };
@@ -58,7 +57,7 @@ export const Trait = ({
                                     className="text-md h-full resize-none overflow-y-auto rounded-lg bg-base-300 p-5"
                                     placeholder="What's on your mind?"
                                     value={racialTraits}
-                                    onChange={(e) => handleSetTraits(e, setRacialTraits, state.character.descriptions.racialTraits)}
+                                    onChange={(e) => handleSetTraits(e, setRacialTraits)}
                                 />
                             </BoxSection>
                             <div className="flex flex-row gap-5">
@@ -89,7 +88,7 @@ export const Trait = ({
                                 className="text-md h-full w-full resize-none overflow-y-auto rounded-lg bg-base-300 px-5"
                                 placeholder="What's on your mind?"
                                 value={featureTraits}
-                                onChange={(e) => handleSetTraits(e, setFeatureTraits, state.character.descriptions.featureTraits)}
+                                onChange={(e) => handleSetTraits(e, setFeatureTraits)}
                             />
                         </BoxSection>
                         <div className="flex flex-row gap-5">
