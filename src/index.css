@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@import "tailwindcss";
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 #root {
   max-width: 1920px;
   margin: 0 auto;

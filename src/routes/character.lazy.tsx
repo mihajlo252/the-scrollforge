@@ -79,6 +79,9 @@ function Character() {
                         <Link to="/notes" className="btn btn-primary">
                             Notes
                         </Link>
+                        <Link to="/chat" className="btn btn-primary">
+                            Chat
+                        </Link>
                     </nav>
                 </BoxSection>
             </section>

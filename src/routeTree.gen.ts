@@ -24,6 +24,7 @@ const SignupLazyImport = createFileRoute('/signup')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const NotesLazyImport = createFileRoute('/notes')()
 const InspirationLazyImport = createFileRoute('/inspiration')()
+const ChatLazyImport = createFileRoute('/chat')()
 const CharacterLazyImport = createFileRoute('/character')()
 const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
@@ -78,6 +79,12 @@ const InspirationLazyRoute = InspirationLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/inspiration.lazy').then((d) => d.Route))
 
+const ChatLazyRoute = ChatLazyImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/chat.lazy').then((d) => d.Route))
+
 const CharacterLazyRoute = CharacterLazyImport.update({
   id: '/character',
   path: '/character',
@@ -119,6 +126,13 @@ declare module '@tanstack/react-router' {
       path: '/character'
       fullPath: '/character'
       preLoaderRoute: typeof CharacterLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatLazyImport
       parentRoute: typeof rootRoute
     }
     '/inspiration': {
@@ -186,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/attacks': typeof AttacksLazyRoute
   '/character': typeof CharacterLazyRoute
+  '/chat': typeof ChatLazyRoute
   '/inspiration': typeof InspirationLazyRoute
   '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -200,6 +215,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/attacks': typeof AttacksLazyRoute
   '/character': typeof CharacterLazyRoute
+  '/chat': typeof ChatLazyRoute
   '/inspiration': typeof InspirationLazyRoute
   '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -215,6 +231,7 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/attacks': typeof AttacksLazyRoute
   '/character': typeof CharacterLazyRoute
+  '/chat': typeof ChatLazyRoute
   '/inspiration': typeof InspirationLazyRoute
   '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -231,6 +248,7 @@ export interface FileRouteTypes {
     | '/'
     | '/attacks'
     | '/character'
+    | '/chat'
     | '/inspiration'
     | '/notes'
     | '/profile'
@@ -244,6 +262,7 @@ export interface FileRouteTypes {
     | '/'
     | '/attacks'
     | '/character'
+    | '/chat'
     | '/inspiration'
     | '/notes'
     | '/profile'
@@ -257,6 +276,7 @@ export interface FileRouteTypes {
     | '/'
     | '/attacks'
     | '/character'
+    | '/chat'
     | '/inspiration'
     | '/notes'
     | '/profile'
@@ -272,6 +292,7 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AttacksLazyRoute: typeof AttacksLazyRoute
   CharacterLazyRoute: typeof CharacterLazyRoute
+  ChatLazyRoute: typeof ChatLazyRoute
   InspirationLazyRoute: typeof InspirationLazyRoute
   NotesLazyRoute: typeof NotesLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
@@ -286,6 +307,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AttacksLazyRoute: AttacksLazyRoute,
   CharacterLazyRoute: CharacterLazyRoute,
+  ChatLazyRoute: ChatLazyRoute,
   InspirationLazyRoute: InspirationLazyRoute,
   NotesLazyRoute: NotesLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
@@ -309,6 +331,7 @@ export const routeTree = rootRoute
         "/",
         "/attacks",
         "/character",
+        "/chat",
         "/inspiration",
         "/notes",
         "/profile",
@@ -327,6 +350,9 @@ export const routeTree = rootRoute
     },
     "/character": {
       "filePath": "character.lazy.tsx"
+    },
+    "/chat": {
+      "filePath": "chat.lazy.tsx"
     },
     "/inspiration": {
       "filePath": "inspiration.lazy.tsx"
