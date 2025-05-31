@@ -83,7 +83,7 @@ function Chat() {
                                 <div className="flex justify-between">
                                     {message.content}
                                     <span className="text-accent">
-                                        {new Date(message.created_at).toLocaleTimeString(undefined, {
+                                        {new Date(message.created_at).toLocaleTimeString("en-US", {
                                             hour: "2-digit",
                                             minute: "2-digit",
                                             hour12: false,
@@ -101,7 +101,7 @@ function Chat() {
                         value={newMessage}
                         onChange={handleSetNewMessage}
                         placeholder="Type a message..."
-                        className="w ill-change-scroll input input-bordered flex-grow"
+                        className="input input-bordered flex-grow"
                     />
                     <button type="submit" className="btn btn-primary">
                         Send
