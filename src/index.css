@@ -9,7 +9,7 @@
     display: none;
   }
   .no-scrollbar {
-    -ms-overflow-style: none;
+    -ms-overflow-style: scroll;
     scrollbar-width: none;
   }
 }

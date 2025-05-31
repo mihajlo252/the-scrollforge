@@ -55,7 +55,7 @@ function Chat() {
         const subscription = supabase
             .channel("chat-room")
             .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
-                setMessages((prev) => [...prev, payload.new.content]);
+                setMessages((prev) => [...prev, payload.new as IMessage]);
             })
             .subscribe();
 
@@ -71,11 +71,10 @@ function Chat() {
         }
     }, [messages.length]);
 
-
     return (
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="m-0 h-full w-full p-0">
-            <BoxSection styles="w-full h-full flex flex-col place-self-center px-10 py-5 gap-10">
-                <BoxSection styles=" w-full flex flex-col place-self-center px-5 py-5 overflow-y-scroll pb-0 gap-5 no-scrollbar">
+            <BoxSection styles="w-full h-full flex flex-col px-10 py-5 gap-10 justify-between">
+                <BoxSection styles="w-full max-h-[70vh] flex flex-col flex-grow px-5 py-5 gap-5 overflow-y-scroll no-scrollbar">
                     <ul className="flex flex-col justify-start gap-2">
                         {messages.map((message, index) => (
                             <li key={index} className="flex flex-col text-left">
@@ -93,7 +92,7 @@ function Chat() {
                             </li>
                         ))}
                     </ul>
-                    <div ref={ref} className="px-5"></div>
+                    <div ref={ref} className="border-2 px-5 text-left"></div>
                 </BoxSection>
                 <form onSubmit={sendMessage} className="flex gap-2">
                     <input
