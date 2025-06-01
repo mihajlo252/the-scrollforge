@@ -29,7 +29,8 @@ function Chat() {
             return;
         }
         const userID = JSON.parse(getUserFromLocal()!).user.id;
-        const { error } = await supabase.from("messages").insert({ content: e.target[0].value, user_id: userID, username: "beca" });
+        const username = JSON.parse(getUserFromLocal()!).user.user_metadata.username
+        const { error } = await supabase.from("messages").insert({ content: e.target[0].value, user_id: userID, username: username });
         setNewMessage("");
 
         if (error) console.error("Error sending message:", error);
