@@ -19,8 +19,18 @@ interface IMessage {
 }
 
 function Chat() {
+    const userID = JSON.parse(getUserFromLocal()!).user.id;
+    const username = JSON.parse(getUserFromLocal()!).user.user_metadata.username;
     const [newMessage, setNewMessage] = useState("");
-    const [messages, setMessages] = useState<IMessage[]>([{}] as IMessage[]);
+    const [messages, setMessages] = useState<IMessage[]>([
+        {
+            content: "Welcome to the chat!",
+            created_at: "",
+            id: "",
+            user_id: "",
+            username: "",
+        },
+    ] as IMessage[]);
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
@@ -28,8 +38,6 @@ function Chat() {
             toast({ style: "bg-error text-base-100", message: "Please enter a message" });
             return;
         }
-        const userID = JSON.parse(getUserFromLocal()!).user.id;
-        const username = JSON.parse(getUserFromLocal()!).user.user_metadata.username
         const { error } = await supabase.from("messages").insert({ content: e.target[0].value, user_id: userID, username: username });
         setNewMessage("");
 
@@ -44,20 +52,23 @@ function Chat() {
     const handleGetMessages = async () => {
         let { data } = await supabase.from("messages").select("*");
         if (!data) return;
-        setMessages(data.map((d: any) => d));
+        setMessages((prev) => [...prev, ...(data.map((d: any) => d) as IMessage[])]);
     };
 
     useEffect(() => {
-        handleGetMessages();
         const subscription = supabase
             .channel("chat-room")
             .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
                 setMessages((prev) => [...prev, payload.new as IMessage]);
             })
+            .on("postgres_changes", { event: "DELETE", schema: "public", table: "messages" }, (payload) => {
+                setMessages((prev) => prev.filter((message) => message.id !== payload.old.id));
+            })
             .subscribe();
 
         return () => {
             supabase.removeChannel(subscription);
+            handleGetMessages();
         };
     }, []);
 
@@ -73,21 +84,36 @@ function Chat() {
             <BoxSection styles="w-full h-full flex flex-col px-10 py-5 gap-10 justify-between">
                 <BoxSection styles="w-full max-h-[70vh] flex flex-col flex-grow px-5 py-5 gap-5 overflow-y-scroll no-scrollbar">
                     <ul className="flex flex-col justify-start gap-2">
-                        {messages.map((message, index) => (
-                            <li key={index} className="flex flex-col text-left">
-                                <label className="text-xl font-bold capitalize text-primary">{message.username}</label>
-                                <div className="flex justify-between">
-                                    {message.content}
-                                    <span className="text-accent">
-                                        {new Date(message.created_at).toLocaleTimeString("en-US", {
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                            hour12: false,
-                                        })}
-                                    </span>
-                                </div>
-                            </li>
-                        ))}
+                        {messages &&
+                            messages.map((message, index) => (
+                                <li key={index} className="flex flex-col text-left">
+                                    {index === 0 ? (
+                                        <>
+                                            <p className="text-center text-xs text-slate-400">System message</p>
+                                            <p className="text-center text-accent">{message.content}</p>
+                                        </>
+                                    ) : (
+                                        <div className="relative flex flex-col gap-2">
+                                            <p className="text-xl font-bold capitalize text-primary">
+                                                {message.username}
+                                                {message.user_id === userID && <span className="text-xs text-slate-400"> (Me)</span>}
+                                            </p>
+
+                                            <div className="flex justify-between">
+                                                {message.content}
+                                                <span className="flex items-center justify-end text-accent">
+                                                    {new Date(message.created_at).toLocaleTimeString("en-US", {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                        hour12: false,
+                                                    })}
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    )}
+                                </li>
+                            ))}
                     </ul>
                     <div ref={ref} className="px-5 text-left"></div>
                 </BoxSection>
