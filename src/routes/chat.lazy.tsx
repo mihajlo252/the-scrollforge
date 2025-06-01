@@ -20,7 +20,7 @@ interface IMessage {
 
 function Chat() {
     const [newMessage, setNewMessage] = useState("");
-    const [messages, setMessages] = useState<IMessage[]>([{ content: "", created_at: "", id: "", user_id: "", username: "" }]);
+    const [messages, setMessages] = useState<IMessage[]>([{}] as IMessage[]);
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
@@ -40,18 +40,14 @@ function Chat() {
         setNewMessage(e.target.value);
     };
 
-    useEffect(() => {
-        const handleGetMessages = async () => {
-            let { data } = await supabase.from("messages").select("*");
-            if (!data) return;
-            setMessages(data.map((d: any) => d));
-        };
-        return () => {
-            handleGetMessages();
-        };
-    }, []);
+    const handleGetMessages = async () => {
+        let { data } = await supabase.from("messages").select("*");
+        if (!data) return;
+        setMessages(data.map((d: any) => d));
+    };
 
     useEffect(() => {
+        handleGetMessages();
         const subscription = supabase
             .channel("chat-room")
             .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
@@ -92,7 +88,7 @@ function Chat() {
                             </li>
                         ))}
                     </ul>
-                    <div ref={ref} className="border-2 px-5 text-left"></div>
+                    <div ref={ref} className="px-5 text-left"></div>
                 </BoxSection>
                 <form onSubmit={sendMessage} className="flex gap-2">
                     <input
