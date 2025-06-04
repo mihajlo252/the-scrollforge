@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { calculateModifiers } from "../../utilities/calculateStats";
+import { BoxSection } from "../../components/BoxSection";
 
 // interface Primary {
 //     str: number,
@@ -91,7 +92,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
     };
 
     return (
-        <header className="grid h-full w-full grid-cols-2 items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
+        <BoxSection styles="grid h-full w-full grid-cols-2 items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
             <div className="flex gap-2">
                 {/* <img
                     src={`./assets/${"bag.png"}`}
@@ -193,6 +194,6 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
                     </div>
                 </div>
             </div>
-        </header>
+        </BoxSection>
     );
 };
