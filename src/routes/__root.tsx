@@ -8,7 +8,7 @@ import { Toaster } from "sonner";
 
 export const Route = createRootRoute({
     component: () => (
-        <div className="flex h-[100svh] flex-col gap-5 px-10 py-5">
+        <div className="flex h-[100svh] flex-col gap-5 bg-base-300 bg-opacity-50 bg-[url('/logo-wide.png')] bg-cover bg-center bg-no-repeat px-10 py-5 bg-blend-overlay">
             <Navigation />
 
             <Outlet />
