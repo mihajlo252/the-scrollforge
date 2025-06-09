@@ -25,7 +25,7 @@ function Character() {
     }
 
     const handleSaveCharacter = async (stats: Stats) => {
-        await sendData("characters", state.character.id, { stats: {...stats}, characterProfile: {...state.character.characterProfile} });
+        await sendData("characters", state.character.id, { stats: { ...stats }, characterProfile: { ...state.character.characterProfile } });
         setIsSave(false);
     };
 
@@ -58,11 +58,11 @@ function Character() {
                         </BoxSection>
                     </div>
                     <BoxSection styles="w-full flex justify-around items-center p-5">
-                        <Bonuses character={state.character} setStatChange={setStatChange}/>
+                        <Bonuses character={state.character} setStatChange={setStatChange} />
                     </BoxSection>
                 </div>
-                <BoxSection styles="w-[10%] flex flex-col py-5">
-                    <nav className="flex flex-col gap-5 p-3">
+                <BoxSection styles="w-[10%] flex flex-col justify-start">
+                    <nav className="flex flex-col gap-3 p-3">
                         <Link to="/traits" className="btn btn-primary">
                             Traits
                         </Link>
