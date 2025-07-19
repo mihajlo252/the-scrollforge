@@ -1,8 +1,8 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { BoxSection } from "../../../components/BoxSection";
-import { InstructionGM } from "../../../components/SablewoodQuickStart/InstructionGM";
-import { SuccessFailCrit } from "../../../components/SablewoodQuickStart/SuccessFailCrit";
+// import { InstructionGM } from "../../../components/SablewoodQuickStart/InstructionGM";
+// import { SuccessFailCrit } from "../../../components/SablewoodQuickStart/SuccessFailCrit";
 
 export const Route = createLazyFileRoute("/daggerheart-demo/acts/act2")({
     component: RouteComponent,
