@@ -63,6 +63,11 @@ export const Navigation = () => {
             {newUser && (
                 <div className="flex items-center gap-2">
                     <BorderButton
+                        text="Daggerheart Demo"
+                        style="border-accent text-accent hover:border-accent hover:bg-accent"
+                        event={() => handleRedirect("/daggerheart-demo/acts")}
+                    />
+                    <BorderButton
                         text="Character"
                         style="border-primary text-primary hover:border-primary hover:bg-primary"
                         event={() => handleRedirect("/character")}
