@@ -1,0 +1,1 @@
+:root{interpolate-size:allow-keywords}._scene-details_1fofk_11::details-content{--transition-duration: .45s ease-in-out;height:0;overflow:hidden;transition:height var(--transition-duration),content-visibility var(--transition-duration);transition-behavior:allow-discrete}._scene-details_1fofk_11[open]::details-content{height:auto}
