@@ -1,10 +1,11 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { BoxSection } from "../../../components/BoxSection";
-import { Scenes } from "../../../components/SablewoodQuickStart/Scenes";
+import { Scenes } from "../../../components/SablewoodQuickStart/Scenes/Scenes";
 import { GM } from "../../../components/SablewoodQuickStart/GM";
 import { SuccessFailCrit } from "../../../components/SablewoodQuickStart/SuccessFailCrit";
-import { Scene } from "../../../components/SablewoodQuickStart/Scene";
+import { Scene } from "../../../components/SablewoodQuickStart/Scenes/Scene";
+import { BasicSheet } from "../../../components/SablewoodQuickStart/BasicSheet";
 // import { GM } from "../../../components/SablewoodQuickStart/InstructionGM";
 // import { SuccessFailCrit } from "../../../components/SablewoodQuickStart/SuccessFailCrit";
 
@@ -21,8 +22,7 @@ function RouteComponent() {
                     <BoxSection styles="w-full max-h-[60vh] overflow-scroll flex flex-col text-start px-5 pt-2 pb-10 gap-2 !border-accent">
                         <h2 className="text-2xl font-bold">Posledice</h2>
                         <Scenes>
-                            <Scene>
-                                <h4 className="text-lg font-bold">Scena 1 - Pretrazuju prevrnutu kociju</h4>
+                            <Scene heading={<h4 className="text-lg font-bold">Scena 1 - Pretrazuju prevrnutu kociju</h4>}>
                                 <p>
                                     U kocijama nema nista od nekih vrednih stvari, samo les vozaca kocija sa otkinutom rukom koju je porodica
                                     Strixvukova pojela.
@@ -30,8 +30,7 @@ function RouteComponent() {
                                 <GM>Ako pretrazuju malo dublje</GM>
                                 <p>Vozacevo grlo je prerezano.</p>
                             </Scene>
-                            <Scene>
-                                <h4 className="text-lg font-bold">Scena 2 - Napadnu Strixvuka</h4>
+                            <Scene heading={<h4 className="text-lg font-bold">Scena 2 - Napadnu Strixvuka</h4>}>
                                 <SuccessFailCrit
                                     styles=""
                                     success={
@@ -74,12 +73,25 @@ function RouteComponent() {
                                 >
                                     <p>Moraju da naprave attack roll sa tezinom 10</p>
                                 </SuccessFailCrit>
+                                <BasicSheet
+                                    name="Strixvuk"
+                                    tier="1 Standard"
+                                    attacks="Bite - Melee - 1d6+3 phy"
+                                    atkmod="+1"
+                                    difficulty="0"
+                                    major={4}
+                                    severe={8}
+                                    hp={3}
+                                    stress={3}
+                                    numTypes={2}
+                                    features=""
+                                />
                             </Scene>
-                            <Scene>
-                                <h4 className="text-lg font-bold">Scena 3</h4>
+                            <Scene heading={<h4 className="text-lg font-bold">Scena 3</h4>}>
+                                <></>
                             </Scene>
-                            <Scene>
-                                <h4 className="text-lg font-bold">Scena 4</h4>
+                            <Scene heading={<h4 className="text-lg font-bold">Scena 4</h4>}>
+                                <></>
                             </Scene>
                         </Scenes>
 
