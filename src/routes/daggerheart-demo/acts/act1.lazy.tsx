@@ -19,8 +19,8 @@ function RouteComponent() {
                             Ove večeri, vaša družina je konačno stigla do Sablewooda — prostrane šume džinovskih stabala za koja neki kažu da su
                             starija i od Zaboravljenih Bogova. To je mesto poznato po dve stvari: svojim uleglim stazama koje služe kao trgovački
                             putevi za mnoge putujuće trgovce, i po svojim neobičnim životinjama — hibridima jedinstvenim za ovaj kraj. Čak i sada,
-                            iznutra vaše kočije, čujete neobične zvuke: niske zovove ševoljca [ševa-moljca], kreket žabaruna [lemurskih žaba], i
-                            šuštanje porodice šišlica [šišmiš-lisica] u žbunju pored puta. Jedan od vas upravlja kočijom. Ko je to? Drveće ovde
+                            iznutra vaše kočije, čujete neobične zvuke: niske zovove "lark-moths" ševoljaca [ševa-moljca], kreket "lemur-toads" žabaruna [lemurskih žaba], i
+                            šuštanje porodice "fox-bats" šišlica [šišmiš-lisica] u žbunju pored puta. Jedan od vas upravlja kočijom. Ko je to? Drveće ovde
                             izgleda... pogrešno, na neki čudan način. Šta tačno primećujete?
                         </p>
                         <br />
@@ -36,7 +36,7 @@ function RouteComponent() {
                         <p>
                             Dok vaši konji vuku kočiju kroz oštru krivinu, jedan točak se nakratko podiže od tla. Tada ugledate prevrnutu trgovačku
                             kočiju, položenu bočno preko staze, blokirajući vam prolaz. Po stazi su razbacani plodovi i povrće, delujući kao da je sve
-                            ostavljeno u žurbi. Iza kočije, iz senke, izlazi strixvuk — ogromna zver sa telom vuka, licem sove i velikim krilima koja
+                            ostavljeno u žurbi. Iza kočije, iz senke, izlazi Stixwolf — ogromna zver sa telom vuka, licem sove i velikim krilima koja
                             mu krase leđa. Završava sa žvakanjem svog obroka — ruke mrtvog trgovca — dok vas netremice posmatra, radoznao,
                             procenjujući da li ste prijatelji... ili pretnja. Zatim, iza njega, nespretno i oprezno izlaze dva mala mladunca, pažljivo
                             promatrajući majku. Iznutra, osećate kako se kočija naglo zaustavlja. Šta želite da uradite?
@@ -53,7 +53,7 @@ function RouteComponent() {
                                         <li className="text-primary">Hope - dobijaju Hope</li>
                                         <li className="text-secondary">
                                             Fear - ja dobijam Fear, i mogu malko da im zakomplikujem ali ipak su uspeli: Majka rikne kao da poziva
-                                            nekog drugog Strixvuka, znate da necete biti sami zadugo. Napada.
+                                            nekog drugog Stixwolfa, znate da necete biti sami zadugo. Napada.
                                         </li>
                                     </ul>
                                 </>
@@ -77,6 +77,7 @@ function RouteComponent() {
                         >
                             <p>Bacaju kockice sa Presence. Mogu da koriste Hope da dodaju neki Experience ako mogu da uklope kako bi to izgledalo</p>
                         </SuccessFailCrit>
+                        <p className="py-10 text-center text-2xl text-accent">ACT 1 END</p>
                         <Link to={"/daggerheart-demo/acts/act2"} className="btn btn-primary">
                             Next Act
                         </Link>
