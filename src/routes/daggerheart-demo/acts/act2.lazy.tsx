@@ -17,7 +17,7 @@ function RouteComponent() {
   return (
     <motion.main className="h-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <BoxSection styles="w-full h-full flex flex-col place-self-center px-5 py-2 gap-5">
-        <h1 className="text-left text-xl font-bold">Čin II - Thicket Thieves [Lopovi iz Šipražja]</h1>
+        <h1 className="text-left text-xl font-bold">Act 2 - Thicket Thieves [Lopovi iz Šipražja]</h1>
         <BoxSection styles="w-full max-h-[70vh] overflow-scroll flex flex-col text-start px-5 pt-2 pb-10 gap-2 !border-accent">
           <h2 className="text-2xl font-bold">Posledice</h2>
           <Scenes heading={"Scene"}>
@@ -177,7 +177,7 @@ function RouteComponent() {
               numTypes={1}
             />
           </div>
-          <GM className="pt-5">Kraj fajta. Mogu da RP ostatak puta do Hush-a.</GM>
+          <GM className="pt-5">Kraj fajta. Reci im da opišu montažno ostatak puta do Hush-a.</GM>
           <p className="py-10 text-center text-2xl text-accent">ACT 2 END</p>
           <Link to={"/daggerheart-demo/acts/act3"} className="btn btn-primary">
             Next Act
