@@ -31,6 +31,9 @@ const IndexLazyImport = createFileRoute('/')()
 const DaggerheartDemoActsIndexLazyImport = createFileRoute(
   '/daggerheart-demo/acts/',
 )()
+const DaggerheartDemoActsAct4LazyImport = createFileRoute(
+  '/daggerheart-demo/acts/act4',
+)()
 const DaggerheartDemoActsAct3LazyImport = createFileRoute(
   '/daggerheart-demo/acts/act3',
 )()
@@ -122,6 +125,15 @@ const DaggerheartDemoActsIndexLazyRoute =
     getParentRoute: () => rootRoute,
   } as any).lazy(() =>
     import('./routes/daggerheart-demo/acts/index.lazy').then((d) => d.Route),
+  )
+
+const DaggerheartDemoActsAct4LazyRoute =
+  DaggerheartDemoActsAct4LazyImport.update({
+    id: '/daggerheart-demo/acts/act4',
+    path: '/daggerheart-demo/acts/act4',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/daggerheart-demo/acts/act4.lazy').then((d) => d.Route),
   )
 
 const DaggerheartDemoActsAct3LazyRoute =
@@ -260,6 +272,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DaggerheartDemoActsAct3LazyImport
       parentRoute: typeof rootRoute
     }
+    '/daggerheart-demo/acts/act4': {
+      id: '/daggerheart-demo/acts/act4'
+      path: '/daggerheart-demo/acts/act4'
+      fullPath: '/daggerheart-demo/acts/act4'
+      preLoaderRoute: typeof DaggerheartDemoActsAct4LazyImport
+      parentRoute: typeof rootRoute
+    }
     '/daggerheart-demo/acts/': {
       id: '/daggerheart-demo/acts/'
       path: '/daggerheart-demo/acts'
@@ -288,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/daggerheart-demo/acts/act1': typeof DaggerheartDemoActsAct1LazyRoute
   '/daggerheart-demo/acts/act2': typeof DaggerheartDemoActsAct2LazyRoute
   '/daggerheart-demo/acts/act3': typeof DaggerheartDemoActsAct3LazyRoute
+  '/daggerheart-demo/acts/act4': typeof DaggerheartDemoActsAct4LazyRoute
   '/daggerheart-demo/acts': typeof DaggerheartDemoActsIndexLazyRoute
 }
 
@@ -307,6 +327,7 @@ export interface FileRoutesByTo {
   '/daggerheart-demo/acts/act1': typeof DaggerheartDemoActsAct1LazyRoute
   '/daggerheart-demo/acts/act2': typeof DaggerheartDemoActsAct2LazyRoute
   '/daggerheart-demo/acts/act3': typeof DaggerheartDemoActsAct3LazyRoute
+  '/daggerheart-demo/acts/act4': typeof DaggerheartDemoActsAct4LazyRoute
   '/daggerheart-demo/acts': typeof DaggerheartDemoActsIndexLazyRoute
 }
 
@@ -327,6 +348,7 @@ export interface FileRoutesById {
   '/daggerheart-demo/acts/act1': typeof DaggerheartDemoActsAct1LazyRoute
   '/daggerheart-demo/acts/act2': typeof DaggerheartDemoActsAct2LazyRoute
   '/daggerheart-demo/acts/act3': typeof DaggerheartDemoActsAct3LazyRoute
+  '/daggerheart-demo/acts/act4': typeof DaggerheartDemoActsAct4LazyRoute
   '/daggerheart-demo/acts/': typeof DaggerheartDemoActsIndexLazyRoute
 }
 
@@ -348,6 +370,7 @@ export interface FileRouteTypes {
     | '/daggerheart-demo/acts/act1'
     | '/daggerheart-demo/acts/act2'
     | '/daggerheart-demo/acts/act3'
+    | '/daggerheart-demo/acts/act4'
     | '/daggerheart-demo/acts'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -366,6 +389,7 @@ export interface FileRouteTypes {
     | '/daggerheart-demo/acts/act1'
     | '/daggerheart-demo/acts/act2'
     | '/daggerheart-demo/acts/act3'
+    | '/daggerheart-demo/acts/act4'
     | '/daggerheart-demo/acts'
   id:
     | '__root__'
@@ -384,6 +408,7 @@ export interface FileRouteTypes {
     | '/daggerheart-demo/acts/act1'
     | '/daggerheart-demo/acts/act2'
     | '/daggerheart-demo/acts/act3'
+    | '/daggerheart-demo/acts/act4'
     | '/daggerheart-demo/acts/'
   fileRoutesById: FileRoutesById
 }
@@ -404,6 +429,7 @@ export interface RootRouteChildren {
   DaggerheartDemoActsAct1LazyRoute: typeof DaggerheartDemoActsAct1LazyRoute
   DaggerheartDemoActsAct2LazyRoute: typeof DaggerheartDemoActsAct2LazyRoute
   DaggerheartDemoActsAct3LazyRoute: typeof DaggerheartDemoActsAct3LazyRoute
+  DaggerheartDemoActsAct4LazyRoute: typeof DaggerheartDemoActsAct4LazyRoute
   DaggerheartDemoActsIndexLazyRoute: typeof DaggerheartDemoActsIndexLazyRoute
 }
 
@@ -423,6 +449,7 @@ const rootRouteChildren: RootRouteChildren = {
   DaggerheartDemoActsAct1LazyRoute: DaggerheartDemoActsAct1LazyRoute,
   DaggerheartDemoActsAct2LazyRoute: DaggerheartDemoActsAct2LazyRoute,
   DaggerheartDemoActsAct3LazyRoute: DaggerheartDemoActsAct3LazyRoute,
+  DaggerheartDemoActsAct4LazyRoute: DaggerheartDemoActsAct4LazyRoute,
   DaggerheartDemoActsIndexLazyRoute: DaggerheartDemoActsIndexLazyRoute,
 }
 
@@ -451,6 +478,7 @@ export const routeTree = rootRoute
         "/daggerheart-demo/acts/act1",
         "/daggerheart-demo/acts/act2",
         "/daggerheart-demo/acts/act3",
+        "/daggerheart-demo/acts/act4",
         "/daggerheart-demo/acts/"
       ]
     },
@@ -498,6 +526,9 @@ export const routeTree = rootRoute
     },
     "/daggerheart-demo/acts/act3": {
       "filePath": "daggerheart-demo/acts/act3.lazy.tsx"
+    },
+    "/daggerheart-demo/acts/act4": {
+      "filePath": "daggerheart-demo/acts/act4.lazy.tsx"
     },
     "/daggerheart-demo/acts/": {
       "filePath": "daggerheart-demo/acts/index.lazy.tsx"
