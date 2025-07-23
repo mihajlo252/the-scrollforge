@@ -12,7 +12,7 @@ function RouteComponent() {
     return (
         <motion.main className="h-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <BoxSection styles="w-full h-full flex flex-col place-self-center px-5 py-2 gap-5">
-                <h1 className="text-left text-xl font-bold">Act One - Trgovačka Kočija</h1>
+                <h1 className="text-left text-xl font-bold">Act 1 - Trgovačka Kočija</h1>
                 <BoxSection styles="w-full max-h-[70vh] overflow-scroll flex flex-col text-start px-5 pt-2 pb-10 gap-2 !border-accent">
                         <h2 className="text-2xl font-bold">Početak</h2>
                         <p>
