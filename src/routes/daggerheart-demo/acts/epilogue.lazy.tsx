@@ -17,10 +17,10 @@ function RouteComponent() {
         <BoxSection styles="w-full max-h-[70vh] overflow-scroll flex flex-col text-start px-5 pt-2 pb-10 gap-2 !border-accent">
           <h2 className="text-2xl font-bold">The Keystone Ward [Zastitni Kamen]</h2>
           <p>
-            Dok zadajete moćan udarac, ritual se završava! Kočija se s treskom spušta na zemlju dok ključ-kamen pulsira od arkanske energije. Onda,
-            iznenada, eksplozija bez zvuka izbija iz Beleplamene Arkanistkinje, raspršujući sve preostale neprijatelje. Čistina ponovo utihne. Sat
-            vremena kasnije, u toplini kuće na drvetu, ključ-kamen lebdi pažljivo iznad vatre koja tiho pucketa u ognjištu. Arkanistkinja, sada vidno
-            starija nego ranije, sedi prekrštenih nogu u prenatrpanoj, udobnoj stolici. Umor se čuje u njenom glasu dok govori: „Borili ste se hrabro.
+            Dok zadajete moćan udarac, ritual se završava! Kočija se s treskom spušta na zemlju dok keystone pulsira od arkanske energije. Onda,
+            iznenada, eksplozija bez zvuka izbija iz Beloplamene Arkanistkinje, raspršujući sve preostale neprijatelje. Otvorena Dolina ponovo utihne. Sat
+            vremena kasnije, u toplini kuće na drvetu, keystone lebdi pažljivo iznad vatre koja tiho pucketa u ognjištu. Arkanistkinja, sada vidno
+            starija nego ranije, sedi prekrštenih nogu u prenatrpanoj, udobnoj stolici. U njenom glasu se cuje kako je umorna dok govori: „Borili ste se hrabro.
             Nisam iznenađena, naravno. Kralj bira dobru družinu. I drago mi je što ste bili ovde.“
           </p>
           <GM>Nek malo RP da zavrse svoju pricu, i ako pitaju za keystone:</GM>
