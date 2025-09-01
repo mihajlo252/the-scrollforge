@@ -1,34 +1,7 @@
 import React, { useState } from "react";
 import { calculateModifiers } from "../../utilities/calculateStats";
 import { BoxSection } from "../../components/BoxSection";
-
-// interface Primary {
-//     str: number,
-//     dex: number,
-//     con: number,
-//     int: number,
-//     wis: number,
-//     cha: number,
-// }
-
-// interface Mods {
-//     str: number,
-//     dex: number,
-//     con: number,
-//     int: number,
-//     wis: number,
-//     cha: number,
-// }
-
-// interface Profile {
-//     class: string,
-//     level: string,
-//     name: string,
-//     pastLife: string,
-//     race: string,
-//     subclass: string,
-//     subrace: string,
-// }
+import { toast } from "../../utilities/toasterSonner";
 
 export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const { state } = JSON.parse(localStorage.getItem("character")!);
@@ -49,6 +22,14 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
     const [characterLevel, setCharacterLevel] = useState(characterProfile.level);
 
     const handleChangeStats = (e: any, setFunc: any) => {
+        if (e.target.value.length > 2 || e.target.value > 30) {
+            toast({ style: "bg-secondary text-white", message: "You've exided the limit!" });
+            return 
+        };
+        e.target.value[0] === "0" && (e.target.value = e.target.value.slice(1));
+        if (e.target.value === 0) {
+            e.target.value = 0;
+        }
         e.target.style.width = e.target.value.length + "ch";
         if (e.target.value.length == 0) {
             e.target.style.width = "7ch";
@@ -94,11 +75,6 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
     return (
         <BoxSection styles="grid h-full w-full grid-cols-2 items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
             <div className="flex gap-2">
-                {/* <img
-                    src={`./assets/${"bag.png"}`}
-                    className="h-12 w-12"
-                    alt=""
-                /> */}
                 <div className="text-start">
                     <p>
                         {characterProfile.name}, Level <input

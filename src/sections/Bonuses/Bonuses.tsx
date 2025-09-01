@@ -15,6 +15,7 @@ export const Bonuses = ({ character, setStatChange }: { character: Character; se
     const [characterHitDice, setCharacteHitDice] = useState<string>(hitDice);
     let proficiencyBonus: number = parseInt(calculateProficiencyBonus({ level: level }) || "0");
     const handleChange = (e: any, setFunc: React.Dispatch<React.SetStateAction<any>>) => {
+        e.target.value[0] === "0" && (e.target.value = e.target.value.slice(1));
         setFunc(e.target.value);
         const {state} = JSON.parse(localStorage.getItem("character")!);
         const mHP = state.character.stats.maxHP;
