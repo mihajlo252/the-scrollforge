@@ -3,6 +3,7 @@ import { useState } from "react";
 import { sendTicket } from "../utilities/sendTickets";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { motion } from "framer-motion";
+import { toast } from "../utilities/toasterSonner";
 
 export const Route = createLazyFileRoute("/tickets")({
     component: Tickets,
@@ -24,13 +25,18 @@ function Tickets() {
             user_id: user.id,
             type: bugOrFeature
         };
-        if (report.appSection === "" || report.description === "") return;
+        if (report.appSection === "" || report.description === "") {
+            toast({ style: "bg-error text-base-100", message: "Please fill out all fields" });
+            return;
+        };
 
         let error;
         try {
             await sendTicket(report);
+            toast({ style: "bg-success text-base-100", message: "Ticket sent!" });
         } catch (err) {
             error = err;
+            toast({ style: "bg-success text-base-100", message: "Ticket not sent! There was an error: " + err });
             throw err;
         }
         if (error) return;
