@@ -1,3 +1,4 @@
+import { toast } from "../utilities/toasterSonner";
 import {supabase} from "../supabase/supabase";
 
 export const signIn = async (email: string, password : string) => {
@@ -7,8 +8,9 @@ export const signIn = async (email: string, password : string) => {
    })
 
    if (error) {
+       toast({ style: "bg-error text-base-100", message: error.message });
        throw error  
-   }
+   }    
    return data
     
 }
