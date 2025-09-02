@@ -23,7 +23,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
 
     const handleChangeStats = (e: any, setFunc: any) => {
         if (e.target.value.length > 2 || e.target.value > 30) {
-            toast({ style: "bg-secondary text-white", message: "You've exided the limit!" });
+            toast({ style: "bg-secondary text-white", message: "You've exceeded the limit!" });
             return 
         };
         e.target.value[0] === "0" && (e.target.value = e.target.value.slice(1));
