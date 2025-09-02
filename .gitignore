@@ -27,3 +27,7 @@ dist-ssr
 comments.md
 
 *.tsbuildinfo
+
+# Daggerheart Demo
+# daggerheart-demo/*
+# SablewoodQuickStart/*
