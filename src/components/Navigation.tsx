@@ -93,8 +93,8 @@ export const Navigation = () => {
               <Popup closerFunc={setOpenSignOut}>
                 <p>Are you sure you want to sign out?</p>
                 <div className="flex gap-2">
-                  <BorderButton text="Yes" style="border-primary text-primary hover:border-primary hover:bg-primary" event={handleSignOut} />
-                  <BorderButton text="No" style="border-secondary text-secondary hover:border-secondary hover:bg-secondary" event={() => setOpenSignOut(false)} />
+                  <BorderButton text="Yes" style="border-primary text-primary hover:border-primary hover:bg-primary text-md" event={handleSignOut} />
+                  <BorderButton text="No" style="border-secondary text-secondary hover:border-secondary hover:bg-secondary text-md" event={() => setOpenSignOut(false)} />
                 </div>
               </Popup>
             )}
