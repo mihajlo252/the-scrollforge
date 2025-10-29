@@ -1,17 +1,17 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
-import { BoxSection } from "../components/BoxSection";
-import { CharacterProfile } from "../sections/CharacterProfile/CharacterProfile";
-import { HPBar } from "../sections/HPBar/HPBar";
-import { Stats } from "../sections/Stats/Stats";
-import { Load } from "../components/Load";
-import { Bonuses } from "../sections/Bonuses/Bonuses";
-import { DiceBoxComponent } from "../components/DiceBox";
+import { BoxSection } from "../../components/BoxSection";
+import { CharacterProfile } from "../../sections/CharacterProfile/CharacterProfile";
+import { HPBar } from "../../sections/HPBar/HPBar";
+import { Stats } from "../../sections/Stats/Stats";
+import { Load } from "../../components/Load";
+import { Bonuses } from "../../sections/Bonuses/Bonuses";
+import { DiceBoxComponent } from "../../components/DiceBox";
 import { useEffect, useState } from "react";
-import { sendData } from "../utilities/sendData";
+import { sendData } from "../../utilities/sendData";
 
-export const Route = createLazyFileRoute("/character")({
+export const Route = createLazyFileRoute("/character/daggerheart")({
     component: Character,
 });
 

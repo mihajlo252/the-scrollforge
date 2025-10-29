@@ -25,9 +25,12 @@ const ProfileLazyImport = createFileRoute('/profile')()
 const NotesLazyImport = createFileRoute('/notes')()
 const InspirationLazyImport = createFileRoute('/inspiration')()
 const ChatLazyImport = createFileRoute('/chat')()
-const CharacterLazyImport = createFileRoute('/character')()
 const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
+const CharacterDndLazyImport = createFileRoute('/character/dnd')()
+const CharacterDaggerheartLazyImport = createFileRoute(
+  '/character/daggerheart',
+)()
 
 // Create/Update Routes
 
@@ -85,12 +88,6 @@ const ChatLazyRoute = ChatLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/chat.lazy').then((d) => d.Route))
 
-const CharacterLazyRoute = CharacterLazyImport.update({
-  id: '/character',
-  path: '/character',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/character.lazy').then((d) => d.Route))
-
 const AttacksLazyRoute = AttacksLazyImport.update({
   id: '/attacks',
   path: '/attacks',
@@ -102,6 +99,20 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const CharacterDndLazyRoute = CharacterDndLazyImport.update({
+  id: '/character/dnd',
+  path: '/character/dnd',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/character/dnd.lazy').then((d) => d.Route))
+
+const CharacterDaggerheartLazyRoute = CharacterDaggerheartLazyImport.update({
+  id: '/character/daggerheart',
+  path: '/character/daggerheart',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/character/daggerheart.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -119,13 +130,6 @@ declare module '@tanstack/react-router' {
       path: '/attacks'
       fullPath: '/attacks'
       preLoaderRoute: typeof AttacksLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/character': {
-      id: '/character'
-      path: '/character'
-      fullPath: '/character'
-      preLoaderRoute: typeof CharacterLazyImport
       parentRoute: typeof rootRoute
     }
     '/chat': {
@@ -191,6 +195,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TraitsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/character/daggerheart': {
+      id: '/character/daggerheart'
+      path: '/character/daggerheart'
+      fullPath: '/character/daggerheart'
+      preLoaderRoute: typeof CharacterDaggerheartLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/character/dnd': {
+      id: '/character/dnd'
+      path: '/character/dnd'
+      fullPath: '/character/dnd'
+      preLoaderRoute: typeof CharacterDndLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -199,7 +217,6 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/attacks': typeof AttacksLazyRoute
-  '/character': typeof CharacterLazyRoute
   '/chat': typeof ChatLazyRoute
   '/inspiration': typeof InspirationLazyRoute
   '/notes': typeof NotesLazyRoute
@@ -209,12 +226,13 @@ export interface FileRoutesByFullPath {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/traits': typeof TraitsLazyRoute
+  '/character/daggerheart': typeof CharacterDaggerheartLazyRoute
+  '/character/dnd': typeof CharacterDndLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/attacks': typeof AttacksLazyRoute
-  '/character': typeof CharacterLazyRoute
   '/chat': typeof ChatLazyRoute
   '/inspiration': typeof InspirationLazyRoute
   '/notes': typeof NotesLazyRoute
@@ -224,13 +242,14 @@ export interface FileRoutesByTo {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/traits': typeof TraitsLazyRoute
+  '/character/daggerheart': typeof CharacterDaggerheartLazyRoute
+  '/character/dnd': typeof CharacterDndLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/attacks': typeof AttacksLazyRoute
-  '/character': typeof CharacterLazyRoute
   '/chat': typeof ChatLazyRoute
   '/inspiration': typeof InspirationLazyRoute
   '/notes': typeof NotesLazyRoute
@@ -240,6 +259,8 @@ export interface FileRoutesById {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/traits': typeof TraitsLazyRoute
+  '/character/daggerheart': typeof CharacterDaggerheartLazyRoute
+  '/character/dnd': typeof CharacterDndLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -247,7 +268,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/attacks'
-    | '/character'
     | '/chat'
     | '/inspiration'
     | '/notes'
@@ -257,11 +277,12 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/traits'
+    | '/character/daggerheart'
+    | '/character/dnd'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/attacks'
-    | '/character'
     | '/chat'
     | '/inspiration'
     | '/notes'
@@ -271,11 +292,12 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/traits'
+    | '/character/daggerheart'
+    | '/character/dnd'
   id:
     | '__root__'
     | '/'
     | '/attacks'
-    | '/character'
     | '/chat'
     | '/inspiration'
     | '/notes'
@@ -285,13 +307,14 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/traits'
+    | '/character/daggerheart'
+    | '/character/dnd'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AttacksLazyRoute: typeof AttacksLazyRoute
-  CharacterLazyRoute: typeof CharacterLazyRoute
   ChatLazyRoute: typeof ChatLazyRoute
   InspirationLazyRoute: typeof InspirationLazyRoute
   NotesLazyRoute: typeof NotesLazyRoute
@@ -301,12 +324,13 @@ export interface RootRouteChildren {
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
   TraitsLazyRoute: typeof TraitsLazyRoute
+  CharacterDaggerheartLazyRoute: typeof CharacterDaggerheartLazyRoute
+  CharacterDndLazyRoute: typeof CharacterDndLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AttacksLazyRoute: AttacksLazyRoute,
-  CharacterLazyRoute: CharacterLazyRoute,
   ChatLazyRoute: ChatLazyRoute,
   InspirationLazyRoute: InspirationLazyRoute,
   NotesLazyRoute: NotesLazyRoute,
@@ -316,6 +340,8 @@ const rootRouteChildren: RootRouteChildren = {
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
   TraitsLazyRoute: TraitsLazyRoute,
+  CharacterDaggerheartLazyRoute: CharacterDaggerheartLazyRoute,
+  CharacterDndLazyRoute: CharacterDndLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -330,7 +356,6 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/attacks",
-        "/character",
         "/chat",
         "/inspiration",
         "/notes",
@@ -339,7 +364,9 @@ export const routeTree = rootRoute
         "/spells",
         "/thanks",
         "/tickets",
-        "/traits"
+        "/traits",
+        "/character/daggerheart",
+        "/character/dnd"
       ]
     },
     "/": {
@@ -347,9 +374,6 @@ export const routeTree = rootRoute
     },
     "/attacks": {
       "filePath": "attacks.lazy.tsx"
-    },
-    "/character": {
-      "filePath": "character.lazy.tsx"
     },
     "/chat": {
       "filePath": "chat.lazy.tsx"
@@ -377,6 +401,12 @@ export const routeTree = rootRoute
     },
     "/traits": {
       "filePath": "traits.lazy.tsx"
+    },
+    "/character/daggerheart": {
+      "filePath": "character/daggerheart.lazy.tsx"
+    },
+    "/character/dnd": {
+      "filePath": "character/dnd.lazy.tsx"
     }
   }
 }

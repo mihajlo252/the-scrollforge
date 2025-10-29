@@ -10,6 +10,8 @@ import { DeletePopup } from "../components/DeletePopup";
 import { DeleteButton } from "../components/DeleteButton";
 import { CreateCharacter } from "../sections/CreateCharacter/CreateCharacter";
 import { Avatar } from "../components/Avatar";
+import { DNDCharacter } from "../sections/CharacterProfile/CharacterSelect/DNDCharacter";
+import { DaggerheartCharacter } from "../sections/CharacterProfile/CharacterSelect/DaggerheartCharacter";
 
 export const Route = createLazyFileRoute("/profile")({
   component: Profile,
@@ -33,12 +35,16 @@ function Profile() {
     setCharacters(user.id);
   };
 
-  const handleNavigateToCharacter = (char: Character) => {
-    setCharacter(char);
-    navigate({ to: "/character" });
+  const handleNavigateToCharacter = (char: Character | DaggerheartCharacter) => {
+    if (gameMode === "D&D") {
+      setCharacter(char as Character);
+    } else {
+      setCharacter(char as DaggerheartCharacter);
+    }
+    navigate({ to: `/character/${gameMode === "D&D" ? "dnd" : "daggerheart"}` });
   };
 
-  const handleDeletePopup = (char: Character) => {
+  const handleDeletePopup = (char: Character | DaggerheartCharacter) => {
     setCharacterDelete(char.id);
     setIsDelete(true);
   };
@@ -93,7 +99,7 @@ function Profile() {
           <section className=" h-full w-full overflow-y-scroll">
             <ul className="flex w-full h-1 flex-col gap-2 text-xl">
               {characters.filter((a: any) => a.gamemode === gameMode).length === 0 && (
-                <p className="text-2xl text-accent text-left border-b-2 border-accent pb-1 w-max">Wow, so empty!</p>
+                <p className="text-xl text-accent text-left w-max">Nothing forged yet!</p>
               )}
               {characters
                 .filter((a: any) => a.gamemode === gameMode)
@@ -108,17 +114,9 @@ function Profile() {
                     className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
                   >
                     <Avatar bucket="characters" characterName={character.characterProfile.name.toLowerCase()} />
-                    <li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
-                      <div className="text-start">
-                        <p>
-                          {character.characterProfile.name}, {character.characterProfile.level}
-                        </p>
-                        <p>
-                          {character.characterProfile.race} {character.characterProfile?.subrace}, {character.characterProfile.class}{" "}
-                          {character.characterProfile?.subclass}
-                        </p>
-                      </div>
-                    </li>
+                    {gameMode === "D&D" && <DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />}
+                    {gameMode === "Daggerheart" && <DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />}
+                    
                     <DeleteButton
                       size={60}
                       styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary"
