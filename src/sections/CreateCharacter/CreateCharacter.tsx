@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { BoxSection } from "../../components/BoxSection";
 import { getUserFromLocal } from "../../utilities/getUserFromLocal";
 import { submitCharacter } from "../../utilities/submitCharacter";
-import { Popup } from "../../components/Popup";
 import { DNDForm } from "./DNDForm";
 import { DaggerheartForm } from "./DaggerheartForm";
 
@@ -47,7 +46,6 @@ export const CreateCharacter = ({
   };
 
   return (
-    <Popup closerFunc={setOpenCreateCharacter}>
       <BoxSection styles="relative h-min flex flex-col gap-5 justify-center items-center text-center px-20 py-10">
         <h2 className="text-4xl font-bold">Create Your Character</h2>
         <form className="flex w-full flex-col gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
@@ -64,6 +62,5 @@ export const CreateCharacter = ({
           </div>
         </form>
       </BoxSection>
-    </Popup>
   );
 };

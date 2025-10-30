@@ -1,8 +1,8 @@
 import { CatchBoundary, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import { useCharactersStore, useCharacterStore } from "../zustand/stores";
 import { BoxSection } from "../components/BoxSection";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
@@ -12,6 +12,7 @@ import { CreateCharacter } from "../sections/CreateCharacter/CreateCharacter";
 import { Avatar } from "../components/Avatar";
 import { DNDCharacter } from "../sections/CharacterProfile/CharacterSelect/DNDCharacter";
 import { DaggerheartCharacter } from "../sections/CharacterProfile/CharacterSelect/DaggerheartCharacter";
+import { Popup } from "../components/Popup";
 
 export const Route = createLazyFileRoute("/profile")({
   component: Profile,
@@ -25,7 +26,8 @@ function Profile() {
   const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))) || "D&D");
+  const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))) ?? "D&D");
+  const gameModeButton = useRef<HTMLButtonElement>(null);
 
   const { user } = JSON.parse(getUserFromLocal());
 
@@ -41,14 +43,14 @@ function Profile() {
     } else {
       setCharacter(char as DaggerheartCharacter);
     }
-    navigate({ to: `/character/${gameMode === "D&D" ? "dnd" : "daggerheart"}` });
+    navigate({ to: `/${gameMode === "D&D" ? "dnd" : "daggerheart"}/character/` });
   };
 
   const handleDeletePopup = (char: Character | DaggerheartCharacter) => {
     setCharacterDelete(char.id);
     setIsDelete(true);
   };
-  const handleGameMode = (e: MouseEvent) => {
+  const handleGameModeToggle = (e: MouseEvent) => {
     if (gameMode === "D&D") {
       setGameMode("Daggerheart");
       localStorage.setItem("gameMode", "Daggerheart");
@@ -63,9 +65,22 @@ function Profile() {
       (e.target as HTMLInputElement).classList.add("btn-accent");
     }
   };
+  const handleGameModeStart = () => {
+    if (!gameModeButton.current) return;
+    if (gameMode === "Daggerheart") {
+      gameModeButton.current.innerText = "Dungeons&Dragons";
+      gameModeButton.current.classList.remove("btn-accent");
+      gameModeButton.current.classList.add("btn-primary");
+    } else {
+      gameModeButton.current.innerText = "Daggerheart";
+      gameModeButton.current.classList.remove("btn-primary");
+      gameModeButton.current.classList.add("btn-accent");
+    }
+  };
 
   useEffect(() => {
     handleGetCharacter();
+    handleGameModeStart();
   }, []);
 
   useEffect(() => {
@@ -80,19 +95,17 @@ function Profile() {
     <CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
       <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <BoxSection styles="w-full flex flex-col items-start gap-5 p-5 overflow-y-scroll relative">
-          <AnimatePresence>
-            {openCreateCharacter && (
-              <CreateCharacter
-                openCreateCharacter={openCreateCharacter}
-                setOpenCreateCharacter={setOpenCreateCharacter}
-                setIsSave={setIsSave}
-                gameMode={gameMode}
-              />
-            )}
-          </AnimatePresence>
+          <Popup toggle={openCreateCharacter} closerFunc={setOpenCreateCharacter}>
+            <CreateCharacter
+              openCreateCharacter={openCreateCharacter}
+              setOpenCreateCharacter={setOpenCreateCharacter}
+              setIsSave={setIsSave}
+              gameMode={gameMode}
+            />
+          </Popup>
           <section className="flex w-full justify-between">
             <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
-            <button className="btn btn-accent" onClick={handleGameMode}>
+            <button ref={gameModeButton} className="btn btn-accent" onClick={handleGameModeToggle}>
               Daggerheart
             </button>
           </section>
@@ -115,8 +128,10 @@ function Profile() {
                   >
                     <Avatar bucket="characters" characterName={character.characterProfile.name.toLowerCase()} />
                     {gameMode === "D&D" && <DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />}
-                    {gameMode === "Daggerheart" && <DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />}
-                    
+                    {gameMode === "Daggerheart" && (
+                      <DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />
+                    )}
+
                     <DeleteButton
                       size={60}
                       styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary"
@@ -125,11 +140,13 @@ function Profile() {
                   </motion.div>
                 ))}
             </ul>
-            <AnimatePresence>
-              {isDelete && (
-                <DeletePopup deleteID={characterDelete} setDeleteID={setCharacterDelete} setIsDeleted={setIsDeleted} setIsDelete={setIsDelete} />
-              )}
-            </AnimatePresence>
+            <DeletePopup
+              toggle={isDelete}
+              deleteID={characterDelete}
+              setDeleteID={setCharacterDelete}
+              setIsDeleted={setIsDeleted}
+              setIsDelete={setIsDelete}
+            />
           </section>
           <button
             onClick={() => setOpenCreateCharacter(true)}

@@ -16,29 +16,22 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const TraitsLazyImport = createFileRoute('/traits')()
 const TicketsLazyImport = createFileRoute('/tickets')()
 const ThanksLazyImport = createFileRoute('/thanks')()
-const SpellsLazyImport = createFileRoute('/spells')()
 const SignupLazyImport = createFileRoute('/signup')()
 const ProfileLazyImport = createFileRoute('/profile')()
-const NotesLazyImport = createFileRoute('/notes')()
-const InspirationLazyImport = createFileRoute('/inspiration')()
 const ChatLazyImport = createFileRoute('/chat')()
-const AttacksLazyImport = createFileRoute('/attacks')()
 const IndexLazyImport = createFileRoute('/')()
-const CharacterDndLazyImport = createFileRoute('/character/dnd')()
-const CharacterDaggerheartLazyImport = createFileRoute(
-  '/character/daggerheart',
+const DndTraitsLazyImport = createFileRoute('/dnd/traits')()
+const DndSpellsLazyImport = createFileRoute('/dnd/spells')()
+const DndInspirationLazyImport = createFileRoute('/dnd/inspiration')()
+const DndCharacterLazyImport = createFileRoute('/dnd/character')()
+const DndAttacksLazyImport = createFileRoute('/dnd/attacks')()
+const DaggerheartCharacterLazyImport = createFileRoute(
+  '/daggerheart/character',
 )()
 
 // Create/Update Routes
-
-const TraitsLazyRoute = TraitsLazyImport.update({
-  id: '/traits',
-  path: '/traits',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/traits.lazy').then((d) => d.Route))
 
 const TicketsLazyRoute = TicketsLazyImport.update({
   id: '/tickets',
@@ -52,12 +45,6 @@ const ThanksLazyRoute = ThanksLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/thanks.lazy').then((d) => d.Route))
 
-const SpellsLazyRoute = SpellsLazyImport.update({
-  id: '/spells',
-  path: '/spells',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/spells.lazy').then((d) => d.Route))
-
 const SignupLazyRoute = SignupLazyImport.update({
   id: '/signup',
   path: '/signup',
@@ -70,29 +57,11 @@ const ProfileLazyRoute = ProfileLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
 
-const NotesLazyRoute = NotesLazyImport.update({
-  id: '/notes',
-  path: '/notes',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/notes.lazy').then((d) => d.Route))
-
-const InspirationLazyRoute = InspirationLazyImport.update({
-  id: '/inspiration',
-  path: '/inspiration',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/inspiration.lazy').then((d) => d.Route))
-
 const ChatLazyRoute = ChatLazyImport.update({
   id: '/chat',
   path: '/chat',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/chat.lazy').then((d) => d.Route))
-
-const AttacksLazyRoute = AttacksLazyImport.update({
-  id: '/attacks',
-  path: '/attacks',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/attacks.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -100,18 +69,44 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const CharacterDndLazyRoute = CharacterDndLazyImport.update({
-  id: '/character/dnd',
-  path: '/character/dnd',
+const DndTraitsLazyRoute = DndTraitsLazyImport.update({
+  id: '/dnd/traits',
+  path: '/dnd/traits',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/character/dnd.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/dnd/traits.lazy').then((d) => d.Route))
 
-const CharacterDaggerheartLazyRoute = CharacterDaggerheartLazyImport.update({
-  id: '/character/daggerheart',
-  path: '/character/daggerheart',
+const DndSpellsLazyRoute = DndSpellsLazyImport.update({
+  id: '/dnd/spells',
+  path: '/dnd/spells',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/dnd/spells.lazy').then((d) => d.Route))
+
+const DndInspirationLazyRoute = DndInspirationLazyImport.update({
+  id: '/dnd/inspiration',
+  path: '/dnd/inspiration',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/character/daggerheart.lazy').then((d) => d.Route),
+  import('./routes/dnd/inspiration.lazy').then((d) => d.Route),
+)
+
+const DndCharacterLazyRoute = DndCharacterLazyImport.update({
+  id: '/dnd/character',
+  path: '/dnd/character',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/dnd/character.lazy').then((d) => d.Route))
+
+const DndAttacksLazyRoute = DndAttacksLazyImport.update({
+  id: '/dnd/attacks',
+  path: '/dnd/attacks',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/dnd/attacks.lazy').then((d) => d.Route))
+
+const DaggerheartCharacterLazyRoute = DaggerheartCharacterLazyImport.update({
+  id: '/daggerheart/character',
+  path: '/daggerheart/character',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/daggerheart/character.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -125,32 +120,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/attacks': {
-      id: '/attacks'
-      path: '/attacks'
-      fullPath: '/attacks'
-      preLoaderRoute: typeof AttacksLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/chat': {
       id: '/chat'
       path: '/chat'
       fullPath: '/chat'
       preLoaderRoute: typeof ChatLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/inspiration': {
-      id: '/inspiration'
-      path: '/inspiration'
-      fullPath: '/inspiration'
-      preLoaderRoute: typeof InspirationLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/notes': {
-      id: '/notes'
-      path: '/notes'
-      fullPath: '/notes'
-      preLoaderRoute: typeof NotesLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile': {
@@ -167,13 +141,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupLazyImport
       parentRoute: typeof rootRoute
     }
-    '/spells': {
-      id: '/spells'
-      path: '/spells'
-      fullPath: '/spells'
-      preLoaderRoute: typeof SpellsLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/thanks': {
       id: '/thanks'
       path: '/thanks'
@@ -188,25 +155,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/traits': {
-      id: '/traits'
-      path: '/traits'
-      fullPath: '/traits'
-      preLoaderRoute: typeof TraitsLazyImport
+    '/daggerheart/character': {
+      id: '/daggerheart/character'
+      path: '/daggerheart/character'
+      fullPath: '/daggerheart/character'
+      preLoaderRoute: typeof DaggerheartCharacterLazyImport
       parentRoute: typeof rootRoute
     }
-    '/character/daggerheart': {
-      id: '/character/daggerheart'
-      path: '/character/daggerheart'
-      fullPath: '/character/daggerheart'
-      preLoaderRoute: typeof CharacterDaggerheartLazyImport
+    '/dnd/attacks': {
+      id: '/dnd/attacks'
+      path: '/dnd/attacks'
+      fullPath: '/dnd/attacks'
+      preLoaderRoute: typeof DndAttacksLazyImport
       parentRoute: typeof rootRoute
     }
-    '/character/dnd': {
-      id: '/character/dnd'
-      path: '/character/dnd'
-      fullPath: '/character/dnd'
-      preLoaderRoute: typeof CharacterDndLazyImport
+    '/dnd/character': {
+      id: '/dnd/character'
+      path: '/dnd/character'
+      fullPath: '/dnd/character'
+      preLoaderRoute: typeof DndCharacterLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/dnd/inspiration': {
+      id: '/dnd/inspiration'
+      path: '/dnd/inspiration'
+      fullPath: '/dnd/inspiration'
+      preLoaderRoute: typeof DndInspirationLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/dnd/spells': {
+      id: '/dnd/spells'
+      path: '/dnd/spells'
+      fullPath: '/dnd/spells'
+      preLoaderRoute: typeof DndSpellsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/dnd/traits': {
+      id: '/dnd/traits'
+      path: '/dnd/traits'
+      fullPath: '/dnd/traits'
+      preLoaderRoute: typeof DndTraitsLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -216,132 +204,124 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/attacks': typeof AttacksLazyRoute
   '/chat': typeof ChatLazyRoute
-  '/inspiration': typeof InspirationLazyRoute
-  '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/signup': typeof SignupLazyRoute
-  '/spells': typeof SpellsLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
-  '/traits': typeof TraitsLazyRoute
-  '/character/daggerheart': typeof CharacterDaggerheartLazyRoute
-  '/character/dnd': typeof CharacterDndLazyRoute
+  '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
+  '/dnd/attacks': typeof DndAttacksLazyRoute
+  '/dnd/character': typeof DndCharacterLazyRoute
+  '/dnd/inspiration': typeof DndInspirationLazyRoute
+  '/dnd/spells': typeof DndSpellsLazyRoute
+  '/dnd/traits': typeof DndTraitsLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/attacks': typeof AttacksLazyRoute
   '/chat': typeof ChatLazyRoute
-  '/inspiration': typeof InspirationLazyRoute
-  '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/signup': typeof SignupLazyRoute
-  '/spells': typeof SpellsLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
-  '/traits': typeof TraitsLazyRoute
-  '/character/daggerheart': typeof CharacterDaggerheartLazyRoute
-  '/character/dnd': typeof CharacterDndLazyRoute
+  '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
+  '/dnd/attacks': typeof DndAttacksLazyRoute
+  '/dnd/character': typeof DndCharacterLazyRoute
+  '/dnd/inspiration': typeof DndInspirationLazyRoute
+  '/dnd/spells': typeof DndSpellsLazyRoute
+  '/dnd/traits': typeof DndTraitsLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/attacks': typeof AttacksLazyRoute
   '/chat': typeof ChatLazyRoute
-  '/inspiration': typeof InspirationLazyRoute
-  '/notes': typeof NotesLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/signup': typeof SignupLazyRoute
-  '/spells': typeof SpellsLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
-  '/traits': typeof TraitsLazyRoute
-  '/character/daggerheart': typeof CharacterDaggerheartLazyRoute
-  '/character/dnd': typeof CharacterDndLazyRoute
+  '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
+  '/dnd/attacks': typeof DndAttacksLazyRoute
+  '/dnd/character': typeof DndCharacterLazyRoute
+  '/dnd/inspiration': typeof DndInspirationLazyRoute
+  '/dnd/spells': typeof DndSpellsLazyRoute
+  '/dnd/traits': typeof DndTraitsLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/attacks'
     | '/chat'
-    | '/inspiration'
-    | '/notes'
     | '/profile'
     | '/signup'
-    | '/spells'
     | '/thanks'
     | '/tickets'
-    | '/traits'
-    | '/character/daggerheart'
-    | '/character/dnd'
+    | '/daggerheart/character'
+    | '/dnd/attacks'
+    | '/dnd/character'
+    | '/dnd/inspiration'
+    | '/dnd/spells'
+    | '/dnd/traits'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/attacks'
     | '/chat'
-    | '/inspiration'
-    | '/notes'
     | '/profile'
     | '/signup'
-    | '/spells'
     | '/thanks'
     | '/tickets'
-    | '/traits'
-    | '/character/daggerheart'
-    | '/character/dnd'
+    | '/daggerheart/character'
+    | '/dnd/attacks'
+    | '/dnd/character'
+    | '/dnd/inspiration'
+    | '/dnd/spells'
+    | '/dnd/traits'
   id:
     | '__root__'
     | '/'
-    | '/attacks'
     | '/chat'
-    | '/inspiration'
-    | '/notes'
     | '/profile'
     | '/signup'
-    | '/spells'
     | '/thanks'
     | '/tickets'
-    | '/traits'
-    | '/character/daggerheart'
-    | '/character/dnd'
+    | '/daggerheart/character'
+    | '/dnd/attacks'
+    | '/dnd/character'
+    | '/dnd/inspiration'
+    | '/dnd/spells'
+    | '/dnd/traits'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  AttacksLazyRoute: typeof AttacksLazyRoute
   ChatLazyRoute: typeof ChatLazyRoute
-  InspirationLazyRoute: typeof InspirationLazyRoute
-  NotesLazyRoute: typeof NotesLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
   SignupLazyRoute: typeof SignupLazyRoute
-  SpellsLazyRoute: typeof SpellsLazyRoute
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
-  TraitsLazyRoute: typeof TraitsLazyRoute
-  CharacterDaggerheartLazyRoute: typeof CharacterDaggerheartLazyRoute
-  CharacterDndLazyRoute: typeof CharacterDndLazyRoute
+  DaggerheartCharacterLazyRoute: typeof DaggerheartCharacterLazyRoute
+  DndAttacksLazyRoute: typeof DndAttacksLazyRoute
+  DndCharacterLazyRoute: typeof DndCharacterLazyRoute
+  DndInspirationLazyRoute: typeof DndInspirationLazyRoute
+  DndSpellsLazyRoute: typeof DndSpellsLazyRoute
+  DndTraitsLazyRoute: typeof DndTraitsLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  AttacksLazyRoute: AttacksLazyRoute,
   ChatLazyRoute: ChatLazyRoute,
-  InspirationLazyRoute: InspirationLazyRoute,
-  NotesLazyRoute: NotesLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
   SignupLazyRoute: SignupLazyRoute,
-  SpellsLazyRoute: SpellsLazyRoute,
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
-  TraitsLazyRoute: TraitsLazyRoute,
-  CharacterDaggerheartLazyRoute: CharacterDaggerheartLazyRoute,
-  CharacterDndLazyRoute: CharacterDndLazyRoute,
+  DaggerheartCharacterLazyRoute: DaggerheartCharacterLazyRoute,
+  DndAttacksLazyRoute: DndAttacksLazyRoute,
+  DndCharacterLazyRoute: DndCharacterLazyRoute,
+  DndInspirationLazyRoute: DndInspirationLazyRoute,
+  DndSpellsLazyRoute: DndSpellsLazyRoute,
+  DndTraitsLazyRoute: DndTraitsLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -355,34 +335,24 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/attacks",
         "/chat",
-        "/inspiration",
-        "/notes",
         "/profile",
         "/signup",
-        "/spells",
         "/thanks",
         "/tickets",
-        "/traits",
-        "/character/daggerheart",
-        "/character/dnd"
+        "/daggerheart/character",
+        "/dnd/attacks",
+        "/dnd/character",
+        "/dnd/inspiration",
+        "/dnd/spells",
+        "/dnd/traits"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/attacks": {
-      "filePath": "attacks.lazy.tsx"
-    },
     "/chat": {
       "filePath": "chat.lazy.tsx"
-    },
-    "/inspiration": {
-      "filePath": "inspiration.lazy.tsx"
-    },
-    "/notes": {
-      "filePath": "notes.lazy.tsx"
     },
     "/profile": {
       "filePath": "profile.lazy.tsx"
@@ -390,23 +360,29 @@ export const routeTree = rootRoute
     "/signup": {
       "filePath": "signup.lazy.tsx"
     },
-    "/spells": {
-      "filePath": "spells.lazy.tsx"
-    },
     "/thanks": {
       "filePath": "thanks.lazy.tsx"
     },
     "/tickets": {
       "filePath": "tickets.lazy.tsx"
     },
-    "/traits": {
-      "filePath": "traits.lazy.tsx"
+    "/daggerheart/character": {
+      "filePath": "daggerheart/character.lazy.tsx"
     },
-    "/character/daggerheart": {
-      "filePath": "character/daggerheart.lazy.tsx"
+    "/dnd/attacks": {
+      "filePath": "dnd/attacks.lazy.tsx"
     },
-    "/character/dnd": {
-      "filePath": "character/dnd.lazy.tsx"
+    "/dnd/character": {
+      "filePath": "dnd/character.lazy.tsx"
+    },
+    "/dnd/inspiration": {
+      "filePath": "dnd/inspiration.lazy.tsx"
+    },
+    "/dnd/spells": {
+      "filePath": "dnd/spells.lazy.tsx"
+    },
+    "/dnd/traits": {
+      "filePath": "dnd/traits.lazy.tsx"
     }
   }
 }

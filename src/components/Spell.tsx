@@ -2,7 +2,6 @@ import { useState } from "react";
 import { BoxSection } from "./BoxSection";
 import { DeleteButton } from "./DeleteButton";
 import { sendData } from "../utilities/sendData";
-import { AnimatePresence } from "framer-motion";
 import { Popup } from "./Popup";
 
 export const Spell = ({
@@ -64,9 +63,7 @@ export const Spell = ({
                         setIsDelete(true);
                     }}
                 />
-                <AnimatePresence>
-                    {isDelete && (
-                        <Popup closerFunc={setIsDelete}>
+                        <Popup closerFunc={setIsDelete} toggle={isDelete}>
                             <form className="flex flex-col gap-10" onSubmit={(e) => handleDelete(e)}>
                                 <p>Are you sure you want to delete this spell?</p>
                                 <div className="flex w-full gap-5">
@@ -79,8 +76,6 @@ export const Spell = ({
                                 </div>
                             </form>
                         </Popup>
-                    )}
-                </AnimatePresence>
             </div>
             <pre>
                 <p className="w-full text-wrap break-words">{spell.description}</p>

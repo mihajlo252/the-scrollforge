@@ -1,10 +1,10 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Trait } from "../components/Trait";
-import { BoxSection } from "../components/BoxSection";
+import { Trait } from "../../components/Trait";
+import { BoxSection } from "../../components/BoxSection";
 import { useState } from "react";
 
-export const Route = createLazyFileRoute("/traits")({
+export const Route = createLazyFileRoute("/dnd/traits")({
     component: TraitsScreen,
 });
 

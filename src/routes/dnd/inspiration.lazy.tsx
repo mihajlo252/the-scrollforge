@@ -1,8 +1,8 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { sendData } from "../utilities/sendData";
-import { BoxSection } from "../components/BoxSection";
+import { sendData } from "../../utilities/sendData";
+import { BoxSection } from "../../components/BoxSection";
 
 import pink from "/assets/pink.svg";
 import white from "/assets/white.svg";
@@ -10,9 +10,9 @@ import purple from "/assets/purple.svg";
 import yellow from "/assets/yellow.svg";
 import red from "/assets/red.svg";
 import regular from "/assets/regular.svg";
-import { toast } from "../utilities/toasterSonner";
+import { toast } from "../../utilities/toasterSonner";
 
-export const Route = createLazyFileRoute("/inspiration")({ component: Inspiration });
+export const Route = createLazyFileRoute("/dnd/inspiration")({ component: Inspiration });
 
 function Inspiration() {
     let { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))));

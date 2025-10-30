@@ -65,17 +65,18 @@ export const DiceBoxComponent = () => {
                     <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(20)}>
                         D20
                     </button>
+                    <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(12)}>
+                        D12
+                    </button>
                     <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(100)}>
                         D100
                     </button>
                 </div>
                 <p className="text-neutral">{resultArray.length > 4 ? <button type="button" className="text-primary" onClick={() => setShowDice(true)}>Show Dice</button> : resultArray.join(" + ")} = {diceResult}</p>
             </div>
-            {showDice && (
-            <Popup closerFunc={setShowDice}>
+            <Popup closerFunc={setShowDice} toggle={showDice}>
                 <p className="text-2xl">{resultArray.join(" + ")} = {diceResult}</p>
             </Popup>
-            )}
         </div>
     );
 };

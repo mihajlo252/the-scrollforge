@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { signOut } from "../utilities/signOut";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
@@ -20,17 +20,21 @@ export const Navigation = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    setOpenSignOut(false)
+    setOpenSignOut(false);
     removeUser();
     setNewUser("");
     navigate({ to: "/" });
   };
   const handleRedirect = (path: string) => {
+    const gameMode = JSON.parse(JSON.stringify(localStorage.getItem("gameMode")));
     if (path === "/character") {
       let character = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character")))) || null;
+
       if (!character) {
         toast({ style: "bg-secondary text-white", message: "Please select a character" });
         return;
+      } else {
+        navigate({ to: `/${gameMode === "D&D" ? "dnd" : "daggerheart"}${path}` });
       }
     }
     if (path === "/signup") {
@@ -87,18 +91,22 @@ export const Navigation = () => {
             style="border-primary text-primary hover:border-primary hover:bg-primary"
             event={() => handleRedirect("/profile")}
           />
-          <BorderButton text="Sign Out" style="border-secondary text-secondary hover:border-secondary hover:bg-secondary" event={() => setOpenSignOut(true)} />
-          <AnimatePresence>
-            {openSignOut && (
-              <Popup closerFunc={setOpenSignOut}>
-                <p>Are you sure you want to sign out?</p>
-                <div className="flex gap-2">
-                  <BorderButton text="Yes" style="border-primary text-primary hover:border-primary hover:bg-primary text-md" event={handleSignOut} />
-                  <BorderButton text="No" style="border-secondary text-secondary hover:border-secondary hover:bg-secondary text-md" event={() => setOpenSignOut(false)} />
-                </div>
-              </Popup>
-            )}
-          </AnimatePresence>
+          <BorderButton
+            text="Sign Out"
+            style="border-secondary text-secondary hover:border-secondary hover:bg-secondary"
+            event={() => setOpenSignOut(true)}
+          />
+          <Popup closerFunc={setOpenSignOut} toggle={openSignOut}>
+            <p>Are you sure you want to sign out?</p>
+            <div className="flex gap-2">
+              <BorderButton text="Yes" style="border-primary text-primary hover:border-primary hover:bg-primary text-md" event={handleSignOut} />
+              <BorderButton
+                text="No"
+                style="border-secondary text-secondary hover:border-secondary hover:bg-secondary text-md"
+                event={() => setOpenSignOut(false)}
+              />
+            </div>
+          </Popup>
         </div>
       )}
     </motion.nav>
