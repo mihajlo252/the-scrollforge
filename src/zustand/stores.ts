@@ -22,7 +22,7 @@ export const useCharacterStore = create<CharacterStore>()(
     persist(
         (set) => ({
             character: <Character>{},
-            setCharacter: async (char: Character) => {
+            setCharacter: async (char: Character | DaggerheartCharacter) => {
                 set({ character: char });
             }
         }),
