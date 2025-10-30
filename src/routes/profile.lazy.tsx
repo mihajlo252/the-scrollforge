@@ -25,7 +25,7 @@ function Profile() {
   const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))));
+  const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))) || "D&D");
 
   const { user } = JSON.parse(getUserFromLocal());
 
