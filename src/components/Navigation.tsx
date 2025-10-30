@@ -29,21 +29,16 @@ export const Navigation = () => {
     const gameMode = JSON.parse(JSON.stringify(localStorage.getItem("gameMode")));
     if (path === "/character") {
       let character = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character")))) || null;
-
       if (!character) {
         toast({ style: "bg-secondary text-white", message: "Please select a character" });
         return;
-      } else {
-        navigate({ to: `/${gameMode === "D&D" ? "dnd" : "daggerheart"}${path}` });
       }
-    }
-    if (path === "/signup") {
+      navigate({ to: `/${gameMode === "D&D" ? "dnd" : "daggerheart"}${path}` });
+      return;
+    } else if (path === "/signup") {
       setSign("Sign In");
-      navigate({ to: "/signup" });
-    }
-    if (path === "/") {
+    } else if (path === "/") {
       setSign("Sign Up");
-      navigate({ to: "/" });
     }
     navigate({ to: path });
   };
