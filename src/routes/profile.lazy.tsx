@@ -94,15 +94,7 @@ function Profile() {
   return (
     <CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
       <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <BoxSection styles="w-full flex flex-col items-start gap-5 p-5 overflow-y-scroll relative">
-          <Popup toggle={openCreateCharacter} closerFunc={setOpenCreateCharacter}>
-            <CreateCharacter
-              openCreateCharacter={openCreateCharacter}
-              setOpenCreateCharacter={setOpenCreateCharacter}
-              setIsSave={setIsSave}
-              gameMode={gameMode}
-            />
-          </Popup>
+        <BoxSection styles="w-full flex flex-col items-start gap-5 p-5 relative">
           <section className="flex w-full justify-between">
             <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
             <button ref={gameModeButton} className="btn btn-accent" onClick={handleGameModeToggle}>
@@ -148,6 +140,14 @@ function Profile() {
               setIsDelete={setIsDelete}
             />
           </section>
+          <Popup toggle={openCreateCharacter} closerFunc={setOpenCreateCharacter}>
+            <CreateCharacter
+              openCreateCharacter={openCreateCharacter}
+              setOpenCreateCharacter={setOpenCreateCharacter}
+              setIsSave={setIsSave}
+              gameMode={gameMode}
+            />
+          </Popup>
           <button
             onClick={() => setOpenCreateCharacter(true)}
             className="btn btn-ghost btn-circle place-self-center border-2 border-primary text-primary hover:border-primary hover:bg-primary hover:text-base-100 hover:scale-[1.1]"

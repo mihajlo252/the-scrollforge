@@ -34,7 +34,9 @@ export const CreateCharacter = ({
     pronouns: "",
     heritage: "",
     subclass: "",
-  })
+  });
+
+  const [classDescription, setClassDescription] = useState("");
 
   const handleCreateCharacter = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,11 +48,18 @@ export const CreateCharacter = ({
   };
 
   return (
+    <section className="flex gap-10 w-full place-content-center">
       <BoxSection styles="relative h-min flex flex-col gap-5 justify-center items-center text-center px-20 py-10">
         <h2 className="text-4xl font-bold">Create Your Character</h2>
         <form className="flex w-full flex-col gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
           {gameMode === "D&D" && <DNDForm setCharacterProfile={setCharacterProfile} characterProfile={characterProfile} />}
-          {gameMode === "Daggerheart" && <DaggerheartForm setCharacterProfileDaggerheart={setCharacterProfileDaggerheart} characterProfileDaggerheart={characterProfileDaggerheart} />}
+          {gameMode === "Daggerheart" && (
+            <DaggerheartForm
+              setCharacterProfileDaggerheart={setCharacterProfileDaggerheart}
+              characterProfileDaggerheart={characterProfileDaggerheart}
+              setClassDescription={setClassDescription}
+            />
+          )}
 
           <div className="mt-10 flex gap-2">
             <button type="submit" className="btn btn-primary flex-1">
@@ -62,5 +71,10 @@ export const CreateCharacter = ({
           </div>
         </form>
       </BoxSection>
+      <div className="w-[30%] place-self-center flex flex-col gap-5">
+        <h1 className="text-3xl text-accent">{characterProfileDaggerheart.class}</h1>
+        <p>{classDescription}</p>
+      </div>
+    </section>
   );
 };

@@ -16,7 +16,7 @@ export const Popup = ({
     <AnimatePresence>
       {toggle && (
         <motion.div
-          className="fixed left-0 top-0 isolate z-50 box-border flex h-full w-full flex-col items-center justify-center gap-5 px-36 py-5"
+          className="fixed left-0 top-0 isolate z-50 box-border flex h-full w-full flex-col items-center justify-center gap-5 px-20 py-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
