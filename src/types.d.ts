@@ -53,9 +53,9 @@ interface CharacterProfileDaggerheart {
     name: string,
     class: string,
     domains: string,
-    level: number ,   
-    pronouns: string,
-    heritage: string,    
+    level: number,
+    ancestry: string,
+    community: string,
     subclass: string
 }
 
@@ -141,4 +141,9 @@ interface Ticket {
     description: string;
     user_id: string;
     type: string;
+}
+
+interface DaggerheartFormDescription {
+    title: string;
+    description: string;
 }

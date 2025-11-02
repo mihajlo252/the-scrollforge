@@ -31,12 +31,15 @@ export const CreateCharacter = ({
     class: "",
     domains: "",
     level: 0,
-    pronouns: "",
-    heritage: "",
+    ancestry: "",
+    community: "",
     subclass: "",
   });
 
-  const [classDescription, setClassDescription] = useState("");
+  const [currentDescription, setCurrentDescription] = useState<DaggerheartFormDescription>({
+    title: "",
+    description: "",
+  });
 
   const handleCreateCharacter = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +60,7 @@ export const CreateCharacter = ({
             <DaggerheartForm
               setCharacterProfileDaggerheart={setCharacterProfileDaggerheart}
               characterProfileDaggerheart={characterProfileDaggerheart}
-              setClassDescription={setClassDescription}
+              setCurrentDescription={setCurrentDescription}
             />
           )}
 
@@ -71,10 +74,12 @@ export const CreateCharacter = ({
           </div>
         </form>
       </BoxSection>
-      <div className="w-[30%] place-self-center flex flex-col gap-5">
-        <h1 className="text-3xl text-accent">{characterProfileDaggerheart.class}</h1>
-        <p>{classDescription}</p>
-      </div>
+      {gameMode === "Daggerheart" && (
+        <div className="w-[30%] place-self-center flex flex-col gap-5">
+          <h1 className="text-3xl text-accent">{currentDescription.title}</h1>
+          <p>{currentDescription.description}</p>
+        </div>
+      )}
     </section>
   );
 };

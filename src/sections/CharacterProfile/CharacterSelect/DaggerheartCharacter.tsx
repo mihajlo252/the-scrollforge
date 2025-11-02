@@ -6,7 +6,7 @@ export const DaggerheartCharacter = ({character, handleNavigateToCharacter}: {ch
           {character.characterProfile.name}, {character.characterProfile.level}
         </p>
         <p>
-          {character.characterProfile.heritage}, {character.characterProfile?.domains}, {character.characterProfile.class} {character.characterProfile?.subclass}
+          {character.characterProfile.ancestry} {character.characterProfile.community}, {character.characterProfile.class} {character.characterProfile?.subclass}, {character.characterProfile?.domains}
         </p>
       </div>
     </li>
