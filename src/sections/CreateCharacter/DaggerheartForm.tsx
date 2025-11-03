@@ -69,6 +69,7 @@ export const DaggerheartForm = ({
       <select
         className="select select-bordered w-full"
         value={characterProfileDaggerheart.ancestry}
+        onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, "ancestry")}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, "ancestry")}
       >
         {DaggerheartAncestries.map((c) => (
@@ -78,6 +79,7 @@ export const DaggerheartForm = ({
       <select
         className="select select-bordered w-full"
         value={characterProfileDaggerheart.community}
+        onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, "community")}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, "community")}
       >
         {DaggerheartCommunities.map((c) => (
@@ -88,6 +90,7 @@ export const DaggerheartForm = ({
         className="select select-bordered w-full"
         required
         value={characterProfileDaggerheart.class}
+        onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, "class")}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, "class")}
       >
         {DaggerheartClasses.map((c) => (
