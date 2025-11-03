@@ -77,7 +77,9 @@ export const CreateCharacter = ({
       {gameMode === "Daggerheart" && (
         <div className="w-[30%] place-self-center flex flex-col gap-5">
           <h1 className="text-3xl text-accent">{currentDescription.title}</h1>
-          <p>{currentDescription.description}</p>
+          <div className="px-2 overflow-y-scroll max-h-[400px]">
+            <p>{currentDescription.description}</p>
+          </div>
         </div>
       )}
     </section>
