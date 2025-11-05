@@ -143,7 +143,7 @@ interface Ticket {
     type: string;
 }
 
-interface DaggerheartFormDescription {
+interface DaggerheartClassDescriptions {
     title: string;
     description: string;
 }

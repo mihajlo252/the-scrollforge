@@ -119,6 +119,9 @@
       {
         "description": [
           {
+            "paragraph": ""
+          }, 
+          {
             "list": [
               "You reduce the severity of physical damage by one threshold (Severe to Major, Major to Minor, Minor to None).",
               "You add the current value of the Unstoppable Die to your damage roll.",
@@ -126,7 +129,7 @@
             ]
           }
         ],
-        "name": "While Unstoppable, you gain the following benefits:"
+        "name": "While Unstoppable, you gain the following benefits"
       }
     ]
   },
