@@ -13,10 +13,10 @@ export const SubclassDescriptions = ({ name, subclasses }: { name: string; subcl
   return (
     <>
       <h1 className="text-3xl text-accent">
-        Subclass: {name} 
-        <span className="block text-2xl">Class: {Capitalize(currentSubclass?.class)}</span>
+        {name} 
+        <span className="block text-2xl">{Capitalize(currentSubclass?.class)}</span>
       </h1>
-      <div className="pr-2  flex flex-col gap-4 overflow-y-scroll h-[400px]">
+      <div className="pr-2  flex flex-col gap-4 overflow-y-scroll h-[400px] max-[1023px]:h-[280px] min-[1440px]:h-[500px]">
         <p><span className="text-primary">Spellcast Trait:</span> {Capitalize(currentSubclass?.spellcastTrait)}</p>
         <div className="flex flex-col gap-1">
           <h3 className="text-lg text-accent">Foundation Features</h3>

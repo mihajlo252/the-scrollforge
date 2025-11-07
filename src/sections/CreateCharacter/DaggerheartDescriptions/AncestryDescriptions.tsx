@@ -8,8 +8,8 @@ export const AncestryDescriptions = ({ name, ancestries }: { name: string; ances
 
   return (
     <>
-      <h1 className="text-3xl text-accent">Ancestry: {name}</h1>
-      <div className="pr-2  flex flex-col gap-4 overflow-y-scroll h-[400px]">
+      <h1 className="text-3xl text-accent">{name}</h1>
+      <div className="pr-2  flex flex-col gap-4 overflow-y-scroll h-[400px] max-[1023px]:h-[280px] min-[1440px]:h-[500px]">
         <p>{currentAncestry?.description[0].paragraph}</p>
         <div className="flex flex-col gap-1">
           <h3 className="text-lg text-accent">Features</h3>
