@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { Navigation } from "../components/Navigation";
+import { Navigation } from "../sections/Navigation";
 import { TicketsButton } from "../components/TicketsButton";
 import { BoxSection } from "../components/BoxSection";
 import { ErrComp } from "../components/ErrComp";

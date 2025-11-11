@@ -4,10 +4,10 @@ import { signOut } from "../utilities/signOut";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
-import { BorderButton } from "./BorderButton";
+import { BorderButton } from "../components/BorderButton";
 import logo from "/assets/the-scrollforge-logo.png";
 import { toast } from "../utilities/toasterSonner";
-import { Popup } from "./Popup";
+import { Popup } from "../components/Popup";
 
 export const Navigation = () => {
   const navigate = useNavigate();

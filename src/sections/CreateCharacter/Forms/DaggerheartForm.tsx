@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import DaggerheartClasses from "../../daggerheart-config/classes_cleaned.json";
-import DaggerheartSubclasses from "../../daggerheart-config/subclasses_clean.json";
-import DaggerheartAncestries from "../../daggerheart-config/ancestries_clean.json";
-import DaggerheartCommunities from "../../daggerheart-config/communities_clean.json";
-import { Capitalize } from "../../utilities/capitalize";
-import { BoxSection } from "../../components/BoxSection";
-import { ClassDescriptions } from "./DaggerheartDescriptions/ClassDescriptions";
-import { AncestryDescriptions } from "./DaggerheartDescriptions/AncestryDescriptions";
-import { CommunityDescriptions } from "./DaggerheartDescriptions/CommunityDescriptions";
-import { SubclassDescriptions } from "./DaggerheartDescriptions/SubclassDescriptions";
+import DaggerheartClasses from "../../../daggerheart-config/classes.json";
+import DaggerheartSubclasses from "../../../daggerheart-config/subclasses.json";
+import DaggerheartAncestries from "../../../daggerheart-config/ancestries.json";
+import DaggerheartCommunities from "../../../daggerheart-config/communities.json";
+import { Capitalize } from "../../../utilities/capitalize";
+import { BoxSection } from "../../../components/BoxSection";
+import { ClassDescriptions } from "../DaggerheartDescriptions/ClassDescriptions";
+import { AncestryDescriptions } from "../DaggerheartDescriptions/AncestryDescriptions";
+import { CommunityDescriptions } from "../DaggerheartDescriptions/CommunityDescriptions";
+import { SubclassDescriptions } from "../DaggerheartDescriptions/SubclassDescriptions";
 enum DHDataType {
   class = "class",
   subclass = "subclass",

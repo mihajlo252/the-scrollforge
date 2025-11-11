@@ -1,5 +1,5 @@
 import React from "react";
-import { BoxSection } from "../../components/BoxSection";
+import { BoxSection } from "../../../components/BoxSection";
 
 export const DNDForm = ({
   children,

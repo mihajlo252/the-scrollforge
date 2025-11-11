@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { sendData } from "../../utilities/sendData";
+import { sendData } from "../utilities/sendData";
 import { motion } from "framer-motion";
 export const Notes = () => {
     const [notes, setNotes] = useState<string>("");
@@ -34,7 +34,7 @@ export const Notes = () => {
         <motion.form className="relative h-full w-full" onSubmit={(e) => handleSubmit(e)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
 
             <textarea
-                className="text-md h-full w-full resize-none overflow-y-auto rounded-lg border-2 border-slate-900 bg-base-300 p-5"
+                className="text-md h-full w-full resize-none overflow-y-auto rounded-lg border-2 border-slate-900 bg-base-300 p-5 text-white"
                 placeholder="What's on your mind?"
                 value={notes}
                 onChange={(e) => handleSetNotes(e)}

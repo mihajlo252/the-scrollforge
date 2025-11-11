@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { sendData } from "../utilities/sendData";
-import { Popup } from "./Popup";
-import { BoxSection } from "./BoxSection";
+import { sendData } from "../../utilities/sendData";
+import { Popup } from "../../components/Popup";
+import { BoxSection } from "../../components/BoxSection";
 
 export const Trait = ({
   setEdit,

@@ -1,8 +1,8 @@
-import { BoxSection } from "./BoxSection";
-import { DeleteButton } from "./DeleteButton";
-import { Popup } from "./Popup";
+import { BoxSection } from "../../components/BoxSection";
+import { DeleteButton } from "../../components/DeleteButton";
+import { Popup } from "../../components/Popup";
 import { useState } from "react";
-import { sendData } from "../utilities/sendData";
+import { sendData } from "../../utilities/sendData";
 
 export const Weapon = ({
   attack,

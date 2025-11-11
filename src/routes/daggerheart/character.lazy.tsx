@@ -3,11 +3,15 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { BoxSection } from "../../components/BoxSection";
 import { Load } from "../../components/Load";
-import { DiceBoxComponent } from "../../components/DiceBox";
+import { DiceBoxComponent } from "../../sections/DiceBox";
 import { useEffect, useState } from "react";
 import { sendData } from "../../utilities/sendData";
 import { Popup } from "../../components/Popup";
-import { Notes } from "../../sections/Notes/Notes";
+import { Notes } from "../../sections/Notes";
+// import ClassesData from "../../daggerheart-config/classes_cleaned.json"
+// import SubclassesData from "../../daggerheart-config/subclasses_clean.json"
+// import CommunitiesData from "../../daggerheart-config/communities_clean.json"
+// import AncestriesData from "../../daggerheart-config/ancestries_clean.json"
 
 export const Route = createLazyFileRoute("/daggerheart/character")({
   component: Character,

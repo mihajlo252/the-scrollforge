@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { BoxSection } from "../../components/BoxSection";
-import { Weapon } from "../../components/Weapon";
+import { Weapon } from "../../sections/DnDSections&Components/Weapon";
 import React, { useState } from "react";
 import { Popup } from "../../components/Popup";
 import { sendData } from "../../utilities/sendData";

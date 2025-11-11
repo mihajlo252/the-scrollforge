@@ -3,15 +3,15 @@ import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { BoxSection } from "../../components/BoxSection";
 import { CharacterProfile } from "../../sections/CharacterProfile/CharacterProfile";
-import { HPBar } from "../../sections/HPBar/HPBar";
-import { Stats } from "../../sections/Stats/Stats";
+import { HPBar } from "../../sections/DnDSections&Components/HPBar";
+import { Stats } from "../../sections/DnDSections&Components/Stats";
 import { Load } from "../../components/Load";
-import { Bonuses } from "../../sections/Bonuses/Bonuses";
-import { DiceBoxComponent } from "../../components/DiceBox";
+import { Bonuses } from "../../sections/DnDSections&Components/Bonuses";
+import { DiceBoxComponent } from "../../sections/DiceBox";
 import { useEffect, useState } from "react";
 import { sendData } from "../../utilities/sendData";
 import { Popup } from "../../components/Popup";
-import { Notes } from "../../sections/Notes/Notes";
+import { Notes } from "../../sections/Notes";
 
 export const Route = createLazyFileRoute("/dnd/character")({
   component: Character,
