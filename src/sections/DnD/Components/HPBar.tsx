@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { sendData } from "../../utilities/sendData";
-import { Popup } from "../../components/Popup";
+import { sendData } from "../../../utilities/sendData";
+import { Popup } from "../../../components/Popup";
 
 export const HPBar = ({ maxHP: mHP, characterID }: { maxHP: number; characterID: string }) => {
   const { state } = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character"))));

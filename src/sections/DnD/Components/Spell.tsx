@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { BoxSection } from "../../components/BoxSection";
-import { DeleteButton } from "../../components/DeleteButton";
-import { sendData } from "../../utilities/sendData";
-import { Popup } from "../../components/Popup";
+import { BoxSection } from "../../../components/BoxSection";
+import { DeleteButton } from "../../../components/DeleteButton";
+import { sendData } from "../../../utilities/sendData";
+import { Popup } from "../../../components/Popup";
 
 export const Spell = ({
     spell,

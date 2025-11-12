@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { calculateModifiers, calculatePassivePerception, calculateProficiencyBonus } from "../../utilities/calculateStats";
+import { calculateModifiers, calculatePassivePerception, calculateProficiencyBonus } from "../../../utilities/calculateStats";
 
 export const Bonuses = ({ character, setStatChange }: { character: Character; setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const {

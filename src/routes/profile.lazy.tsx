@@ -8,10 +8,10 @@ import { BoxSection } from "../components/BoxSection";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { DeletePopup } from "../components/DeletePopup";
 import { DeleteButton } from "../components/DeleteButton";
-import { CreateCharacter } from "../sections/CreateCharacter/CreateCharacter";
+import { CreateCharacter } from "../sections/CreateCharacter";
 import { Avatar } from "../components/Avatar";
-import { DNDCharacter } from "../sections/CharacterProfile/CharacterSelect/DNDCharacter";
-import { DaggerheartCharacter } from "../sections/CharacterProfile/CharacterSelect/DaggerheartCharacter";
+import { DNDCharacter } from "../sections/DnD/CharacterProfile/DNDCharacter";
+import { DaggerheartCharacter } from "../sections/Daggerheart/CharacterProfile/DaggerheartCharacter";
 import { Popup } from "../components/Popup";
 
 export const Route = createLazyFileRoute("/profile")({

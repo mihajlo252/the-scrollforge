@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { sendData } from "../../utilities/sendData";
 import { Popup } from "../../components/Popup";
 import { Notes } from "../../sections/Notes";
+import { CharacterProfile } from "../../sections/Daggerheart/CharacterProfile/CharacterProfile";
 // import ClassesData from "../../daggerheart-config/classes_cleaned.json"
 // import SubclassesData from "../../daggerheart-config/subclasses_clean.json"
 // import CommunitiesData from "../../daggerheart-config/communities_clean.json"
@@ -22,6 +23,7 @@ function Character() {
   const [statChange, setStatChange] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const [toggleNotes, setToggleNotes] = useState(false);
+  const [toggleDice, setToggleDice] = useState(false);
 
   if (!state.character) {
     return <Load />;
@@ -47,19 +49,28 @@ function Character() {
         </button>
       )}
       <section className={`flex gap-5`}>
-        <BoxSection styles="w-[50%] flex justify-around items-center p-5">
-          <DiceBoxComponent />
-        </BoxSection>
+        <CharacterProfile setStatChange={setStatChange} />
         <BoxSection styles="w-[10%] flex flex-col justify-start">
           <nav className="flex flex-col gap-3 p-3">
             <button onClick={() => setToggleNotes(true)} className="btn btn-primary">
               Notes
             </button>
+            <button className="btn btn-primary" onClick={() => setToggleDice(true)}>
+              Dice
+            </button>
           </nav>
         </BoxSection>
       </section>
+      {/* <BoxSection styles="w-[20%] flex justify-around items-center p-5">
+        <DiceBoxComponent />
+      </BoxSection> */}
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
         <Notes />
+      </Popup>
+      <Popup closerFunc={setToggleDice} toggle={toggleDice}>
+        <BoxSection styles="w-[20%] flex justify-around items-center p-5">
+          <DiceBoxComponent />
+        </BoxSection>
       </Popup>
     </motion.main>
   );

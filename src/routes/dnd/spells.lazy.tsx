@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { BoxSection } from "../../components/BoxSection";
-import { Spell } from "../../sections/DnDSections&Components/Spell";
+import { Spell } from "../../sections/DnD/Components/Spell";
 import { Popup } from "../../components/Popup";
 import { useState } from "react";
 import { sendData } from "../../utilities/sendData";

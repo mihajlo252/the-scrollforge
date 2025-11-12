@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { getUserFromLocal } from "../../utilities/getUserFromLocal";
-import { submitCharacter } from "../../utilities/submitCharacter";
-import { DNDForm } from "./Forms/DNDForm";
-import { DaggerheartForm } from "./Forms/DaggerheartForm";
+import { getUserFromLocal } from "../utilities/getUserFromLocal";
+import { submitCharacter } from "../utilities/submitCharacter";
+import { DNDForm } from "./DnD/CreateCharacter/DNDForm";
+import { DaggerheartForm } from "./Daggerheart/CreateCharacter/DaggerheartForm";
 
 export const CreateCharacter = ({
   openCreateCharacter,

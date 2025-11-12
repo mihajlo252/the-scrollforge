@@ -52,6 +52,7 @@ html {
     touch-action: none;
     pointer-events: none;
     transition: opacity 500ms ease-in-out;
+    z-index: 99;
 }
 
 /* Chrome, Safari, Edge, Opera */

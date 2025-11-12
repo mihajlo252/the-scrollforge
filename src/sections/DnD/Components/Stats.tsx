@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { calculateSaves, calculateSkills, calculateProficiencyBonus } from "../../utilities/calculateStats";
+import { calculateSaves, calculateSkills, calculateProficiencyBonus } from "../../../utilities/calculateStats";
 
 export const Stats = ({ character, setStatChange }: { character: Character; setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const {

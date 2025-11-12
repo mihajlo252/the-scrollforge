@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Trait } from "../../sections/DnDSections&Components/Trait";
+import { Trait } from "../../sections/DnD/Components/Trait";
 import { BoxSection } from "../../components/BoxSection";
 import { useState } from "react";
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { calculateModifiers } from "../../utilities/calculateStats";
-import { BoxSection } from "../../components/BoxSection";
-import { toast } from "../../utilities/toasterSonner";
+import { calculateModifiers } from "../../../utilities/calculateStats";
+import { BoxSection } from "../../../components/BoxSection";
+import { toast } from "../../../utilities/toasterSonner";
 
 export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const { state } = JSON.parse(localStorage.getItem("character")!);

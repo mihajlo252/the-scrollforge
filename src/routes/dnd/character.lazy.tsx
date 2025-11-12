@@ -2,11 +2,11 @@ import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
 import { BoxSection } from "../../components/BoxSection";
-import { CharacterProfile } from "../../sections/CharacterProfile/CharacterProfile";
-import { HPBar } from "../../sections/DnDSections&Components/HPBar";
-import { Stats } from "../../sections/DnDSections&Components/Stats";
+import { CharacterProfile } from "../../sections/DnD/CharacterProfile/CharacterProfile";
+import { HPBar } from "../../sections/DnD/Components/HPBar";
+import { Stats } from "../../sections/DnD/Components/Stats";
 import { Load } from "../../components/Load";
-import { Bonuses } from "../../sections/DnDSections&Components/Bonuses";
+import { Bonuses } from "../../sections/DnD/Components/Bonuses";
 import { DiceBoxComponent } from "../../sections/DiceBox";
 import { useEffect, useState } from "react";
 import { sendData } from "../../utilities/sendData";
