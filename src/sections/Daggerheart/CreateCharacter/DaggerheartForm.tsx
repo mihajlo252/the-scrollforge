@@ -62,18 +62,28 @@ export const DaggerheartForm = ({
 
   return (
     <>
-      <BoxSection styles="relative h-min flex flex-col gap-5 justify-center items-center text-center px-20 py-10">
+      <BoxSection styles="relative w-[calc(40vw-5rem)] h-min flex flex-col gap-5 justify-center items-center text-center px-12 py-10">
         <h2 className="text-4xl font-bold">Create Your Character</h2>
-        <form className="flex w-full flex-col gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
+        <form className="grid grid-cols-4 w-full  gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
           <input
             type="text"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full col-span-3"
             placeholder="Name"
             required
             onChange={(e) => setCharacterProfileDaggerheart({ ...characterProfileDaggerheart, name: e.target.value })}
           />
           <select
-            className="select select-bordered w-full"
+            className="select select-bordered w-full col-span-1"
+            required
+            value={characterProfileDaggerheart.level}
+            onChange={(e) => setCharacterProfileDaggerheart({ ...characterProfileDaggerheart, level: parseInt(e.target.value) })}
+          >
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((level) => (
+              <option key={level}>{level}</option>
+            ))}
+          </select>
+          <select
+            className="select select-bordered w-full col-span-2"
             value={characterProfileDaggerheart.ancestry}
             onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.ancestry)}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.ancestry)}
@@ -85,7 +95,7 @@ export const DaggerheartForm = ({
             ))}
           </select>
           <select
-            className="select select-bordered w-full"
+            className="select select-bordered w-full col-span-2"
             value={characterProfileDaggerheart.community}
             onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.community)}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.community)}
@@ -97,7 +107,7 @@ export const DaggerheartForm = ({
             ))}
           </select>
           <select
-            className="select select-bordered w-full"
+            className="select select-bordered w-full col-span-4"
             required
             value={characterProfileDaggerheart.class}
             onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.class)}
@@ -111,14 +121,14 @@ export const DaggerheartForm = ({
           </select>
           <input
             type="text"
-            className="input w-full bg-accent user-select-none cursor-default  focus:outline-none"
+            className="input w-full bg-accent user-select-none cursor-default  focus:outline-none col-span-4"
             placeholder="Domains"
             required
             readOnly
             value={`Domains: ${characterProfileDaggerheart.domains}`}
           />
           <select
-            className="select select-bordered w-full"
+            className="select select-bordered w-full col-span-4"
             value={characterProfileDaggerheart.subclass}
             onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
@@ -129,20 +139,11 @@ export const DaggerheartForm = ({
               </option>
             ))}
           </select>
-          <select
-            className="select select-bordered w-full"
-            required
-            value={characterProfileDaggerheart.level}
-            onChange={(e) => setCharacterProfileDaggerheart({ ...characterProfileDaggerheart, level: parseInt(e.target.value) })}
-          >
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((level) => (
-              <option key={level}>{level}</option>
-            ))}
-          </select>
+          
           {children}
         </form>
       </BoxSection>
-      <div className="w-[30%] place-self-center flex flex-col gap-5 text-left">
+      <div className="w-[calc(35vw-5rem)] place-self-center flex flex-col gap-5 text-left">
         {currentSelectedDataType.type === DHDataType.class && <ClassDescriptions name={currentSelectedDataType.name} classes={DaggerheartClasses} />}
         {currentSelectedDataType.type === DHDataType.subclass && (
           <SubclassDescriptions name={currentSelectedDataType.name} subclasses={DaggerheartSubclasses} />

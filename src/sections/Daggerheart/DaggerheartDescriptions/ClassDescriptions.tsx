@@ -11,7 +11,8 @@ export const ClassDescriptions = ({ name, classes }: { name: string; classes: an
   return (
     <>
       <h1 className="text-3xl text-accent">
-        {name} <span className="block text-2xl">{currentClass?.domains.map((d: string) => Capitalize(d)).join(" and ")}</span>
+        {name}
+        <span className="block text-2xl">{currentClass?.domains.map((d: string) => Capitalize(d)).join(" and ")}</span>
       </h1>
       <div className="pr-2  flex flex-col gap-4 overflow-y-scroll h-[400px] max-[1023px]:h-[280px] min-[1440px]:h-[500px]">
         <p>{currentClass?.description[0].paragraph}</p>

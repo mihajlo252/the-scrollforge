@@ -47,7 +47,7 @@ export const CreateCharacter = ({
   };
 
   return (
-    <section className="flex gap-10 w-full place-content-center">
+    <section className="flex gap-10 w-min place-content-center">
       {gameMode === "D&D" && (
         <DNDForm
           setCharacterProfile={setCharacterProfile}
@@ -70,7 +70,7 @@ export const CreateCharacter = ({
           characterProfileDaggerheart={characterProfileDaggerheart}
           handleCreateCharacter={handleCreateCharacter}
         >
-          <div className="mt-10 flex gap-2">
+          <div className="mt-10 flex gap-2 col-span-4">
             <button type="submit" className="btn btn-primary flex-1">
               Create
             </button>
