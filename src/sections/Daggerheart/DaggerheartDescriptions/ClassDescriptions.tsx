@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Capitalize } from "../../../utilities/capitalize";
+import { DescriptionScrollContainer } from "../Components/DescriptionScrollContainer";
 
 export const ClassDescriptions = ({ name, classes }: { name: string; classes: any }) => {
   const [currentClass, setCurrentClass] = useState(classes.find((c: any) => c.name === name.toUpperCase()));
@@ -14,7 +15,7 @@ export const ClassDescriptions = ({ name, classes }: { name: string; classes: an
         {name}
         <span className="block text-2xl">{currentClass?.domains.map((d: string) => Capitalize(d)).join(" and ")}</span>
       </h1>
-      <div className="pr-2  flex flex-col gap-4 overflow-y-scroll h-[400px] max-[1023px]:h-[280px] min-[1440px]:h-[500px]">
+      <DescriptionScrollContainer>
         <p>{currentClass?.description[0].paragraph}</p>
         <ul className="list-disc">
           <li className="list-item">
@@ -56,7 +57,7 @@ export const ClassDescriptions = ({ name, classes }: { name: string; classes: an
             ))}
           </ul>
         </div>
-      </div>
+      </DescriptionScrollContainer>
     </>
   );
 };

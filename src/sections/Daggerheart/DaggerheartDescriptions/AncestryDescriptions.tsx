@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { DescriptionScrollContainer } from "../Components/DescriptionScrollContainer";
 export const AncestryDescriptions = ({ name, ancestries }: { name: string; ancestries: any }) => {
   const [currentAncestry, setCurrentAncestry] = useState(ancestries.find((c: any) => c.name === name.toUpperCase()));
 
@@ -9,7 +10,7 @@ export const AncestryDescriptions = ({ name, ancestries }: { name: string; ances
   return (
     <>
       <h1 className="text-3xl text-accent">{name}</h1>
-      <div className="pr-2  flex flex-col gap-4 overflow-y-scroll h-[400px] max-[1023px]:h-[280px] min-[1440px]:h-[500px]">
+      <DescriptionScrollContainer>
         <p>{currentAncestry?.description[0].paragraph}</p>
         <div className="flex flex-col gap-1">
           <h3 className="text-lg text-accent">Features</h3>
@@ -21,7 +22,7 @@ export const AncestryDescriptions = ({ name, ancestries }: { name: string; ances
             ))}
           </ul>
         </div>
-      </div>
+      </DescriptionScrollContainer>
     </>
   );
 };

@@ -62,7 +62,7 @@ export const DaggerheartForm = ({
 
   return (
     <>
-      <BoxSection styles="relative w-[calc(40vw-5rem)] h-min flex flex-col gap-5 justify-center items-center text-center px-12 py-10">
+      <BoxSection styles="relative w-[calc(56vw-5rem)] max-[1023px]:w-[calc(45vw-5rem)] xl:w-[calc(40vw-5rem)]  h-min flex flex-col gap-5 justify-center items-center text-center px-10 py-10">
         <h2 className="text-4xl font-bold">Create Your Character</h2>
         <form className="grid grid-cols-4 w-full  gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
           <input
@@ -139,7 +139,7 @@ export const DaggerheartForm = ({
               </option>
             ))}
           </select>
-          
+
           {children}
         </form>
       </BoxSection>

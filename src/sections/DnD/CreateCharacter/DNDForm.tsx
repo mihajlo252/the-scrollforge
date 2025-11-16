@@ -13,7 +13,7 @@ export const DNDForm = ({
   handleCreateCharacter: (e: React.FormEvent) => Promise<void>;
 }) => {
   return (
-    <BoxSection styles="relative  w-[calc(45vw-5rem)] h-min flex flex-col gap-5 justify-center items-center text-center px-20 py-10">
+    <BoxSection styles="relative  w-[calc(60vw-5rem)] max-[1023px]:w-[calc(45vw-5rem)] xl:w-[calc(45vw-5rem)] h-min flex flex-col gap-5 justify-center items-center text-center px-20 py-10">
       <h2 className="text-4xl font-bold">Create Your Character</h2>
       <form className="flex w-full flex-col gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
         <input
