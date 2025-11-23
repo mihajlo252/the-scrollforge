@@ -116,7 +116,7 @@ function Chat() {
               {messages.map((message, index) => (
                 <li key={index} className="flex flex-col text-left">
                   <div className="relative flex flex-col gap-2">
-                    <p className="text-xl font-bold capitalize text-primary">
+                    <p className={`text-xl font-bold capitalize ${message.user_id === userID ? "text-accent" : "text-primary"}`}>
                       {message.username}
                       {message.user_id === userID && <span className="text-xs text-slate-400"> (Me)</span>}
                     </p>
