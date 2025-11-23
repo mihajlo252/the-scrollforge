@@ -63,6 +63,7 @@ function Chat() {
   }, [messages.length]);
 
   useEffect(() => {
+    handleGetMessages();
     const subscription = supabase
       .channel("chat-room")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
@@ -74,7 +75,6 @@ function Chat() {
       .subscribe();
 
     return () => {
-      handleGetMessages();
       supabase.removeChannel(subscription);
     };
   }, []);
