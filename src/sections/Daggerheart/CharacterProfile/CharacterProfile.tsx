@@ -75,8 +75,8 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
   return (
     <BoxSection styles="flex gap-10 w-full items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
       <div className="grid grid-cols-2 gap-[5px] text-2xl">
-        {Object.entries(baseStats).map((stat) => (
-          <StatBlock name={Object.values(stat)[0] as string} stat={Object.keys(stat)[0] as string} />
+        {Object.entries(baseStats).map((stat, i) => (
+          <StatBlock key={i} name={Object.values(stat)[0] as string} stat={Object.keys(stat)[0] as string} />
         ))}
       </div>
       <div className="flex gap-2">

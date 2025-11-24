@@ -62,9 +62,9 @@ export const DaggerheartForm = ({
 
   return (
     <>
-      <BoxSection styles="relative w-[calc(56vw-5rem)] max-[1023px]:w-[calc(45vw-5rem)] xl:w-[calc(40vw-5rem)]  h-min flex flex-col gap-5 justify-center items-center text-center px-10 py-10">
+      <BoxSection styles="relative w-[calc(56vw-5rem)] max-[1023px]:w-[calc(45vw-5rem)] xl:w-[calc(40vw-5rem)]  h-min flex flex-col gap-14 justify-center items-center text-center p-10">
         <h2 className="text-4xl font-bold">Create Your Character</h2>
-        <form className="grid grid-cols-4 w-full  gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
+        <form className="grid grid-cols-4 w-full gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
           <input
             type="text"
             className="input input-bordered w-full col-span-3"
@@ -107,7 +107,7 @@ export const DaggerheartForm = ({
             ))}
           </select>
           <select
-            className="select select-bordered w-full col-span-4"
+            className="select select-bordered w-full col-span-2"
             required
             value={characterProfileDaggerheart.class}
             onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.class)}
@@ -119,16 +119,8 @@ export const DaggerheartForm = ({
               </option>
             ))}
           </select>
-          <input
-            type="text"
-            className="input w-full bg-accent user-select-none cursor-default  focus:outline-none col-span-4"
-            placeholder="Domains"
-            required
-            readOnly
-            value={`Domains: ${characterProfileDaggerheart.domains}`}
-          />
           <select
-            className="select select-bordered w-full col-span-4"
+            className="select select-bordered w-full col-span-2"
             value={characterProfileDaggerheart.subclass}
             onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
@@ -139,6 +131,15 @@ export const DaggerheartForm = ({
               </option>
             ))}
           </select>
+          <input
+            type="text"
+            className="input w-full bg-accent user-select-none cursor-default  focus:outline-none col-span-4"
+            placeholder="Domains"
+            required
+            readOnly
+            value={`Domains: ${characterProfileDaggerheart.domains}`}
+          />
+          
 
           {children}
         </form>

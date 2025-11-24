@@ -5,8 +5,6 @@ export const SubclassDescriptions = ({ name, subclasses }: { name: string; subcl
   const [currentSubclass, setCurrentSubclass] = useState(subclasses.find((c: any) => c.name === name));
 
   useEffect(() => {
-    console.log(subclasses.find((c: any) => c.name === name).class);
-    console.log(currentSubclass);
     setCurrentSubclass(subclasses.find((c: any) => c.name === name));
   }, [name]);
 
