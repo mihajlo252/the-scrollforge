@@ -26,7 +26,7 @@ function Profile() {
   const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))) ?? "D&D");
+  const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))) ?? "dnd");
   const gameModeButton = useRef<HTMLButtonElement>(null);
 
   const { user } = JSON.parse(getUserFromLocal());
@@ -38,12 +38,16 @@ function Profile() {
   };
 
   const handleNavigateToCharacter = (char: Character | DaggerheartCharacter) => {
-    if (gameMode === "D&D") {
+    if (gameMode === "dnd") {
       setCharacter(char as Character);
+      setGameMode("dnd");
+      localStorage.setItem("gameMode", "dnd");
     } else {
       setCharacter(char as DaggerheartCharacter);
+      setGameMode("daggerheart");
+      localStorage.setItem("gameMode", "daggerheart");
     }
-    navigate({ to: `/${gameMode === "D&D" ? "dnd" : "daggerheart"}/character/` });
+    navigate({ to: "/" + gameMode + "/character/" });
   };
 
   const handleDeletePopup = (char: Character | DaggerheartCharacter) => {
@@ -51,15 +55,15 @@ function Profile() {
     setIsDelete(true);
   };
   const handleGameModeToggle = (e: MouseEvent) => {
-    if (gameMode === "D&D") {
-      setGameMode("Daggerheart");
-      localStorage.setItem("gameMode", "Daggerheart");
+    if (gameMode === "dnd") {
+      setGameMode("daggerheart");
+      localStorage.setItem("gameMode", "daggerheart");
       (e.target as HTMLInputElement).innerText = "Dungeons&Dragons";
       (e.target as HTMLInputElement).classList.remove("btn-accent");
       (e.target as HTMLInputElement).classList.add("btn-primary");
     } else {
-      setGameMode("D&D");
-      localStorage.setItem("gameMode", "D&D");
+      setGameMode("dnd");
+      localStorage.setItem("gameMode", "dnd");
       (e.target as HTMLInputElement).innerText = "Daggerheart";
       (e.target as HTMLInputElement).classList.remove("btn-primary");
       (e.target as HTMLInputElement).classList.add("btn-accent");
@@ -67,7 +71,7 @@ function Profile() {
   };
   const handleGameModeStart = () => {
     if (!gameModeButton.current) return;
-    if (gameMode === "Daggerheart") {
+    if (gameMode === "daggerheart") {
       gameModeButton.current.innerText = "Dungeons&Dragons";
       gameModeButton.current.classList.remove("btn-accent");
       gameModeButton.current.classList.add("btn-primary");
@@ -93,7 +97,7 @@ function Profile() {
 
   return (
     <CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
-      <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <motion.main className={`flex h-full w-full gap-5 mt-[calc(8vh+1.25rem)]`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <BoxSection styles="w-full flex flex-col items-start gap-5 p-5 relative">
           <section className="flex w-full justify-between">
             <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
@@ -119,8 +123,8 @@ function Profile() {
                     className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
                   >
                     <Avatar bucket="characters" characterName={character.characterProfile.name.toLowerCase()} />
-                    {gameMode === "D&D" && <DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />}
-                    {gameMode === "Daggerheart" && (
+                    {gameMode === "dnd" && <DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />}
+                    {gameMode === "daggerheart" && (
                       <DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />
                     )}
 

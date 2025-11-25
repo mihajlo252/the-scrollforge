@@ -47,7 +47,7 @@ export const Bonuses = ({ character, setStatChange }: { character: Character; se
             </li>
             <li>
                 {" "}
-                Initiative: <span className="text-primary">+{calculateModifiers({ stat: dex })}</span>
+                Initiative: <span className="text-primary">{calculateModifiers({ stat: dex })}</span>
             </li>
             <li>
                 {" "}

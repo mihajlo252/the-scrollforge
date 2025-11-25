@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { signOut } from "../utilities/signOut";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
@@ -18,6 +18,12 @@ export const Navigation = () => {
 
   const [newUser, setNewUser] = useState(getUserFromLocal() || "");
 
+  const currentLocation = useLocation().href
+
+  // useEffect(() => {
+    
+  // }, [currentLocation]);
+
   const handleSignOut = async () => {
     await signOut();
     setOpenSignOut(false);
@@ -33,7 +39,7 @@ export const Navigation = () => {
         toast({ style: "bg-secondary text-white", message: "Please select a character" });
         return;
       }
-      navigate({ to: `/${gameMode === "D&D" ? "dnd" : "daggerheart"}${path}` });
+      navigate({ to: `/` + gameMode + "/" + path });
       return;
     } else if (path === "/signup") {
       setSign("Sign In");
@@ -60,9 +66,14 @@ export const Navigation = () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+  if (currentLocation.split("/")[currentLocation.split("/").length - 1] === "character") return;
 
   return (
-    <motion.nav className="flex justify-between gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.nav
+      className="flex justify-between gap-2 fixed z-50 grow items-center p-4 h-[8vh] w-[calc(100vw-4rem)]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
       <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline">
         <img src={logo} className="w-28" alt="Dash&Play Logo" />
       </Link>

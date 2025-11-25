@@ -109,7 +109,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                         ></button>
                         STR
                         <span className="text-primary">
-                            +{calculateSaves({ stat: primaryStats.str, proficiencyBonus, proficiency: saveThrowsProficiency.str })}
+                            {calculateSaves({ stat: primaryStats.str, proficiencyBonus, proficiency: saveThrowsProficiency.str })}
                         </span>
                     </li>
                     <li className={`relative flex flex-col ${dexProficiency ? "text-primary" : ""}`}>
@@ -120,7 +120,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                         ></button>
                         DEX
                         <span className="text-primary">
-                            +{calculateSaves({ stat: primaryStats.dex, proficiencyBonus, proficiency: saveThrowsProficiency.dex })}
+                            {calculateSaves({ stat: primaryStats.dex, proficiencyBonus, proficiency: saveThrowsProficiency.dex })}
                         </span>
                     </li>
                     <li className={`relative flex flex-col ${conProficiency ? "text-primary" : ""}`}>
@@ -131,7 +131,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                         ></button>
                         CON
                         <span className="text-primary">
-                            +{calculateSaves({ stat: primaryStats.con, proficiencyBonus, proficiency: saveThrowsProficiency.con })}
+                            {calculateSaves({ stat: primaryStats.con, proficiencyBonus, proficiency: saveThrowsProficiency.con })}
                         </span>
                     </li>
                     <li className={`relative flex flex-col ${intProficiency ? "text-primary" : ""}`}>
@@ -142,7 +142,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                         ></button>
                         INT
                         <span className="text-primary">
-                            +{calculateSaves({ stat: primaryStats.int, proficiencyBonus, proficiency: saveThrowsProficiency.int })}
+                            {calculateSaves({ stat: primaryStats.int, proficiencyBonus, proficiency: saveThrowsProficiency.int })}
                         </span>
                     </li>
                     <li className={`relative flex flex-col ${wisProficiency ? "text-primary" : ""}`}>
@@ -153,7 +153,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                         ></button>
                         WIS
                         <span className="text-primary">
-                            +{calculateSaves({ stat: primaryStats.wis, proficiencyBonus, proficiency: saveThrowsProficiency.wis })}
+                            {calculateSaves({ stat: primaryStats.wis, proficiencyBonus, proficiency: saveThrowsProficiency.wis })}
                         </span>
                     </li>
                     <li className={`relative flex flex-col ${chaProficiency ? "text-primary" : ""}`}>
@@ -164,7 +164,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                         ></button>
                         CHA
                         <span className="text-primary">
-                            +{calculateSaves({ stat: primaryStats.cha, proficiencyBonus, proficiency: saveThrowsProficiency.cha })}
+                            {calculateSaves({ stat: primaryStats.cha, proficiencyBonus, proficiency: saveThrowsProficiency.cha })}
                         </span>
                     </li>
                 </ul>
@@ -184,7 +184,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Acrobatics (Dex)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.acrobatics })}
+                                {calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.acrobatics })}
                             </span>
                         </li>
                         <li
@@ -197,7 +197,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Animal Handling (Wis)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.animalHandling })}
+                                {calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.animalHandling })}
                             </span>
                         </li>
                         <li
@@ -210,7 +210,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Arcana (Int)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.arcana })}
+                                {calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.arcana })}
                             </span>
                         </li>
                         <li
@@ -223,7 +223,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Athletics (Str)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.str, proficiencyBonus, proficiency: skillProficiency.athletics })}
+                                {calculateSkills({ stat: primaryStats.str, proficiencyBonus, proficiency: skillProficiency.athletics })}
                             </span>
                         </li>
                         <li
@@ -236,7 +236,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Deception (Cha)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.deception })}
+                                {calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.deception })}
                             </span>
                         </li>
                         <li
@@ -249,7 +249,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             History (Int)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.history })}
+                                {calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.history })}
                             </span>
                         </li>
                         <li
@@ -262,7 +262,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Insight (Wis)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.insight })}
+                                {calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.insight })}
                             </span>
                         </li>
                         <li
@@ -275,7 +275,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Intimidation (Cha)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.intimidation })}
+                                {calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.intimidation })}
                             </span>
                         </li>
                         <li
@@ -288,7 +288,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                             ></button>
                             Investigation (Int)
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.investigation })}
+                                {calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.investigation })}
                             </span>
                         </li>
                     </ul>
@@ -302,7 +302,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("medicine", setMedicineProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.medicine })}
+                                {calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.medicine })}
                             </span>
                             Medicine (Wis)
                         </li>
@@ -315,7 +315,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("nature", setNatureProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.nature })}
+                                {calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.nature })}
                             </span>
                             Nature (Int)
                         </li>
@@ -328,7 +328,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("perception", setPerceptionProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.perception })}
+                                {calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.perception })}
                             </span>
                             Perception (Wis)
                         </li>
@@ -341,7 +341,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("performance", setPerformanceProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.performance })}
+                                {calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.performance })}
                             </span>
                             Performance (Cha)
                         </li>
@@ -354,7 +354,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("persuasion", setPersuasionProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.persuasion })}
+                                {calculateSkills({ stat: primaryStats.cha, proficiencyBonus, proficiency: skillProficiency.persuasion })}
                             </span>
                             Persuasion (Cha)
                         </li>
@@ -367,7 +367,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("religion", setReligionProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.religion })}
+                                {calculateSkills({ stat: primaryStats.int, proficiencyBonus, proficiency: skillProficiency.religion })}
                             </span>
                             Religion (Int)
                         </li>
@@ -380,7 +380,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("sleightOfHand", setSleightOfHandProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.sleightOfHand })}
+                                {calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.sleightOfHand })}
                             </span>
                             Sleight of Hand (Dex)
                         </li>
@@ -393,7 +393,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("survival", setSurvivalProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.survival })}
+                                {calculateSkills({ stat: primaryStats.wis, proficiencyBonus, proficiency: skillProficiency.survival })}
                             </span>
                             Survival (Wis)
                         </li>
@@ -406,7 +406,7 @@ export const Stats = ({ character, setStatChange }: { character: Character; setS
                                 onClick={() => toggleProficiency("stealth", setStealthProficiency)}
                             ></button>
                             <span className="w-[3ch] px-1 text-primary">
-                                +{calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.stealth })}
+                                {calculateSkills({ stat: primaryStats.dex, proficiencyBonus, proficiency: skillProficiency.stealth })}
                             </span>
                             Stealth (Dex)
                         </li>

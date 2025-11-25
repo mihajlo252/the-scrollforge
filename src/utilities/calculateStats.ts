@@ -1,12 +1,18 @@
-export const calculateModifiers = ({ stat }: { stat: number }) => {
+const calcBaseMod = ({ stat }: { stat: number }) => {
     const mod = Math.floor((stat - 10) / 2);
-    if (mod < 0) return 0;
+    return mod;
+};
+export const calculateModifiers = ({ stat }: { stat: number }) => {
+    const mod = calcBaseMod({ stat });
+    if (mod >= 0) return "+" + mod;
     return mod;
 };
 
 export const calculateSaves = ({ stat, proficiencyBonus, proficiency }: { stat: number; proficiencyBonus: number, proficiency: boolean }) => {
-    if (proficiency) return calculateModifiers({ stat }) + proficiencyBonus
-    return calculateModifiers({ stat })
+    const mod = calcBaseMod({ stat });
+    if (proficiency) return "+" + (mod + proficiencyBonus)
+    if (mod >= 0) return "+" + mod;
+    return mod
 };
 
 export const calculateSkills = ({
@@ -18,12 +24,16 @@ export const calculateSkills = ({
     proficiencyBonus: number;
     proficiency: string;
 }) => {
+    const mod = calcBaseMod({ stat });
     if (proficiency === "proficient") {
-        return calculateModifiers({ stat }) + proficiencyBonus;
+        if (mod + proficiencyBonus > 0) return "+" + (mod + proficiencyBonus);
+        return mod + proficiencyBonus;
     } else if (proficiency === "expert") {
-        return calculateModifiers({ stat }) + proficiencyBonus * 2;
+        if (mod + proficiencyBonus * 2 > 0) return "+" + (mod + proficiencyBonus * 2);
+        return mod + proficiencyBonus * 2;
     }
-    return calculateModifiers({ stat });
+    if (mod >= 0) return "+" + mod;
+    return mod;
 };
 
 export const calculatePassivePerception = ({
@@ -35,12 +45,13 @@ export const calculatePassivePerception = ({
     proficiencyBonus: number;
     proficiency: string;
 }) => {
+    const mod = calcBaseMod({ stat });
     if (proficiency === "proficient") {
-        return 10 + calculateModifiers({ stat }) + proficiencyBonus;
+        return 10 + mod + proficiencyBonus;
     } else if (proficiency === "expert") {
-        return 10 + calculateModifiers({ stat }) + proficiencyBonus * 2;
+        return 10 + mod + proficiencyBonus * 2;
     }
-    return 10 + calculateModifiers({ stat }); 
+    return 10 + mod; 
 };
 
 export const calculateProficiencyBonus = ({level} : {level: number}) => {

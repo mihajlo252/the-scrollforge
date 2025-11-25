@@ -111,7 +111,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
                             name="str"
                             onChange={(e) => handleChangeStats(e, setStr)}
                         />
-                        <span className="text-sm text-primary">+{calculateModifiers({ stat: str })}</span>
+                        <span className="text-sm text-primary">{calculateModifiers({ stat: str })}</span>
                     </div>
                     <div className="flex items-center justify-center gap-0">
                         <input
@@ -122,7 +122,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
                             value={dex ?? 0}
                             onChange={(e) => handleChangeStats(e, setDex)}
                         />
-                        <span className="text-sm text-primary">+{calculateModifiers({ stat: dex })}</span>
+                        <span className="text-sm text-primary">{calculateModifiers({ stat: dex })}</span>
                     </div>
                     <div className="flex items-center justify-center gap-0">
                         <input
@@ -133,7 +133,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
                             value={con ?? 0}
                             onChange={(e) => handleChangeStats(e, setCon)}
                         />
-                        <span className="text-sm text-primary">+{calculateModifiers({ stat: con })}</span>
+                        <span className="text-sm text-primary">{calculateModifiers({ stat: con })}</span>
                     </div>
                     <div className="flex items-center justify-center gap-0">
                         <input
@@ -144,7 +144,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
                             value={int ?? 0}
                             onChange={(e) => handleChangeStats(e, setInt, )}
                         />
-                        <span className="text-sm text-primary">+{calculateModifiers({ stat: int })}</span>
+                        <span className="text-sm text-primary">{calculateModifiers({ stat: int })}</span>
                     </div>
                     <div className="flex items-center justify-center gap-0">
                         <input
@@ -155,7 +155,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
                             value={wis ?? 0}
                             onChange={(e) => handleChangeStats(e, setWis)}
                         />
-                        <span className="text-sm text-primary">+{calculateModifiers({ stat: wis })}</span>
+                        <span className="text-sm text-primary">{calculateModifiers({ stat: wis })}</span>
                     </div>
                     <div className="flex items-center justify-center gap-0">
                         <input
@@ -166,7 +166,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
                             value={cha ?? 0}
                             onChange={(e) => handleChangeStats(e, setCha)}
                         />
-                        <span className="text-sm text-primary">+{calculateModifiers({ stat: cha })}</span>
+                        <span className="text-sm text-primary">{calculateModifiers({ stat: cha })}</span>
                     </div>
                 </div>
             </div>

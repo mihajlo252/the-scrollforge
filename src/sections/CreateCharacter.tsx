@@ -48,7 +48,7 @@ export const CreateCharacter = ({
 
   return (
     <section className="flex gap-10 w-min place-content-center">
-      {gameMode === "D&D" && (
+      {gameMode === "dnd" && (
         <DNDForm
           setCharacterProfile={setCharacterProfile}
           characterProfile={characterProfile}
@@ -64,7 +64,7 @@ export const CreateCharacter = ({
           </div>
         </DNDForm>
       )}
-      {gameMode === "Daggerheart" && (
+      {gameMode === "daggerheart" && (
         <DaggerheartForm
           setCharacterProfileDaggerheart={setCharacterProfileDaggerheart}
           characterProfileDaggerheart={characterProfileDaggerheart}
