@@ -248,21 +248,23 @@ function Chat() {
               </>
             )}
           </BoxSection>
-          <form onSubmit={sendMessage} className="flex gap-2">
+          <div className="flex gap-2">
             <button type="button" className="btn btn-accent" onClick={() => setSeeActiveUsers(true)}>
               Active
             </button>
-            <input
-              type="text"
-              value={newMessage}
-              onChange={handleSetNewMessage}
-              placeholder="Type a message..."
-              className="input input-bordered flex-grow"
-            />
-            <button type="submit" className="btn btn-primary">
-              Send
-            </button>
-          </form>
+            <form onSubmit={sendMessage} className="flex gap-2 flex-1">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={handleSetNewMessage}
+                placeholder="Type a message..."
+                className="input input-bordered flex-grow"
+              />
+              <button type="submit" className="btn btn-primary">
+                Send
+              </button>
+            </form>
+          </div>
         </div>
       </BoxSection>
 
