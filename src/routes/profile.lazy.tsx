@@ -97,7 +97,7 @@ function Profile() {
 
   return (
     <CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
-      <motion.main className={`flex h-full w-full gap-5 mt-[calc(8vh+1.25rem)]`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <BoxSection styles="w-full flex flex-col items-start gap-5 p-5 relative">
           <section className="flex w-full justify-between">
             <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>

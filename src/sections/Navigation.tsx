@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { signOut } from "../utilities/signOut";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../zustand/stores";
 import { BorderButton } from "../components/BorderButton";
 import logo from "/assets/the-scrollforge-logo.png";
-import { toast } from "../utilities/toasterSonner";
 import { Popup } from "../components/Popup";
+import { BackButton, ForwardButton } from "../components/NavButtons";
 
 export const Navigation = () => {
   const navigate = useNavigate();
@@ -18,12 +18,6 @@ export const Navigation = () => {
 
   const [newUser, setNewUser] = useState(getUserFromLocal() || "");
 
-  const currentLocation = useLocation().href
-
-  // useEffect(() => {
-    
-  // }, [currentLocation]);
-
   const handleSignOut = async () => {
     await signOut();
     setOpenSignOut(false);
@@ -32,16 +26,7 @@ export const Navigation = () => {
     navigate({ to: "/" });
   };
   const handleRedirect = (path: string) => {
-    const gameMode = JSON.parse(JSON.stringify(localStorage.getItem("gameMode")));
-    if (path === "/character") {
-      let character = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem("character")))) || null;
-      if (!character) {
-        toast({ style: "bg-secondary text-white", message: "Please select a character" });
-        return;
-      }
-      navigate({ to: `/` + gameMode + "/" + path });
-      return;
-    } else if (path === "/signup") {
+    if (path === "/signup") {
       setSign("Sign In");
     } else if (path === "/") {
       setSign("Sign Up");
@@ -55,28 +40,22 @@ export const Navigation = () => {
     }
   }, [user]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") handleRedirect("/character");
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-  if (currentLocation.split("/")[currentLocation.split("/").length - 1] === "character") return;
-
   return (
     <motion.nav
-      className="flex justify-between gap-2 fixed z-50 grow items-center p-4 h-[8vh] w-[calc(100vw-4rem)]"
+      className="flex justify-between gap-2 grow items-center p-4 h-[8vh] w-[calc(100vw-4rem)]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline">
-        <img src={logo} className="w-28" alt="Dash&Play Logo" />
-      </Link>
+      <div className="flex gap-5 items-center">
+        <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline">
+          <img src={logo} className="w-28" alt="Dash&Play Logo" />
+        </Link>
+        {newUser && (
+          <BorderButton style="border-primary text-primary hover:border-primary hover:bg-primary" event={() => handleRedirect("/chat")}>
+            Chat
+          </BorderButton>
+        )}
+      </div>
       {!newUser && (
         <BorderButton
           text={sign === "Sign Up" ? "Sign Up" : "Sign In"}
@@ -88,20 +67,21 @@ export const Navigation = () => {
       {newUser && (
         <div className="flex items-center gap-2">
           <BorderButton
-            text="Character"
-            style="border-primary text-primary hover:border-primary hover:bg-primary"
-            event={() => handleRedirect("/character")}
+            text="Sign Out"
+            style="border-secondary text-secondary hover:border-secondary hover:bg-secondary mr-4"
+            event={() => setOpenSignOut(true)}
           />
           <BorderButton
             text="Profile"
             style="border-primary text-primary hover:border-primary hover:bg-primary"
             event={() => handleRedirect("/profile")}
           />
-          <BorderButton
-            text="Sign Out"
-            style="border-secondary text-secondary hover:border-secondary hover:bg-secondary"
-            event={() => setOpenSignOut(true)}
-          />
+
+          <div className="flex gap-2">
+            <BackButton styles="border-primary text-primary hover:border-primary hover:bg-primary" />
+            <ForwardButton styles="border-primary text-primary hover:border-primary hover:bg-primary" />
+          </div>
+
           <Popup closerFunc={setOpenSignOut} toggle={openSignOut}>
             <p>Are you sure you want to sign out?</p>
             <div className="flex gap-2">

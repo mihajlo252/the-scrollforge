@@ -73,7 +73,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
     };
 
     return (
-        <BoxSection styles="grid h-full w-full grid-cols-2 items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
+        <BoxSection styles="grid h-full w-full grid-cols-2 items-center justify-between border-2 border-slate-900 bg-base-300 px-5 text-neutral">
             <div className="flex gap-2">
                 <div className="text-start">
                     <p>

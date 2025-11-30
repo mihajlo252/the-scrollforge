@@ -36,8 +36,9 @@ function Character() {
     setStatChange(false);
     if (statChange) setIsSave(true);
   }, [statChange]);
+
   return (
-    <motion.main className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.main className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {isSave && (
         <button
           className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
@@ -47,12 +48,12 @@ function Character() {
         </button>
       )}
       <CharacterProfile setStatChange={setStatChange} />
-      <section className={`flex gap-5`}>
-        <BoxSection styles="w-[50%] flex flex-col gap-5 p-5">
+      <section className={`flex gap-2`}>
+        <BoxSection styles="w-[50%] flex flex-col gap-2 p-5">
           <Stats character={state.character} setStatChange={setStatChange} />
         </BoxSection>
-        <div className={`flex h-full w-[40%] flex-col gap-5`}>
-          <div className={`flex h-full w-full gap-5`}>
+        <div className={`flex h-full w-[40%] flex-col gap-2`}>
+          <div className={`flex h-full w-full gap-2`}>
             <BoxSection styles="w-[50%] flex justify-around items-center p-2">
               <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
             </BoxSection>
@@ -64,27 +65,22 @@ function Character() {
             <Bonuses character={state.character} setStatChange={setStatChange} />
           </BoxSection>
         </div>
-        <BoxSection styles="w-[10%] flex flex-col justify-start">
-          <nav className="flex flex-col gap-3 p-3">
-            <Link to="/dnd/traits" className="btn btn-primary">
+        <BoxSection styles="flex flex-1 flex-col gap-3 py-3 px-2 justify-center h-full w-full">
+            <Link to="/dnd/traits" className="btn btn-primary w-full">
               Traits
             </Link>
-            <Link to="/dnd/attacks" className="btn btn-primary">
+            <Link to="/dnd/attacks" className="btn btn-primary w-full">
               Attacks
             </Link>
-            <Link to="/dnd/spells" className="btn btn-primary">
+            <Link to="/dnd/spells" className="btn btn-primary w-full">
               Spells
             </Link>
-            <Link to="/dnd/inspiration" className="btn btn-primary">
+            <Link to="/dnd/inspiration" className="btn btn-primary w-full">
               Inspiration
             </Link>
-            <button onClick={() => setToggleNotes(true)} className="btn btn-primary">
+            <button onClick={() => setToggleNotes(true)} className="btn btn-primary w-full">
               Notes
             </button>
-            <Link to="/chat" className="btn btn-primary">
-              Chat
-            </Link>
-          </nav>
         </BoxSection>
       </section>
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>

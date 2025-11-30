@@ -13,6 +13,12 @@
     align-content: center;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     height: 100svh;
 }
