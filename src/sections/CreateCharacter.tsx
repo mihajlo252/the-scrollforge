@@ -40,8 +40,8 @@ export const CreateCharacter = ({
   const handleCreateCharacter = async (e: React.FormEvent) => {
     e.preventDefault();
     const { user } = JSON.parse(getUserFromLocal());
-    if (gameMode === "D&D") await submitCharacter(characterProfile, user.id, gameMode);
-    if (gameMode === "Daggerheart") await submitCharacter(characterProfileDaggerheart, user.id, gameMode);
+    if (gameMode === "dnd") await submitCharacter(characterProfile, user.id, gameMode);
+    if (gameMode === "daggerheart") await submitCharacter(characterProfileDaggerheart, user.id, gameMode);
     setIsSave(true);
     setOpenCreateCharacter(false);
   };
