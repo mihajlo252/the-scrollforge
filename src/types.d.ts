@@ -49,6 +49,15 @@ interface CharacterProfile {
     subclass: string;
     subrace: string;
 }
+interface CharacterProfileDaggerheart {
+    name: string,
+    class: string,
+    domains: string,
+    level: number,
+    ancestry: string,
+    community: string,
+    subclass: string
+}
 
 interface SkillProficiency {
     acrobatics: string;
@@ -98,7 +107,19 @@ interface Character {
     currentHP: number;
     stats: Stats;
     descriptions: Descriptions;
+    created_at: string;
+    gamemode: string;
 }
+interface DaggerheartCharacter {
+    id: string;
+    characterProfile: CharacterProfileDaggerheart;
+    currentHP: number;
+    stats: Stats;
+    descriptions: Descriptions;
+    created_at: string;
+    gamemode: string;
+}
+
 interface UserStore {
     user: string;
     setUser: (string, string) => Promise<void>;
@@ -106,13 +127,13 @@ interface UserStore {
 }
 
 interface CharactersStore {
-    characters: Character[];
+    characters: Character[] | DaggerheartCharacter[];
     setCharacters: (string) => Promise<void>;
 }
 
 interface CharacterStore {
-    character: Character;
-    setCharacter: (character: Character) => void;
+    character: Character | DaggerheartCharacter;
+    setCharacter: (character: Character | DaggerheartCharacter) => void;
 }
 
 interface Ticket {
@@ -120,4 +141,9 @@ interface Ticket {
     description: string;
     user_id: string;
     type: string;
+}
+
+interface DaggerheartClassDescriptions {
+    title: string;
+    description: string;
 }

@@ -1,6 +1,6 @@
 import { supabase } from "../supabase/supabase";
 
-export const submitCharacter = async (characterProfile: any, user: string) => {
+export const submitCharacter = async (characterProfile: any, user: string, gameMode: string) => {
     
     try {
         const { error } = await supabase
@@ -8,7 +8,8 @@ export const submitCharacter = async (characterProfile: any, user: string) => {
             .insert({
                 name: characterProfile.name,
                 characterProfile: characterProfile,
-                profileID: user
+                profileID: user,
+                gamemode: gameMode
             });
         if (error) {
             throw error.message;

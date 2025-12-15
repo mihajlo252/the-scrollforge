@@ -1,0 +1,91 @@
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
+
+import { motion } from "framer-motion";
+import { BoxSection } from "../../components/BoxSection";
+import { CharacterProfile } from "../../sections/DnD/CharacterProfile/CharacterProfile";
+import { HPBar } from "../../sections/DnD/Components/HPBar";
+import { Stats } from "../../sections/DnD/Components/Stats";
+import { Load } from "../../components/Load";
+import { Bonuses } from "../../sections/DnD/Components/Bonuses";
+import { DiceBoxComponent } from "../../sections/DiceBox";
+import { useEffect, useState } from "react";
+import { sendData } from "../../utilities/sendData";
+import { Popup } from "../../components/Popup";
+import { Notes } from "../../sections/Notes";
+
+export const Route = createLazyFileRoute("/dnd/character")({
+  component: Character,
+});
+
+function Character() {
+  const { state } = JSON.parse(localStorage.getItem("character") ?? "{}");
+  const [statChange, setStatChange] = useState(false);
+  const [isSave, setIsSave] = useState(false);
+  const [toggleNotes, setToggleNotes] = useState(false);
+
+  if (!state.character) {
+    return <Load />;
+  }
+
+  const handleSaveCharacter = async (stats: Stats) => {
+    await sendData("characters", state.character.id, { stats: { ...stats }, characterProfile: { ...state.character.characterProfile } });
+    setIsSave(false);
+  };
+
+  useEffect(() => {
+    setStatChange(false);
+    if (statChange) setIsSave(true);
+  }, [statChange]);
+
+  return (
+    <motion.main className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      {isSave && (
+        <button
+          className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
+          onClick={() => handleSaveCharacter(state.character.stats)}
+        >
+          Save Character
+        </button>
+      )}
+      <CharacterProfile setStatChange={setStatChange} />
+      <section className={`flex gap-2`}>
+        <BoxSection styles="w-[50%] flex flex-col gap-2 p-5">
+          <Stats character={state.character} setStatChange={setStatChange} />
+        </BoxSection>
+        <div className={`flex h-full w-[40%] flex-col gap-2`}>
+          <div className={`flex h-full w-full gap-2`}>
+            <BoxSection styles="w-[50%] flex justify-around items-center p-2">
+              <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
+            </BoxSection>
+            <BoxSection styles="w-[50%] flex justify-around items-center p-5">
+              <DiceBoxComponent />
+            </BoxSection>
+          </div>
+          <BoxSection styles="w-full flex justify-around items-center p-5">
+            <Bonuses character={state.character} setStatChange={setStatChange} />
+          </BoxSection>
+        </div>
+        <BoxSection styles="flex flex-1 flex-col gap-3 py-3 px-2 justify-center h-full w-full">
+            <Link to="/dnd/traits" className="btn btn-primary w-full">
+              Traits
+            </Link>
+            <Link to="/dnd/attacks" className="btn btn-primary w-full">
+              Attacks
+            </Link>
+            <Link to="/dnd/spells" className="btn btn-primary w-full">
+              Spells
+            </Link>
+            <Link to="/dnd/inspiration" className="btn btn-primary w-full">
+              Inspiration
+            </Link>
+            <button onClick={() => setToggleNotes(true)} className="btn btn-primary w-full">
+              Notes
+            </button>
+        </BoxSection>
+      </section>
+      <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
+        <Notes />
+      </Popup>
+    </motion.main>
+  );
+}
