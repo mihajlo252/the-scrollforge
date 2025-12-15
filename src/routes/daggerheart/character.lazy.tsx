@@ -19,6 +19,16 @@ export const Route = createLazyFileRoute("/daggerheart/character")({
 });
 
 function Character() {
+  const dev = import.meta.env.VITE_DEV_MODE
+  
+  if (dev === "false") {
+    return (
+      <BoxSection styles="w-full h-full flex flex-col justify-center items-center">
+        <h1 className="text-primary text-4xl">Currently unavailable. Please check back later!</h1>
+      </BoxSection>
+    )
+  }
+
   const { state } = JSON.parse(localStorage.getItem("character") ?? "{}");
   const [statChange, setStatChange] = useState(false);
   const [isSave, setIsSave] = useState(false);
