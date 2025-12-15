@@ -194,53 +194,42 @@ function Chat() {
   }, [chatRoom]);
 
   return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="m-0 relative h-full w-full p-0">
-      <BoxSection styles="w-full flex px-5 py-5 gap-2 justify-between overflow-hidden">
-        <div className="flex flex-col gap-2 h-full">
-          <ul className="flex flex-col gap-2 overflow-y-scroll h-full">
+    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full relative">
+      <BoxSection styles="w-full grid grid-rows-[repeat(2, 1fr)] grid-cols-[1fr] px-5 py-5 gap-2 h-full">
+        <div className="flex gap-5 relative w-full">
+          <div className="flex flex-col gap-2 w-[15%]">
             {myRooms.map((room) => (
-              <li key={room.id}>
-                <BorderButton style="border-accent text-accent hover:border-accent hover:bg-accent" event={() => setChatRoom(room.id)}>
-                  {room.name}
-                </BorderButton>
-              </li>
+              <BorderButton key={room.id} style="border-accent text-accent hover:border-accent hover:bg-accent" event={() => setChatRoom(room.id)}>
+                {room.name}
+              </BorderButton>
             ))}
-          </ul>
-          <BorderButton style="border-accent text-accent hover:border-accent hover:bg-accent mt-auto" event={() => handleGetAllParties()}>
-            Join Party
-          </BorderButton>
-          <button className="btn btn-primary mt-auto" onClick={() => setOpenCreateParty(true)}>
-            Create Party
-          </button>
-        </div>
-        <div className="flex flex-col gap-5 w-full h-full">
-          <BoxSection styles="w-full h-full flex flex-col flex-grow px-5 py-5 gap-5 overflow-y-scroll relative">
+          </div>
+
+          <BoxSection styles="flex-col grow px-5 py-5 gap-5 overflow-y-scroll w-full h-[calc(100vh-230px)]">
             {chatRoom && (
               <>
-                <ul className="flex flex-col justify-start gap-2">
+                <ul className="flex flex-col justify-start gap-2 h-[calc(80vh-230px)]">
                   <li className="flex flex-col text-left">
                     <p className="text-center text-xs text-slate-400">System message</p>
                     <p className="text-center text-accent">Welcome to {myRooms.find((room) => room.id === chatRoom)?.name}</p>
                   </li>
                   {messages.map((message, index) => (
-                    <li key={index} className="flex flex-col text-left">
-                      <div className="relative flex flex-col gap-2">
-                        <p className={`text-xl font-bold capitalize ${message.user_id === userID ? "text-accent" : "text-primary"}`}>
-                          {message.username}
-                          {message.user_id === userID && <span className="text-xs text-slate-400"> (Me)</span>}
-                        </p>
+                    <li key={index} className="flex flex-col text-left gap-2">
+                      <p className={`text-xl font-bold capitalize ${message.user_id === userID ? "text-accent" : "text-primary"}`}>
+                        {message.username}
+                        {message.user_id === userID && <span className="text-xs text-slate-400"> (Me)</span>}
+                      </p>
 
-                        <div className="flex justify-between">
-                          {message.content}
-                          <span className="flex items-center justify-end text-accent">
-                            {new Date(message.created_at).toLocaleTimeString("en-US", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: false,
-                            })}
-                          </span>
-                        </div>
-                      </div>
+                      <p className="flex justify-between">
+                        {message.content}
+                        <span className="flex items-center justify-end text-accent">
+                          {new Date(message.created_at).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
+                        </span>
+                      </p>
                     </li>
                   ))}
                 </ul>
@@ -248,7 +237,18 @@ function Chat() {
               </>
             )}
           </BoxSection>
-          <div className="flex gap-2">
+        </div>
+
+        <div className="flex gap-5 items-end">
+          <div className="flex flex-col gap-2 w-[15%]">
+            <BorderButton style="border-accent text-accent hover:border-accent hover:bg-accent mt-auto" event={() => handleGetAllParties()}>
+              Join Party
+            </BorderButton>
+            <button className="btn btn-primary mt-auto" onClick={() => setOpenCreateParty(true)}>
+              Create Party
+            </button>
+          </div>
+          <div className="flex gap-2 w-full">
             <button type="button" className="btn btn-accent" onClick={() => setSeeActiveUsers(true)}>
               Active
             </button>
@@ -269,18 +269,18 @@ function Chat() {
       </BoxSection>
 
       <Popup closerFunc={setSeeActiveUsers} toggle={seeActiveUsers}>
-        <BoxSection styles="w-1/5 px-5 py-5 relative flex flex-col justify-start items-start h-max">
+        <BoxSection styles="w-1/5 px-5 py-5 flex-col gap-5 justify-start items-center relative">
           <BorderButton
-            style="border-secondary text-secondary hover:border-secondary hover:bg-secondary absolute top-5 right-5"
+            style="border-secondary text-secondary hover:border-secondary hover:bg-secondary absolute bottom-5 right-5"
             event={() => setSeeActiveUsers(false)}
           >
-            X
+            Close
           </BorderButton>
-          <h1 className=" text-2xl font-semibold text-primary">Active</h1>
+          <h1 className=" text-4xl font-semibold text-primary">Active</h1>
           <ul className="flex flex-col">
             {activeUsers.map((user, index) => (
-              <li key={index} className="flex flex-col text-left">
-                <p className="text-xl font-bold capitalize text-success">{user}</p>
+              <li key={index} className="flex flex-col justify-center items-center">
+                <p className="text-3xl font-bold capitalize text-success flex items-center">{user}</p>
               </li>
             ))}
           </ul>

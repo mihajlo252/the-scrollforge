@@ -2,7 +2,6 @@ import React from "react";
 import { BoxSection } from "./BoxSection";
 import { deleteCharacter } from "../utilities/deleteCharacter";
 import { Popup } from "./Popup";
-import { AnimatePresence } from "framer-motion";
 export const DeletePopup = ({
   deleteID,
   setDeleteID,
@@ -31,22 +30,18 @@ export const DeletePopup = ({
 
   // const MotionBoxSection = motion(BoxSection);
   return (
-    <AnimatePresence>
-      {toggle && (
-        <Popup closerFunc={setIsDelete} toggle={toggle}>
-          <BoxSection styles={`fixed h-min px-10 py-16 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-5`}>
-            <p>Are you sure you want to continue?</p>
-            <div className="flex items-center justify-center gap-20">
-              <button type="button" className="btn btn-secondary" onClick={() => handleDelete(deleteID)}>
-                Yes
-              </button>
-              <button type="button" className="btn btn-primary" onClick={handleCancel}>
-                Cancel
-              </button>
-            </div>
-          </BoxSection>
-        </Popup>
-      )}
-    </AnimatePresence>
+    <Popup closerFunc={setIsDelete} toggle={toggle}>
+      <BoxSection styles={`h-min px-10 py-16 flex flex-col gap-5`}>
+        <p>Are you sure you want to continue?</p>
+        <div className="flex items-center justify-center gap-20">
+          <button type="button" className="btn btn-secondary" onClick={() => handleDelete(deleteID)}>
+            Yes
+          </button>
+          <button type="button" className="btn btn-primary" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+      </BoxSection>
+    </Popup>
   );
 };
