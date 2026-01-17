@@ -43,7 +43,7 @@ export const Navigation = () => {
 
   return (
     <motion.nav
-      className="flex justify-between gap-2 grow items-center p-4 h-[8vh] w-[calc(100vw-4rem)]"
+      className="flex justify-between gap-2 grow items-center p-4 h-max w-[calc(100vw-4rem)]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
@@ -52,9 +52,16 @@ export const Navigation = () => {
           <img src={logo} className="w-28" alt="Dash&Play Logo" />
         </Link>
         {newUser && (
-          <BorderButton style="border-primary text-primary hover:border-primary hover:bg-primary" event={() => handleRedirect("/chat")}>
-            Chat
-          </BorderButton>
+          <>
+            <BorderButton style="border-primary text-primary hover:border-primary hover:bg-primary" event={() => handleRedirect("/chat")}>
+              Chat
+            </BorderButton>
+            <TicketsButton
+              styles="aspect-square cursor-pointer hover:scale-110 transition-all duration-150 ease-in  left-3 bottom-3 opacity-50 z-[99999] stroke-primary"
+              size={5}
+              strokeWidth={5}
+            />
+          </>
         )}
       </div>
       {!newUser && (
@@ -94,12 +101,6 @@ export const Navigation = () => {
               />
             </div>
           </Popup>
-
-          <TicketsButton
-            styles="cursor-pointer hover:scale-110 transition-all duration-150 ease-in absolute left-3 bottom-3 opacity-50 z-[99999] stroke-primary"
-            size={30}
-            strokeWidth={5}
-          />
         </div>
       )}
     </motion.nav>

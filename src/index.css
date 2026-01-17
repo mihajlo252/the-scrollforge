@@ -27,27 +27,27 @@ pre {
     font-family: "K2D", sans-serif;
 }
 
-html {
-    font-size: 130%;
-}
-
-@media (max-width: 1680px) {
     html {
-        font-size: 110%;
+        font-size: 130%;
     }
-}
 
-@media (max-width: 1200px) {
-    html {
-        font-size: 100%;
+    @media (max-width: 1680px) {
+        html {
+            font-size: 110%;
+        }
     }
-}
 
-@media (max-width: 1000px) {
-    html {
-        font-size: 60%;
+    @media (max-width: 1200px) {
+        html {
+            font-size: 100%;
+        }
     }
-}
+
+    @media (max-width: 1000px) {
+        html {
+            font-size: 60%;
+        }
+    }
 
 .dice-box-canvas {
     position: absolute;
