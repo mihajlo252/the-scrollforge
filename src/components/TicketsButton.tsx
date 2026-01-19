@@ -5,9 +5,7 @@ export const TicketsButton = ({ size, strokeWidth, styles }: { size?: number; st
   console.log(size, strokeWidth, styles);
 
   return (
-    <BorderButton event={() => navigate({ to: "/tickets" })} style="border-accent text-accent hover:bg-accent">
-      Bug Report / Feature Request
-    </BorderButton>
+    
   );
 
   // return (

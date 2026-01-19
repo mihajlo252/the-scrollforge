@@ -67,19 +67,38 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
           },
         },
         version: 0,
-      })
+      }),
     );
     setStatChange(true);
   };
 
   return (
-    <BoxSection styles="">
-      <ul className="grid grid-cols-1 gap-0 px-2 py-1">
+    <BoxSection styles="flex gap-2 px-2 py-5">
+      <ul className="grid grid-cols-1 gap-2 w-max h-max px-2 py-1">
         {Object.entries(baseStats).map((stat, i) => (
           <StatBlock key={i} name={Object.values(stat)[0] as string} stat={Object.keys(stat)[0] as string} />
         ))}
       </ul>
-      
+      <div>
+        <div>
+          <p className="text-2xl text-left">
+            {characterProfile.name}, Level{" "}
+            <input
+              type="text"
+              placeholder="0"
+              className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center focus-within:outline-0"
+              value={characterLevel ?? 0}
+              onChange={(e) => handleChangeLevel(e)}
+            />
+          </p>
+          <p>
+            {characterProfile.ancestry} {characterProfile.community}, {characterProfile.class} {characterProfile.subclass}, {characterProfile.domains}
+          </p>
+        </div>
+        <div>
+          
+        </div>
+      </div>
     </BoxSection>
   );
 

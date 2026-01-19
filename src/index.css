@@ -2,83 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 #root {
-    max-width: 1920px;
-    margin: 0 auto;
-    text-align: center;
-    font-family: "K2D", sans-serif;
-    height: 100svh;
-    align-content: center;
+  max-width: 1920px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: "K2D", sans-serif;
+  height: 100svh;
+  align-content: center;
 }
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    height: 100svh;
+  height: 100svh;
+}
+html {
+  overflow-x: hidden;
 }
 
 pre {
-    font-family: "K2D", sans-serif;
+  font-family: "K2D", sans-serif;
 }
 
-    html {
-        font-size: 130%;
-    }
+html {
+  font-size: 130%;
+}
 
-    @media (max-width: 1680px) {
-        html {
-            font-size: 110%;
-        }
-    }
+@media (max-width: 1680px) {
+  html {
+    font-size: 110%;
+  }
+}
 
-    @media (max-width: 1200px) {
-        html {
-            font-size: 100%;
-        }
-    }
+@media (max-width: 1200px) {
+  html {
+    font-size: 100%;
+  }
+}
 
-    @media (max-width: 1000px) {
-        html {
-            font-size: 60%;
-        }
-    }
+@media (max-width: 1000px) {
+  html {
+    font-size: 60%;
+  }
+}
 
 .dice-box-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    user-select: none;
-    touch-action: none;
-    pointer-events: none;
-    transition: opacity 500ms ease-in-out;
-    z-index: 99;
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+  touch-action: none;
+  pointer-events: none;
+  transition: opacity 500ms ease-in-out;
+  z-index: 99;
 }
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Firefox */
 input[type="number"] {
-    appearance: textfield;
-    -moz-appearance: textfield;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
-
 
 .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 .no-scrollbar {
-    -ms-overflow-style: scroll;
-    scrollbar-width: none;
+  -ms-overflow-style: scroll;
+  scrollbar-width: none;
 }

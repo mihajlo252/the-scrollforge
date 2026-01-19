@@ -36,7 +36,7 @@ function Tickets() {
     let error;
     try {
       await sendTicket(report);
-      toast({ style: "bg-success text-base-100", message: "Ticket sent!" });
+      toast({ style: "bg-success text-base-100", message: `Ticket sent! Thank you for submitting a ${bugOrFeature}!` });
     } catch (err) {
       error = err;
       toast({ style: "bg-success text-base-100", message: "Ticket not sent! There was an error: " + err });
@@ -49,18 +49,16 @@ function Tickets() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full relative">
       <form
         className="flex h-full w-full flex-col items-center justify-center gap-10 rounded-lg border-2 border-slate-900 bg-base-300 px-[25%] text-left text-neutral"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <h1 className="sticky top-0 w-full text-center text-3xl font-bold text-primary">
-          Select feature if you have a feature request or bug report if you've found one.
-        </h1>
+        <h1 className="sticky top-0 w-full text-center text-3xl font-bold text-primary">All feedback is greatly appreciated.</h1>
         <div className="flex w-full flex-col gap-2">
           <select className="select select-bordered" value={bugOrFeature} onChange={(e) => setBugOrFeature(e.target.value)}>
             <option value="Bug Report">Bug Report</option>
-            <option value="Feature">Feature</option>
+            <option value="Feature Request">Feature Request</option>
           </select>
         </div>
         <div className="flex w-full flex-col gap-5">
@@ -70,7 +68,7 @@ function Tickets() {
             id="appSection"
             onChange={(e) => setAppSection(e.target.value)}
             value={appSection}
-            placeholder="App Section"
+            placeholder={`Which section of the app is your ${bugOrFeature} referring to?`}
             className="input input-bordered"
           />
           <textarea
@@ -88,9 +86,9 @@ function Tickets() {
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
-      <button type="button" className="btn btn-primary" onClick={() => setOpenTicketLog(true)}>
-        Ticket Log
-      </button>
+        <button type="button" className="btn btn-accent absolute top-5 left-5" onClick={() => setOpenTicketLog(true)}>
+          Ticket Log
+        </button>
       </form>
       <Popup closerFunc={setOpenTicketLog} toggle={openTicketLog}>
         <TicketLog />

@@ -8,14 +8,14 @@ import { BorderButton } from "../components/BorderButton";
 import logo from "/assets/the-scrollforge-logo.png";
 import { Popup } from "../components/Popup";
 import { BackButton, ForwardButton } from "../components/NavButtons";
-import { TicketsButton } from "../components/TicketsButton";
+import { SideMenu } from "../components/SideMenu";
 
 export const Navigation = () => {
   const navigate = useNavigate();
 
   const { user, removeUser } = useUserStore();
-  const [sign, setSign] = useState("Sign Up");
   const [openSignOut, setOpenSignOut] = useState(false);
+  const [menu, setMenu] = useState(false);
 
   const [newUser, setNewUser] = useState(getUserFromLocal() || "");
 
@@ -27,15 +27,12 @@ export const Navigation = () => {
     navigate({ to: "/" });
   };
   const handleRedirect = (path: string) => {
-    if (path === "/signup") {
-      setSign("Sign In");
-    } else if (path === "/") {
-      setSign("Sign Up");
-    }
+    setMenu(false);
     navigate({ to: path });
   };
 
   useEffect(() => {
+    setMenu(false)
     if (user) {
       setNewUser(user);
     }
@@ -47,48 +44,43 @@ export const Navigation = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <div className="flex gap-5 items-center">
-        <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline">
-          <img src={logo} className="w-28" alt="Dash&Play Logo" />
-        </Link>
-        {newUser && (
-          <>
-            <BorderButton style="border-primary text-primary hover:border-primary hover:bg-primary" event={() => handleRedirect("/chat")}>
-              Chat
-            </BorderButton>
-            <TicketsButton
-              styles="aspect-square cursor-pointer hover:scale-110 transition-all duration-150 ease-in  left-3 bottom-3 opacity-50 z-[99999] stroke-primary"
-              size={5}
-              strokeWidth={5}
-            />
-          </>
-        )}
-      </div>
-      {!newUser && (
-        <BorderButton
-          text={sign === "Sign Up" ? "Sign Up" : "Sign In"}
-          style="border-primary text-primary hover:border-primary hover:bg-primary"
-          event={() => handleRedirect(sign === "Sign Up" ? "/signup" : "/")}
-        />
-      )}
+      <div className="flex gap-5 items-center">{newUser && <></>}</div>
 
       {newUser && (
         <div className="flex items-center gap-2">
-          <BorderButton
-            text="Sign Out"
-            style="border-secondary text-secondary hover:border-secondary hover:bg-secondary mr-4"
-            event={() => setOpenSignOut(true)}
-          />
-          <BorderButton
-            text="Profile"
-            style="border-primary text-primary hover:border-primary hover:bg-primary"
-            event={() => handleRedirect("/profile")}
-          />
-
           <div className="flex gap-2">
             <BackButton styles="border-primary text-primary hover:border-primary hover:bg-primary" />
             <ForwardButton styles="border-primary text-primary hover:border-primary hover:bg-primary" />
+            <BorderButton style="border-primary text-primary hover:porder-primary hover:bg-primary" event={() => setMenu(true)}>
+              =
+            </BorderButton>
           </div>
+
+          <SideMenu closerFunc={setMenu} toggle={menu}>
+            <div className="flex flex-col gap-20">
+              <Link to={newUser ? "/profile" : "/"} className="font-bold uppercase text-neutral no-underline select-none">
+                <img src={logo} className="" alt="Dash&Play Logo" />
+              </Link>
+              <div className="flex flex-col gap-5 w-max place-self-center">
+                <BorderButton
+                  text="Profile"
+                  style="border-primary text-primary hover:border-primary hover:bg-primary"
+                  event={() => handleRedirect("/profile")}
+                />
+                <BorderButton style="border-primary text-primary hover:border-primary hover:bg-primary" event={() => handleRedirect("/chat")}>
+                  Chat
+                </BorderButton>
+                <BorderButton event={() => handleRedirect("/tickets")} style="border-accent text-accent hover:bg-accent">
+                  Support
+                </BorderButton>
+                <BorderButton
+                  text="Sign Out"
+                  style="border-secondary text-secondary hover:border-secondary hover:bg-secondary"
+                  event={() => setOpenSignOut(true)}
+                />
+              </div>
+            </div>
+          </SideMenu>
 
           <Popup closerFunc={setOpenSignOut} toggle={openSignOut}>
             <p>Are you sure you want to sign out?</p>
