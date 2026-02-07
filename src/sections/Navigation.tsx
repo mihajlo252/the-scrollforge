@@ -40,7 +40,7 @@ export const Navigation = () => {
 
   return (
     <motion.nav
-      className="flex justify-between gap-2 grow items-center p-4 h-max w-[calc(100vw-4rem)]"
+      className="flex justify-between gap-2 items-center p-4 h-max w-[calc(100vw-4rem)]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >

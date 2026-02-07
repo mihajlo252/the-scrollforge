@@ -38,7 +38,7 @@ function Character() {
   }, [statChange]);
 
   return (
-    <motion.main className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.main className={`grid h-full grow w-full grid-rows-[.2fr_1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {isSave && (
         <button
           className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
@@ -61,7 +61,7 @@ function Character() {
               <DiceBoxComponent />
             </BoxSection>
           </div>
-          <BoxSection styles="w-full flex justify-around items-center p-5">
+          <BoxSection styles="w-full flex min-h-[unset] items-start p-5">
             <Bonuses character={state.character} setStatChange={setStatChange} />
           </BoxSection>
         </div>

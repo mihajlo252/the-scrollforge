@@ -44,7 +44,7 @@ export const Trait = ({
 
   if (description === "racialTraits") {
     return (
-      <form className="relative h-full w-full overflow-scroll" onSubmit={(e) => handleSubmit(e, racialTraits)}>
+      <form className="relative w-full overflow-scroll pr-5 pb-5" onSubmit={(e) => handleSubmit(e, racialTraits)}>
         <Popup closerFunc={setEdit} toggle={edit}>
           <BoxSection styles="w-full h-full mx-auto flex flex-col place-self-center">
             <textarea
@@ -72,7 +72,7 @@ export const Trait = ({
   }
   if (description === "featureTraits") {
     return (
-      <form className="relative h-full w-full overflow-scroll" onSubmit={(e) => handleSubmit(e, featureTraits)}>
+      <form className="relative h-full w-full overflow-scroll pr-5 pb-5" onSubmit={(e) => handleSubmit(e, featureTraits)}>
         <Popup closerFunc={setEdit} toggle={edit}>
           <BoxSection styles="w-full h-full mx-auto flex flex-col place-self-center">
             <textarea

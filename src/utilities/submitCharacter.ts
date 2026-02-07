@@ -4,7 +4,7 @@ export const submitCharacter = async (characterProfile: any, user: string, gameM
     
     try {
         const { error } = await supabase
-            .from("characters")
+            .from(gameMode + "Characters")
             .insert({
                 name: characterProfile.name,
                 characterProfile: characterProfile,

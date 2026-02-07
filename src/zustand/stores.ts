@@ -7,9 +7,10 @@ export const useCharactersStore = create<CharactersStore>()(
     persist(
         (set) => ({
             characters: [],
-            setCharacters: async (id: string) => {
-                const res = await getData("characters", id);
+            setCharacters: async (id: string, table: string) => {
+                const res = await getData(table + "Characters", id);
                 set({ characters: res });
+                return res
             }
         }),
         {

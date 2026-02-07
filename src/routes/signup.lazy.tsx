@@ -30,7 +30,7 @@ function signUpScreen() {
   }
 
   return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full overflow-hidden">
+    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full flex grow overflow-hidden">
       <BoxSection styles="relative w-full gap-10 p-10 flex-col text-start overflow-y-hidden justify-center items-center">
         <Link to={"/"} className="font-bold uppercase text-neutral no-underline select-none">
           <img src={logo} className="" alt="Dash&Play Logo" />

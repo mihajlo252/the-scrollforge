@@ -27,14 +27,20 @@ function Profile() {
   const [isSave, setIsSave] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))) ?? "dnd");
+  const [noCharacters, setNoCharacters] = useState(false);
   const gameModeButton = useRef<HTMLButtonElement>(null);
 
   const { user } = JSON.parse(getUserFromLocal());
 
   const navigate = useNavigate();
 
-  const handleGetCharacter = () => {
-    setCharacters(user.id);
+  const handleGetCharacter = async () => {
+    let res = await setCharacters(user.id, gameMode);
+    if (res.length < 1) {
+      setNoCharacters(true);
+    } else {
+      setNoCharacters(false);
+    }
   };
 
   const handleNavigateToCharacter = (char: Character | DaggerheartCharacter) => {
@@ -55,27 +61,23 @@ function Profile() {
     setIsDelete(true);
   };
   const handleGameModeToggle = (e: MouseEvent) => {
+    e.preventDefault()
     if (gameMode === "dnd") {
       setGameMode("daggerheart");
-      localStorage.setItem("gameMode", "daggerheart");
-      (e.target as HTMLInputElement).innerText = "Dungeons&Dragons";
-      (e.target as HTMLInputElement).classList.remove("btn-accent");
-      (e.target as HTMLInputElement).classList.add("btn-primary");
     } else {
       setGameMode("dnd");
-      localStorage.setItem("gameMode", "dnd");
-      (e.target as HTMLInputElement).innerText = "Daggerheart";
-      (e.target as HTMLInputElement).classList.remove("btn-primary");
-      (e.target as HTMLInputElement).classList.add("btn-accent");
     }
   };
   const handleGameModeStart = () => {
     if (!gameModeButton.current) return;
+    handleGetCharacter();
     if (gameMode === "daggerheart") {
+      localStorage.setItem("gameMode", "daggerheart");
       gameModeButton.current.innerText = "Dungeons&Dragons";
       gameModeButton.current.classList.remove("btn-accent");
       gameModeButton.current.classList.add("btn-primary");
     } else {
+      localStorage.setItem("gameMode", "dnd");
       gameModeButton.current.innerText = "Daggerheart";
       gameModeButton.current.classList.remove("btn-primary");
       gameModeButton.current.classList.add("btn-accent");
@@ -83,9 +85,8 @@ function Profile() {
   };
 
   useEffect(() => {
-    handleGetCharacter();
     handleGameModeStart();
-  }, []);
+  }, [gameMode]);
 
   useEffect(() => {
     if (isDeleted || isSave) {
@@ -97,7 +98,7 @@ function Profile() {
 
   return (
     <CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
-      <motion.main className={`flex h-full w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <motion.main className={`flex h-full grow w-full gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <BoxSection styles="w-full flex flex-col items-start gap-5 p-5 relative">
           <section className="flex w-full justify-between">
             <h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
@@ -105,36 +106,31 @@ function Profile() {
               Daggerheart
             </button>
           </section>
-          <section className=" h-full w-full overflow-y-scroll">
+          <section className="h-full flex-1 w-full overflow-y-scroll">
+            {noCharacters && <p className="text-xl text-accent text-left w-max">Nothing forged yet!</p>}
             <ul className="flex w-full h-1 flex-col gap-2 text-xl">
-              {characters.filter((a: any) => a.gamemode === gameMode).length === 0 && (
-                <p className="text-xl text-accent text-left w-max">Nothing forged yet!</p>
-              )}
-              {characters
-                .filter((a: any) => a.gamemode === gameMode)
-                .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
-                .map((character) => (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
-                    key={character.id}
-                    className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
-                  >
-                    <Avatar bucket="characters" characterName={character.characterProfile.name.toLowerCase()} />
-                    {gameMode === "dnd" && <DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />}
-                    {gameMode === "daggerheart" && (
-                      <DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />
-                    )}
+              {characters.map((character) => (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
+                  key={character.id}
+                  className="relative flex w-full items-center gap-5 rounded-badge border-2 border-slate-900 p-2 transition-colors hover:cursor-pointer hover:bg-slate-800"
+                >
+                  <Avatar bucket="characters" characterName={character.name.toLowerCase()} />
+                  {gameMode === "dnd" && <DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />}
+                  {gameMode === "daggerheart" && (
+                    <DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />
+                  )}
 
-                    <DeleteButton
-                      size={60}
-                      styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary"
-                      event={() => handleDeletePopup(character)}
-                    />
-                  </motion.div>
-                ))}
+                  <DeleteButton
+                    size={60}
+                    styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary"
+                    event={() => handleDeletePopup(character)}
+                  />
+                </motion.div>
+              ))}
             </ul>
             <DeletePopup
               toggle={isDelete}
@@ -142,6 +138,7 @@ function Profile() {
               setDeleteID={setCharacterDelete}
               setIsDeleted={setIsDeleted}
               setIsDelete={setIsDelete}
+              gameMode={gameMode}
             />
           </section>
           <Popup toggle={openCreateCharacter} closerFunc={setOpenCreateCharacter}>

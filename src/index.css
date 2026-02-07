@@ -20,7 +20,7 @@
 body {
   height: 100svh;
 }
-html {
+html, body {
   overflow-x: hidden;
 }
 
@@ -29,6 +29,11 @@ pre {
 }
 
 html {
+  font-size: clamp(.8rem, 1.2vw, 1.2rem);
+  /* font-size: clamp(1rem, 0.8438rem + 0.5vw, 1.125rem); */
+}
+
+/* html {
   font-size: 130%;
 }
 
@@ -45,10 +50,15 @@ html {
 }
 
 @media (max-width: 1000px) {
+  html { 
+    font-size: 75%;
+  }
+}
+@media (max-width: 900px) {
   html {
     font-size: 60%;
   }
-}
+} */
 
 .dice-box-canvas {
   position: absolute;

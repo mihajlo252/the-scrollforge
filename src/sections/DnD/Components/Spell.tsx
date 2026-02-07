@@ -45,7 +45,7 @@ export const Spell = ({
     };
 
     return (
-        <BoxSection key={index} styles={`relative grid w-full grid-cols-[1fr_3fr] h-min gap-5 text-lg px-10 py-5 border-accent ${style}`}>
+        <BoxSection key={index} styles={`relative grid w-full min-h-[unset] grid-cols-[1fr_3fr] h-min gap-5 text-lg px-10 py-5 border-accent ${style}`}>
             <div className="flex flex-col gap-2">
                 <p className="grid text-sm">
                     <span className="text-3xl underline">{spell.name}</span>

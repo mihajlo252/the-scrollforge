@@ -70,10 +70,10 @@ function Inspiration() {
     };
 
     return (
-        <BoxSection styles="w-full flex gap-5 p-5 relative">
-            <form className="flex h-full w-full flex-col justify-center" onSubmit={(e) => handleSubmit(e)}>
+        <BoxSection styles="w-full flex gap-5 p-5 relative h-full grow">
+            <form className="flex w-full flex-1 flex-col justify-center" onSubmit={(e) => handleSubmit(e)}>
                 <motion.ul
-                    className="flex w-full flex-col-reverse items-start gap-2"
+                    className="flex w-full flex-col-reverse items-start justify-center gap-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                 >

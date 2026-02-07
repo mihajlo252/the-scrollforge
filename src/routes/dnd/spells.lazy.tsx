@@ -62,11 +62,11 @@ function Spells() {
   };
 
   return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full overflow-hidden">
+    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex h-full grow overflow-hidden">
       <button type="button" className="btn btn-accent absolute right-14 top-24 z-10" onClick={() => setAdd(true)}>
         Add
       </button>
-      <BoxSection styles="w-full h-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
+      <BoxSection styles="w-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
         {spells.map((spell: Spell, index: number) => (
           <Spell index={index} spell={spell} key={index} setSpells={setSpells} />
         ))}

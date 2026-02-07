@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { BoxSection } from "../../../components/BoxSection";
 // import { toast } from "../../../utilities/toasterSonner";
-import { StatBlock } from "../Components/StatBlock";
+import { StatBlock } from "./ComponentBlocks/StatBlock";
+import { ArmorBlock } from "./ComponentBlocks/ArmorBlock";
+import { StatHeadSVG } from "../../../components/StatHeadSVG";
+import { CirclesBlock } from "./ComponentBlocks/CirclesBlock";
+
+import ClassesData from "../../../daggerheart-config/classes.json";
+import { TraitsBlock } from "./ComponentBlocks/TraitsBlock";
 
 export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const { state } = JSON.parse(localStorage.getItem("character")!);
@@ -9,6 +15,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
   if (!character) return;
 
   const {
+    name,
     characterProfile,
     stats: { baseStats },
   } = character;
@@ -74,15 +81,11 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
 
   return (
     <BoxSection styles="flex gap-2 px-2 py-5">
-      <ul className="grid grid-cols-1 gap-2 w-max h-max px-2 py-1">
-        {Object.entries(baseStats).map((stat, i) => (
-          <StatBlock key={i} name={Object.values(stat)[0] as string} stat={Object.keys(stat)[0] as string} />
-        ))}
-      </ul>
-      <div>
+      <TraitsBlock traitList={baseStats}/>
+      <section className="flex flex-col gap-5">
         <div>
           <p className="text-2xl text-left">
-            {characterProfile.name}, Level{" "}
+            {name}, Level{" "}
             <input
               type="text"
               placeholder="0"
@@ -95,10 +98,30 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
             {characterProfile.ancestry} {characterProfile.community}, {characterProfile.class} {characterProfile.subclass}, {characterProfile.domains}
           </p>
         </div>
-        <div>
-          
+        <div className="place-self-start flex gap-5">
+          <StatBlock
+            name={"Evasion"}
+            stat={ClassesData.find((c: any) => c.name === characterProfile.class.toUpperCase())!.startingEvasion}
+            color="accent"
+          >
+            <StatHeadSVG stylesOutline={`stroke-accent transition-all fill-none`} stylesInline={`stroke-primary fill-none transition-all`} />
+          </StatBlock>
+          <ArmorBlock name={"Armor"} stat={3} />
         </div>
-      </div>
+        <div className="place-self-start flex flex-col gap-5">
+          <div className="flex gap-20 text-lg justify-center">
+            <p>Minor</p>
+
+            <p>Major</p>
+            <p>Severe</p>
+          </div>
+          <div className="grid grid-cols-[.3fr_1fr] gap-5">
+            <CirclesBlock name={"HP"} stat={ClassesData.find((c: any) => c.name === characterProfile.class.toUpperCase())!.startingHitPoints} max={12}/>
+            <CirclesBlock name={"Stress"} stat={6} max={12}/>
+            <CirclesBlock name={"Hope"} stat={6} max={6}/>
+          </div>
+        </div>
+      </section>
     </BoxSection>
   );
 

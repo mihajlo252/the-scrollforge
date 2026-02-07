@@ -61,17 +61,17 @@ function Attacks() {
   };
 
   return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full overflow-hidden">
+    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex h-full grow overflow-hidden">
       <button type="button" className="btn btn-accent absolute right-14 top-24 z-10" onClick={() => setAdd(true)}>
         Add
       </button>
-      <BoxSection styles="w-full h-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
+      <BoxSection styles="w-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
         {attacks.map((attack: Attack, index: number) => (
           <Weapon index={index} attack={attack} key={index} setAttacks={setAttacks} />
         ))}
         <Popup closerFunc={setAdd} toggle={add}>
           <form onSubmit={(e) => handleAddAttack(e)} className="flex w-min items-center justify-center">
-            <BoxSection styles="px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-start text-start">
+            <BoxSection styles="px-20 bg-opacity-90 flex-1 py-10 justify-center flex-col gap-5 items-start text-start">
               <input
                 type="text"
                 name="name"

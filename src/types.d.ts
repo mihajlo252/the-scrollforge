@@ -50,7 +50,6 @@ interface CharacterProfile {
     subrace: string;
 }
 interface CharacterProfileDaggerheart {
-    name: string,
     class: string,
     domains: string,
     level: number,
@@ -103,6 +102,7 @@ interface Stats {
 
 interface Character {
     id: string;
+    name: string;
     characterProfile: CharacterProfile;
     currentHP: number;
     stats: Stats;
@@ -112,6 +112,7 @@ interface Character {
 }
 interface DaggerheartCharacter {
     id: string;
+    name: string;
     characterProfile: CharacterProfileDaggerheart;
     currentHP: number;
     stats: Stats;
@@ -128,7 +129,7 @@ interface UserStore {
 
 interface CharactersStore {
     characters: Character[] | DaggerheartCharacter[];
-    setCharacters: (string) => Promise<void>;
+    setCharacters: (string, string) => Promise<any[]>;
 }
 
 interface CharacterStore {

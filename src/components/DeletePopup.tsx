@@ -8,15 +8,17 @@ export const DeletePopup = ({
   setIsDeleted,
   setIsDelete,
   toggle,
+  gameMode
 }: {
   deleteID: string;
   setDeleteID: React.Dispatch<React.SetStateAction<string>>;
   setIsDeleted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDelete: React.Dispatch<React.SetStateAction<boolean>>;
   toggle?: boolean;
+  gameMode: string;
 }) => {
   const handleDelete = async (id: string) => {
-    await deleteCharacter(id);
+    await deleteCharacter(id, gameMode);
     setIsDeleted(true);
     setIsDelete(false);
     setDeleteID("");

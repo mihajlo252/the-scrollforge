@@ -33,12 +33,12 @@ function signinScreen() {
   }, []);
 
   return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full overflow-hidden">
-      <BoxSection styles="relative w-full gap-10 p-10 flex-col text-start overflow-y-hidden justify-center items-center">
+    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex h-full grow ">
+      <BoxSection styles="relative w-full gap-10 p-10  flex-col text-start justify-center items-center">
         <Link to={"/"} className="font-bold uppercase text-neutral no-underline select-none">
           <img src={logo} className="" alt="Dash&Play Logo" />
         </Link>
-        <form className="self-center justify-self-center" onSubmit={(e) => login(e)}>
+        <form className="" onSubmit={(e) => login(e)}>
           <BoxSection styles="w-full flex flex-col gap-5 px-20 py-10">
             <div className="flex flex-col gap-2">
               <label htmlFor="email">Email:</label>
