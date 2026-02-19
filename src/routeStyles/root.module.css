@@ -1,0 +1,20 @@
+.main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: calc(100vw - 4rem);
+    gap: 1rem;
+    position: relative;
+    isolation: isolate;
+}
+.main::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-blend-mode: overlay;
+    background-clip: border-box;
+    background-image: url('/logo-wide.png');
+}

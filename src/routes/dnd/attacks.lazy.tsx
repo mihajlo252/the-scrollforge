@@ -1,9 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection";
+import { BoxSection } from "../../components/BoxSection/BoxSection";
 import { Weapon } from "../../sections/DnD/Components/Weapon";
 import React, { useState } from "react";
-import { Popup } from "../../components/Popup";
+import { Popup } from "../../components/Popup/Popup";
 import { sendData } from "../../utilities/sendData";
 
 export const Route = createLazyFileRoute("/dnd/attacks")({

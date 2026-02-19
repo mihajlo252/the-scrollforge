@@ -1,24 +1,23 @@
 import { useCanGoBack, useLocation, useRouter } from "@tanstack/react-router";
-import { BorderButton } from "./BorderButton";
-export const BackButton = ({ styles }: { styles?: string }) => {
+export const BackButton = ({ classes }: { classes?: string }) => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const location = useLocation();
   const path = location.pathname;
 
   return (
-    <BorderButton style={`${styles}`} event={() =>router.history.back()} disabled={path === "/profile" || !canGoBack}>
+    <button type="button" className={`${classes}`} onClick={() =>router.history.back()} disabled={path === "/profile" || !canGoBack}>
       {"<"}
-    </BorderButton>
+    </button>
   );
 };
 
-export const ForwardButton = ({ styles }: { styles?: string }) => {
+export const ForwardButton = ({ classes }: { classes?: string }) => {
   const router = useRouter();
 
   return (
-    <BorderButton style={`${styles}`} event={() => router.history.forward()}>
+    <button type="button" className={`${classes}`} onClick={() => router.history.forward()}>
       {">"}
-    </BorderButton>
+    </button>
   );
 };

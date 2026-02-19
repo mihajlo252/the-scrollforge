@@ -1,79 +1,74 @@
-import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { BoxSection } from "../components/BoxSection";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { BoxSection } from "../components/BoxSection/BoxSection";
+import { Logo } from "../components/Logo/Logo";
+
 import { useEffect, useState } from "react";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useUserStore } from "../zustand/stores";
 
-import logo from "/assets/the-scrollforge-logo.png";
+// import styles from "../routeStyles/index.module.css";
 
 export const Route = createLazyFileRoute("/")({
-  component: signinScreen,
+	component: signinScreen,
 });
 
 function signinScreen() {
-  const { setUser } = useUserStore();
+	const { setUser } = useUserStore();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 
-  let user = getUserFromLocal();
+	let user = getUserFromLocal();
 
-  const login = async (e: any) => {
-    e.preventDefault();
-    await setUser(email, password);
-    navigate({ to: "/profile" });
-  };
+	const login = async (e: any) => {
+		e.preventDefault();
+		await setUser(email, password);
+		navigate({ to: "/profile" });
+	};
 
-  useEffect(() => {
-    if (user) {
-      navigate({ to: "/profile" });
-    }
-  }, []);
+	useEffect(() => {
+		if (user) {
+			navigate({ to: "/profile" });
+		}
+	}, []);
 
-  return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex h-full grow ">
-      <BoxSection styles="relative w-full gap-10 p-10  flex-col text-start justify-center items-center">
-        <Link to={"/"} className="font-bold uppercase text-neutral no-underline select-none">
-          <img src={logo} className="" alt="Dash&Play Logo" />
-        </Link>
-        <form className="" onSubmit={(e) => login(e)}>
-          <BoxSection styles="w-full flex flex-col gap-5 px-20 py-10">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                placeholder="example@gmail.com"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="pass">Password:</label>
-              <input
-                type="password"
-                placeholder="*********"
-                id="pass"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Login
-            </button>
-            <p className="text-base-content">
-              Don't have an account?{" "}
-              <a className="link transition-colors hover:text-primary" onClick={() => navigate({ to: "/signup" })}>
-                Sign up here!
-              </a>
-            </p>
-          </BoxSection>
-        </form>
-      </BoxSection>
-    </motion.main>
-  );
+	return (
+		<BoxSection classes="row-direction">
+			<Logo />
+			<form className="form boxSection column-direction" onSubmit={(e) => login(e)}>
+				<div className="inputWrapper">
+					<label htmlFor="email">Email:</label>
+					<input
+						type="email"
+						placeholder="example@gmail.com"
+						id="email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						className="boxSection input"
+					/>
+				</div>
+				<div className="inputWrapper">
+					<label htmlFor="pass">Password:</label>
+					<input
+						type="password"
+						placeholder="*********"
+						id="pass"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						className="boxSection input"
+					/>
+				</div>
+				<button type="submit" className="button button-primary">
+					Log in
+				</button>
+				<p className="text-content">
+					Don't have an account?{" "}
+					<a onClick={() => navigate({ to: "/signup" })}>
+						Sign up here!
+					</a>
+				</p>
+			</form>
+		</BoxSection>
+	);
 }

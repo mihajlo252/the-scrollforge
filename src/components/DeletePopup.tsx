@@ -1,7 +1,6 @@
 import React from "react";
-import { BoxSection } from "./BoxSection";
 import { deleteCharacter } from "../utilities/deleteCharacter";
-import { Popup } from "./Popup";
+import { Popup } from "./Popup/Popup";
 export const DeletePopup = ({
   deleteID,
   setDeleteID,
@@ -17,7 +16,8 @@ export const DeletePopup = ({
   toggle?: boolean;
   gameMode: string;
 }) => {
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (e: React.FormEvent, id: string) => {
+    e.preventDefault()
     await deleteCharacter(id, gameMode);
     setIsDeleted(true);
     setIsDelete(false);
@@ -33,17 +33,17 @@ export const DeletePopup = ({
   // const MotionBoxSection = motion(BoxSection);
   return (
     <Popup closerFunc={setIsDelete} toggle={toggle}>
-      <BoxSection styles={`h-min px-10 py-16 flex flex-col gap-5`}>
+      <form className="boxSection form column-direction" onSubmit={(e) => handleDelete(e, deleteID)}>
         <p>Are you sure you want to continue?</p>
-        <div className="flex items-center justify-center gap-20">
-          <button type="button" className="btn btn-secondary" onClick={() => handleDelete(deleteID)}>
+        <div className="choices">
+          <button type="submit" className="button button-primary button-ghost">
             Yes
           </button>
-          <button type="button" className="btn btn-primary" onClick={handleCancel}>
+          <button type="button" className="button button-secondary button-ghost" onClick={handleCancel}>
             Cancel
           </button>
         </div>
-      </BoxSection>
+      </form>
     </Popup>
   );
 };

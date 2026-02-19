@@ -1,87 +1,80 @@
-import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { BoxSection } from "../components/BoxSection";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { BoxSection } from "../components/BoxSection/BoxSection";
 import { useState } from "react";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { signUp } from "../utilities/signUp";
 
-import logo from "/assets/the-scrollforge-logo.png";
+import { Logo } from "../components/Logo/Logo";
 
 export const Route = createLazyFileRoute("/signup")({
-  component: signUpScreen,
+	component: signUpScreen,
 });
 
 function signUpScreen() {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 
-  let user = getUserFromLocal();
+	let user = getUserFromLocal();
 
-  const newUserSignUp = async (e: any) => {
-    e.preventDefault();
-    await signUp(email, password, username);
-    navigate({ to: "/thanks" });
-  };
+	const newUserSignUp = async (e: any) => {
+		e.preventDefault();
+		const { error } = await signUp(email, password, username);
+		if (!error) {
+			navigate({ to: "/thanks" });
+		}
+	};
 
-  if (user) {
-    navigate({ to: "/profile" });
-  }
+	if (user) {
+		navigate({ to: "/profile" });
+	}
 
-  return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full flex grow overflow-hidden">
-      <BoxSection styles="relative w-full gap-10 p-10 flex-col text-start overflow-y-hidden justify-center items-center">
-        <Link to={"/"} className="font-bold uppercase text-neutral no-underline select-none">
-          <img src={logo} className="" alt="Dash&Play Logo" />
-        </Link>
-        <form onSubmit={(e) => newUserSignUp(e)}>
-          <BoxSection styles="w-full flex flex-col gap-5 px-20 py-10">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="username">Username:</label>
-              <input
-                type="text"
-                placeholder="Username"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                placeholder="example@gmail.com"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="pass">Password:</label>
-              <input
-                type="password"
-                placeholder="*********"
-                id="pass"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-            <p className="text-base-content">
-              Already have an account?{" "}
-              <a className="link transition-colors hover:text-primary" onClick={() => navigate({ to: "/" })}>
-                Sign in here!
-              </a>
-            </p>
-          </BoxSection>
-        </form>
-      </BoxSection>
-    </motion.main>
-  );
+	return (
+		<BoxSection classes="row-direction">
+			<Logo />
+			<form onSubmit={(e) => newUserSignUp(e)} className="boxSection column-direction form">
+				<div className="inputWrapper">
+					<label htmlFor="username">Username:</label>
+					<input
+						type="text"
+						placeholder="Username"
+						id="username"
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
+						className="boxSection input"
+					/>
+				</div>
+				<div className="inputWrapper">
+					<label htmlFor="email">Email:</label>
+					<input
+						type="email"
+						placeholder="example@gmail.com"
+						id="email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						className="boxSection input"
+					/>
+				</div>
+				<div className="inputWrapper">
+					<label htmlFor="pass">Password:</label>
+					<input
+						type="password"
+						placeholder="*********"
+						id="pass"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						className="boxSection input"
+					/>
+				</div>
+				<button type="submit" className={"button button-primary"}>Sign Up</button>
+				<p className="text-content">
+					Already have an account?{" "}
+					<a onClick={() => navigate({ to: "/" })}>
+						Sign in here!
+					</a>
+				</p>
+			</form>
+		</BoxSection>
+	);
 }

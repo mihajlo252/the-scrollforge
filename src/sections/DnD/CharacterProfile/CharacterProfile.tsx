@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { calculateModifiers } from "../../../utilities/calculateStats";
-import { BoxSection } from "../../../components/BoxSection";
+import { BoxSection } from "../../../components/BoxSection/BoxSection";
 import { toast } from "../../../utilities/toasterSonner";
 
 export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {

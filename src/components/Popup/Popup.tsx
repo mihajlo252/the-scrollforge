@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
+import styles from "./Popup.module.css"
 
 export const Popup = ({
   children,
@@ -16,7 +17,7 @@ export const Popup = ({
     <AnimatePresence>
       {toggle && (
         <motion.div
-          className="fixed left-0 top-0 isolate z-50 box-border flex h-full w-full flex-col items-center justify-center gap-5 px-10 py-5"
+          className={styles.popupWrapper}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

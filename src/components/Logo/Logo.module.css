@@ -1,0 +1,9 @@
+.logoWrapper {
+    max-width: max-content;
+    place-self: center;
+}
+.logo {
+    width: clamp(150px, 20vw, 300px);
+    width: calc(var(--size) * 1px);
+    user-select: none;
+}

@@ -4,7 +4,7 @@ import { sendTicket } from "../utilities/sendTickets";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { motion } from "framer-motion";
 import { toast } from "../utilities/toasterSonner";
-import { Popup } from "../components/Popup";
+import { Popup } from "../components/Popup/Popup";
 import { TicketLog } from "../sections/TicketLog";
 
 export const Route = createLazyFileRoute("/tickets")({
@@ -83,10 +83,10 @@ function Tickets() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="button button-primary">
           Submit
         </button>
-        <button type="button" className="btn btn-accent absolute top-5 left-5" onClick={() => setOpenTicketLog(true)}>
+        <button type="button" className="button button-accent" onClick={() => setOpenTicketLog(true)}>
           Ticket Log
         </button>
       </form>

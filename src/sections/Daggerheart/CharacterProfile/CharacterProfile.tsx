@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BoxSection } from "../../../components/BoxSection";
+import { BoxSection } from "../../../components/BoxSection/BoxSection";
 // import { toast } from "../../../utilities/toasterSonner";
 import { StatBlock } from "./ComponentBlocks/StatBlock";
 import { ArmorBlock } from "./ComponentBlocks/ArmorBlock";
@@ -80,7 +80,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
   };
 
   return (
-    <BoxSection styles="flex gap-2 px-2 py-5">
+    <BoxSection classes="flex gap-2 px-2 py-5">
       <TraitsBlock traitList={baseStats}/>
       <section className="flex flex-col gap-5">
         <div>

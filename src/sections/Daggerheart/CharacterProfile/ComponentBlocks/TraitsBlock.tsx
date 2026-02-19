@@ -1,7 +1,7 @@
 import { StatBlock } from "./StatBlock";
 import { StatHeadSVG } from "../../../../components/StatHeadSVG";
 import { useState } from "react";
-import { Popup } from "../../../../components/Popup";
+import { Popup } from "../../../../components/Popup/Popup";
 
 export const TraitsBlock = ({ traitList }: { traitList: [] }) => {
   const [openEdit, setOpenEdit] = useState(false);

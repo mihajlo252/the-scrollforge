@@ -2,7 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { sendData } from "../../utilities/sendData";
-import { BoxSection } from "../../components/BoxSection";
+import { BoxSection } from "../../components/BoxSection/BoxSection";
 
 import pink from "/assets/pink.svg";
 import white from "/assets/white.svg";

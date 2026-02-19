@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Trait } from "../../sections/DnD/Components/Trait";
-import { BoxSection } from "../../components/BoxSection";
+import { BoxSection } from "../../components/BoxSection/BoxSection";
 import { useState } from "react";
 
 export const Route = createLazyFileRoute("/dnd/traits")({

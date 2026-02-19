@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter, createHashHistory } from '@tanstack/react-router'
 import './index.css';
+import './global.css'
 
 
 // Import the generated route tree  
@@ -27,6 +28,6 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <RouterProvider router={router} />
-    </StrictMode>,
+    </StrictMode>
   )
 }

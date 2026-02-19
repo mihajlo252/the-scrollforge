@@ -1,12 +1,12 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection";
+import { BoxSection } from "../../components/BoxSection/BoxSection";
 import { Load } from "../../components/Load";
 import { DiceBoxComponent } from "../../sections/DiceBox";
 import { useEffect, useState } from "react";
 import { sendData } from "../../utilities/sendData";
-import { Popup } from "../../components/Popup";
+import { Popup } from "../../components/Popup/Popup";
 import { Notes } from "../../sections/Notes";
 import { CharacterProfile } from "../../sections/Daggerheart/CharacterProfile/CharacterProfile";
 // import ClassesData from "../../daggerheart-config/classes_cleaned.json"
@@ -23,7 +23,7 @@ function Character() {
   
   if (dev === "false") {
     return (
-      <BoxSection styles="w-full h-full flex flex-col justify-center items-center">
+      <BoxSection classes="w-full h-full flex flex-col justify-center items-center">
         <h1 className="text-primary text-4xl">Currently unavailable. Please check back later!</h1>
       </BoxSection>
     )
@@ -52,7 +52,7 @@ function Character() {
     <motion.main className={`grid flex-1 w-full grid-rows-[1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {isSave && (
         <button
-          className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
+          className="button button-primary button-ghost absolute top-5 m-0 h-min min-h-0 place-self-center"
           onClick={() => handleSaveCharacter(state.character.stats)}
         >
           Save Character
@@ -60,12 +60,12 @@ function Character() {
       )}
       <section className={`flex gap-5`}>
         <CharacterProfile setStatChange={setStatChange} />
-        <BoxSection styles="w-[10%] flex flex-col justify-start">
+        <BoxSection classes="w-[10%] flex flex-col justify-start">
           <nav className="flex flex-col gap-3 p-3">
-            <button onClick={() => setToggleNotes(true)} className="btn btn-primary">
+            <button onClick={() => setToggleNotes(true)} className="button button-primary">
               Notes
             </button>
-            <button className="btn btn-primary" onClick={() => setToggleDice(true)}>
+            <button className="button button-primary" onClick={() => setToggleDice(true)}>
               Dice
             </button>
           </nav>
@@ -78,7 +78,7 @@ function Character() {
         <Notes />
       </Popup>
       <Popup closerFunc={setToggleDice} toggle={toggleDice}>
-        <BoxSection styles="w-[20%] flex justify-around items-center p-5">
+        <BoxSection classes="w-[20%] flex justify-around items-center p-5">
           <DiceBoxComponent />
         </BoxSection>
       </Popup>

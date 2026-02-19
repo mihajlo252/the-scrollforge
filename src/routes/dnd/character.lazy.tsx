@@ -1,7 +1,7 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection";
+import { BoxSection } from "../../components/BoxSection/BoxSection";
 import { CharacterProfile } from "../../sections/DnD/CharacterProfile/CharacterProfile";
 import { HPBar } from "../../sections/DnD/Components/HPBar";
 import { Stats } from "../../sections/DnD/Components/Stats";
@@ -10,7 +10,7 @@ import { Bonuses } from "../../sections/DnD/Components/Bonuses";
 import { DiceBoxComponent } from "../../sections/DiceBox";
 import { useEffect, useState } from "react";
 import { sendData } from "../../utilities/sendData";
-import { Popup } from "../../components/Popup";
+import { Popup } from "../../components/Popup/Popup";
 import { Notes } from "../../sections/Notes";
 
 export const Route = createLazyFileRoute("/dnd/character")({
@@ -49,36 +49,36 @@ function Character() {
       )}
       <CharacterProfile setStatChange={setStatChange} />
       <section className={`flex gap-2`}>
-        <BoxSection styles="w-[50%] flex flex-col gap-2 p-5">
+        <BoxSection classes="w-[50%] flex flex-col gap-2 p-5">
           <Stats character={state.character} setStatChange={setStatChange} />
         </BoxSection>
         <div className={`flex h-full w-[40%] flex-col gap-2`}>
           <div className={`flex h-full w-full gap-2`}>
-            <BoxSection styles="w-[50%] flex justify-around items-center p-2">
+            <BoxSection classes="w-[50%] flex justify-around items-center p-2">
               <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
             </BoxSection>
-            <BoxSection styles="w-[50%] flex justify-around items-center p-5">
+            <BoxSection classes="w-[50%] flex justify-around items-center p-5">
               <DiceBoxComponent />
             </BoxSection>
           </div>
-          <BoxSection styles="w-full flex min-h-[unset] items-start p-5">
+          <BoxSection classes="w-full flex min-h-[unset] items-start p-5">
             <Bonuses character={state.character} setStatChange={setStatChange} />
           </BoxSection>
         </div>
-        <BoxSection styles="flex flex-1 flex-col gap-3 py-3 px-2 justify-center h-full w-full">
-            <Link to="/dnd/traits" className="btn btn-primary w-full">
+        <BoxSection classes="flex flex-1 flex-col gap-3 py-3 px-2 justify-center h-full w-full">
+            <Link to="/dnd/traits" className="button button-accent w-full">
               Traits
             </Link>
-            <Link to="/dnd/attacks" className="btn btn-primary w-full">
+            <Link to="/dnd/attacks" className="button button-accent w-full">
               Attacks
             </Link>
-            <Link to="/dnd/spells" className="btn btn-primary w-full">
+            <Link to="/dnd/spells" className="button button-accent w-full">
               Spells
             </Link>
-            <Link to="/dnd/inspiration" className="btn btn-primary w-full">
+            <Link to="/dnd/inspiration" className="button button-accent w-full">
               Inspiration
             </Link>
-            <button onClick={() => setToggleNotes(true)} className="btn btn-primary w-full">
+            <button onClick={() => setToggleNotes(true)} className="button button-accent w-full">
               Notes
             </button>
         </BoxSection>

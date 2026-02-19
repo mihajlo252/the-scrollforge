@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase/supabase";
 import { toast } from "../utilities/toasterSonner";
-import { BoxSection } from "../components/BoxSection";
+import { BoxSection } from "../components/BoxSection/BoxSection";
 
 export const TicketLog = () => {
   type Ticket = {

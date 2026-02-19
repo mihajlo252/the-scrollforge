@@ -1,6 +1,6 @@
-import { BoxSection } from "../../../components/BoxSection";
+import { BoxSection } from "../../../components/BoxSection/BoxSection";
 import { DeleteButton } from "../../../components/DeleteButton";
-import { Popup } from "../../../components/Popup";
+import { Popup } from "../../../components/Popup/Popup";
 import { useState } from "react";
 import { sendData } from "../../../utilities/sendData";
 
