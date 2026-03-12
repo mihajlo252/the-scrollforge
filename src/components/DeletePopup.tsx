@@ -35,7 +35,7 @@ export const DeletePopup = ({
     <Popup closerFunc={setIsDelete} toggle={toggle}>
       <form className="boxSection form column-direction" onSubmit={(e) => handleDelete(e, deleteID)}>
         <p>Are you sure you want to continue?</p>
-        <div className="choices">
+        <div className="sideBySide">
           <button type="submit" className="button button-primary button-ghost">
             Yes
           </button>

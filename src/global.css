@@ -1,6 +1,43 @@
+.h1 {
+	font-size: 60px;
+	@media (max-width: 768px) {
+		font-size: 48px;
+	}
+}
+.h2 {
+	font-size: 48px;
+	@media (max-width: 768px) {
+		font-size: 40px;
+	}
+}
 
+.h3 {
+	font-size: 36px;
+	@media (max-width: 768px) {
+		font-size: 28px;
+	}
+}
 
+.h4 {
+	font-size: 28px;
+	@media (max-width: 768px) {
+		font-size: 24px;
+	}
+}
 
+.h5 {
+	font-size: 24px;
+	@media (max-width: 768px) {
+		font-size: 20px;
+	}
+}
+
+.h6 {
+	font-size: 20px;
+	@media (max-width: 768px) {
+		font-size: 16px;
+	}
+}
 
 .form {
 	width: fit-content;
@@ -48,10 +85,10 @@
 .button {
 	text-align: center;
 	transition:
-		background-color .5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-		border-color .5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-		color .5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-		scale .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+		border-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+		color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+		scale 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	cursor: pointer;
 	padding: 0.5rem 1rem;
 	border-radius: 100vh;
@@ -96,12 +133,25 @@
 	}
 }
 
-.choices {
+.sideBySide {
 	display: flex;
 	flex-direction: row;
-	gap: 1rem;
+	gap: 0.5rem;
 	justify-content: center;
 	align-items: center;
+	&.apart {
+		gap: 1rem;
+		justify-content: space-between;
+	}
+}
+@media (max-width: 768px) {
+	.sideBySide {
+		flex-direction: row;
+		align-items: center;
+		&.apart {
+			flex-direction: column;
+		}
+	}
 }
 .list {
 	display: grid;
@@ -126,7 +176,7 @@
 	background-color: transparent;
 	color: var(--_bg);
 	border-width: 2px;
-	
+
 	&:hover {
 		background-color: var(--_bg);
 		color: var(--_color);
@@ -139,8 +189,8 @@
 	a {
 		color: var(--_color);
 		transition:
-			color .5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-			text-decoration .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+			color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+			text-decoration 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		cursor: pointer;
 		text-decoration: underline;
 	}

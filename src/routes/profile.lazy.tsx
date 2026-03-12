@@ -97,18 +97,18 @@ function Profile() {
 	return (
 		<CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
 			<BoxSection classes="column-direction">
-				<section className="flex w-full justify-between">
-					<div className="choices">
-						<h1 className="text-5xl text-primary">{user.user_metadata.username}</h1>
+				<section className="sideBySide apart">
+					<h1 className="h1 text-primary">{user.user_metadata.username}</h1>
+					<div className="sideBySide">
+						<button ref={gameModeButton} className="button button-accent" onClick={handleGameModeToggle}>
+							Daggerheart
+						</button>
 						<button onClick={() => setOpenCreateCharacter(true)} className="button button-primary button-ghost">
 							Create character
 						</button>
 					</div>
-					<button ref={gameModeButton} className="button button-accent " onClick={handleGameModeToggle}>
-						Daggerheart
-					</button>
 				</section>
-				<section className="flex-1 w-full overflow-y-scroll">
+				<section className="">
 					{noCharacters && <p className="text-xl text-accent text-left w-max">Nothing forged yet!</p>}
 					<ul className="flex w-full h-1 flex-col gap-2 text-xl">
 						{characters.map((character) => (

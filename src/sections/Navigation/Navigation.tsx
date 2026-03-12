@@ -75,7 +75,7 @@ export const Navigation = () => {
 			<Popup closerFunc={setOpenSignOut} toggle={openSignOut}>
 				<form className="boxSection form column-direction" onSubmit={handleSignOut}>
 					<p>Are you sure you want to sign out?</p>
-					<div className="choices">
+					<div className="sideBySide">
 						<button type="submit" className="button button-primary button-ghost">
 							Yes
 						</button>
