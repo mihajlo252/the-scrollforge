@@ -3,7 +3,7 @@
     place-self: center;
 }
 .logo {
-    width: clamp(150px, 20vw, 300px);
-    width: calc(var(--size) * 1px);
+    --size: clamp(250px, 20vw, 300px);
+    width: var(--size);
     user-select: none;
 }

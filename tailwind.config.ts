@@ -1,13 +1,15 @@
 /** @type {import('tailwindcss').Config} */
-import daisyui from "daisyui";
+// import daisyui from "daisyui";
 import cornerShape from "@toolwind/corner-shape"
 
 export default {
-	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+	// content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+	// content: ["./index.html"],
 	theme: {
 		
 	},
-	plugins: [daisyui, cornerShape],
+	// plugins: [daisyui, cornerShape],
+	plugins: [ cornerShape],
 	daisyui: {
 		themes: [
 			{

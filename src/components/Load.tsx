@@ -1,6 +1,4 @@
-
-
 export const Load = () => {
 
-    return <div>Loading...</div>;
+    return <div className="loader"></div>;
 };

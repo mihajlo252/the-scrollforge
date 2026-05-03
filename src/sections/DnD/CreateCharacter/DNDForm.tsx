@@ -1,5 +1,5 @@
 import React from "react";
-import { BoxSection } from "../../../components/BoxSection/BoxSection";
+import { Frame } from "../../../components/Frame/Frame";
 
 export const DNDForm = ({
   children,
@@ -13,7 +13,7 @@ export const DNDForm = ({
   handleCreateCharacter: (e: React.FormEvent) => Promise<void>;
 }) => {
   return (
-    <BoxSection classes="column-direction">
+    <Frame classes="column-direction">
       <h2 className="text-4xl font-bold">Create Your Character</h2>
       <form className="flex w-full flex-col gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
         <input
@@ -58,6 +58,6 @@ export const DNDForm = ({
         />
         {children}
       </form>
-    </BoxSection>
+    </Frame>
   );
 };

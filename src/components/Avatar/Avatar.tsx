@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
-import { Popup } from "./Popup/Popup";
-import { supabase } from "../supabase/supabase";
-import { toast } from "../utilities/toasterSonner";
+import { useState } from "react";
+import { Popup } from "../Popup/Popup";
+import { supabase } from "../../supabase/supabase";
+import { toast } from "../../utilities/toasterSonner";
+import styles from "./Avatar.module.css";
+import { AvatarIcon } from "../Primitives";
 
-export const Avatar = ({ bucket, characterName }: { bucket: string; characterName: string }) => {
+export const Avatar = ({ characterName, characterClass }: { characterName: string, characterClass: string }) => {
 	const [imageSrc, setImageSrc] = useState<string>(
-		import.meta.env.VITE_PUBLIC_SUPABASE_URL + "/storage/v1/object/public/" + `${bucket}/${characterName}.png`,
+		import.meta.env.VITE_PUBLIC_SUPABASE_URL + "/storage/v1/object/public/" + `characters/${characterName}.png`,
 	);
 	const [edit, setEdit] = useState(false);
-	const [isAlt, setIsAlt] = useState(true);
-
-	const handleGetImageFromStorage = async () => {
-		fetch(imageSrc, { method: "HEAD" }).then(async (r) => {
-			if (r.ok) {
-				setIsAlt(false);
-			}
-		});
-	};
+	const [placeholder, setPlaceholder] = useState(false);
 
 	const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -31,7 +25,6 @@ export const Avatar = ({ bucket, characterName }: { bucket: string; characterNam
 			return;
 		}
 		setEdit(false);
-		setIsAlt(false);
 		setImageSrc((prev) => `${prev}?t=${Date.now()}`);
 		toast({ style: "bg-primary text-base-100", message: "Image changed!" });
 	};
@@ -41,36 +34,23 @@ export const Avatar = ({ bucket, characterName }: { bucket: string; characterNam
 		await supabase.storage.from("characters").remove([`${characterName}.png`]);
 		setImageSrc((prev) => `${prev}?t=${Date.now()}`);
 		setEdit(false);
-		setIsAlt(true);
 		toast({ style: "bg-primary text-base-100", message: "Image removed!" });
 	};
 
-	useEffect(() => {
-		handleGetImageFromStorage();
-	}, []);
-
 	return (
 		<>
-			<button
-				type="button"
-				className="relative aspect-square w-24 overflow-hidden rounded-badge border-2 border-slate-900"
-				onClick={() => setEdit(true)}
-			>
-				<img
-					src={imageSrc}
-					onError={() => setIsAlt(true)}
-					alt={(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}
-					className={`object-cover object-top text-center text-4xl text-primary transition-opacity ${isAlt && "opacity-0"}`}
-				/>
-				<div
-					className={`absolute inset-0 place-content-center text-center text-4xl text-primary transition-opacity opacity-0 ${isAlt && "opacity-100"}`}
-				>
-					<p>{(characterName.charAt(0) + characterName.charAt(1)).toUpperCase()}</p>
-				</div>
-				<div className="absolute inset-0 place-content-center bg-black/50 text-lg opacity-0 transition-opacity hover:opacity-100">
+			<div className={`${styles.avatar}`}>
+				{!placeholder ? (
+					<img src={imageSrc} onError={() => setPlaceholder(true)} />
+				) : (
+					<div className={`${styles.placeholder}`}>
+						<AvatarIcon name={"cleric"} size={64} fillClr="var(--accent)" strokeClr="var(--accent)" />
+					</div>
+				)}
+				<button onClick={() => setEdit(true)}>
 					<p>Edit</p>
-				</div>
-			</button>
+				</button>
+			</div>
 			<Popup closerFunc={setEdit} toggle={edit}>
 				<form onSubmit={handleSave} className="flex flex-col gap-5">
 					<h2 className="mb-10 text-3xl text-accent">Upload Image</h2>

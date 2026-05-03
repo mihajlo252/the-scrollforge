@@ -1,22 +1,26 @@
 import { CatchBoundary, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-
-import { MouseEvent, useEffect, useRef, useState } from "react";
-import { useCharactersStore, useCharacterStore } from "../zustand/stores";
-import { BoxSection } from "../components/BoxSection/BoxSection";
-import { getUserFromLocal } from "../utilities/getUserFromLocal";
+import { MouseEvent, useEffect, useState } from "react";
+import { useCharactersStore, useCharacterStore, useUserStore } from "../zustand/stores";
 import { DeletePopup } from "../components/DeletePopup";
-import { DeleteButton } from "../components/DeleteButton";
 import { CreateCharacter } from "../sections/CreateCharacter";
-import { Avatar } from "../components/Avatar";
-import { DNDCharacter } from "../sections/DnD/CharacterProfile/DNDCharacter";
-import { DaggerheartCharacter } from "../sections/Daggerheart/CharacterProfile/DaggerheartCharacter";
+import { Avatar } from "../components/Avatar/Avatar";
 import { Popup } from "../components/Popup/Popup";
+import styles from "../routeStyles/profile.module.css";
+import { Icon, RuneDivider } from "../components/Primitives";
+import { activeButtonsToggle } from "../utilities/utilityFunctions";
 
 export const Route = createLazyFileRoute("/profile")({
 	component: Profile,
 });
 
+const filters = [
+	{ name: "All", val: "all" },
+	{ name: "Daggerheart", val: "daggerheart" },
+	{ name: "Dungeons&Dragons", val: "dnd" },
+];
+
 function Profile() {
+	const { user } = useUserStore();
 	const { characters, setCharacters }: CharactersStore = useCharactersStore();
 	const { setCharacter }: CharacterStore = useCharacterStore();
 	const [isDeleted, setIsDeleted] = useState(false);
@@ -24,16 +28,15 @@ function Profile() {
 	const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
 	const [isSave, setIsSave] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
-	const [gameMode, setGameMode] = useState<string>(JSON.parse(JSON.stringify(localStorage.getItem("gameMode"))) ?? "dnd");
 	const [noCharacters, setNoCharacters] = useState(false);
-	const gameModeButton = useRef<HTMLButtonElement>(null);
-
-	const { user } = JSON.parse(getUserFromLocal());
+	const [gameMode, setGameMode] = useState("dnd");
+	const [charFilter, setCharFilter] = useState("all");
 
 	const navigate = useNavigate();
 
 	const handleGetCharacter = async () => {
-		let res = await setCharacters(user.id, gameMode);
+		if (!user) return;
+		let res = await setCharacters(user!.id);
 		if (res.length < 1) {
 			setNoCharacters(true);
 		} else {
@@ -42,49 +45,29 @@ function Profile() {
 	};
 
 	const handleNavigateToCharacter = (char: Character | DaggerheartCharacter) => {
-		if (gameMode === "dnd") {
+		if (char.gamemode === "dnd") {
 			setCharacter(char as Character);
-			setGameMode("dnd");
-			localStorage.setItem("gameMode", "dnd");
 		} else {
 			setCharacter(char as DaggerheartCharacter);
-			setGameMode("daggerheart");
-			localStorage.setItem("gameMode", "daggerheart");
 		}
-		navigate({ to: "/" + gameMode + "/character/" });
+		navigate({ to: "/" + char.gamemode + "/character/" });
 	};
 
 	const handleDeletePopup = (char: Character | DaggerheartCharacter) => {
 		setCharacterDelete(char.id);
 		setIsDelete(true);
 	};
-	const handleGameModeToggle = (e: MouseEvent) => {
+	const handleGameModeToggle = (e: MouseEvent, gm: string) => {
 		e.preventDefault();
-		if (gameMode === "dnd") {
-			setGameMode("daggerheart");
-		} else {
-			setGameMode("dnd");
-		}
-	};
-	const handleGameModeStart = () => {
-		if (!gameModeButton.current) return;
-		handleGetCharacter();
-		if (gameMode === "daggerheart") {
-			localStorage.setItem("gameMode", "daggerheart");
-			gameModeButton.current.innerText = "Dungeons&Dragons";
-			gameModeButton.current.classList.remove("button-accent");
-			gameModeButton.current.classList.add("button-primary");
-		} else {
-			localStorage.setItem("gameMode", "dnd");
-			gameModeButton.current.innerText = "Daggerheart";
-			gameModeButton.current.classList.remove("button-primary");
-			gameModeButton.current.classList.add("button-accent");
-		}
+		activeButtonsToggle(e);
+		setGameMode(gm);
 	};
 
-	useEffect(() => {
-		handleGameModeStart();
-	}, [gameMode]);
+	const handleFilterCharacters = (e: MouseEvent, val: string) => {
+		e.preventDefault();
+		setCharFilter(val);
+		activeButtonsToggle(e);
+	};
 
 	useEffect(() => {
 		if (isDeleted || isSave) {
@@ -94,62 +77,151 @@ function Profile() {
 		setIsSave(false);
 	}, [isDeleted, isSave]);
 
+	useEffect(() => {
+		handleGetCharacter();
+	}, []);
+
 	return (
 		<CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
-			<BoxSection classes="column-direction">
-				<section className="sideBySide apart">
-					<h1 className="h1 text-primary">{user.user_metadata.username}</h1>
-					<div className="sideBySide">
-						<button ref={gameModeButton} className="button button-accent" onClick={handleGameModeToggle}>
-							Daggerheart
-						</button>
-						<button onClick={() => setOpenCreateCharacter(true)} className="button button-primary button-ghost">
-							Create character
-						</button>
-					</div>
+			<section className="column-direction stretch">
+				<section className="side-by-side apart">
+					<h2 className="text-content text-primary">
+						<span className="small-eyebrow">Welcome back,</span>
+						{user?.user_metadata.username}
+					</h2>
+					<button type="button" onClick={() => setOpenCreateCharacter(true)} className="button button-primary">
+						Create character
+					</button>
 				</section>
-				<section className="">
-					{noCharacters && <p className="text-xl text-accent text-left w-max">Nothing forged yet!</p>}
-					<ul className="flex w-full h-1 flex-col gap-2 text-xl">
-						{characters.map((character) => (
-							<BoxSection key={character.id} hoverable>
-								<Avatar bucket="characters" characterName={character.name.toLowerCase()} />
-								{gameMode === "dnd" && (
-									<DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />
-								)}
-								{gameMode === "daggerheart" && (
-									<DaggerheartCharacter
-										character={character as DaggerheartCharacter}
-										handleNavigateToCharacter={handleNavigateToCharacter}
-									/>
-								)}
-
-								<DeleteButton
-									size={60}
-									styles=" transition-colors rounded-badge  fill-base-300 hover:fill-slate-900 hover:stroke-secondary stroke-primary"
-									event={() => handleDeletePopup(character)}
+				<RuneDivider />
+				<section className={`frame ${styles.filter}`}>
+					{filters.map((filter) => (
+						<button key={filter.val} className="button button-primary" onClick={(e) => handleFilterCharacters(e, filter.val)}>
+							{filter.name}
+						</button>
+					))}
+				</section>
+				{noCharacters && <p className="text-xl text-accent text-left w-max">Nothing forged yet!</p>}
+				<ul className={`${styles.characterList}`}>
+					{characters
+						.filter((character) => {
+							if (charFilter === "all") return character;
+							return character.gamemode === charFilter;
+						})
+						.map((character) => (
+							<section className={`frame hoverable ${styles.characterCard}`} key={character.id}>
+								<CharacterCard character={character} handleNavigateToCharacter={handleNavigateToCharacter} />
+								<div className="side-by-side">
+									<button className="button button-primary" onClick={() => handleNavigateToCharacter(character)}>
+										Unravel
+									</button>
+									<button className={`button button-secondary ${styles.delete}`} onClick={() => handleDeletePopup(character)}>
+										<Icon name="trash" size={14} />
+									</button>
+								</div>
+								<DeletePopup
+									toggle={isDelete}
+									deleteID={characterDelete}
+									setDeleteID={setCharacterDelete}
+									setIsDeleted={setIsDeleted}
+									setIsDelete={setIsDelete}
 								/>
-							</BoxSection>
+							</section>
 						))}
-					</ul>
-					<DeletePopup
-						toggle={isDelete}
-						deleteID={characterDelete}
-						setDeleteID={setCharacterDelete}
-						setIsDeleted={setIsDeleted}
-						setIsDelete={setIsDelete}
-						gameMode={gameMode}
-					/>
-				</section>
+				</ul>
 				<Popup toggle={openCreateCharacter} closerFunc={setOpenCreateCharacter}>
-					<CreateCharacter
-						openCreateCharacter={openCreateCharacter}
-						setOpenCreateCharacter={setOpenCreateCharacter}
-						setIsSave={setIsSave}
-						gameMode={gameMode}
-					/>
+					<section className={`frame column-direction ${styles.characterPopup}`}>
+						<h3 style={{ textAlign: "center" }}>Choose System</h3>
+						<RuneDivider />
+						<div className="side-by-side">
+							<button
+								className="button button-primary"
+								data-active={gameMode === "dnd" && "true"}
+								onClick={(e) => handleGameModeToggle(e, "dnd")}
+							>
+								Dungeons&Dragons
+							</button>
+							<button
+								className="button button-accent"
+								data-active={gameMode === "daggerheart" && "true"}
+								onClick={(e) => handleGameModeToggle(e, "daggerheart")}
+							>
+								Daggerheart
+							</button>
+						</div>
+						<CreateCharacter
+							openCreateCharacter={openCreateCharacter}
+							setOpenCreateCharacter={setOpenCreateCharacter}
+							setIsSave={setIsSave}
+							gameMode={gameMode}
+						/>
+					</section>
 				</Popup>
-			</BoxSection>
+			</section>
 		</CatchBoundary>
 	);
 }
+
+const DNDCharacter = ({
+	character,
+	handleNavigateToCharacter,
+}: {
+	character: Character;
+	handleNavigateToCharacter: (char: Character | DaggerheartCharacter) => void;
+}) => {
+	return (
+		<li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
+			<div className="text-start">
+				<p>
+					{character.characterProfile.name}, {character.characterProfile.level}
+				</p>
+				<p>
+					{character.characterProfile.race} {character.characterProfile?.subrace}, {character.characterProfile.class}{" "}
+					{character.characterProfile?.subclass}
+				</p>
+			</div>
+		</li>
+	);
+};
+
+const DaggerheartCharacter = ({
+	character,
+	handleNavigateToCharacter,
+}: {
+	character: DaggerheartCharacter;
+	handleNavigateToCharacter: (char: DaggerheartCharacter) => void;
+}) => {
+	return (
+		<li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
+			<div className="text-start">
+				<p>
+					{character.name}, {character.characterProfile.level}
+				</p>
+				<p>
+					{character.characterProfile.ancestry} {character.characterProfile.community}, {character.characterProfile.class}{" "}
+					{character.characterProfile?.subclass}, {character.characterProfile?.domains}
+				</p>
+			</div>
+		</li>
+	);
+};
+
+const CharacterCard = ({
+	character,
+	handleNavigateToCharacter,
+}: {
+	character: Character | DaggerheartCharacter;
+	handleNavigateToCharacter: (char: Character | DaggerheartCharacter) => void;
+}) => {
+	return (
+		<div className={`${styles.details}`}>
+			<Avatar characterName={character.name.toLowerCase()} characterClass={character.characterProfile.class}/>
+			{character.gamemode === "dnd" && (
+				<DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />
+			)}
+			{character.gamemode === "daggerheart" && (
+				<DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />
+			)}
+		</div>
+	);
+};

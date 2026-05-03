@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { sendData } from "../../../utilities/sendData";
 import { Popup } from "../../../components/Popup/Popup";
-import { BoxSection } from "../../../components/BoxSection/BoxSection";
+import { Frame } from "../../../components/Frame/Frame";
 
 export const Trait = ({
   setEdit,
@@ -46,14 +46,14 @@ export const Trait = ({
     return (
       <form className="relative w-full overflow-scroll pr-5 pb-5" onSubmit={(e) => handleSubmit(e, racialTraits)}>
         <Popup closerFunc={setEdit} toggle={edit}>
-          <BoxSection styles="w-full h-full mx-auto flex flex-col place-self-center">
+          <Frame styles="w-full h-full mx-auto flex flex-col place-self-center">
             <textarea
               className="text-md h-full resize-none overflow-y-auto rounded-lg bg-base-300 p-5"
               placeholder="What's on your mind?"
               value={racialTraits}
               onChange={(e) => handleSetTraits(e, setRacialTraits)}
             />
-          </BoxSection>
+          </Frame>
           <div className="flex flex-row gap-5">
             <button type="submit" className="btn btn-accent">
               Save
@@ -74,14 +74,14 @@ export const Trait = ({
     return (
       <form className="relative h-full w-full overflow-scroll pr-5 pb-5" onSubmit={(e) => handleSubmit(e, featureTraits)}>
         <Popup closerFunc={setEdit} toggle={edit}>
-          <BoxSection styles="w-full h-full mx-auto flex flex-col place-self-center">
+          <Frame styles="w-full h-full mx-auto flex flex-col place-self-center">
             <textarea
               className="text-md h-full w-full resize-none overflow-y-auto rounded-lg bg-base-300 px-5"
               placeholder="What's on your mind?"
               value={featureTraits}
               onChange={(e) => handleSetTraits(e, setFeatureTraits)}
             />
-          </BoxSection>
+          </Frame>
           <div className="flex flex-row gap-5">
             <button type="submit" className="btn btn-accent">
               Save

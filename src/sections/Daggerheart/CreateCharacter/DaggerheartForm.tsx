@@ -4,7 +4,7 @@ import DaggerheartSubclasses from "../../../daggerheart-config/subclasses.json";
 import DaggerheartAncestries from "../../../daggerheart-config/ancestries.json";
 import DaggerheartCommunities from "../../../daggerheart-config/communities.json";
 import { Capitalize } from "../../../utilities/capitalize";
-import { BoxSection } from "../../../components/BoxSection/BoxSection";
+import { Frame } from "../../../components/Frame/Frame";
 import { ClassDescriptions } from "../DaggerheartDescriptions/ClassDescriptions";
 import { AncestryDescriptions } from "../DaggerheartDescriptions/AncestryDescriptions";
 import { CommunityDescriptions } from "../DaggerheartDescriptions/CommunityDescriptions";
@@ -52,6 +52,7 @@ export const DaggerheartForm = ({
 	useEffect(() => {
 		setCharacterProfileDaggerheart({
 			...characterProfileDaggerheart,
+			name: "",
 			class: "Bard",
 			level: 1,
 			subclass: "Troubadour",
@@ -63,7 +64,7 @@ export const DaggerheartForm = ({
 	}, []);
 
 	return (
-		<BoxSection classes="row-direction">
+		<Frame classes="row-direction">
 			<div className="column-direction center">
 				<h2 className="text-4xl font-bold">Create Your Character</h2>
 				<form className="grid grid-cols-4 w-full gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
@@ -159,6 +160,6 @@ export const DaggerheartForm = ({
 					<CommunityDescriptions name={currentSelectedDataType.name} communities={DaggerheartCommunities} />
 				)}
 			</div>
-		</BoxSection>
+		</Frame>
 	);
 };

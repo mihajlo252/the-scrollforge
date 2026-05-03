@@ -1,4 +1,4 @@
-import { BoxSection } from "../../../components/BoxSection/BoxSection";
+import { Frame } from "../../../components/Frame/Frame";
 import { DeleteButton } from "../../../components/DeleteButton";
 import { Popup } from "../../../components/Popup/Popup";
 import { useState } from "react";
@@ -45,7 +45,7 @@ export const Weapon = ({
     setIsDelete(false);
   };
   return (
-    <BoxSection key={index} styles={`relative grid w-full min-h-[unset] grid-cols-[1fr_3fr] gap-5 text-lg px-10 py-5 border-accent ${style}`}>
+    <Frame key={index} styles={`relative grid w-full min-h-[unset] grid-cols-[1fr_3fr] gap-5 text-lg px-10 py-5 border-accent ${style}`}>
       <div className="flex flex-col gap-2">
         <p className="grid text-sm">
           <span className="text-3xl underline">{attack.name}</span>
@@ -82,6 +82,6 @@ export const Weapon = ({
           </span>
         ))}
       </p>
-    </BoxSection>
+    </Frame>
   );
 };

@@ -7,8 +7,8 @@ export const useCharactersStore = create<CharactersStore>()(
     persist(
         (set) => ({
             characters: [],
-            setCharacters: async (id: string, table: string) => {
-                const res = await getData(table + "Characters", id);
+            setCharacters: async (id: string) => {
+                const res = await getData("characters", id);
                 set({ characters: res });
                 return res
             }
@@ -36,13 +36,12 @@ export const useCharacterStore = create<CharacterStore>()(
 export const useUserStore = create<UserStore>()(
     persist(
         (set) => ({
-            user: "",
+            user: null,
             setUser: async (email: string, password: string) => {
-                
                 const data = await signIn(email, password);
-                set({ user: data.user.id });
+                set({ user: data.user });
             },
-            removeUser: () => set({ user: "" }),
+            removeUser: () => set({ user: null }),
         }),
         {
             name: "characters",

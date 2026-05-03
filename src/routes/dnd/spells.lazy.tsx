@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection/BoxSection";
+import { Frame } from "../../components/Frame/Frame";
 import { Spell } from "../../sections/DnD/Components/Spell";
 import { Popup } from "../../components/Popup/Popup";
 import { useState } from "react";
@@ -66,13 +66,13 @@ function Spells() {
       <button type="button" className="btn btn-accent absolute right-14 top-24 z-10" onClick={() => setAdd(true)}>
         Add
       </button>
-      <BoxSection styles="w-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
+      <Frame styles="w-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
         {spells.map((spell: Spell, index: number) => (
           <Spell index={index} spell={spell} key={index} setSpells={setSpells} />
         ))}
         <Popup closerFunc={setAdd} toggle={add}>
           <form onSubmit={(e) => handleAddSpell(e)} className="flex w-min items-center justify-center">
-            <BoxSection styles="px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-start text-start">
+            <Frame styles="px-20 bg-opacity-90 py-10 justify-center flex-col gap-5 items-start text-start">
               <input
                 type="text"
                 name="name"
@@ -138,10 +138,10 @@ function Spells() {
                   Close
                 </button>
               </div>
-            </BoxSection>
+            </Frame>
           </form>
         </Popup>
-      </BoxSection>
+      </Frame>
     </motion.main>
   );
 }

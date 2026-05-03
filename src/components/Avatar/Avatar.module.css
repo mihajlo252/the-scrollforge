@@ -1,0 +1,69 @@
+.avatar {
+    --_transition-duration: .7s;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: clamp( 60px, 10vw, 100px);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid hsl(from var(--primary) h s calc(l - 40) / 1);
+    isolation: isolate;
+    corner-shape: superellipse(2);
+    > * {
+        grid-area: 1 / 1;
+    }
+    .placeholder {
+        background-color: hsl(from var(--accent) h s l / .2);
+        color: var(--primary);
+        width: inherit;
+        aspect-ratio: 1;
+        place-content: center;
+        text-align: center;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 1;
+        transition: opacity var(--_transition-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    &:hover .placeholder {
+        opacity: 0;
+    }
+    object, img {
+        width: inherit;
+        aspect-ratio: 1;
+        background-size: cover;
+        object-fit: cover;
+        pointer-events: none;
+    }
+    button {
+        background: hsla(from var(--background) h s l / .6);
+        width: 100%;
+        aspect-ratio: 1;
+        border: none;
+        opacity: 0;
+        color: var(--text);
+        box-shadow: none;
+        transition: opacity var(--_transition-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    }
+    button:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+}
+
+.avatar::before {
+	content: "";
+	position: absolute;
+	inset: -1.5px;
+	z-index: -2;
+	background: 
+    /* top-left */
+		linear-gradient(var(--_gold), var(--_gold)) top left / var(--_corner-size) var(--_corner-w) no-repeat,
+		linear-gradient(var(--_gold), var(--_gold)) top left / var(--_corner-w) var(--_corner-size) no-repeat,
+		/* top-right */ linear-gradient(var(--_gold), var(--_gold)) top right / var(--_corner-size) var(--_corner-w) no-repeat,
+		linear-gradient(var(--_gold), var(--_gold)) top right / var(--_corner-w) var(--_corner-size) no-repeat,
+		/* bottom-left */ linear-gradient(var(--_gold), var(--_gold)) bottom left / var(--_corner-size) var(--_corner-w) no-repeat,
+		linear-gradient(var(--_gold), var(--_gold)) bottom left / var(--_corner-w) var(--_corner-size) no-repeat,
+		/* bottom-right */ linear-gradient(var(--_gold), var(--_gold)) bottom right / var(--_corner-size) var(--_corner-w) no-repeat,
+		linear-gradient(var(--_gold), var(--_gold)) bottom right / var(--_corner-w) var(--_corner-size) no-repeat;
+}

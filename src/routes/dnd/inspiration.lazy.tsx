@@ -2,7 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { sendData } from "../../utilities/sendData";
-import { BoxSection } from "../../components/BoxSection/BoxSection";
+import { Frame } from "../../components/Frame/Frame";
 
 import pink from "/assets/pink.svg";
 import white from "/assets/white.svg";
@@ -70,7 +70,7 @@ function Inspiration() {
     };
 
     return (
-        <BoxSection styles="w-full flex gap-5 p-5 relative h-full grow">
+        <Frame styles="w-full flex gap-5 p-5 relative h-full grow">
             <form className="flex w-full flex-1 flex-col justify-center" onSubmit={(e) => handleSubmit(e)}>
                 <motion.ul
                     className="flex w-full flex-col-reverse items-start justify-center gap-2"
@@ -98,7 +98,7 @@ function Inspiration() {
                                     className="h-[4.5rem] w-[4.5rem]"
                                 />
 
-                                <BoxSection styles="items-center justify-center gap-5">
+                                <Frame styles="items-center justify-center gap-5">
                                     <button
                                         type="button"
                                         className="btn btn-ghost text-3xl"
@@ -116,7 +116,7 @@ function Inspiration() {
                                     >
                                         +
                                     </button>
-                                </BoxSection>
+                                </Frame>
                                 <p>{inspirations[key as keyof Inspiration]}</p>
                             </li>
                         );
@@ -132,6 +132,6 @@ function Inspiration() {
                     </button>
                 </div>
             </form>
-        </BoxSection>
+        </Frame>
     );
 }

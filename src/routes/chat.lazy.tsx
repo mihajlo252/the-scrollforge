@@ -3,7 +3,7 @@ import { supabase } from "../supabase/supabase";
 import { useEffect, useRef, useState } from "react";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { toast } from "../utilities/toasterSonner";
-import { BoxSection } from "../components/BoxSection/BoxSection";
+import { Frame } from "../components/Frame/Frame";
 import { motion } from "framer-motion";
 import { Popup } from "../components/Popup/Popup";
 
@@ -199,17 +199,17 @@ function Chat() {
 
 	return (
 		<motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full relative">
-			<BoxSection classes="w-full grid grid-rows-[repeat(2, 1fr)] grid-cols-[1fr] px-5 py-5 gap-2 h-full">
+			<Frame classes="w-full grid grid-rows-[repeat(2, 1fr)] grid-cols-[1fr] px-5 py-5 gap-2 h-full">
 				<div className="flex gap-5 relative w-full">
 					<div className="flex flex-col gap-2 w-[15%]">
 						{myRooms.map((room) => (
-							<button key={room.id} type="button" className="button button-accent button-ghost" onClick={() => setChatRoom(room.id)}>
+							<button key={room.id} type="button" className="button button-accent " onClick={() => setChatRoom(room.id)}>
 								{room.name}
 							</button>
 						))}
 					</div>
 
-					<BoxSection classes="flex-col grow px-5 py-5 gap-5 overflow-y-scroll w-full h-[calc(100vh-230px)]">
+					<Frame classes="flex-col grow px-5 py-5 gap-5 overflow-y-scroll w-full h-[calc(100vh-230px)]">
 						{chatRoom && (
 							<>
 								<ul className="flex flex-col justify-start gap-2 h-[calc(80vh-230px)]">
@@ -242,12 +242,12 @@ function Chat() {
 								<div ref={lastMessageRef} className="px-5 text-left"></div>
 							</>
 						)}
-					</BoxSection>
+					</Frame>
 				</div>
 
 				<div className="flex gap-5 items-end">
 					<div className="flex flex-col gap-2 w-[15%]">
-						<button type="button" className="button button-accent button-ghost" onClick={() => handleGetAllParties()}>
+						<button type="button" className="button button-accent " onClick={() => handleGetAllParties()}>
 							Join Party
 						</button>
 						<button className="button button-primary" onClick={() => setOpenCreateParty(true)}>
@@ -272,11 +272,11 @@ function Chat() {
 						</form>
 					</div>
 				</div>
-			</BoxSection>
+			</Frame>
 
 			<Popup closerFunc={setSeeActiveUsers} toggle={seeActiveUsers}>
-				<BoxSection classes="w-1/5 px-5 py-5 flex-col gap-5 justify-start items-center relative">
-					<button type="button" className="button button-secondary button-ghost" onClick={() => setSeeActiveUsers(false)}>
+				<Frame classes="w-1/5 px-5 py-5 flex-col gap-5 justify-start items-center relative">
+					<button type="button" className="button button-secondary " onClick={() => setSeeActiveUsers(false)}>
 						Close
 					</button>
 					<h1 className=" text-4xl font-semibold text-primary">Active</h1>
@@ -287,12 +287,12 @@ function Chat() {
 							</li>
 						))}
 					</ul>
-				</BoxSection>
+				</Frame>
 			</Popup>
 
 			<Popup closerFunc={setOpenCreateParty} toggle={openCreateParty}>
 				<form onSubmit={handleCreateRoom}>
-					<BoxSection classes="w-full flex flex-col gap-5 px-20 py-10">
+					<Frame classes="w-full flex flex-col gap-5 px-20 py-10">
 						<div className="flex flex-col gap-5">
 							<label htmlFor="roomNameID" className="text-2xl">
 								Name Your Party
@@ -314,26 +314,26 @@ function Chat() {
 								Cancel
 							</button>
 						</div>
-					</BoxSection>
+					</Frame>
 				</form>
 			</Popup>
 
 			<Popup closerFunc={setOpenAllParties} toggle={openAllParties}>
 				<form onSubmit={handleCreateRoom}>
-					<BoxSection classes="w-full flex flex-col gap-5 px-10 py-5">
+					<Frame classes="w-full flex flex-col gap-5 px-10 py-5">
 						<ul className="grid grid-cols-2 gap-2">
 							{allParties.map((party, index) => (
 								<li key={index} className="flex flex-col">
-									<BoxSection classes="relative flex flex-col gap-2 py-5 px-10">
+									<Frame classes="relative flex flex-col gap-2 py-5 px-10">
 										<p className="text-xl font-bold capitalize">{party.name}</p>
 										<button className="button button-accent" type="button" onClick={() => handleJoinParty(party.id)}>
 											Join
 										</button>
-									</BoxSection>
+									</Frame>
 								</li>
 							))}
 						</ul>
-					</BoxSection>
+					</Frame>
 				</form>
 			</Popup>
 		</motion.main>

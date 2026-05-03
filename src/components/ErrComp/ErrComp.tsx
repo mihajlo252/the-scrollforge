@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { BoxSection } from "../BoxSection/BoxSection";
+import { Frame } from "../Frame/Frame";
 import styles from "./ErrComp.module.css"
 
 export const ErrComp = () => {
     return (
-        <BoxSection classes="column-direction">
+        <Frame classes="column-direction">
             <div className={styles.errorMessages}>
                 <p>There was an error!</p>
                 <p>Please go to the Homepage.</p>
@@ -12,6 +12,6 @@ export const ErrComp = () => {
             <Link className="button button-primary center" to="/">
                 Home
             </Link>
-        </BoxSection>
+        </Frame>
     );
 };

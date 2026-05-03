@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
-import { submitDaggerheartCharacter, submitDndCharacter } from "../utilities/submitCharacter";
+import { submitCharacter, submitDaggerheartCharacter, submitDndCharacter } from "../utilities/submitCharacter";
 import { DNDForm } from "./DnD/CreateCharacter/DNDForm";
 import { DaggerheartForm } from "./Daggerheart/CreateCharacter/DaggerheartForm";
 
@@ -26,6 +26,7 @@ export const CreateCharacter = ({
 		subrace: "",
 	});
 	const [characterProfileDaggerheart, setCharacterProfileDaggerheart] = useState<CharacterProfileDaggerheart>({
+		name: "",
 		class: "",
 		domains: "",
 		level: 0,
@@ -38,8 +39,9 @@ export const CreateCharacter = ({
 	const handleCreateCharacter = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const { user } = JSON.parse(getUserFromLocal());
-		if (gameMode === "dnd") await submitDndCharacter(characterProfile, user.id, gameMode);
-		if (gameMode === "daggerheart") await submitDaggerheartCharacter(daggerheartName, characterProfileDaggerheart, user.id, gameMode);
+		await submitCharacter(characterProfile, user.id, gameMode);
+		// if (gameMode === "dnd") await submitDndCharacter(characterProfile, user.id, gameMode);
+		// if (gameMode === "daggerheart") await submitDaggerheartCharacter(daggerheartName, characterProfileDaggerheart, user.id, gameMode);
 		setIsSave(true);
 		setOpenCreateCharacter(false);
 	};

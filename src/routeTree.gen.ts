@@ -18,7 +18,6 @@ import { Route as rootRoute } from './routes/__root'
 
 const TicketsLazyImport = createFileRoute('/tickets')()
 const ThanksLazyImport = createFileRoute('/thanks')()
-const SignupLazyImport = createFileRoute('/signup')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const ChatLazyImport = createFileRoute('/chat')()
 const IndexLazyImport = createFileRoute('/')()
@@ -44,12 +43,6 @@ const ThanksLazyRoute = ThanksLazyImport.update({
   path: '/thanks',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/thanks.lazy').then((d) => d.Route))
-
-const SignupLazyRoute = SignupLazyImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/signup.lazy').then((d) => d.Route))
 
 const ProfileLazyRoute = ProfileLazyImport.update({
   id: '/profile',
@@ -134,13 +127,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
     }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/thanks': {
       id: '/thanks'
       path: '/thanks'
@@ -206,7 +192,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/chat': typeof ChatLazyRoute
   '/profile': typeof ProfileLazyRoute
-  '/signup': typeof SignupLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
@@ -221,7 +206,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/chat': typeof ChatLazyRoute
   '/profile': typeof ProfileLazyRoute
-  '/signup': typeof SignupLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
@@ -237,7 +221,6 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/chat': typeof ChatLazyRoute
   '/profile': typeof ProfileLazyRoute
-  '/signup': typeof SignupLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
@@ -254,7 +237,6 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/profile'
-    | '/signup'
     | '/thanks'
     | '/tickets'
     | '/daggerheart/character'
@@ -268,7 +250,6 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/profile'
-    | '/signup'
     | '/thanks'
     | '/tickets'
     | '/daggerheart/character'
@@ -282,7 +263,6 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/profile'
-    | '/signup'
     | '/thanks'
     | '/tickets'
     | '/daggerheart/character'
@@ -298,7 +278,6 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   ChatLazyRoute: typeof ChatLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
-  SignupLazyRoute: typeof SignupLazyRoute
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
   DaggerheartCharacterLazyRoute: typeof DaggerheartCharacterLazyRoute
@@ -313,7 +292,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   ChatLazyRoute: ChatLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
-  SignupLazyRoute: SignupLazyRoute,
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
   DaggerheartCharacterLazyRoute: DaggerheartCharacterLazyRoute,
@@ -337,7 +315,6 @@ export const routeTree = rootRoute
         "/",
         "/chat",
         "/profile",
-        "/signup",
         "/thanks",
         "/tickets",
         "/daggerheart/character",
@@ -356,9 +333,6 @@ export const routeTree = rootRoute
     },
     "/profile": {
       "filePath": "profile.lazy.tsx"
-    },
-    "/signup": {
-      "filePath": "signup.lazy.tsx"
     },
     "/thanks": {
       "filePath": "thanks.lazy.tsx"

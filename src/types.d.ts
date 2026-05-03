@@ -1,3 +1,4 @@
+
 interface Values {
     str: number;
     dex: number;
@@ -50,6 +51,7 @@ interface CharacterProfile {
     subrace: string;
 }
 interface CharacterProfileDaggerheart {
+    name: string,
     class: string,
     domains: string,
     level: number,
@@ -122,14 +124,14 @@ interface DaggerheartCharacter {
 }
 
 interface UserStore {
-    user: string;
+    user: import('@supabase/supabase-js').User | null;
     setUser: (string, string) => Promise<void>;
     removeUser: () => void;
 }
 
 interface CharactersStore {
     characters: Character[] | DaggerheartCharacter[];
-    setCharacters: (string, string) => Promise<any[]>;
+    setCharacters: (string) => Promise<any[]>;
 }
 
 interface CharacterStore {

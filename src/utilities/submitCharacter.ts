@@ -1,6 +1,25 @@
 import { toast } from "./toasterSonner";
 import { supabase } from "../supabase/supabase";
 
+export const submitCharacter = async (characterProfile: any, user: string, gameMode: string) => {
+    
+    try {
+        const { error } = await supabase
+            .from("characters")
+            .insert({
+                name: characterProfile.name,
+                characterProfile: characterProfile,
+                profileID: user,
+                gamemode: gameMode
+            });
+        if (error) {
+            toast({"style": "frame button-primary", "message": `Failed to create a character. Please try again. ${error.message}`});
+            throw error.message
+        }
+    } catch (err) {
+        throw err;
+    }
+};
 export const submitDndCharacter = async (characterProfile: any, user: string, gameMode: string) => {
     
     try {
@@ -13,7 +32,7 @@ export const submitDndCharacter = async (characterProfile: any, user: string, ga
                 gamemode: gameMode
             });
         if (error) {
-            toast({"style": "boxSection button-primary", "message": `Failed to create a character. Please try again. ${error.message}`});
+            toast({"style": "frame button-primary", "message": `Failed to create a character. Please try again. ${error.message}`});
             throw error.message
         }
     } catch (err) {
@@ -31,7 +50,7 @@ export const submitDaggerheartCharacter = async (name: string, characterProfileD
             gamemode: gameMode,
         });
         if (error) {
-            toast({"style": "boxSection button-primary", "message": `Failed to create a character. Please try again. ${error.message}`});
+            toast({"style": "frame button-primary", "message": `Failed to create a character. Please try again. ${error.message}`});
             throw error.message;
         }
     } catch (err) {

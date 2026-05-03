@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection/BoxSection";
+import { Frame } from "../../components/Frame/Frame";
 import { Load } from "../../components/Load";
 import { DiceBoxComponent } from "../../sections/DiceBox";
 import { useEffect, useState } from "react";
@@ -23,9 +23,9 @@ function Character() {
   
   if (dev === "false") {
     return (
-      <BoxSection classes="w-full h-full flex flex-col justify-center items-center">
+      <Frame classes="w-full h-full flex flex-col justify-center items-center">
         <h1 className="text-primary text-4xl">Currently unavailable. Please check back later!</h1>
-      </BoxSection>
+      </Frame>
     )
   }
 
@@ -52,7 +52,7 @@ function Character() {
     <motion.main className={`grid flex-1 w-full grid-rows-[1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {isSave && (
         <button
-          className="button button-primary button-ghost absolute top-5 m-0 h-min min-h-0 place-self-center"
+          className="button button-primary  absolute top-5 m-0 h-min min-h-0 place-self-center"
           onClick={() => handleSaveCharacter(state.character.stats)}
         >
           Save Character
@@ -60,7 +60,7 @@ function Character() {
       )}
       <section className={`flex gap-5`}>
         <CharacterProfile setStatChange={setStatChange} />
-        <BoxSection classes="w-[10%] flex flex-col justify-start">
+        <Frame classes="w-[10%] flex flex-col justify-start">
           <nav className="flex flex-col gap-3 p-3">
             <button onClick={() => setToggleNotes(true)} className="button button-primary">
               Notes
@@ -69,18 +69,18 @@ function Character() {
               Dice
             </button>
           </nav>
-        </BoxSection>
+        </Frame>
       </section>
-      {/* <BoxSection styles="w-[20%] flex justify-around items-center p-5">
+      {/* <Frame styles="w-[20%] flex justify-around items-center p-5">
         <DiceBoxComponent />
-      </BoxSection> */}
+      </Frame> */}
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
         <Notes />
       </Popup>
       <Popup closerFunc={setToggleDice} toggle={toggleDice}>
-        <BoxSection classes="w-[20%] flex justify-around items-center p-5">
+        <Frame classes="w-[20%] flex justify-around items-center p-5">
           <DiceBoxComponent />
-        </BoxSection>
+        </Frame>
       </Popup>
     </motion.main>
   );

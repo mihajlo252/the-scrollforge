@@ -1,7 +1,7 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection/BoxSection";
+import { Frame } from "../../components/Frame/Frame";
 import { CharacterProfile } from "../../sections/DnD/CharacterProfile/CharacterProfile";
 import { HPBar } from "../../sections/DnD/Components/HPBar";
 import { Stats } from "../../sections/DnD/Components/Stats";
@@ -49,23 +49,23 @@ function Character() {
       )}
       <CharacterProfile setStatChange={setStatChange} />
       <section className={`flex gap-2`}>
-        <BoxSection classes="w-[50%] flex flex-col gap-2 p-5">
+        <Frame classes="w-[50%] flex flex-col gap-2 p-5">
           <Stats character={state.character} setStatChange={setStatChange} />
-        </BoxSection>
+        </Frame>
         <div className={`flex h-full w-[40%] flex-col gap-2`}>
           <div className={`flex h-full w-full gap-2`}>
-            <BoxSection classes="w-[50%] flex justify-around items-center p-2">
+            <Frame classes="w-[50%] flex justify-around items-center p-2">
               <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
-            </BoxSection>
-            <BoxSection classes="w-[50%] flex justify-around items-center p-5">
+            </Frame>
+            <Frame classes="w-[50%] flex justify-around items-center p-5">
               <DiceBoxComponent />
-            </BoxSection>
+            </Frame>
           </div>
-          <BoxSection classes="w-full flex min-h-[unset] items-start p-5">
+          <Frame classes="w-full flex min-h-[unset] items-start p-5">
             <Bonuses character={state.character} setStatChange={setStatChange} />
-          </BoxSection>
+          </Frame>
         </div>
-        <BoxSection classes="flex flex-1 flex-col gap-3 py-3 px-2 justify-center h-full w-full">
+        <Frame classes="flex flex-1 flex-col gap-3 py-3 px-2 justify-center h-full w-full">
             <Link to="/dnd/traits" className="button button-accent w-full">
               Traits
             </Link>
@@ -81,7 +81,7 @@ function Character() {
             <button onClick={() => setToggleNotes(true)} className="button button-accent w-full">
               Notes
             </button>
-        </BoxSection>
+        </Frame>
       </section>
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
         <Notes />

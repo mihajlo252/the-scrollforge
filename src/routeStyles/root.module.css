@@ -1,14 +1,19 @@
 .main {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    width: calc(100vw - 4rem);
-    gap: 1rem;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+	padding-inline: var(--max-width-padding);
+    /* min-height: 100cqh; */
+    min-width: 20px !important;
     position: relative;
     isolation: isolate;
+    padding-block: 2rem;
+    gap: .5rem;
 }
 .main::after {
     content: "";
-    position: absolute;
+    position: fixed;
     inset: 0;
     z-index: -1;
     background-position: center; 
@@ -16,5 +21,6 @@
     background-size: cover; 
     background-blend-mode: overlay;
     background-clip: border-box;
-    background-image: url('/logo-wide.png');
+    opacity: .2;
+    /* background-image: url('/logo-wide.png'); */
 }

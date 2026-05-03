@@ -1,6 +1,7 @@
 .hoverableCard {
     gap: 1rem;
-	transition: background-color .15s cubic-bezier(0.1, 0.7, 0.1, 1.0); 
+	transition: background-color .15s cubic-bezier(0.1, 0.7, 0.1, 1.0);
+	padding: 1rem 2rem;
 }
 .hoverableCard:hover, .hoverableCard:focus-visible {
 	background-color: var(--_hover);

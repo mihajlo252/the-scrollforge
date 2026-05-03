@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase/supabase";
 import { toast } from "../utilities/toasterSonner";
-import { BoxSection } from "../components/BoxSection/BoxSection";
+import { Frame } from "../components/Frame/Frame";
 
 export const TicketLog = () => {
   type Ticket = {
@@ -31,7 +31,7 @@ export const TicketLog = () => {
   }, []);
 
   return (
-    <BoxSection styles="w-[65%] h-full flex flex-col px-10 py-5">
+    <Frame styles="w-[65%] h-full flex flex-col px-10 py-5">
       <h1 className="text-3xl font-bold text-primary">Ticket Log</h1>
       <div className="flex flex-col gap-5 mt-10 overflow-y-scroll overflow-x-visible">
         {tickets.map((ticket) => (
@@ -51,6 +51,6 @@ export const TicketLog = () => {
           </div>
         ))}
       </div>
-    </BoxSection>
+    </Frame>
   );
 };

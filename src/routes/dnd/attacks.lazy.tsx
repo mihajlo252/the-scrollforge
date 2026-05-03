@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection/BoxSection";
+import { Frame } from "../../components/Frame/Frame";
 import { Weapon } from "../../sections/DnD/Components/Weapon";
 import React, { useState } from "react";
 import { Popup } from "../../components/Popup/Popup";
@@ -65,13 +65,13 @@ function Attacks() {
       <button type="button" className="btn btn-accent absolute right-14 top-24 z-10" onClick={() => setAdd(true)}>
         Add
       </button>
-      <BoxSection styles="w-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
+      <Frame styles="w-full p-5 py-10 flex-col gap-5 text-start overflow-y-scroll">
         {attacks.map((attack: Attack, index: number) => (
           <Weapon index={index} attack={attack} key={index} setAttacks={setAttacks} />
         ))}
         <Popup closerFunc={setAdd} toggle={add}>
           <form onSubmit={(e) => handleAddAttack(e)} className="flex w-min items-center justify-center">
-            <BoxSection styles="px-20 bg-opacity-90 flex-1 py-10 justify-center flex-col gap-5 items-start text-start">
+            <Frame styles="px-20 bg-opacity-90 flex-1 py-10 justify-center flex-col gap-5 items-start text-start">
               <input
                 type="text"
                 name="name"
@@ -129,10 +129,10 @@ function Attacks() {
                   Close
                 </button>
               </div>
-            </BoxSection>
+            </Frame>
           </form>
         </Popup>
-      </BoxSection>
+      </Frame>
     </motion.main>
   );
 }

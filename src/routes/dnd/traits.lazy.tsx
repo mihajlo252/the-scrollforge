@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Trait } from "../../sections/DnD/Components/Trait";
-import { BoxSection } from "../../components/BoxSection/BoxSection";
+import { Frame } from "../../components/Frame/Frame";
 import { useState } from "react";
 
 export const Route = createLazyFileRoute("/dnd/traits")({
@@ -17,7 +17,7 @@ function TraitsScreen() {
   };
   return (
     <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex h-full grow w-full  overflow-hidden ">
-      <BoxSection styles=" relative w-full flex-col text-start gap-2 pl-5">
+      <Frame styles=" relative w-full flex-col text-start gap-2 pl-5">
         <div className="flex w-full gap-2 bg-base-300 pt-5">
           <button onClick={() => changeDescription("racialTraits")} className="btn btn-ghost">
             Racial Traits
@@ -31,7 +31,7 @@ function TraitsScreen() {
         </div>
 
           <Trait setEdit={setEdit} edit={edit} description={description} />
-      </BoxSection>
+      </Frame>
     </motion.main>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BoxSection } from "../../../components/BoxSection/BoxSection";
+import { Frame } from "../../../components/Frame/Frame";
 // import { toast } from "../../../utilities/toasterSonner";
 import { StatBlock } from "./ComponentBlocks/StatBlock";
 import { ArmorBlock } from "./ComponentBlocks/ArmorBlock";
@@ -80,7 +80,7 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
   };
 
   return (
-    <BoxSection classes="flex gap-2 px-2 py-5">
+    <Frame classes="flex gap-2 px-2 py-5">
       <TraitsBlock traitList={baseStats}/>
       <section className="flex flex-col gap-5">
         <div>
@@ -122,11 +122,11 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
           </div>
         </div>
       </section>
-    </BoxSection>
+    </Frame>
   );
 
   // return (
-  //   <BoxSection styles="flex gap-10 w-full items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
+  //   <Frame styles="flex gap-10 w-full items-center justify-between rounded-lg border-2 border-slate-900 bg-base-300 px-5 text-neutral">
   //     <div className="grid grid-cols-2 gap-[5px] text-2xl">
   //       {Object.entries(baseStats).map((stat, i) => (
   //         <StatBlock key={i} name={Object.values(stat)[0] as string} stat={Object.keys(stat)[0] as string} />
@@ -150,6 +150,6 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
   //         </p>
   //       </div>
   //     </div>
-  //   </BoxSection>
+  //   </Frame>
   // );
 };
