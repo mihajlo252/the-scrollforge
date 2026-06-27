@@ -9,6 +9,7 @@ import { Logo } from "../../components/Logo/Logo";
 import styles from "./Navigation.module.css";
 import { Icon } from "../../components/Primitives";
 import { AccountPopover } from "../../components/SideMenu/AccountPopover";
+import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 
 export const Navigation = () => {
 	const navigate = useNavigate();
@@ -38,6 +39,7 @@ export const Navigation = () => {
 				<button type="button" className="button button-accent" onClick={() => handleRedirect("/chat")}>
 					Chat
 				</button>
+				<ThemeToggle />
 				<button type="button" className={`button button-primary ${styles.account}`} onClick={() => setMenu(true)}>
 					<Icon name="user" />
 				</button>

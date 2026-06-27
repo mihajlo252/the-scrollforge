@@ -12,18 +12,20 @@
 	font-weight: 400;
 	
 	font-family: var(--globalFont), sans-serif;
+
 }
 
 :root {
-	
+
 	--globalFont: "Newsreader";
+	/* --globalFont: "K2D"; */
 	--text: #e4e4e4;
 	--background: #0f0e13;
 	/* --background: #050514; */
 	--primary: #c49f72;
 	--secondary: #9e2222;
 	--accent: #8587dd;
-	
+
 	--info: #3abff8;
 	--success: #36d399;
 	--warning: #fbbd23;
@@ -33,10 +35,20 @@
 	--paper-tint: rgba(201, 162, 74, 0.04);
 }
 
+[data-theme="light"] {
+	--text: #2c1f0e;
+	--background: #f5edd8;
+	--primary: #a07840;
+	--secondary: #7a1a1a;
+	--accent: #5557b0;
+	--ghost: #6b5a45;
+	--paper-tint: rgba(160, 120, 64, 0.06);
+}
+
 html {
 	background: var(--background);
 	overflow-x: hidden;
-	scrollbar-gutter: stable;
+	/* scrollbar-gutter: stable; */
 	height: max-content;
 	interpolate-size: allow-keywords;
 
@@ -49,6 +61,7 @@ body {
 	margin: 0;
 	padding: 0;
 	overflow-x: hidden;
+	max-height: 100svh;
 }
 
 #root {

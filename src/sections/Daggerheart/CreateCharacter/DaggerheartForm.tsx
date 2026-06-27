@@ -20,13 +20,11 @@ export const DaggerheartForm = ({
 	setCharacterProfileDaggerheart,
 	characterProfileDaggerheart,
 	handleCreateCharacter,
-	setDaggerheartName
 }: {
 	children: React.ReactNode;
 	setCharacterProfileDaggerheart: React.Dispatch<React.SetStateAction<CharacterProfileDaggerheart>>;
 	characterProfileDaggerheart: CharacterProfileDaggerheart;
 	handleCreateCharacter: (e: React.FormEvent) => Promise<void>;
-	setDaggerheartName: React.Dispatch<React.SetStateAction<string>>
 }) => {
 	// const [currentDescription, setCurrentDescription] = useState<DaggerheartSelectedDataType>();
 	const [currentSelectedDataType, setCurrentSelectedDataType] = useState<{ type: DHDataType; name: string }>({
@@ -59,94 +57,89 @@ export const DaggerheartForm = ({
 			ancestry: "Clank",
 			community: "Highborne",
 		});
-		// setCurrentDescription({ title: "Clank", description: DaggerheartAncestries[0].description[0].paragraph });
 		setCurrentSelectedDataType({ type: DHDataType.ancestry, name: "Clank" });
 	}, []);
 
 	return (
-		<Frame classes="row-direction">
-			<div className="column-direction center">
-				<h2 className="text-4xl font-bold">Create Your Character</h2>
-				<form className="grid grid-cols-4 w-full gap-2" onSubmit={(e) => handleCreateCharacter(e)}>
-					<input
-						type="text"
-						className="input input-bordered w-full col-span-3"
-						placeholder="Name"
-						required
-						onChange={(e) => setDaggerheartName(e.target.value) }
-					/>
-					<select
-						className="select select-bordered w-full col-span-1"
-						required
-						value={characterProfileDaggerheart.level}
-						onChange={(e) => setCharacterProfileDaggerheart({ ...characterProfileDaggerheart, level: parseInt(e.target.value) })}
-					>
-						{Array.from({ length: 10 }, (_, i) => i + 1).map((level) => (
-							<option key={level}>{level}</option>
-						))}
-					</select>
-					<select
-						className="select select-bordered w-full col-span-2"
-						value={characterProfileDaggerheart.ancestry}
-						onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.ancestry)}
-						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.ancestry)}
-					>
-						{DaggerheartAncestries.map((c) => (
-							<option key={c.id} value={c.name}>
-								Ancestry: {c.name}
-							</option>
-						))}
-					</select>
-					<select
-						className="select select-bordered w-full col-span-2"
-						value={characterProfileDaggerheart.community}
-						onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.community)}
-						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.community)}
-					>
-						{DaggerheartCommunities.map((c) => (
-							<option key={c.id} value={c.name}>
-								Community: {c.name}
-							</option>
-						))}
-					</select>
-					<select
-						className="select select-bordered w-full col-span-2"
-						required
-						value={characterProfileDaggerheart.class}
-						onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.class)}
-						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.class)}
-					>
-						{DaggerheartClasses.map((c) => (
-							<option key={c.id} value={Capitalize(c.name)}>
-								Class: {Capitalize(c.name)}
-							</option>
-						))}
-					</select>
-					<select
-						className="select select-bordered w-full col-span-2"
-						value={characterProfileDaggerheart.subclass}
-						onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
-						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
-					>
-						{DaggerheartSubclasses.filter((c) => c.class === characterProfileDaggerheart.class.toUpperCase())?.map((c) => (
-							<option key={c.id} value={c.name}>
-								Subclass: {c.name}
-							</option>
-						))}
-					</select>
-					<input
-						type="text"
-						className="input w-full bg-accent user-select-none cursor-default  focus:outline-none col-span-4"
-						placeholder="Domains"
-						required
-						readOnly
-						value={`Domains: ${characterProfileDaggerheart.domains}`}
-					/>
+		<>
+			<form className="form column-direction stretch" onSubmit={(e) => handleCreateCharacter(e)}>
+				<input
+					type="text"
+					className="input text-content"
+					placeholder="Name"
+					required
+					onChange={(e) => setCharacterProfileDaggerheart({ ...characterProfileDaggerheart, name: e.target.value })}
+				/>
+				<select
+					className="select"
+					required
+					value={characterProfileDaggerheart.level}
+					onChange={(e) => setCharacterProfileDaggerheart({ ...characterProfileDaggerheart, level: parseInt(e.target.value) })}
+				>
+					{Array.from({ length: 10 }, (_, i) => i + 1).map((level) => (
+						<option key={level}>{level}</option>
+					))}
+				</select>
+				<select
+					className="select"
+					value={characterProfileDaggerheart.ancestry}
+					onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.ancestry)}
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.ancestry)}
+				>
+					{DaggerheartAncestries.map((c) => (
+						<option key={c.id} value={c.name}>
+							Ancestry: {c.name}
+						</option>
+					))}
+				</select>
+				<select
+					className="select"
+					value={characterProfileDaggerheart.community}
+					onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.community)}
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.community)}
+				>
+					{DaggerheartCommunities.map((c) => (
+						<option key={c.id} value={c.name}>
+							Community: {c.name}
+						</option>
+					))}
+				</select>
+				<select
+					className="select"
+					required
+					value={characterProfileDaggerheart.class}
+					onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.class)}
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.class)}
+				>
+					{DaggerheartClasses.map((c) => (
+						<option key={c.id} value={Capitalize(c.name)}>
+							Class: {Capitalize(c.name)}
+						</option>
+					))}
+				</select>
+				<select
+					className="select"
+					value={characterProfileDaggerheart.subclass}
+					onFocus={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e, DHDataType.subclass)}
+				>
+					{DaggerheartSubclasses.filter((c) => c.class === characterProfileDaggerheart.class.toUpperCase())?.map((c) => (
+						<option key={c.id} value={c.name}>
+							Subclass: {c.name}
+						</option>
+					))}
+				</select>
+				<input
+					type="text"
+					className="input text-content text-primary"
+					placeholder="Domains"
+					readOnly
+					value={`Domains: ${characterProfileDaggerheart.domains}`}
+				/>
 
-					{children}
-				</form>
-			</div>
-			<div className="w-[calc(35vw-5rem)] place-self-center flex flex-col gap-5 text-left">
+				{children}
+			</form>
+			<div className="characterCreateDescriptions">
 				{currentSelectedDataType.type === DHDataType.class && (
 					<ClassDescriptions name={currentSelectedDataType.name} classes={DaggerheartClasses} />
 				)}
@@ -160,6 +153,6 @@ export const DaggerheartForm = ({
 					<CommunityDescriptions name={currentSelectedDataType.name} communities={DaggerheartCommunities} />
 				)}
 			</div>
-		</Frame>
+		</>
 	);
 };

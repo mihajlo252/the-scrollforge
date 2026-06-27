@@ -5,9 +5,13 @@ import { DeletePopup } from "../components/DeletePopup";
 import { CreateCharacter } from "../sections/CreateCharacter";
 import { Avatar } from "../components/Avatar/Avatar";
 import { Popup } from "../components/Popup/Popup";
-import styles from "../routeStyles/profile.module.css";
 import { Icon, RuneDivider } from "../components/Primitives";
-import { activeButtonsToggle } from "../utilities/utilityFunctions";
+import { activeButtonsToggle, getRandomGreeting } from "../utilities/utilityFunctions";
+import { motion } from "framer-motion";
+
+import styles from "../routeStyles/profile.module.css";
+import { toast } from "../utilities/toasterSonner";
+import { supabase } from "../supabase/supabase";
 
 export const Route = createLazyFileRoute("/profile")({
 	component: Profile,
@@ -22,15 +26,16 @@ const filters = [
 function Profile() {
 	const { user } = useUserStore();
 	const { characters, setCharacters }: CharactersStore = useCharactersStore();
-	const { setCharacter }: CharacterStore = useCharacterStore();
+	const { character, setCharacter }: CharacterStore = useCharacterStore();
 	const [isDeleted, setIsDeleted] = useState(false);
 	const [characterDelete, setCharacterDelete] = useState("");
-	const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
+	const [openCreateCharacter, setOpenCreateCharacter] = useState(false); // ----- !!! CHANGE TO FALSE !!! ---------
 	const [isSave, setIsSave] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
 	const [noCharacters, setNoCharacters] = useState(false);
-	const [gameMode, setGameMode] = useState("dnd");
-	const [charFilter, setCharFilter] = useState("all");
+	const [gameMode, setGameMode] = useState("");
+	const [characterFilter, setCharacterFilter] = useState("all");
+	const [greeting] = useState(() => getRandomGreeting());
 
 	const navigate = useNavigate();
 
@@ -65,10 +70,11 @@ function Profile() {
 
 	const handleFilterCharacters = (e: MouseEvent, val: string) => {
 		e.preventDefault();
-		setCharFilter(val);
+		setCharacterFilter(val);
 		activeButtonsToggle(e);
 	};
 
+	
 	useEffect(() => {
 		if (isDeleted || isSave) {
 			handleGetCharacter();
@@ -85,10 +91,10 @@ function Profile() {
 		<CatchBoundary getResetKey={() => "reset"} onCatch={() => navigate({ to: "/" })}>
 			<section className="column-direction stretch">
 				<section className="side-by-side apart">
-					<h2 className="text-content text-primary">
-						<span className="small-eyebrow">Welcome back,</span>
+					<h1 className="text-content text-primary title">
+						<span className="small-eyebrow">{greeting}</span>
 						{user?.user_metadata.username}
-					</h2>
+					</h1>
 					<button type="button" onClick={() => setOpenCreateCharacter(true)} className="button button-primary">
 						Create character
 					</button>
@@ -96,7 +102,12 @@ function Profile() {
 				<RuneDivider />
 				<section className={`frame ${styles.filter}`}>
 					{filters.map((filter) => (
-						<button key={filter.val} className="button button-primary" onClick={(e) => handleFilterCharacters(e, filter.val)}>
+						<button
+							key={filter.val}
+							className="button button-primary"
+							data-active={filter.val === "all" ? true : false}
+							onClick={(e) => handleFilterCharacters(e, filter.val)}
+						>
 							{filter.name}
 						</button>
 					))}
@@ -105,57 +116,64 @@ function Profile() {
 				<ul className={`${styles.characterList}`}>
 					{characters
 						.filter((character) => {
-							if (charFilter === "all") return character;
-							return character.gamemode === charFilter;
+							if (characterFilter === "all") return character;
+							return character.gamemode === characterFilter;
 						})
 						.map((character) => (
 							<section className={`frame hoverable ${styles.characterCard}`} key={character.id}>
-								<CharacterCard character={character} handleNavigateToCharacter={handleNavigateToCharacter} />
+								<CharacterCard  character={character} handleNavigateToCharacter={handleNavigateToCharacter}  />
 								<div className="side-by-side">
 									<button className="button button-primary" onClick={() => handleNavigateToCharacter(character)}>
-										Unravel
+										Enter
 									</button>
 									<button className={`button button-secondary ${styles.delete}`} onClick={() => handleDeletePopup(character)}>
 										<Icon name="trash" size={14} />
 									</button>
 								</div>
-								<DeletePopup
-									toggle={isDelete}
-									deleteID={characterDelete}
-									setDeleteID={setCharacterDelete}
-									setIsDeleted={setIsDeleted}
-									setIsDelete={setIsDelete}
-								/>
+								<button className={styles.enterButton} onClick={() => handleNavigateToCharacter(character)} />
 							</section>
 						))}
 				</ul>
+				<DeletePopup
+					toggle={isDelete}
+					deleteID={characterDelete}
+					setDeleteID={setCharacterDelete}
+					setIsDeleted={setIsDeleted}
+					setIsDelete={setIsDelete}
+				/>
 				<Popup toggle={openCreateCharacter} closerFunc={setOpenCreateCharacter}>
-					<section className={`frame column-direction ${styles.characterPopup}`}>
-						<h3 style={{ textAlign: "center" }}>Choose System</h3>
-						<RuneDivider />
-						<div className="side-by-side">
-							<button
-								className="button button-primary"
-								data-active={gameMode === "dnd" && "true"}
-								onClick={(e) => handleGameModeToggle(e, "dnd")}
+					<>
+						{gameMode === "" ? (
+							<motion.div
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+								transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
+								className="frame full column-direction"
 							>
-								Dungeons&Dragons
-							</button>
-							<button
-								className="button button-accent"
-								data-active={gameMode === "daggerheart" && "true"}
-								onClick={(e) => handleGameModeToggle(e, "daggerheart")}
-							>
-								Daggerheart
-							</button>
-						</div>
-						<CreateCharacter
-							openCreateCharacter={openCreateCharacter}
-							setOpenCreateCharacter={setOpenCreateCharacter}
-							setIsSave={setIsSave}
-							gameMode={gameMode}
-						/>
-					</section>
+								<h2 style={{ textAlign: "center" }}>Choose a system</h2>
+								<div className="side-by-side">
+									<button className="button button-primary" onClick={(e) => handleGameModeToggle(e, "dnd")} autoFocus>
+										Dungeons&Dragons
+									</button>
+									<button className="button button-accent" onClick={(e) => handleGameModeToggle(e, "daggerheart")}>
+										Daggerheart
+									</button>
+								</div>
+							</motion.div>
+						) : (
+							<>
+								{/* <h3 style={{ textAlign: "center" }}>Forge Your New Hero</h3> */}
+								<CreateCharacter
+									openCreateCharacter={openCreateCharacter}
+									setOpenCreateCharacter={setOpenCreateCharacter}
+									setIsSave={setIsSave}
+									gameMode={gameMode}
+									setGameMode={setGameMode}
+								/>
+							</>
+						)}
+					</>
 				</Popup>
 			</section>
 		</CatchBoundary>
@@ -173,7 +191,7 @@ const DNDCharacter = ({
 		<li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
 			<div className="text-start">
 				<p>
-					{character.characterProfile.name}, {character.characterProfile.level}
+					{character.characterProfile.name}, {character.characterProfile.level}{" "}
 				</p>
 				<p>
 					{character.characterProfile.race} {character.characterProfile?.subrace}, {character.characterProfile.class}{" "}
@@ -212,10 +230,18 @@ const CharacterCard = ({
 }: {
 	character: Character | DaggerheartCharacter;
 	handleNavigateToCharacter: (char: Character | DaggerheartCharacter) => void;
+
+
+
 }) => {
 	return (
 		<div className={`${styles.details}`}>
-			<Avatar characterName={character.name.toLowerCase()} characterClass={character.characterProfile.class}/>
+			<Avatar characterClass={character.characterProfile.class} gameMode={character.gamemode} />
+			{/* <div className={`${styles.tagBox}`}>
+				<span className={`frame full text-content ${character.gamemode == "dnd" ? "text-primary" : "text-accent"} ${styles.tag}`}>
+					{character.gamemode == "dnd" ? "D&D" : "DH"}
+				</span>
+			</div> */}
 			{character.gamemode === "dnd" && (
 				<DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />
 			)}

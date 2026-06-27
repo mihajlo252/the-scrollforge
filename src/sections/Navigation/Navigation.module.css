@@ -1,4 +1,5 @@
 .nav {
+    anchor-name: --navigation;
     display: flex;
     align-items: center;
     height: max-content;

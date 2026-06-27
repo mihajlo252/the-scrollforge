@@ -2,7 +2,9 @@
     position: fixed;
     isolation: isolate;
     inset: 0;
-    z-index: 999;
+    position-anchor: --navigation;
+    top: anchor(top);
+    z-index: 50;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -14,7 +16,7 @@
 }
 
 .backdrop {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: -1;
