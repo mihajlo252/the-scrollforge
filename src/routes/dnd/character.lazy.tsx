@@ -44,7 +44,7 @@ function Character() {
   };
 
   return (
-    <motion.main className={styles.page} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.section className={styles.page} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {isSave && (
         <button className={`button button-accent ${styles.saveBtn}`} onClick={handleSaveCharacter}>
           Save Character
@@ -74,6 +74,6 @@ function Character() {
           <DiceBoxComponent />
         </Frame>
       </Popup>
-    </motion.main>
+    </motion.section>
   );
 }
