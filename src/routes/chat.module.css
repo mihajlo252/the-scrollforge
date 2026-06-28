@@ -1,0 +1,258 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+	gap: 1rem;
+	position: relative;
+}
+
+.chatGrid {
+	display: grid;
+	grid-template-columns: 260px 1fr;
+	gap: 1rem;
+	flex: 1;
+	min-height: 0;
+	align-items: stretch;
+}
+@media (max-width: 860px) {
+	.chatGrid {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 1fr;
+	}
+}
+
+/* ── Parties rail ───────────────────────────────────────── */
+.rooms {
+	--_padding: 0;
+	gap: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	min-height: 0;
+}
+.roomList {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 10px;
+}
+.roomBtn {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	width: 100%;
+	padding: 0.6rem 0.75rem;
+	background: transparent;
+	border: 1px solid transparent;
+	border-left: 2px solid transparent;
+	border-radius: 3px;
+	color: var(--ink-dim);
+	font-family: var(--display), serif;
+	font-size: 1rem;
+	text-align: left;
+	cursor: pointer;
+	transition:
+		background 0.15s ease,
+		color 0.15s ease;
+}
+.roomBtn:hover {
+	color: var(--text);
+	background: rgba(201, 162, 74, 0.06);
+}
+.roomBtn[data-active] {
+	color: var(--gold-2);
+	background: linear-gradient(90deg, rgba(201, 162, 74, 0.15), transparent);
+	border-left-color: var(--gold);
+}
+.roomActions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 12px;
+	border-top: 1px solid var(--rule);
+}
+.empty {
+	padding: 1rem 0.75rem;
+	color: var(--ink-faint);
+	font-style: italic;
+	font-size: 0.9rem;
+}
+
+/* ── Chat column ────────────────────────────────────────── */
+.chatMain {
+	--_padding: 0;
+	gap: 0;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+.chatHeaderName {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+.online {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--emerald);
+	box-shadow: 0 0 6px var(--emerald);
+}
+.messages {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1.25rem;
+}
+.placeholder {
+	margin: auto;
+	text-align: center;
+	color: var(--ink-dim);
+	font-style: italic;
+}
+.sysMsg {
+	text-align: center;
+	margin-bottom: 0.25rem;
+}
+.sysLabel {
+	font-size: 0.7rem;
+	color: var(--ink-faint);
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+.sysWelcome {
+	font-family: var(--display), serif;
+	color: var(--accent);
+	font-size: 1.05rem;
+}
+.msgRow {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	max-width: 74%;
+	align-self: flex-start;
+}
+.msgRow.own {
+	align-self: flex-end;
+	align-items: flex-end;
+}
+.msgMeta {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+}
+.msgName {
+	font-family: var(--display), serif;
+	font-size: 0.95rem;
+	color: var(--gold-2);
+	text-transform: capitalize;
+}
+.msgRow.own .msgName {
+	color: var(--accent);
+}
+.msgMe {
+	font-size: 0.7rem;
+	color: var(--ink-faint);
+}
+.msgTime {
+	font-family: var(--mono), monospace;
+	font-size: 0.7rem;
+	color: var(--ink-faint);
+}
+.bubble {
+	padding: 0.55rem 0.85rem;
+	border-radius: 10px;
+	background: var(--panel-2);
+	border: 1px solid var(--rule);
+	color: var(--text);
+	line-height: 1.5;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+.msgRow.own .bubble {
+	background: linear-gradient(180deg, hsla(from var(--gold) h s l / 0.16), hsla(from var(--gold) h s l / 0.07));
+	border-color: var(--gold-deep);
+}
+.composer {
+	display: flex;
+	gap: 0.6rem;
+	padding: 0.85rem 1.25rem;
+	border-top: 1px solid var(--rule);
+}
+.composerInput {
+	flex: 1;
+	min-width: 0;
+}
+
+/* ── Popups ─────────────────────────────────────────────── */
+.popupCard {
+	--_padding: 1.5rem;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 1rem;
+	width: min(440px, 92vw);
+	max-width: 100%;
+}
+.popupHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+.userList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.userRow {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.6rem 0.75rem;
+	background: rgba(201, 162, 74, 0.06);
+	border: 1px solid var(--rule);
+	border-radius: 4px;
+	font-family: var(--display), serif;
+	font-size: 1.05rem;
+	text-transform: capitalize;
+}
+.partyGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.75rem;
+}
+@media (max-width: 540px) {
+	.partyGrid {
+		grid-template-columns: 1fr;
+	}
+}
+.partyCard {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	padding: 0.85rem;
+	background: rgba(0, 0, 0, 0.2);
+	border: 1px solid var(--rule);
+	border-radius: 4px;
+}
+.partyName {
+	font-family: var(--display), serif;
+	font-size: 1.1rem;
+	color: var(--text);
+	text-transform: capitalize;
+}
+.formRow {
+	display: flex;
+	gap: 0.75rem;
+}
+.formRow > * {
+	flex: 1 1 0;
+	min-width: 0;
+}

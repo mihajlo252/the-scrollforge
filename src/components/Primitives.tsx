@@ -2,8 +2,6 @@ export const Icon = ({
 	name,
 	size = 16,
 	stroke = 1.6,
-	fillClr,
-	strokeClr,
 }: {
 	name: string;
 	size?: any;
@@ -184,6 +182,11 @@ export const Icon = ({
 		crown: (
 			<>
 				<path d="M3 19h18M3 9l4 4 5-8 5 8 4-4v10H3V9z" />
+			</>
+		),
+		grip: (
+			<>
+				<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" />
 			</>
 		),
 	};
@@ -674,14 +677,17 @@ export const Heading = ({ children, size = 28, align = "left" }: { children: any
 
 // HP Bar
 export const HPBar = ({ cur, max, temp = 0 }: { cur: any; max: any; temp: any }) => {
-	const pct = Math.max(0, Math.min(100, (cur / max) * 100));
-	const tempPct = Math.max(0, Math.min(100, (temp / max) * 100));
+	const c = Number(cur) || 0;
+	const m = Number(max) || 0;
+	const t = Number(temp) || 0;
+	const pct = m > 0 ? Math.max(0, Math.min(100, (c / m) * 100)) : 0;
+	const tempPct = m > 0 ? Math.max(0, Math.min(100, (t / m) * 100)) : 0;
 	const color = pct > 50 ? "var(--emerald)" : pct > 25 ? "var(--gold)" : "var(--ember)";
 	return (
 		<div className="sf-hpbar">
 			<div className="sf-hpbar-track">
 				<div className="sf-hpbar-fill" style={{ width: pct + "%", background: color }} />
-				{temp > 0 && <div className="sf-hpbar-temp" style={{ width: tempPct + "%", left: pct + "%" }} />}
+				{t > 0 && <div className="sf-hpbar-temp" style={{ width: tempPct + "%", left: pct + "%" }} />}
 			</div>
 		</div>
 	);

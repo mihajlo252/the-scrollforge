@@ -44,7 +44,7 @@ export const useUserStore = create<UserStore>()(
             removeUser: () => set({ user: null }),
         }),
         {
-            name: "characters",
+            name: "user",
         }
     )
 );

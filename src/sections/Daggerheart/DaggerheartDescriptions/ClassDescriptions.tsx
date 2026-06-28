@@ -23,7 +23,7 @@ export const ClassDescriptions = ({ name, classes }: { name: string; classes: an
 						<span className=" text-primary ">Starting Hit Points:</span> {currentClass?.startingHitPoints}
 					</li>
 				</ul>
-				<div className="flex flex-col gap-1">
+				<div className="column-direction">
 					<h3 className="text-lg text-accent">Class Items</h3>
 					<ul className="list-disc">
 						{currentClass?.classItems.map((item: string) => (
@@ -33,12 +33,12 @@ export const ClassDescriptions = ({ name, classes }: { name: string; classes: an
 						))}
 					</ul>
 				</div>
-				<div className="flex flex-col gap-1">
+				<div className="column-direction">
 					<h3 className="text-lg text-accent">Hope Feature</h3>
 					<h4 className="text-md text-primary">{currentClass?.hopeFeature.name}</h4>
 					<p>{currentClass?.hopeFeature.description[0].paragraph}</p>
 				</div>
-				<div className="flex flex-col gap-1">
+				<div className="column-direction">
 					<h3 className="text-lg text-accent">Class Features</h3>
 					<ul className="list-disc">
 						{currentClass?.classFeatures.map((feature: any) => (

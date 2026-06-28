@@ -1,0 +1,24 @@
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.item {
+	cursor: pointer;
+}
+.editRow {
+	display: flex;
+	gap: 2.5rem;
+}
+.editCol {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+.input {
+	width: 5ch;
+	text-align: center;
+	padding: 0.25rem;
+}

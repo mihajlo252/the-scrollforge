@@ -1,6 +1,6 @@
 export const FancyCircle = ({styles, stylesOutline, stylesInline }: {styles?: string; stylesOutline: string; stylesInline: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="292.5 73.5 512 512" className={styles}>
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="292.5 73.5 512 512" className={styles} style={{ width: "100%", height: "100%" }}>
       <path
         d="M692.19034,490.41627c-36.88128,40.60854 -87.64772,65.69253 -143.69034,65.69253c-56.04262,0 -108.44187,-25.77535 -145.32315,-66.38389l-64.67489,-71.30679l-23.0822,-88.91812l23.0822,-88.91811l66.3077,-71.99815c36.88128,-40.60854 87.64772,-65.69253 143.69034,-65.69253c56.04262,0 106.80906,25.08399 143.69034,65.69253l66.3077,71.99815l23.0822,88.91811l-23.0822,88.91812z"
         id="Path-1-1"

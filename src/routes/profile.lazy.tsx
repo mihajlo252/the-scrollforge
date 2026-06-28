@@ -5,13 +5,12 @@ import { DeletePopup } from "../components/DeletePopup";
 import { CreateCharacter } from "../sections/CreateCharacter";
 import { Avatar } from "../components/Avatar/Avatar";
 import { Popup } from "../components/Popup/Popup";
-import { Icon, RuneDivider } from "../components/Primitives";
+import { HPBar, Icon, RuneDivider } from "../components/Primitives";
 import { activeButtonsToggle, getRandomGreeting } from "../utilities/utilityFunctions";
 import { motion } from "framer-motion";
+import DaggerheartClasses from "../daggerheart-config/classes.json";
 
 import styles from "../routeStyles/profile.module.css";
-import { toast } from "../utilities/toasterSonner";
-import { supabase } from "../supabase/supabase";
 
 export const Route = createLazyFileRoute("/profile")({
 	component: Profile,
@@ -26,10 +25,10 @@ const filters = [
 function Profile() {
 	const { user } = useUserStore();
 	const { characters, setCharacters }: CharactersStore = useCharactersStore();
-	const { character, setCharacter }: CharacterStore = useCharacterStore();
+	const { setCharacter }: CharacterStore = useCharacterStore();
 	const [isDeleted, setIsDeleted] = useState(false);
 	const [characterDelete, setCharacterDelete] = useState("");
-	const [openCreateCharacter, setOpenCreateCharacter] = useState(false); // ----- !!! CHANGE TO FALSE !!! ---------
+	const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
 	const [isSave, setIsSave] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
 	const [noCharacters, setNoCharacters] = useState(false);
@@ -68,13 +67,8 @@ function Profile() {
 		setGameMode(gm);
 	};
 
-	const handleFilterCharacters = (e: MouseEvent, val: string) => {
-		e.preventDefault();
-		setCharacterFilter(val);
-		activeButtonsToggle(e);
-	};
+	const countFor = (val: string) => (val === "all" ? characters.length : characters.filter((c) => c.gamemode === val).length);
 
-	
 	useEffect(() => {
 		if (isDeleted || isSave) {
 			handleGetCharacter();
@@ -92,27 +86,30 @@ function Profile() {
 			<section className="column-direction stretch">
 				<section className="side-by-side apart">
 					<h1 className="text-content text-primary title">
-						<span className="small-eyebrow">{greeting}</span>
+						<span className="eyebrow">{greeting}</span>
 						{user?.user_metadata.username}
 					</h1>
 					<button type="button" onClick={() => setOpenCreateCharacter(true)} className="button button-primary">
-						Create character
+						<Icon name="plus" size={16} /> Forge New Hero
 					</button>
 				</section>
 				<RuneDivider />
-				<section className={`frame ${styles.filter}`}>
+				<div className={`tabs ${styles.filter}`}>
 					{filters.map((filter) => (
 						<button
 							key={filter.val}
-							className="button button-primary"
-							data-active={filter.val === "all" ? true : false}
-							onClick={(e) => handleFilterCharacters(e, filter.val)}
+							className="tab"
+							data-active={characterFilter === filter.val}
+							onClick={() => setCharacterFilter(filter.val)}
 						>
 							{filter.name}
+							<span className="mono" style={{ opacity: 0.6 }}>
+								{countFor(filter.val)}
+							</span>
 						</button>
 					))}
-				</section>
-				{noCharacters && <p className="text-xl text-accent text-left w-max">Nothing forged yet!</p>}
+				</div>
+				{noCharacters && <p className="text-content text-accent">Nothing forged yet!</p>}
 				<ul className={`${styles.characterList}`}>
 					{characters
 						.filter((character) => {
@@ -120,18 +117,12 @@ function Profile() {
 							return character.gamemode === characterFilter;
 						})
 						.map((character) => (
-							<section className={`frame hoverable ${styles.characterCard}`} key={character.id}>
-								<CharacterCard  character={character} handleNavigateToCharacter={handleNavigateToCharacter}  />
-								<div className="side-by-side">
-									<button className="button button-primary" onClick={() => handleNavigateToCharacter(character)}>
-										Enter
-									</button>
-									<button className={`button button-secondary ${styles.delete}`} onClick={() => handleDeletePopup(character)}>
-										<Icon name="trash" size={14} />
-									</button>
-								</div>
-								<button className={styles.enterButton} onClick={() => handleNavigateToCharacter(character)} />
-							</section>
+							<CharacterCard
+								key={character.id}
+								character={character}
+								onEnter={handleNavigateToCharacter}
+								onDelete={handleDeletePopup}
+							/>
 						))}
 				</ul>
 				<DeletePopup
@@ -151,6 +142,10 @@ function Profile() {
 								transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
 								className="frame full column-direction"
 							>
+								<span className="frame-corner tl" />
+								<span className="frame-corner tr" />
+								<span className="frame-corner bl" />
+								<span className="frame-corner br" />
 								<h2 style={{ textAlign: "center" }}>Choose a system</h2>
 								<div className="side-by-side">
 									<button className="button button-primary" onClick={(e) => handleGameModeToggle(e, "dnd")} autoFocus>
@@ -162,16 +157,13 @@ function Profile() {
 								</div>
 							</motion.div>
 						) : (
-							<>
-								{/* <h3 style={{ textAlign: "center" }}>Forge Your New Hero</h3> */}
-								<CreateCharacter
-									openCreateCharacter={openCreateCharacter}
-									setOpenCreateCharacter={setOpenCreateCharacter}
-									setIsSave={setIsSave}
-									gameMode={gameMode}
-									setGameMode={setGameMode}
-								/>
-							</>
+							<CreateCharacter
+								openCreateCharacter={openCreateCharacter}
+								setOpenCreateCharacter={setOpenCreateCharacter}
+								setIsSave={setIsSave}
+								gameMode={gameMode}
+								setGameMode={setGameMode}
+							/>
 						)}
 					</>
 				</Popup>
@@ -180,74 +172,84 @@ function Profile() {
 	);
 }
 
-const DNDCharacter = ({
-	character,
-	handleNavigateToCharacter,
-}: {
-	character: Character;
-	handleNavigateToCharacter: (char: Character | DaggerheartCharacter) => void;
-}) => {
-	return (
-		<li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
-			<div className="text-start">
-				<p>
-					{character.characterProfile.name}, {character.characterProfile.level}{" "}
-				</p>
-				<p>
-					{character.characterProfile.race} {character.characterProfile?.subrace}, {character.characterProfile.class}{" "}
-					{character.characterProfile?.subclass}
-				</p>
-			</div>
-		</li>
-	);
-};
-
-const DaggerheartCharacter = ({
-	character,
-	handleNavigateToCharacter,
-}: {
-	character: DaggerheartCharacter;
-	handleNavigateToCharacter: (char: DaggerheartCharacter) => void;
-}) => {
-	return (
-		<li className="flex h-full w-full items-center gap-5" onClick={() => handleNavigateToCharacter(character)}>
-			<div className="text-start">
-				<p>
-					{character.name}, {character.characterProfile.level}
-				</p>
-				<p>
-					{character.characterProfile.ancestry} {character.characterProfile.community}, {character.characterProfile.class}{" "}
-					{character.characterProfile?.subclass}, {character.characterProfile?.domains}
-				</p>
-			</div>
-		</li>
-	);
-};
-
 const CharacterCard = ({
 	character,
-	handleNavigateToCharacter,
+	onEnter,
+	onDelete,
 }: {
 	character: Character | DaggerheartCharacter;
-	handleNavigateToCharacter: (char: Character | DaggerheartCharacter) => void;
-
-
-
+	onEnter: (char: Character | DaggerheartCharacter) => void;
+	onDelete: (char: Character | DaggerheartCharacter) => void;
 }) => {
+	const isDnd = character.gamemode === "dnd";
+	const profile: any = character.characterProfile;
+	const name = profile?.name ?? (character as any).name;
+	const level = profile?.level;
+
+	const lineage = isDnd
+		? [profile?.race, profile?.subrace].filter(Boolean).join(" ")
+		: [profile?.ancestry, profile?.community].filter(Boolean).join(" ");
+	const job = [profile?.class, profile?.subclass].filter(Boolean).join(" ");
+
+	const dhMaxHP = !isDnd
+		? (DaggerheartClasses as any[]).find((c) => c.name === (profile?.class ?? "").toUpperCase())?.startingHitPoints
+		: undefined;
+	const maxHP = isDnd ? (character as any).stats?.maxHP : dhMaxHP;
+	// Daggerheart HP marks aren't persisted, so show the character at full HP.
+	const currentHP = isDnd ? (character as any).currentHP : dhMaxHP;
+	const hasHP = typeof maxHP === "number" && maxHP > 0;
+
 	return (
-		<div className={`${styles.details}`}>
-			<Avatar characterClass={character.characterProfile.class} gameMode={character.gamemode} />
-			{/* <div className={`${styles.tagBox}`}>
-				<span className={`frame full text-content ${character.gamemode == "dnd" ? "text-primary" : "text-accent"} ${styles.tag}`}>
-					{character.gamemode == "dnd" ? "D&D" : "DH"}
-				</span>
-			</div> */}
-			{character.gamemode === "dnd" && (
-				<DNDCharacter character={character as Character} handleNavigateToCharacter={handleNavigateToCharacter} />
-			)}
-			{character.gamemode === "daggerheart" && (
-				<DaggerheartCharacter character={character as DaggerheartCharacter} handleNavigateToCharacter={handleNavigateToCharacter} />
-			)}
-		</div>
+		<li className={styles.characterCard}>
+			<article className="frame hoverable">
+				<span className="frame-corner tl" />
+				<span className="frame-corner tr" />
+				<span className="frame-corner bl" />
+				<span className="frame-corner br" />
+
+				<div className={styles.portrait} onClick={() => onEnter(character)}>
+					<Avatar characterClass={profile?.class ?? ""} gameMode={character.gamemode} />
+					<span className={`chip ${isDnd ? "chip-gold" : "chip-arcane"} ${styles.sysChip}`}>{isDnd ? "D&D" : "Daggerheart"}</span>
+				</div>
+
+				<div className={styles.cardBody}>
+					<div className={styles.cardHead}>
+						<span className="display" style={{ fontSize: "1.5rem", lineHeight: 1.05 }}>
+							{name}
+						</span>
+						{level != null && (
+							<span className="mono" style={{ color: "var(--gold-2)", fontSize: "0.85rem" }}>
+								LV <span style={{ fontSize: "1.15rem" }}>{level}</span>
+							</span>
+						)}
+					</div>
+					<div className={styles.meta}>
+						{lineage && <div>{lineage}</div>}
+						{job && <div className={styles.metaSub}>{job}</div>}
+					</div>
+
+					{hasHP && (
+						<div className={styles.hpBlock}>
+							<div className={styles.hpRow}>
+								<span className="caps">Hit Points</span>
+								<span className="mono" style={{ color: "var(--text)" }}>
+									{currentHP ?? maxHP} / {maxHP}
+								</span>
+							</div>
+							<HPBar cur={currentHP ?? maxHP} max={maxHP} temp={0} />
+						</div>
+					)}
+
+					<div className={styles.actions}>
+						<button className="button stretch" onClick={() => onEnter(character)}>
+							Open Scroll
+						</button>
+						<button className={`button button-secondary ${styles.delete}`} onClick={() => onDelete(character)}>
+							<Icon name="trash" size={14} />
+						</button>
+					</div>
+				</div>
+			</article>
+		</li>
 	);
 };

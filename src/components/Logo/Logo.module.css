@@ -1,9 +1,39 @@
-.logoWrapper {
-    max-width: max-content;
-    place-self: center;
-}
 .logo {
-    --size: clamp(250px, 20vw, 300px);
-    width: var(--size);
-    user-select: none;
+	max-width: max-content;
+	place-self: center;
+	display: block;
+	font-family: var(--display), serif;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	text-align: center;
+	line-height: 1;
+	color: var(--text);
+	text-decoration: none;
+	user-select: none;
+}
+.the {
+	display: block;
+	font-family: var(--body), serif;
+	font-weight: 600;
+	font-size: 1.125rem;
+	letter-spacing: 0.42em;
+	text-transform: uppercase;
+	color: var(--primary);
+	margin-bottom: 6px;
+}
+.name {
+	font-size: var(--logo-size, clamp(2.5rem, 4vw, 3.5rem));
+	color: var(--gold-2);
+	font-weight: 600;
+	text-shadow: 0 2px 12px rgba(201, 162, 74, 0.15);
+}
+
+.compact .the {
+	font-size: 0.5625rem;
+	letter-spacing: 0.36em;
+	margin-bottom: 0;
+}
+.compact .name {
+	font-size: 1.375rem;
+	text-shadow: none;
 }

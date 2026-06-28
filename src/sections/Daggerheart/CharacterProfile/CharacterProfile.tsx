@@ -8,6 +8,7 @@ import { CirclesBlock } from "./ComponentBlocks/CirclesBlock";
 
 import ClassesData from "../../../daggerheart-config/classes.json";
 import { TraitsBlock } from "./ComponentBlocks/TraitsBlock";
+import styles from "./CharacterProfile.module.css";
 
 export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const { state } = JSON.parse(localStorage.getItem("character")!);
@@ -80,42 +81,41 @@ export const CharacterProfile = ({ setStatChange }: { setStatChange: React.Dispa
   };
 
   return (
-    <Frame classes="flex gap-2 px-2 py-5">
+    <Frame classes={styles.frame}>
       <TraitsBlock traitList={baseStats}/>
-      <section className="flex flex-col gap-5">
+      <section className={styles.main}>
         <div>
-          <p className="text-2xl text-left">
+          <p className={styles.name}>
             {name}, Level{" "}
             <input
               type="text"
               placeholder="0"
-              className="max-w-[2ch] rounded-lg border-[1px] border-slate-700 bg-slate-900 text-center focus-within:outline-0"
+              className={`input ${styles.levelInput}`}
               value={characterLevel ?? 0}
               onChange={(e) => handleChangeLevel(e)}
             />
           </p>
-          <p>
+          <p className={styles.meta}>
             {characterProfile.ancestry} {characterProfile.community}, {characterProfile.class} {characterProfile.subclass}, {characterProfile.domains}
           </p>
         </div>
-        <div className="place-self-start flex gap-5">
+        <div className={styles.row}>
           <StatBlock
             name={"Evasion"}
             stat={ClassesData.find((c: any) => c.name === characterProfile.class.toUpperCase())!.startingEvasion}
             color="accent"
           >
-            <StatHeadSVG stylesOutline={`stroke-accent transition-all fill-none`} stylesInline={`stroke-primary fill-none transition-all`} />
+            <StatHeadSVG stylesOutline={`stroke-accent fill-none`} stylesInline={`stroke-primary fill-none`} />
           </StatBlock>
           <ArmorBlock name={"Armor"} stat={3} />
         </div>
-        <div className="place-self-start flex flex-col gap-5">
-          <div className="flex gap-20 text-lg justify-center">
+        <div className={styles.col}>
+          <div className={styles.labels}>
             <p>Minor</p>
-
             <p>Major</p>
             <p>Severe</p>
           </div>
-          <div className="grid grid-cols-[.3fr_1fr] gap-5">
+          <div className={styles.hpGrid}>
             <CirclesBlock name={"HP"} stat={ClassesData.find((c: any) => c.name === characterProfile.class.toUpperCase())!.startingHitPoints} max={12}/>
             <CirclesBlock name={"Stress"} stat={6} max={12}/>
             <CirclesBlock name={"Hope"} stat={6} max={6}/>

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import styles from "./Resources.module.css";
 
 function createBoolArray(maxAmout: number, trues: number) {
   const arr = new Array(maxAmout).fill(false);
@@ -8,7 +9,7 @@ function createBoolArray(maxAmout: number, trues: number) {
   return arr;
 }
 
-export const Resources = ({ children, styles, stat, max }: { children: React.ReactNode, styles: string, stat: number, max: number }) => {
+export const Resources = ({ children, columns, stat, max }: { children: React.ReactNode; columns: number; stat: number; max: number }) => {
   const [activeResources, setActiveResources] = useState<boolean[]>(createBoolArray(max, stat));
 
   const handleToggleResource = (e: React.MouseEvent<HTMLElement>) => {
@@ -18,27 +19,16 @@ export const Resources = ({ children, styles, stat, max }: { children: React.Rea
   };
 
   useEffect(() => {
-    setActiveResources(createBoolArray(max, stat))
-  }, [stat])
+    setActiveResources(createBoolArray(max, stat));
+  }, [stat]);
 
   return (
-    <li className={`grid gap-2 hover:cursor-pointer ${styles}`}>
-      {activeResources.map((r, i) => {
-        // console.log(r);
-        if (r === true) {
-          return (
-            <div key={i} className={`stroke-primary`} onClick={handleToggleResource}>
-              {children}
-            </div>
-          );
-        } else {
-          return (
-            <div key={i} className={`stroke-accent`}>
-              {children}
-            </div>
-          );
-        }
-      })}
+    <li className={styles.grid} style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+      {activeResources.map((r, i) => (
+        <div key={i} className={`${styles.cell} ${r ? "stroke-primary" : "stroke-accent"}`} onClick={r ? handleToggleResource : undefined}>
+          {children}
+        </div>
+      ))}
     </li>
   );
 };

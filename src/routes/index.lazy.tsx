@@ -4,7 +4,7 @@ import { Logo } from "../components/Logo/Logo";
 import { useEffect, useState } from "react";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { useUserStore } from "../zustand/stores";
-import { RuneDivider } from "../components/Primitives";
+import { Icon, RuneDivider } from "../components/Primitives";
 
 import styles from "../routeStyles/index.module.css";
 import { signUp } from "../utilities/signUp";
@@ -23,7 +23,7 @@ function Index() {
 	let user = getUserFromLocal();
 
 	const setForm: any = (formType: string, { fromCreate, e }: { fromCreate?: boolean; e?: React.MouseEvent<HTMLButtonElement> }) => {
-		const activeButtonNodes = document.querySelectorAll(".button[data-active]");
+		const activeButtonNodes = document.querySelectorAll(".tab[data-active]");
 		const activeButtons = Array.from(activeButtonNodes);
 		activeButtons.forEach((b) => {
 			b.setAttribute("data-active", "false");
@@ -57,25 +57,33 @@ function Index() {
 			>
 				<section className={styles.landingHeroSection}>
 					<div>
-						<p className="text-content text-primary">Welcome to The Scrollforge</p>
+						<p className="caps" style={{ color: "var(--gold-deep)" }}>
+							Est. in the Age of Ink
+						</p>
 						<h1 className="text-content">
-							Every hero <br /><span className="alternate">needs</span> a scroll
+							Every hero <br />
+							<span className="alternate">begins</span> with a scroll
 						</h1>
 					</div>
 					<p>
-						A living character sheet for D&D, Daggerheart, and every tale between. Tracked and remembered, so you can keep your
-						eyes on the table.
+						A living character sheet for D&D, Daggerheart, and every tale between. Tracked, rolled, and remembered — so you can keep
+						your eyes on the table.
 					</p>
+					<RuneDivider />
 				</section>
 				<section className={`frame ${styles.formBox}`}>
+					<span className="frame-corner tl" />
+					<span className="frame-corner tr" />
+					<span className="frame-corner bl" />
+					<span className="frame-corner br" />
 					<Logo focusable={false} />
 					<RuneDivider />
 					<div className="column-direction">
-						<div className="side-by-side stretch">
-							<button className="button  button-primary stretch" onClick={(e) => setForm("login", { e })} data-active="true">
-								Login
+						<div className="tabs full">
+							<button className="tab stretch" onClick={(e) => setForm("login", { e })} data-active="true">
+								Sign In
 							</button>
-							<button className="button  button-primary stretch" onClick={(e) => setForm("createaccount", { e })} data-active="false">
+							<button className="tab stretch" onClick={(e) => setForm("createaccount", { e })} data-active="false">
 								Create Account
 							</button>
 						</div>
@@ -136,7 +144,7 @@ const LoginForm = () => {
 				/>
 			</div>
 			<button type="submit" className="button button-primary">
-				Log in
+				<Icon name="scroll" size={16} /> Unroll My Scroll
 			</button>
 		</motion.form>
 	);
@@ -216,7 +224,13 @@ function CreateAccountForm({ setForm }: { setForm: any }) {
 				/>
 			</div>
 			<button type="submit" className={"button button-primary"}>
-				{isPending ? <Load /> : "Submit"}
+				{isPending ? (
+						<Load />
+					) : (
+						<>
+							<Icon name="scroll" size={16} /> Forge My Scroll
+						</>
+					)}
 			</button>
 			{success && (
 				<motion.div

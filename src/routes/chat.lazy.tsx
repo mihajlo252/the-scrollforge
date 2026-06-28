@@ -6,6 +6,8 @@ import { toast } from "../utilities/toasterSonner";
 import { Frame } from "../components/Frame/Frame";
 import { motion } from "framer-motion";
 import { Popup } from "../components/Popup/Popup";
+import { Icon } from "../components/Primitives";
+import styles from "./chat.module.css";
 
 export const Route = createLazyFileRoute("/chat")({
 	component: Chat,
@@ -197,120 +199,147 @@ function Chat() {
 		};
 	}, [chatRoom]);
 
+	const activeRoomName = myRooms.find((room) => room.id === chatRoom)?.name;
+
 	return (
-		<motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full relative">
-			<Frame classes="w-full grid grid-rows-[repeat(2, 1fr)] grid-cols-[1fr] px-5 py-5 gap-2 h-full">
-				<div className="flex gap-5 relative w-full">
-					<div className="flex flex-col gap-2 w-[15%]">
+		<motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={styles.page}>
+			<div className={styles.chatGrid}>
+				{/* Parties rail */}
+				<Frame classes={styles.rooms}>
+					<div className="card-hdr">
+						<div className="card-title">Parties</div>
+						<span className="mono" style={{ fontSize: 12, color: "var(--ink-dim)" }}>{myRooms.length}</span>
+					</div>
+					<div className={styles.roomList}>
+						{myRooms.length === 0 && <div className={styles.empty}>No parties yet — create or join one.</div>}
 						{myRooms.map((room) => (
-							<button key={room.id} type="button" className="button button-accent " onClick={() => setChatRoom(room.id)}>
-								{room.name}
+							<button
+								key={room.id}
+								type="button"
+								className={styles.roomBtn}
+								data-active={chatRoom === room.id ? "" : undefined}
+								onClick={() => setChatRoom(room.id)}
+							>
+								<Icon name="user" size={14} />
+								<span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+									{room.name}
+								</span>
 							</button>
 						))}
 					</div>
+					<div className={styles.roomActions}>
+						<button type="button" className="button button-ghost short" onClick={() => handleGetAllParties()}>
+							<Icon name="search" size={13} /> Join Party
+						</button>
+						<button type="button" className="button button-primary short" onClick={() => setOpenCreateParty(true)}>
+							<Icon name="plus" size={13} /> Create Party
+						</button>
+					</div>
+				</Frame>
 
-					<Frame classes="flex-col grow px-5 py-5 gap-5 overflow-y-scroll w-full h-[calc(100vh-230px)]">
-						{chatRoom && (
+				{/* Chat column */}
+				<Frame classes={styles.chatMain}>
+					<div className="card-hdr">
+						<div className={styles.chatHeaderName}>
+							{chatRoom && <span className={styles.online} />}
+							<div className="card-title">{activeRoomName ?? "Select a party"}</div>
+						</div>
+						<button
+							type="button"
+							className="button button-ghost short"
+							onClick={() => setSeeActiveUsers(true)}
+							disabled={!chatRoom}
+						>
+							<Icon name="user" size={13} /> Active{activeUsers.length ? ` · ${activeUsers.length}` : ""}
+						</button>
+					</div>
+
+					<div className={styles.messages}>
+						{!chatRoom ? (
+							<div className={styles.placeholder}>Select a party from the left to start chatting.</div>
+						) : (
 							<>
-								<ul className="flex flex-col justify-start gap-2 h-[calc(80vh-230px)]">
-									<li className="flex flex-col text-left">
-										<p className="text-center text-xs text-slate-400">System message</p>
-										<p className="text-center text-accent">Welcome to {myRooms.find((room) => room.id === chatRoom)?.name}</p>
-									</li>
-									{messages.map((message, index) => (
-										<li key={index} className="flex flex-col text-left gap-2">
-											<p
-												className={`text-xl font-bold capitalize ${message.user_id === userID ? "text-accent" : "text-primary"}`}
-											>
-												{message.username}
-												{message.user_id === userID && <span className="text-xs text-slate-400"> (Me)</span>}
-											</p>
-
-											<p className="flex justify-between">
-												{message.content}
-												<span className="flex items-center justify-end text-accent">
+								<div className={styles.sysMsg}>
+									<div className={styles.sysLabel}>System message</div>
+									<div className={styles.sysWelcome}>Welcome to {activeRoomName}</div>
+								</div>
+								{messages.map((message, index) => {
+									const own = message.user_id === userID;
+									return (
+										<div key={index} className={`${styles.msgRow} ${own ? styles.own : ""}`}>
+											<div className={styles.msgMeta}>
+												<span className={styles.msgName}>{message.username}</span>
+												{own && <span className={styles.msgMe}>(Me)</span>}
+												<span className={styles.msgTime}>
 													{new Date(message.created_at).toLocaleTimeString("en-US", {
 														hour: "2-digit",
 														minute: "2-digit",
 														hour12: false,
 													})}
 												</span>
-											</p>
-										</li>
-									))}
-								</ul>
-								<div ref={lastMessageRef} className="px-5 text-left"></div>
+											</div>
+											<div className={styles.bubble}>{message.content}</div>
+										</div>
+									);
+								})}
+								<div ref={lastMessageRef} />
 							</>
 						)}
-					</Frame>
-				</div>
+					</div>
 
-				<div className="flex gap-5 items-end">
-					<div className="flex flex-col gap-2 w-[15%]">
-						<button type="button" className="button button-accent " onClick={() => handleGetAllParties()}>
-							Join Party
+					<form onSubmit={sendMessage} className={styles.composer}>
+						<input
+							type="text"
+							value={newMessage}
+							onChange={handleSetNewMessage}
+							placeholder={chatRoom ? "Type a message…" : "Select a party first…"}
+							className={`input ${styles.composerInput}`}
+							disabled={!chatRoom}
+						/>
+						<button type="submit" className="button button-primary short" disabled={!chatRoom}>
+							<Icon name="fwd" size={14} /> Send
 						</button>
-						<button className="button button-primary" onClick={() => setOpenCreateParty(true)}>
-							Create Party
-						</button>
-					</div>
-					<div className="flex gap-2 w-full">
-						<button type="button" className="button button-accent" onClick={() => setSeeActiveUsers(true)}>
-							Active
-						</button>
-						<form onSubmit={sendMessage} className="flex gap-2 flex-1">
-							<input
-								type="text"
-								value={newMessage}
-								onChange={handleSetNewMessage}
-								placeholder="Type a message..."
-								className="input input-bordered flex-grow"
-							/>
-							<button type="submit" className="button button-primary">
-								Send
-							</button>
-						</form>
-					</div>
-				</div>
-			</Frame>
+					</form>
+				</Frame>
+			</div>
 
 			<Popup closerFunc={setSeeActiveUsers} toggle={seeActiveUsers}>
-				<Frame classes="w-1/5 px-5 py-5 flex-col gap-5 justify-start items-center relative">
-					<button type="button" className="button button-secondary " onClick={() => setSeeActiveUsers(false)}>
-						Close
-					</button>
-					<h1 className=" text-4xl font-semibold text-primary">Active</h1>
-					<ul className="flex flex-col">
+				<Frame classes={styles.popupCard}>
+					<div className={styles.popupHeader}>
+						<h3 className="card-title">Active Members</h3>
+						<button type="button" className="button button-secondary short" onClick={() => setSeeActiveUsers(false)}>
+							Close
+						</button>
+					</div>
+					<div className={styles.userList}>
+						{activeUsers.length === 0 && <div className={styles.empty}>No one is online right now.</div>}
 						{activeUsers.map((user, index) => (
-							<li key={index} className="flex flex-col justify-center items-center">
-								<p className="text-3xl font-bold capitalize text-success flex items-center">{user}</p>
-							</li>
+							<div key={index} className={styles.userRow}>
+								<span className={styles.online} />
+								{user}
+							</div>
 						))}
-					</ul>
+					</div>
 				</Frame>
 			</Popup>
 
 			<Popup closerFunc={setOpenCreateParty} toggle={openCreateParty}>
 				<form onSubmit={handleCreateRoom}>
-					<Frame classes="w-full flex flex-col gap-5 px-20 py-10">
-						<div className="flex flex-col gap-5">
-							<label htmlFor="roomNameID" className="text-2xl">
-								Name Your Party
-							</label>
-							<input
-								type="text"
-								placeholder="Name"
-								id="roomNameID"
-								value={newRoomName}
-								onChange={(e) => setNewRoomName(e.target.value)}
-								className="rounded-xl border-2 border-slate-900 bg-base-300 p-2 text-base-content"
-							/>
-						</div>
-						<div className="flex gap-2">
-							<button type="submit" className="button button-primary" disabled={isSubmitting ? true : false}>
-								Create party
+					<Frame classes={styles.popupCard}>
+						<h3 className="card-title">Name Your Party</h3>
+						<input
+							type="text"
+							placeholder="Party name"
+							id="roomNameID"
+							value={newRoomName}
+							onChange={(e) => setNewRoomName(e.target.value)}
+							className="input"
+						/>
+						<div className={styles.formRow}>
+							<button type="submit" className="button button-accent stretch" disabled={isSubmitting}>
+								Create Party
 							</button>
-							<button type="button" className="button button-secondary" onClick={() => setOpenCreateParty(false)}>
+							<button type="button" className="button button-secondary stretch" onClick={() => setOpenCreateParty(false)}>
 								Cancel
 							</button>
 						</div>
@@ -319,23 +348,26 @@ function Chat() {
 			</Popup>
 
 			<Popup closerFunc={setOpenAllParties} toggle={openAllParties}>
-				<form onSubmit={handleCreateRoom}>
-					<Frame classes="w-full flex flex-col gap-5 px-10 py-5">
-						<ul className="grid grid-cols-2 gap-2">
-							{allParties.map((party, index) => (
-								<li key={index} className="flex flex-col">
-									<Frame classes="relative flex flex-col gap-2 py-5 px-10">
-										<p className="text-xl font-bold capitalize">{party.name}</p>
-										<button className="button button-accent" type="button" onClick={() => handleJoinParty(party.id)}>
-											Join
-										</button>
-									</Frame>
-								</li>
-							))}
-						</ul>
-					</Frame>
-				</form>
+				<Frame classes={styles.popupCard}>
+					<div className={styles.popupHeader}>
+						<h3 className="card-title">Join a Party</h3>
+						<button type="button" className="button button-secondary short" onClick={() => setOpenAllParties(false)}>
+							Close
+						</button>
+					</div>
+					<div className={styles.partyGrid}>
+						{allParties.length === 0 && <div className={styles.empty}>No parties available.</div>}
+						{allParties.map((party, index) => (
+							<div key={index} className={styles.partyCard}>
+								<span className={styles.partyName}>{party.name}</span>
+								<button className="button button-accent short" type="button" onClick={() => handleJoinParty(party.id)}>
+									<Icon name="plus" size={13} /> Join
+								</button>
+							</div>
+						))}
+					</div>
+				</Frame>
 			</Popup>
-		</motion.main>
+		</motion.section>
 	);
 }

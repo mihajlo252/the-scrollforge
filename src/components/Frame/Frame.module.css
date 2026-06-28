@@ -1,11 +1,14 @@
 .hoverableCard {
-    gap: 1rem;
-	transition: background-color .15s cubic-bezier(0.1, 0.7, 0.1, 1.0);
-	padding: 1rem 2rem;
-}
-.hoverableCard:hover, .hoverableCard:focus-visible {
-	background-color: var(--_hover);
+	gap: 1rem;
 	cursor: pointer;
+	transition:
+		border-color 0.15s cubic-bezier(0.1, 0.7, 0.1, 1),
+		background 0.15s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+.hoverableCard:hover,
+.hoverableCard:focus-visible {
+	border-color: var(--gold);
+	background: linear-gradient(180deg, var(--panel-2), var(--bg-3));
 }
 
 .hoverableCard:focus-visible {

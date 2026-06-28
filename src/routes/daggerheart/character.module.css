@@ -1,0 +1,52 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	flex: 1;
+	position: relative;
+}
+
+.saveBtn {
+	position: absolute;
+	top: 1rem;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 30;
+}
+
+.row {
+	display: flex;
+	gap: 1.25rem;
+	align-items: stretch;
+	flex-wrap: wrap;
+}
+
+.profileWrap {
+	flex: 1 1 480px;
+	display: flex;
+}
+
+.navCol {
+	flex: 0 0 auto;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.nav {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.dice {
+	justify-content: center;
+	align-items: center;
+}
+
+.unavailable {
+	flex: 1;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}

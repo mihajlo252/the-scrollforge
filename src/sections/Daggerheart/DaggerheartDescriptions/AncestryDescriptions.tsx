@@ -12,7 +12,7 @@ export const AncestryDescriptions = ({ name, ancestries }: { name: string; ances
       <h1 className="text-3xl text-accent">{name}</h1>
       <DescriptionScrollContainer>
         <p>{currentAncestry?.description[0].paragraph}</p>
-        <div className="flex flex-col gap-1">
+        <div className="column-direction">
           <h3 className="text-lg text-accent">Features</h3>
           <ul className="list-disc">
             {currentAncestry?.features.map((feature: any) => (
