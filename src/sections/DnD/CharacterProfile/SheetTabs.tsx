@@ -1,4 +1,5 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { TabBar } from "../../../components/Primitives";
 import styles from "./sheet.module.css";
 
@@ -13,6 +14,17 @@ export const SHEET_TABS = [
 
 export const SheetTabs = ({ active }: { active: string }) => {
 	const navigate = useNavigate();
+	const router = useRouter();
+
+	// Preload every sibling tab's code-split chunk up front so switching
+	// tabs is instant (no first-load flicker). These use programmatic
+	// navigation, which intent-preloading doesn't cover.
+	useEffect(() => {
+		SHEET_TABS.forEach((t) => {
+			Promise.resolve(router.preloadRoute({ to: t.to })).catch(() => {});
+		});
+	}, [router]);
+
 	return (
 		<div className={styles.tabsRow}>
 			<TabBar

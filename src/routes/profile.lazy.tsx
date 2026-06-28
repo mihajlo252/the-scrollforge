@@ -1,11 +1,13 @@
 import { CatchBoundary, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useCharactersStore, useCharacterStore, useUserStore } from "../zustand/stores";
 import { DeletePopup } from "../components/DeletePopup";
 import { CreateCharacter } from "../sections/CreateCharacter";
 import { Avatar } from "../components/Avatar/Avatar";
 import { Popup } from "../components/Popup/Popup";
 import { HPBar, Icon, RuneDivider } from "../components/Primitives";
+import { SortableGrid } from "../components/SortableGrid/SortableGrid";
+import { sendData } from "../utilities/sendData";
 import { activeButtonsToggle, getRandomGreeting } from "../utilities/utilityFunctions";
 import { motion } from "framer-motion";
 import DaggerheartClasses from "../daggerheart-config/classes.json";
@@ -35,6 +37,11 @@ function Profile() {
 	const [gameMode, setGameMode] = useState("");
 	const [characterFilter, setCharacterFilter] = useState("all");
 	const [greeting] = useState(() => getRandomGreeting());
+	// Only set while the user is actively reordering; null = follow the
+	// DB-sorted order. Keeps the load order stable (no jump on every visit).
+	const [dragOrder, setDragOrder] = useState<string[] | null>(null);
+	const dragOrderRef = useRef<string[] | null>(null);
+	dragOrderRef.current = dragOrder;
 
 	const navigate = useNavigate();
 
@@ -68,6 +75,59 @@ function Profile() {
 	};
 
 	const countFor = (val: string) => (val === "all" ? characters.length : characters.filter((c) => c.gamemode === val).length);
+
+	const byId = useMemo(() => new Map(characters.map((c) => [c.id, c] as const)), [characters]);
+
+	// Sorted synchronously from the DB `sortOrder` so the FIRST render is already
+	// correct (unset values sink to the bottom, then by creation time).
+	const sortedCharacters = useMemo(
+		() =>
+			[...characters].sort((a, b) => {
+				const sa = a.sortOrder;
+				const sb = b.sortOrder;
+				const aHas = typeof sa === "number";
+				const bHas = typeof sb === "number";
+				if (aHas && bHas) return sa! - sb!;
+				if (aHas) return -1;
+				if (bHas) return 1;
+				return (a.created_at ?? "").localeCompare(b.created_at ?? "");
+			}),
+		[characters],
+	);
+
+	// When the list (re)loads, drop any in-session drag order so we follow the
+	// freshly-fetched DB order.
+	useEffect(() => {
+		setDragOrder(null);
+	}, [characters]);
+
+	const ordered = dragOrder
+		? (dragOrder.map((id) => byId.get(id)).filter(Boolean) as (Character | DaggerheartCharacter)[])
+		: sortedCharacters;
+	const displayed = ordered.filter((c) => characterFilter === "all" || c.gamemode === characterFilter);
+
+	// Reorder within the visible (filtered) set, merged back into the full order.
+	const handleReorder = (nextDisplayed: (Character | DaggerheartCharacter)[]) => {
+		const fullIds = dragOrderRef.current ?? sortedCharacters.map((c) => c.id);
+		const displayedIds = new Set(displayed.map((c) => c.id));
+		const nextIds = nextDisplayed.map((c) => c.id);
+		const newOrder = [...fullIds];
+		let k = 0;
+		for (let i = 0; i < newOrder.length; i++) {
+			if (displayedIds.has(newOrder[i])) newOrder[i] = nextIds[k++];
+		}
+		setDragOrder(newOrder);
+	};
+
+	// On drop, persist the new index of any character whose position changed.
+	const commitOrder = () => {
+		const next = dragOrderRef.current;
+		if (!next) return;
+		next.forEach((id, i) => {
+			const c = byId.get(id);
+			if (c && c.sortOrder !== i) sendData("characters", id, { sortOrder: i });
+		});
+	};
 
 	useEffect(() => {
 		if (isDeleted || isSave) {
@@ -110,21 +170,17 @@ function Profile() {
 					))}
 				</div>
 				{noCharacters && <p className="text-content text-accent">Nothing forged yet!</p>}
-				<ul className={`${styles.characterList}`}>
-					{characters
-						.filter((character) => {
-							if (characterFilter === "all") return character;
-							return character.gamemode === characterFilter;
-						})
-						.map((character) => (
-							<CharacterCard
-								key={character.id}
-								character={character}
-								onEnter={handleNavigateToCharacter}
-								onDelete={handleDeletePopup}
-							/>
-						))}
-				</ul>
+				<SortableGrid
+					items={displayed}
+					getId={(c) => c.id}
+					onReorder={handleReorder}
+					onCommit={commitOrder}
+					className={`${styles.characterList}`}
+					itemClassName={styles.characterCard}
+					renderItem={(character) => (
+						<CharacterCard character={character} onEnter={handleNavigateToCharacter} onDelete={handleDeletePopup} />
+					)}
+				/>
 				<DeletePopup
 					toggle={isDelete}
 					deleteID={characterDelete}
@@ -200,8 +256,7 @@ const CharacterCard = ({
 	const hasHP = typeof maxHP === "number" && maxHP > 0;
 
 	return (
-		<li className={styles.characterCard}>
-			<article className="frame hoverable">
+		<article className="frame hoverable">
 				<span className="frame-corner tl" />
 				<span className="frame-corner tr" />
 				<span className="frame-corner bl" />
@@ -250,6 +305,5 @@ const CharacterCard = ({
 					</div>
 				</div>
 			</article>
-		</li>
 	);
 };

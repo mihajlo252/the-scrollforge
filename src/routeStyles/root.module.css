@@ -1,24 +1,26 @@
+/* Block (not flex) scroller: a block container honours padding-bottom at the
+   end of scroll, so bottom content keeps its offset instead of sitting flush
+   (flex scroll containers drop the trailing padding). scrollbar-gutter keeps
+   the layout from shifting when the scrollbar appears/disappears. */
 .main {
-    display: flex;
     flex: 1;
     min-height: 0;
     overflow-y: auto;
-    flex-direction: column;
-    justify-content: safe center;
+    overscroll-behavior-y: contain;
+    scrollbar-gutter: stable;
 	padding-inline: var(--max-width-padding);
     min-width: 20px !important;
     position: relative;
     isolation: isolate;
     padding-block: 2rem;
-    gap: .5rem;
 }
-/* Page transition wrapper — replicates .main's flex/centering so page
-   layouts (full-height flex pages and short centered pages) are unchanged. */
+/* Page transition wrapper — owns the vertical centering. min-height:100% makes
+   short pages fill (and centre) while tall pages grow and scroll, so there's
+   no extra scrollbar when content already fits. */
 .pageWrap {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    min-height: 0;
+    min-height: 100%;
     justify-content: safe center;
 }
 .main::after {

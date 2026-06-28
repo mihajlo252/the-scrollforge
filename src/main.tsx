@@ -12,8 +12,16 @@ import { routeTree } from './routeTree.gen'
 // Create hash history
 const hashHistory = createHashHistory()
 
-// Create a new router instance
-const router = createRouter({ routeTree, history: hashHistory })
+// Create a new router instance.
+// defaultPreload "intent" fetches a route's code-split chunk on hover/touch
+// of a <Link>, so the screen is ready before navigation (avoids the
+// first-load flicker while the chunk downloads).
+const router = createRouter({
+  routeTree,
+  history: hashHistory,
+  defaultPreload: "intent",
+  defaultPreloadDelay: 50,
+})
 
 const queryClient = new QueryClient()
 

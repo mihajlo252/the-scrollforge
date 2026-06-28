@@ -1,0 +1,31 @@
+.item {
+	position: relative;
+}
+.handle {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 4;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 6px;
+	border: 1px solid var(--rule);
+	background: hsla(from var(--panel) h s l / 0.7);
+	color: var(--ink-faint);
+	cursor: grab;
+	touch-action: none;
+	backdrop-filter: blur(2px);
+	transition:
+		color 0.15s ease,
+		border-color 0.15s ease;
+}
+.handle:hover {
+	color: var(--gold);
+	border-color: var(--gold-deep);
+}
+.handle:active {
+	cursor: grabbing;
+}

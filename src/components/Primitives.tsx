@@ -189,6 +189,12 @@ export const Icon = ({
 				<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" />
 			</>
 		),
+		refresh: (
+			<>
+				<path d="M21 12a9 9 0 1 1-2.64-6.36" />
+				<path d="M21 3v5h-5" />
+			</>
+		),
 	};
 	return (
 		<svg

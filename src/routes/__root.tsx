@@ -1,8 +1,10 @@
 import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Navigation } from "../sections/Navigation/Navigation";
 import { ErrComp } from "../components/ErrComp/ErrComp";
+import { PullToRefresh } from "../components/PullToRefresh/PullToRefresh";
 import { Toaster } from "sonner";
 import styles from "../routeStyles/root.module.css";
 import { useUserStore } from "../zustand/stores";
@@ -16,11 +18,13 @@ export const Route = createRootRoute({
 function Root() {
 	const { user: id } = useUserStore();
 	const pathname = useRouterState({ select: (s) => s.location.pathname });
+	const mainRef = useRef<HTMLElement>(null);
 
 	return (
 		<>
 			{id && <Navigation />}
-			<main className={`${styles.main}`}>
+			<PullToRefresh containerRef={mainRef} />
+			<main ref={mainRef} className={`${styles.main}`}>
 				{/* Keyed by pathname so each navigation replays a smooth, eased
 				    fade + slide. (Enter-only: AnimatePresence exit is unreliable
 				    with TanStack's shared Outlet.) */}

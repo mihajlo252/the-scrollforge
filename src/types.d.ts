@@ -151,6 +151,7 @@ interface Character {
     descriptions: Descriptions;
     created_at: string;
     gamemode: string;
+    sortOrder?: number;
     spellSlots?: SpellSlots;
     inventory?: InventoryItem[];
     currency?: Currency;
@@ -165,6 +166,7 @@ interface DaggerheartCharacter {
     descriptions: Descriptions;
     created_at: string;
     gamemode: string;
+    sortOrder?: number;
 }
 
 interface UserStore {
