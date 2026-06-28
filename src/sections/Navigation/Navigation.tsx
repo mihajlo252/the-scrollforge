@@ -33,7 +33,7 @@ export const Navigation = () => {
 
 	return (
 		<motion.nav className={styles.nav} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-			<Logo size="140px" />
+			<Logo compact />
 			<div className={styles.menuItems}>
 				<BackButton classes="button button-primary" />
 				<button type="button" className="button button-accent" onClick={() => handleRedirect("/chat")}>
@@ -46,19 +46,29 @@ export const Navigation = () => {
 			</div>
 
 			<AccountPopover closerFunc={setMenu} toggle={menu}>
-				<div className={styles.accountPopoverContent}>
-					<div className={styles.profile}>
-						<div className={styles.accountPopoverUserIcon}>
-							<Icon name="user" size={50} />
+				<div className={styles.accountMenu}>
+					<div className={styles.accountHeader}>
+						<div className={styles.accountAvatar}>
+							{user?.user_metadata.username?.[0] ?? <Icon name="user" size={22} />}
 						</div>
-						<h4>{user?.user_metadata.username}</h4>
+						<div className={styles.accountIdentity}>
+							<div className={styles.accountName}>{user?.user_metadata.username ?? "Adventurer"}</div>
+							{user?.email && <div className={styles.accountEmail}>{user.email}</div>}
+						</div>
 					</div>
-					<div className="list">
-						<button type="button" className="button button-accent" onClick={() => handleRedirect("/tickets")}>
-							Help & Support
+					<div className={styles.accountDivider} />
+					<div className={styles.accountActions}>
+						<button type="button" className={styles.menuRow} onClick={() => handleRedirect("/tickets")}>
+							<Icon name="book" size={16} />
+							<span>Help &amp; Support</span>
 						</button>
-						<button type="button" className="button button-secondary" onClick={() => setOpenSignOut(true)}>
-							Sign Out
+						<button
+							type="button"
+							className={`${styles.menuRow} ${styles.menuRowDanger}`}
+							onClick={() => setOpenSignOut(true)}
+						>
+							<Icon name="back" size={16} />
+							<span>Sign Out</span>
 						</button>
 					</div>
 				</div>

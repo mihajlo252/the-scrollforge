@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import DiceBox from "@3d-dice/dice-box";
 import { Popup } from "../components/Popup/Popup";
+import styles from "./DiceBox.module.css";
 
 const diceBox = new DiceBox({
   assetPath: "/the-scrollforge/assets/",
@@ -36,41 +37,25 @@ export const DiceBoxComponent = () => {
   };
 
   return (
-    <div className="w-full">
-      <div className={`flex flex-col gap-2`}>
+    <div className={styles.wrap}>
+      <div className={styles.col}>
         <input
           type="number"
-          className="input input-bordered h-min w-full"
+          className="input"
           onChange={(e) => setQuantity(parseInt(e.target.value))}
           value={quantity}
           placeholder="Quantity"
         />
-        <div className="grid grid-cols-2 gap-2">
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(4)}>
-            D4
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(6)}>
-            D6
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(8)}>
-            D8
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(10)}>
-            D10
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(12)}>
-            D12
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(20)}>
-            D20
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(100)}>
-            D100
-          </button>
+        <div className={styles.grid}>
+          {[4, 6, 8, 10, 12, 20, 100].map((d) => (
+            <button key={d} type="button" className="button button-primary short" onClick={() => throwDice(d)}>
+              D{d}
+            </button>
+          ))}
         </div>
-        <p className="text-neutral">
+        <p className={styles.result}>
           {resultArray.length > 4 ? (
-            <button type="button" className="text-primary" onClick={() => setShowDice(true)}>
+            <button type="button" className={styles.link} onClick={() => setShowDice(true)}>
               Show Dice
             </button>
           ) : (
@@ -80,7 +65,7 @@ export const DiceBoxComponent = () => {
         </p>
       </div>
       <Popup closerFunc={setShowDice} toggle={showDice}>
-        <p className="text-2xl">
+        <p className={styles.popupResult}>
           {resultArray.join(" + ")} = {diceResult}
         </p>
       </Popup>

@@ -1,6 +1,6 @@
 export const StatHeadSVG = ({ stylesOutline, stylesInline }: { stylesOutline: string; stylesInline: string }) => {
   return (      
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="292.5 73.5 512 512" className="w-full h-full">
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="292.5 73.5 512 512" style={{ width: "100%", height: "100%" }}>
         <path
           d="M449.34252,550.4216v-88.36865l-99.15752,-44.18432v-88.36865l24.68797,-11.0009c-2.04177,-10.74816 -3.11024,-21.841 -3.11024,-33.18342c0,-97.60931 79.12799,-176.73726 176.73726,-176.73726c97.60931,0 176.73726,79.12799 176.73726,176.73726c0,11.34241 -1.06847,22.43528 -3.11024,33.18342l24.68797,11.0009v88.36865l-99.15752,44.18432v88.36865z"
           id="Path-1"

@@ -18,7 +18,7 @@ export const SubclassDescriptions = ({ name, subclasses }: { name: string; subcl
 						<span className="text-primary">Spellcast Trait:</span> {Capitalize(currentSubclass?.spellcastTrait)}
 					</p>
 				)}
-				<div className="flex flex-col gap-1">
+				<div className="column-direction">
 					<h3 className="text-lg text-accent">Foundation Features</h3>
 					<ul className="list-disc">
 						{currentSubclass?.foundation.features.map((feature: any) => (
@@ -28,7 +28,7 @@ export const SubclassDescriptions = ({ name, subclasses }: { name: string; subcl
 						))}
 					</ul>
 				</div>
-				<div className="flex flex-col gap-1">
+				<div className="column-direction">
 					<h3 className="text-lg text-accent">Specialization Features</h3>
 					<ul className="list-disc">
 						{currentSubclass?.specialization.features.map((feature: any) => (
@@ -38,7 +38,7 @@ export const SubclassDescriptions = ({ name, subclasses }: { name: string; subcl
 						))}
 					</ul>
 				</div>
-				<div className="flex flex-col gap-1">
+				<div className="column-direction">
 					<h3 className="text-lg text-accent">Mastery Features</h3>
 					<ul className="list-disc">
 						{currentSubclass?.mastery.features.map((feature: any) => (

@@ -9,6 +9,7 @@ import { sendData } from "../../utilities/sendData";
 import { Popup } from "../../components/Popup/Popup";
 import { Notes } from "../../sections/Notes";
 import { CharacterProfile } from "../../sections/Daggerheart/CharacterProfile/CharacterProfile";
+import styles from "./character.module.css";
 // import ClassesData from "../../daggerheart-config/classes_cleaned.json"
 // import SubclassesData from "../../daggerheart-config/subclasses_clean.json"
 // import CommunitiesData from "../../daggerheart-config/communities_clean.json"
@@ -23,8 +24,8 @@ function Character() {
   
   if (dev === "false") {
     return (
-      <Frame classes="w-full h-full flex flex-col justify-center items-center">
-        <h1 className="text-primary text-4xl">Currently unavailable. Please check back later!</h1>
+      <Frame classes={styles.unavailable}>
+        <h1 className="text-content text-primary">Currently unavailable. Please check back later!</h1>
       </Frame>
     )
   }
@@ -49,19 +50,18 @@ function Character() {
     if (statChange) setIsSave(true);
   }, [statChange]);
   return (
-    <motion.main className={`grid flex-1 w-full grid-rows-[1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.section className={styles.page} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {isSave && (
-        <button
-          className="button button-primary  absolute top-5 m-0 h-min min-h-0 place-self-center"
-          onClick={() => handleSaveCharacter(state.character.stats)}
-        >
+        <button className={`button button-primary ${styles.saveBtn}`} onClick={() => handleSaveCharacter(state.character.stats)}>
           Save Character
         </button>
       )}
-      <section className={`flex gap-5`}>
-        <CharacterProfile setStatChange={setStatChange} />
-        <Frame classes="w-[10%] flex flex-col justify-start">
-          <nav className="flex flex-col gap-3 p-3">
+      <section className={styles.row}>
+        <div className={styles.profileWrap}>
+          <CharacterProfile setStatChange={setStatChange} />
+        </div>
+        <Frame classes={styles.navCol}>
+          <nav className={styles.nav}>
             <button onClick={() => setToggleNotes(true)} className="button button-primary">
               Notes
             </button>
@@ -71,17 +71,14 @@ function Character() {
           </nav>
         </Frame>
       </section>
-      {/* <Frame styles="w-[20%] flex justify-around items-center p-5">
-        <DiceBoxComponent />
-      </Frame> */}
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
         <Notes />
       </Popup>
       <Popup closerFunc={setToggleDice} toggle={toggleDice}>
-        <Frame classes="w-[20%] flex justify-around items-center p-5">
+        <Frame classes={styles.dice}>
           <DiceBoxComponent />
         </Frame>
       </Popup>
-    </motion.main>
+    </motion.section>
   );
 }

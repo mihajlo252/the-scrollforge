@@ -26,11 +26,12 @@
 }
 
 .accountPopover {
-    height: 100%;
+    --_padding: 1rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    gap: 1rem;
-    background-color: hsla(from var(--background) calc(h - 2) calc(s + 2) calc(l + .02) / .9);
+    align-items: stretch;
+    gap: 0;
+    width: max-content;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    box-shadow: var(--shadow-2);
 } 

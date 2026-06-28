@@ -23,6 +23,7 @@ const ChatLazyImport = createFileRoute('/chat')()
 const IndexLazyImport = createFileRoute('/')()
 const DndTraitsLazyImport = createFileRoute('/dnd/traits')()
 const DndSpellsLazyImport = createFileRoute('/dnd/spells')()
+const DndInventoryLazyImport = createFileRoute('/dnd/inventory')()
 const DndInspirationLazyImport = createFileRoute('/dnd/inspiration')()
 const DndCharacterLazyImport = createFileRoute('/dnd/character')()
 const DndAttacksLazyImport = createFileRoute('/dnd/attacks')()
@@ -73,6 +74,12 @@ const DndSpellsLazyRoute = DndSpellsLazyImport.update({
   path: '/dnd/spells',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/dnd/spells.lazy').then((d) => d.Route))
+
+const DndInventoryLazyRoute = DndInventoryLazyImport.update({
+  id: '/dnd/inventory',
+  path: '/dnd/inventory',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/dnd/inventory.lazy').then((d) => d.Route))
 
 const DndInspirationLazyRoute = DndInspirationLazyImport.update({
   id: '/dnd/inspiration',
@@ -169,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DndInspirationLazyImport
       parentRoute: typeof rootRoute
     }
+    '/dnd/inventory': {
+      id: '/dnd/inventory'
+      path: '/dnd/inventory'
+      fullPath: '/dnd/inventory'
+      preLoaderRoute: typeof DndInventoryLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/dnd/spells': {
       id: '/dnd/spells'
       path: '/dnd/spells'
@@ -198,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/dnd/attacks': typeof DndAttacksLazyRoute
   '/dnd/character': typeof DndCharacterLazyRoute
   '/dnd/inspiration': typeof DndInspirationLazyRoute
+  '/dnd/inventory': typeof DndInventoryLazyRoute
   '/dnd/spells': typeof DndSpellsLazyRoute
   '/dnd/traits': typeof DndTraitsLazyRoute
 }
@@ -212,6 +227,7 @@ export interface FileRoutesByTo {
   '/dnd/attacks': typeof DndAttacksLazyRoute
   '/dnd/character': typeof DndCharacterLazyRoute
   '/dnd/inspiration': typeof DndInspirationLazyRoute
+  '/dnd/inventory': typeof DndInventoryLazyRoute
   '/dnd/spells': typeof DndSpellsLazyRoute
   '/dnd/traits': typeof DndTraitsLazyRoute
 }
@@ -227,6 +243,7 @@ export interface FileRoutesById {
   '/dnd/attacks': typeof DndAttacksLazyRoute
   '/dnd/character': typeof DndCharacterLazyRoute
   '/dnd/inspiration': typeof DndInspirationLazyRoute
+  '/dnd/inventory': typeof DndInventoryLazyRoute
   '/dnd/spells': typeof DndSpellsLazyRoute
   '/dnd/traits': typeof DndTraitsLazyRoute
 }
@@ -243,6 +260,7 @@ export interface FileRouteTypes {
     | '/dnd/attacks'
     | '/dnd/character'
     | '/dnd/inspiration'
+    | '/dnd/inventory'
     | '/dnd/spells'
     | '/dnd/traits'
   fileRoutesByTo: FileRoutesByTo
@@ -256,6 +274,7 @@ export interface FileRouteTypes {
     | '/dnd/attacks'
     | '/dnd/character'
     | '/dnd/inspiration'
+    | '/dnd/inventory'
     | '/dnd/spells'
     | '/dnd/traits'
   id:
@@ -269,6 +288,7 @@ export interface FileRouteTypes {
     | '/dnd/attacks'
     | '/dnd/character'
     | '/dnd/inspiration'
+    | '/dnd/inventory'
     | '/dnd/spells'
     | '/dnd/traits'
   fileRoutesById: FileRoutesById
@@ -284,6 +304,7 @@ export interface RootRouteChildren {
   DndAttacksLazyRoute: typeof DndAttacksLazyRoute
   DndCharacterLazyRoute: typeof DndCharacterLazyRoute
   DndInspirationLazyRoute: typeof DndInspirationLazyRoute
+  DndInventoryLazyRoute: typeof DndInventoryLazyRoute
   DndSpellsLazyRoute: typeof DndSpellsLazyRoute
   DndTraitsLazyRoute: typeof DndTraitsLazyRoute
 }
@@ -298,6 +319,7 @@ const rootRouteChildren: RootRouteChildren = {
   DndAttacksLazyRoute: DndAttacksLazyRoute,
   DndCharacterLazyRoute: DndCharacterLazyRoute,
   DndInspirationLazyRoute: DndInspirationLazyRoute,
+  DndInventoryLazyRoute: DndInventoryLazyRoute,
   DndSpellsLazyRoute: DndSpellsLazyRoute,
   DndTraitsLazyRoute: DndTraitsLazyRoute,
 }
@@ -321,6 +343,7 @@ export const routeTree = rootRoute
         "/dnd/attacks",
         "/dnd/character",
         "/dnd/inspiration",
+        "/dnd/inventory",
         "/dnd/spells",
         "/dnd/traits"
       ]
@@ -351,6 +374,9 @@ export const routeTree = rootRoute
     },
     "/dnd/inspiration": {
       "filePath": "dnd/inspiration.lazy.tsx"
+    },
+    "/dnd/inventory": {
+      "filePath": "dnd/inventory.lazy.tsx"
     },
     "/dnd/spells": {
       "filePath": "dnd/spells.lazy.tsx"

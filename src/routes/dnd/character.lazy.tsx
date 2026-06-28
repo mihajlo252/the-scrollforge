@@ -1,17 +1,20 @@
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
-
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Frame } from "../../components/Frame/Frame";
-import { CharacterProfile } from "../../sections/DnD/CharacterProfile/CharacterProfile";
-import { HPBar } from "../../sections/DnD/Components/HPBar";
-import { Stats } from "../../sections/DnD/Components/Stats";
-import { Load } from "../../components/Load";
-import { Bonuses } from "../../sections/DnD/Components/Bonuses";
-import { DiceBoxComponent } from "../../sections/DiceBox";
 import { useEffect, useState } from "react";
-import { sendData } from "../../utilities/sendData";
+import { Load } from "../../components/Load";
+import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
+import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
+import { SheetTopbar } from "../../sections/DnD/CharacterProfile/SheetTopbar";
+import { HPCard } from "../../sections/DnD/CharacterProfile/HPCard";
+import { AbilitiesCard } from "../../sections/DnD/CharacterProfile/AbilitiesCard";
+import { ResourcesCard } from "../../sections/DnD/CharacterProfile/ResourcesCard";
+import { SkillsCard } from "../../sections/DnD/CharacterProfile/SkillsCard";
+import { DefensesCard } from "../../sections/DnD/CharacterProfile/DefensesCard";
+import { DiceBoxComponent } from "../../sections/DiceBox";
 import { Notes } from "../../sections/Notes";
+import { sendData } from "../../utilities/sendData";
+import styles from "../../sections/DnD/CharacterProfile/sheet.module.css";
 
 export const Route = createLazyFileRoute("/dnd/character")({
   component: Character,
@@ -22,70 +25,55 @@ function Character() {
   const [statChange, setStatChange] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const [toggleNotes, setToggleNotes] = useState(false);
-
-  if (!state.character) {
-    return <Load />;
-  }
-
-  const handleSaveCharacter = async (stats: Stats) => {
-    await sendData("characters", state.character.id, { stats: { ...stats }, characterProfile: { ...state.character.characterProfile } });
-    setIsSave(false);
-  };
+  const [toggleDice, setToggleDice] = useState(false);
 
   useEffect(() => {
     setStatChange(false);
     if (statChange) setIsSave(true);
   }, [statChange]);
 
+  if (!state?.character) {
+    return <Load />;
+  }
+
+  const character = state.character;
+
+  const handleSaveCharacter = async () => {
+    await sendData("characters", character.id, { stats: { ...character.stats }, characterProfile: { ...character.characterProfile } });
+    setIsSave(false);
+  };
+
   return (
-    <motion.main className={`grid h-full grow w-full grid-rows-[.2fr_1fr] gap-2`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.section className={styles.page} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {isSave && (
-        <button
-          className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
-          onClick={() => handleSaveCharacter(state.character.stats)}
-        >
+        <button className={`button button-accent ${styles.saveBtn}`} onClick={handleSaveCharacter}>
           Save Character
         </button>
       )}
-      <CharacterProfile setStatChange={setStatChange} />
-      <section className={`flex gap-2`}>
-        <Frame classes="w-[50%] flex flex-col gap-2 p-5">
-          <Stats character={state.character} setStatChange={setStatChange} />
-        </Frame>
-        <div className={`flex h-full w-[40%] flex-col gap-2`}>
-          <div className={`flex h-full w-full gap-2`}>
-            <Frame classes="w-[50%] flex justify-around items-center p-2">
-              <HPBar maxHP={state.character.stats.maxHP} characterID={state.character.id} />
-            </Frame>
-            <Frame classes="w-[50%] flex justify-around items-center p-5">
-              <DiceBoxComponent />
-            </Frame>
-          </div>
-          <Frame classes="w-full flex min-h-[unset] items-start p-5">
-            <Bonuses character={state.character} setStatChange={setStatChange} />
-          </Frame>
-        </div>
-        <Frame classes="flex flex-1 flex-col gap-3 py-3 px-2 justify-center h-full w-full">
-            <Link to="/dnd/traits" className="button button-accent w-full">
-              Traits
-            </Link>
-            <Link to="/dnd/attacks" className="button button-accent w-full">
-              Attacks
-            </Link>
-            <Link to="/dnd/spells" className="button button-accent w-full">
-              Spells
-            </Link>
-            <Link to="/dnd/inspiration" className="button button-accent w-full">
-              Inspiration
-            </Link>
-            <button onClick={() => setToggleNotes(true)} className="button button-accent w-full">
-              Notes
-            </button>
-        </Frame>
+
+      <SheetTabs active="combat" />
+
+      <SheetTopbar character={character} setStatChange={setStatChange} onRoll={() => setToggleDice(true)} onNotes={() => setToggleNotes(true)} />
+
+      <section className={styles.row3}>
+        <HPCard character={character} setStatChange={setStatChange} />
+        <AbilitiesCard character={character} setStatChange={setStatChange} />
+        <ResourcesCard character={character} />
       </section>
+
+      <section className={styles.row2}>
+        <SkillsCard character={character} setStatChange={setStatChange} />
+        <DefensesCard character={character} />
+      </section>
+
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
         <Notes />
       </Popup>
-    </motion.main>
+      <Popup closerFunc={setToggleDice} toggle={toggleDice}>
+        <Frame classes="column-direction">
+          <DiceBoxComponent />
+        </Frame>
+      </Popup>
+    </motion.section>
   );
 }

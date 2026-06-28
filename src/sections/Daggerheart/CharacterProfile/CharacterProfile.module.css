@@ -1,0 +1,52 @@
+.frame {
+	flex: 1;
+	gap: 2rem;
+	align-items: flex-start;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	flex: 1;
+}
+
+.name {
+	font-family: var(--display), serif;
+	font-size: 1.5rem;
+}
+.levelInput {
+	width: 3.5ch;
+	text-align: center;
+	padding: 0.25rem;
+}
+.meta {
+	color: var(--ink-dim);
+	margin-top: 0.25rem;
+}
+
+.row {
+	display: flex;
+	gap: 1.5rem;
+	align-self: flex-start;
+}
+
+.col {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	align-self: flex-start;
+}
+
+.labels {
+	display: flex;
+	gap: 3rem;
+	justify-content: center;
+}
+
+.hpGrid {
+	display: grid;
+	grid-template-columns: 0.3fr 1fr;
+	gap: 1.25rem;
+	align-items: center;
+}

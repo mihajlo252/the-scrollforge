@@ -13,7 +13,7 @@ export const CommunityDescriptions = ({ name, communities }: { name: string; com
       <h1 className="text-3xl text-accent">{name}</h1>
       <DescriptionScrollContainer>
         <p>{currentCommunity?.description[0].paragraph}</p>
-        <div className="flex flex-col gap-1">
+        <div className="column-direction">
           <h3 className="text-lg text-accent">Personalities</h3>
           <ul className="list-disc">
             {currentCommunity?.personalities.map((personality: any) => (
@@ -23,7 +23,7 @@ export const CommunityDescriptions = ({ name, communities }: { name: string; com
             ))}
           </ul>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="column-direction">
           <h3 className="text-lg text-accent">Features</h3>
           <ul className="list-disc">
             {currentCommunity?.features.map((feature: any) => (

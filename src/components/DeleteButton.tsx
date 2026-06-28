@@ -1,20 +1,9 @@
 import { Icon } from "./Primitives";
 
-// import { useNavigate } from "@tanstack/react-router";
-export const DeleteButton = ({
-    size,
-    styles,
-    event,
-}: {
-    size: number;
-    styles: string;
-    event: () => void;
-}) => {
-    // const navigate = useNavigate();
-
+export const DeleteButton = ({ event }: { event: () => void }) => {
     return (
         <button className="button" onClick={event}>
-            <Icon name="trash" size={32}/>
+            <Icon name="trash" size={32} />
         </button>
     );
 };

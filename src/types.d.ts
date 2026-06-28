@@ -40,6 +40,46 @@ interface Spell {
     duration: string;
     components: string;
     description: string;
+    level?: number;
+    school?: string;
+    prepared?: boolean;
+}
+
+interface TraitItem {
+    name: string;
+    category: string;
+    sub?: string;
+    chips?: string[];
+    text: string;
+}
+
+interface InventoryItem {
+    name: string;
+    type: string;
+    qty: number;
+    wt: number;
+    rarity: string;
+    equipped?: boolean;
+    dmg?: string;
+    note?: string;
+}
+
+interface Currency {
+    pp: number;
+    gp: number;
+    ep: number;
+    sp: number;
+    cp: number;
+}
+
+interface SpellSlotLevel {
+    total: number;
+    used: number;
+}
+
+interface SpellSlots {
+    ability: string;
+    slots: Record<string, SpellSlotLevel>;
 }
 
 interface CharacterProfile {
@@ -111,6 +151,10 @@ interface Character {
     descriptions: Descriptions;
     created_at: string;
     gamemode: string;
+    spellSlots?: SpellSlots;
+    inventory?: InventoryItem[];
+    currency?: Currency;
+    traits?: TraitItem[];
 }
 interface DaggerheartCharacter {
     id: string;

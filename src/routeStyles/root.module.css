@@ -1,15 +1,25 @@
 .main {
     display: flex;
-    flex-grow: 1;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     flex-direction: column;
-    justify-content: center;
+    justify-content: safe center;
 	padding-inline: var(--max-width-padding);
-    /* min-height: 100cqh; */
     min-width: 20px !important;
     position: relative;
     isolation: isolate;
     padding-block: 2rem;
     gap: .5rem;
+}
+/* Page transition wrapper — replicates .main's flex/centering so page
+   layouts (full-height flex pages and short centered pages) are unchanged. */
+.pageWrap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    justify-content: safe center;
 }
 .main::after {
     content: "";

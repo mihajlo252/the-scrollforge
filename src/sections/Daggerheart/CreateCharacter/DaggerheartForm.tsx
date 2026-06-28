@@ -4,7 +4,6 @@ import DaggerheartSubclasses from "../../../daggerheart-config/subclasses.json";
 import DaggerheartAncestries from "../../../daggerheart-config/ancestries.json";
 import DaggerheartCommunities from "../../../daggerheart-config/communities.json";
 import { Capitalize } from "../../../utilities/capitalize";
-import { Frame } from "../../../components/Frame/Frame";
 import { ClassDescriptions } from "../DaggerheartDescriptions/ClassDescriptions";
 import { AncestryDescriptions } from "../DaggerheartDescriptions/AncestryDescriptions";
 import { CommunityDescriptions } from "../DaggerheartDescriptions/CommunityDescriptions";

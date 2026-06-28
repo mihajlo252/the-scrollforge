@@ -4,7 +4,8 @@ export const ShieldSVG = ({styles, stylesOutline, stylesInline }: {styles?: stri
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
       viewBox="292.5 73.5 512 512"
-      className={` ${styles}`}
+      className={` ${styles ?? ""}`}
+      style={{ width: "100%", height: "100%" }}
     >
       <g
         fill="none"
