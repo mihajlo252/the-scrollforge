@@ -1,9 +1,9 @@
 .form {
 	position: relative;
-	height: 100%;
+	padding: 0;
 	width: 100%;
 	min-width: min(70vw, 640px);
-	min-height: 50vh;
+	min-height: 70vh;
 }
 .textarea {
 	height: 100%;
