@@ -725,41 +725,6 @@ export const TabBar = ({ tabs, active, onChange }: { tabs: any; active: any; onC
 	</div>
 );
 
-// Top chrome — app header with character switcher
-export const AppChrome = ({ character, onBack, right }: { character: any; onBack: any; right: any }) => (
-	<div className="sf-chrome">
-		<div className="sf-chrome-l">
-			{onBack && (
-				<button className="sf-icon-btn" onClick={onBack}>
-					<Icon name="back" />
-				</button>
-			)}
-			<div className="logo-scrollforge compact">
-				<span className="the caps">THE</span>
-				<span className="name display">Scrollforge</span>
-			</div>
-		</div>
-		{character && (
-			<div className="sf-chrome-m">
-				<div className="sf-avatar-sm" style={{ background: character.color }}>
-					{character.initial}
-				</div>
-				<div>
-					<div className="display" style={{ fontSize: 20, lineHeight: 1 }}>
-						{character.name}
-					</div>
-					<div className="caps" style={{ fontSize: 10, marginTop: 4 }}>
-						{character.sub}
-					</div>
-				</div>
-				<button className="sf-icon-btn">
-					<Icon name="chev_d" size={14} />
-				</button>
-			</div>
-		)}
-		<div className="sf-chrome-r">{right}</div>
-	</div>
-);
 
 export const RuneDivider = () => (
 	<div className="rune-divider">

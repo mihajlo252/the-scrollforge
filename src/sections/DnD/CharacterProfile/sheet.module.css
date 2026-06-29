@@ -55,6 +55,10 @@
 	color: var(--ink-dim);
 	font-size: 0.8125rem;
 	margin-top: 0.35rem;
+	.classRace {
+		display: flex;
+		gap: .2rem;
+	}
 }
 .identity {
 	flex: 1;
@@ -80,10 +84,12 @@
 	background: var(--rule);
 }
 
-@media (max-width: 640px) {
-	.topFrame {
+.topFrame {
 		--_padding: 1rem;
 	}
+
+@media (max-width: 640px) {
+	
 	.topbar {
 		gap: 0.85rem;
 	}
@@ -123,7 +129,8 @@
 @media (max-width: 1024px) {
 	.row3,
 	.row2 {
-		grid-template-columns: 1fr;
+		display: flex;
+		flex-direction: column;
 	}
 }
 

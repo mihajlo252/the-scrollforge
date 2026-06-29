@@ -47,16 +47,14 @@ export const SheetTopbar = ({
 				<div className={styles.identity}>
 					<div className={styles.name}>{characterProfile.name}</div>
 					<div className={styles.sub}>
-						<span className="mono" style={{ color: "var(--gold-2)" }}>LV</span>
-						<input
-							type="text"
-							placeholder="0"
-							className={`input ${styles.levelInput}`}
-							value={level ?? 0}
-							onChange={handleChangeLevel}
-						/>
-						<span>· {characterProfile.race} {characterProfile.subrace} ·</span>
-						<em>{characterProfile.class} {characterProfile.subclass}</em>
+						<span className="mono" style={{ color: "var(--gold-2)" }}>
+							LV
+						</span>
+						<input type="text" placeholder="0" className={`input ${styles.levelInput}`} value={level ?? 0} onChange={handleChangeLevel} />
+
+						<span>
+							· {characterProfile.race} {characterProfile.subrace} · {characterProfile.class} {characterProfile.subclass} ·
+						</span>
 					</div>
 				</div>
 				<div className={styles.topActions}>
