@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Rune Ward",
+    "domain": "ARCANA",
+    "level": 1,
+    "type": "Spell",
+    "recall": 0,
+    "text": "You have a deeply personal trinket that can be infused with protective magic. Describe what it is and give it to an ally. While they carry it, they can spend a Hope to reduce incoming damage by 1d8. When the ward is used, it goes dormant until your next rest."
+  },
+  {
+    "name": "Unleash Chaos",
+    "domain": "ARCANA",
+    "level": 1,
+    "type": "Spell",
+    "recall": 1,
+    "text": "At the start of a battle, place a number of tokens equal to your Spellcast trait on this card. Spend a Hope and any number of tokens to deal that many d10 magic damage to a target within Far range, marking a Stress for each token spent beyond the first."
+  },
+  {
+    "name": "Get Back Up",
+    "domain": "BLADE",
+    "level": 1,
+    "type": "Ability",
+    "recall": 1,
+    "text": "When you take Severe damage, you can mark a Stress to reduce the severity by one threshold."
+  },
+  {
+    "name": "Whirlwind",
+    "domain": "BLADE",
+    "level": 1,
+    "type": "Ability",
+    "recall": 0,
+    "text": "When you make an attack against a target within Very Close range, you can spend a Hope to hit all targets within that range. Make one attack roll against all of them."
+  },
+  {
+    "name": "Deft Maneuvers",
+    "domain": "BONE",
+    "level": 1,
+    "type": "Ability",
+    "recall": 0,
+    "text": "Once per rest, mark a Stress to move within Close range of a target without provoking attacks, then make an attack against them with advantage."
+  },
+  {
+    "name": "I See It Coming",
+    "domain": "BONE",
+    "level": 1,
+    "type": "Ability",
+    "recall": 1,
+    "text": "When you're targeted by an attack made from beyond Melee range, you can mark a Stress to roll a d4 and add its result to your Evasion against the attack."
+  },
+  {
+    "name": "Book of Ava",
+    "domain": "CODEX",
+    "level": 1,
+    "type": "Grimoire",
+    "recall": 0,
+    "text": "A grimoire of practical incantations: Power Push (Spellcast vs. target to knock back), Tava's Armor (mark Stress to add to Armor Score), and Ice Spike (Spellcast for 1d8+1 magic damage)."
+  },
+  {
+    "name": "Book of Illiat",
+    "domain": "CODEX",
+    "level": 1,
+    "type": "Grimoire",
+    "recall": 1,
+    "text": "A grimoire of subtle magics: Slumber (put a minor adversary to sleep), Telepathy (communicate mind-to-mind), and Voidstrike (Spellcast for 1d6+2 magic damage that pushes a target)."
+  },
+  {
+    "name": "Deft Deceiver",
+    "domain": "GRACE",
+    "level": 1,
+    "type": "Spell",
+    "recall": 0,
+    "text": "Spend a Hope to gain advantage on a roll to deceive or trick someone into believing a lie you tell them."
+  },
+  {
+    "name": "Enrapture",
+    "domain": "GRACE",
+    "level": 1,
+    "type": "Spell",
+    "recall": 1,
+    "text": "Make a Spellcast Roll against a target within Close range. On a success, they become temporarily Enraptured, focusing only on you until you make an attack or move out of their sight."
+  },
+  {
+    "name": "Pick and Pull",
+    "domain": "MIDNIGHT",
+    "level": 1,
+    "type": "Spell",
+    "recall": 0,
+    "text": "You have advantage on rolls to pick locks, disarm traps, or steal items unnoticed using sleight of hand."
+  },
+  {
+    "name": "Rain of Blades",
+    "domain": "MIDNIGHT",
+    "level": 1,
+    "type": "Spell",
+    "recall": 1,
+    "text": "Spend a Hope to conjure throwing blades and target all adversaries within Very Close range. Make a Spellcast Roll against each; on a success, deal d8 magic damage."
+  },
+  {
+    "name": "Gifted Tracker",
+    "domain": "SAGE",
+    "level": 1,
+    "type": "Spell",
+    "recall": 0,
+    "text": "When you spend time tracking a creature, make a Spellcast Roll to learn details about it: its direction, how long ago it passed, its condition, and its number."
+  },
+  {
+    "name": "Vicious Entangle",
+    "domain": "SAGE",
+    "level": 1,
+    "type": "Spell",
+    "recall": 1,
+    "text": "Make a Spellcast Roll against a target within Far range. On a success, roots erupt and deal 1d8+2 magic damage, and the target is temporarily Restrained."
+  },
+  {
+    "name": "Bolt Beacon",
+    "domain": "SPLENDOR",
+    "level": 1,
+    "type": "Spell",
+    "recall": 0,
+    "text": "Spend a Hope to send a bolt of shimmering light at a target within Far range. Make a Spellcast Roll; on a success, deal d8 magic damage and the target is temporarily Vulnerable."
+  },
+  {
+    "name": "Mending Touch",
+    "domain": "SPLENDOR",
+    "level": 1,
+    "type": "Spell",
+    "recall": 1,
+    "text": "Touch a creature and make a Spellcast Roll (13). On a success, clear a Hit Point or a Stress on them. On a roll with Fear, you also mark a Stress."
+  },
+  {
+    "name": "Bare Bones",
+    "domain": "VALOR",
+    "level": 1,
+    "type": "Ability",
+    "recall": 0,
+    "text": "When you choose to wear no armor, your damage thresholds are equal to your level plus 6 (Major) and your level plus 12 (Severe), and you gain a Base Armor Score of 3."
+  },
+  {
+    "name": "I Am Your Shield",
+    "domain": "VALOR",
+    "level": 1,
+    "type": "Ability",
+    "recall": 1,
+    "text": "When an ally within Very Close range would take damage, you can mark a Stress to stand in the way and take the damage instead."
+  }
+]

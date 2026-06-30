@@ -1,0 +1,133 @@
+.tabsRow {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* ── Topbar ─────────────────────────────────────────────── */
+.topFrame {
+	--_padding: 1rem;
+}
+.topbar {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: 1.25rem;
+	flex-wrap: wrap;
+}
+.avatar {
+	width: 64px;
+	height: 64px;
+	flex-shrink: 0;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: var(--display), serif;
+	font-size: 36px;
+	color: #fff;
+	border: 1px solid var(--gold-deep);
+	background: linear-gradient(135deg, #3a3a6b, #1f2a3e);
+}
+.identity {
+	flex: 1;
+	min-width: 0;
+}
+.name {
+	font-family: var(--display), serif;
+	font-size: 1.875rem;
+	line-height: 1;
+}
+.sub {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	color: var(--ink-dim);
+	font-size: 0.8125rem;
+	margin-top: 0.35rem;
+}
+.levelInput {
+	width: 3.5ch;
+	text-align: center;
+	padding: 0.1rem 0.25rem;
+	color: var(--gold-2);
+}
+.topActions {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+.vDivider {
+	width: 1px;
+	height: 40px;
+	background: var(--rule);
+}
+
+/* ── Conditions row ─────────────────────────────────────── */
+.conditions {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	flex-basis: 100%;
+	margin-top: 0.85rem;
+	padding-top: 0.85rem;
+	border-top: 1px solid var(--rule);
+}
+.condLabel {
+	font-size: 11px;
+	letter-spacing: 0.08em;
+	color: var(--gold-deep);
+	text-transform: uppercase;
+}
+.condChip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.condRemove {
+	display: inline-flex;
+	background: none;
+	border: 0;
+	color: inherit;
+	cursor: pointer;
+	padding: 0;
+	opacity: 0.7;
+}
+.condRemove:hover {
+	opacity: 1;
+}
+.condForm {
+	display: flex;
+	gap: 0.4rem;
+	align-items: center;
+}
+.condInput {
+	width: 12ch;
+	height: 28px;
+	padding: 0 0.5rem;
+}
+
+@media (max-width: 640px) {
+	.topbar {
+		gap: 0.85rem;
+	}
+	.avatar {
+		width: 52px;
+		height: 52px;
+		font-size: 28px;
+	}
+	.name {
+		font-size: 1.5rem;
+	}
+	.topActions {
+		flex-basis: 100%;
+	}
+	.topActions button {
+		flex: 1;
+	}
+	.vDivider {
+		display: none;
+	}
+}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getUserFromLocal } from "../utilities/getUserFromLocal";
 import { submitCharacter } from "../utilities/submitCharacter";
 import { DNDForm } from "./DnD/CreateCharacter/DNDForm";
-import { DaggerheartForm } from "./Daggerheart/CreateCharacter/DaggerheartForm";
+import { ForgeHero } from "./Daggerheart/CreateCharacter/ForgeHero";
 import { motion } from "framer-motion";
 import { Icon } from "../components/Primitives";
 export const CreateCharacter = ({
@@ -28,22 +28,12 @@ export const CreateCharacter = ({
 		subclass: "",
 		subrace: "",
 	});
-	const [characterProfileDaggerheart, setCharacterProfileDaggerheart] = useState<CharacterProfileDaggerheart>({
-		name: "",
-		class: "",
-		domains: "",
-		level: 0,
-		ancestry: "",
-		community: "",
-		subclass: "",
-	});
-
+	// Daggerheart creation is handled by the ForgeHero wizard (it seeds all dh*
+	// columns and persists itself). This handler covers the D&D form only.
 	const handleCreateCharacter = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const { user } = JSON.parse(getUserFromLocal());
-		// await submitCharacter(characterProfile, user.id, gameMode);
 		if (gameMode === "dnd") await submitCharacter(characterProfile, user.id, gameMode);
-		if (gameMode === "daggerheart") await submitCharacter(characterProfileDaggerheart, user.id, gameMode);
 		setIsSave(true);
 		setOpenCreateCharacter(false);
 	};
@@ -91,33 +81,19 @@ export const CreateCharacter = ({
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
-					className="frame full"
+					className="frame full column-direction"
 				>
-					<DaggerheartForm
-						setCharacterProfileDaggerheart={setCharacterProfileDaggerheart}
-						characterProfileDaggerheart={characterProfileDaggerheart}
-						handleCreateCharacter={handleCreateCharacter}
-					>
-						<div className="side-by-side">
-							<button type="button" className="button button-primary" onClick={() => setGameMode("")}>
-								<Icon name="back" size={13} />
-							</button>
-
-							<button type="submit" className="button button-primary stretch">
-								Create
-							</button>
-							<button
-								type="button"
-								className="button button-secondary stretch"
-								onClick={() => {
-									setGameMode("");
-									setOpenCreateCharacter(false);
-								}}
-							>
-								Cancel
-							</button>
-						</div>
-					</DaggerheartForm>
+					<ForgeHero
+						onCancel={() => {
+							setGameMode("");
+							setOpenCreateCharacter(false);
+						}}
+						onCreated={() => {
+							setIsSave(true);
+							setGameMode("");
+							setOpenCreateCharacter(false);
+						}}
+					/>
 				</motion.section>
 			)}
 		</>

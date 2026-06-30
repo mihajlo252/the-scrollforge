@@ -27,6 +27,12 @@ const DndInventoryLazyImport = createFileRoute('/dnd/inventory')()
 const DndInspirationLazyImport = createFileRoute('/dnd/inspiration')()
 const DndCharacterLazyImport = createFileRoute('/dnd/character')()
 const DndAttacksLazyImport = createFileRoute('/dnd/attacks')()
+const DaggerheartJournalLazyImport = createFileRoute('/daggerheart/journal')()
+const DaggerheartFeaturesLazyImport = createFileRoute('/daggerheart/features')()
+const DaggerheartEquipmentLazyImport = createFileRoute(
+  '/daggerheart/equipment',
+)()
+const DaggerheartDomainsLazyImport = createFileRoute('/daggerheart/domains')()
 const DaggerheartCharacterLazyImport = createFileRoute(
   '/daggerheart/character',
 )()
@@ -101,6 +107,38 @@ const DndAttacksLazyRoute = DndAttacksLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/dnd/attacks.lazy').then((d) => d.Route))
 
+const DaggerheartJournalLazyRoute = DaggerheartJournalLazyImport.update({
+  id: '/daggerheart/journal',
+  path: '/daggerheart/journal',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/daggerheart/journal.lazy').then((d) => d.Route),
+)
+
+const DaggerheartFeaturesLazyRoute = DaggerheartFeaturesLazyImport.update({
+  id: '/daggerheart/features',
+  path: '/daggerheart/features',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/daggerheart/features.lazy').then((d) => d.Route),
+)
+
+const DaggerheartEquipmentLazyRoute = DaggerheartEquipmentLazyImport.update({
+  id: '/daggerheart/equipment',
+  path: '/daggerheart/equipment',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/daggerheart/equipment.lazy').then((d) => d.Route),
+)
+
+const DaggerheartDomainsLazyRoute = DaggerheartDomainsLazyImport.update({
+  id: '/daggerheart/domains',
+  path: '/daggerheart/domains',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/daggerheart/domains.lazy').then((d) => d.Route),
+)
+
 const DaggerheartCharacterLazyRoute = DaggerheartCharacterLazyImport.update({
   id: '/daggerheart/character',
   path: '/daggerheart/character',
@@ -153,6 +191,34 @@ declare module '@tanstack/react-router' {
       path: '/daggerheart/character'
       fullPath: '/daggerheart/character'
       preLoaderRoute: typeof DaggerheartCharacterLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/daggerheart/domains': {
+      id: '/daggerheart/domains'
+      path: '/daggerheart/domains'
+      fullPath: '/daggerheart/domains'
+      preLoaderRoute: typeof DaggerheartDomainsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/daggerheart/equipment': {
+      id: '/daggerheart/equipment'
+      path: '/daggerheart/equipment'
+      fullPath: '/daggerheart/equipment'
+      preLoaderRoute: typeof DaggerheartEquipmentLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/daggerheart/features': {
+      id: '/daggerheart/features'
+      path: '/daggerheart/features'
+      fullPath: '/daggerheart/features'
+      preLoaderRoute: typeof DaggerheartFeaturesLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/daggerheart/journal': {
+      id: '/daggerheart/journal'
+      path: '/daggerheart/journal'
+      fullPath: '/daggerheart/journal'
+      preLoaderRoute: typeof DaggerheartJournalLazyImport
       parentRoute: typeof rootRoute
     }
     '/dnd/attacks': {
@@ -209,6 +275,10 @@ export interface FileRoutesByFullPath {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
+  '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
+  '/daggerheart/equipment': typeof DaggerheartEquipmentLazyRoute
+  '/daggerheart/features': typeof DaggerheartFeaturesLazyRoute
+  '/daggerheart/journal': typeof DaggerheartJournalLazyRoute
   '/dnd/attacks': typeof DndAttacksLazyRoute
   '/dnd/character': typeof DndCharacterLazyRoute
   '/dnd/inspiration': typeof DndInspirationLazyRoute
@@ -224,6 +294,10 @@ export interface FileRoutesByTo {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
+  '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
+  '/daggerheart/equipment': typeof DaggerheartEquipmentLazyRoute
+  '/daggerheart/features': typeof DaggerheartFeaturesLazyRoute
+  '/daggerheart/journal': typeof DaggerheartJournalLazyRoute
   '/dnd/attacks': typeof DndAttacksLazyRoute
   '/dnd/character': typeof DndCharacterLazyRoute
   '/dnd/inspiration': typeof DndInspirationLazyRoute
@@ -240,6 +314,10 @@ export interface FileRoutesById {
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
+  '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
+  '/daggerheart/equipment': typeof DaggerheartEquipmentLazyRoute
+  '/daggerheart/features': typeof DaggerheartFeaturesLazyRoute
+  '/daggerheart/journal': typeof DaggerheartJournalLazyRoute
   '/dnd/attacks': typeof DndAttacksLazyRoute
   '/dnd/character': typeof DndCharacterLazyRoute
   '/dnd/inspiration': typeof DndInspirationLazyRoute
@@ -257,6 +335,10 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/daggerheart/character'
+    | '/daggerheart/domains'
+    | '/daggerheart/equipment'
+    | '/daggerheart/features'
+    | '/daggerheart/journal'
     | '/dnd/attacks'
     | '/dnd/character'
     | '/dnd/inspiration'
@@ -271,6 +353,10 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/daggerheart/character'
+    | '/daggerheart/domains'
+    | '/daggerheart/equipment'
+    | '/daggerheart/features'
+    | '/daggerheart/journal'
     | '/dnd/attacks'
     | '/dnd/character'
     | '/dnd/inspiration'
@@ -285,6 +371,10 @@ export interface FileRouteTypes {
     | '/thanks'
     | '/tickets'
     | '/daggerheart/character'
+    | '/daggerheart/domains'
+    | '/daggerheart/equipment'
+    | '/daggerheart/features'
+    | '/daggerheart/journal'
     | '/dnd/attacks'
     | '/dnd/character'
     | '/dnd/inspiration'
@@ -301,6 +391,10 @@ export interface RootRouteChildren {
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
   DaggerheartCharacterLazyRoute: typeof DaggerheartCharacterLazyRoute
+  DaggerheartDomainsLazyRoute: typeof DaggerheartDomainsLazyRoute
+  DaggerheartEquipmentLazyRoute: typeof DaggerheartEquipmentLazyRoute
+  DaggerheartFeaturesLazyRoute: typeof DaggerheartFeaturesLazyRoute
+  DaggerheartJournalLazyRoute: typeof DaggerheartJournalLazyRoute
   DndAttacksLazyRoute: typeof DndAttacksLazyRoute
   DndCharacterLazyRoute: typeof DndCharacterLazyRoute
   DndInspirationLazyRoute: typeof DndInspirationLazyRoute
@@ -316,6 +410,10 @@ const rootRouteChildren: RootRouteChildren = {
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
   DaggerheartCharacterLazyRoute: DaggerheartCharacterLazyRoute,
+  DaggerheartDomainsLazyRoute: DaggerheartDomainsLazyRoute,
+  DaggerheartEquipmentLazyRoute: DaggerheartEquipmentLazyRoute,
+  DaggerheartFeaturesLazyRoute: DaggerheartFeaturesLazyRoute,
+  DaggerheartJournalLazyRoute: DaggerheartJournalLazyRoute,
   DndAttacksLazyRoute: DndAttacksLazyRoute,
   DndCharacterLazyRoute: DndCharacterLazyRoute,
   DndInspirationLazyRoute: DndInspirationLazyRoute,
@@ -340,6 +438,10 @@ export const routeTree = rootRoute
         "/thanks",
         "/tickets",
         "/daggerheart/character",
+        "/daggerheart/domains",
+        "/daggerheart/equipment",
+        "/daggerheart/features",
+        "/daggerheart/journal",
         "/dnd/attacks",
         "/dnd/character",
         "/dnd/inspiration",
@@ -365,6 +467,18 @@ export const routeTree = rootRoute
     },
     "/daggerheart/character": {
       "filePath": "daggerheart/character.lazy.tsx"
+    },
+    "/daggerheart/domains": {
+      "filePath": "daggerheart/domains.lazy.tsx"
+    },
+    "/daggerheart/equipment": {
+      "filePath": "daggerheart/equipment.lazy.tsx"
+    },
+    "/daggerheart/features": {
+      "filePath": "daggerheart/features.lazy.tsx"
+    },
+    "/daggerheart/journal": {
+      "filePath": "daggerheart/journal.lazy.tsx"
     },
     "/dnd/attacks": {
       "filePath": "dnd/attacks.lazy.tsx"

@@ -90,10 +90,10 @@ export const SkillsCard = ({
 				<div className="card-title">Skills &amp; Saves</div>
 				<div className={styles.legend}>
 					<span>
-						<span className={styles.legendDot} style={{ background: "var(--gold)" }} /> Proficient
+						<span className={styles.legendDot} style={{ background: "var(--gold-2)", borderColor: "var(--gold)", boxShadow: "0 0 0 2px rgba(from var(--gold-2) r g b / .2" }} /> Proficient
 					</span>
 					<span>
-						<span className={styles.legendDot} style={{ background: "var(--ember-2)" }} /> Expertise
+						<span className={styles.legendDot} style={{ background: "var(--ember-2)", borderColor: "var(--ember)", boxShadow: "0 0 0 2px rgba(from var(--ember-2) r g b / .2" }} /> Expertise
 					</span>
 				</div>
 			</div>

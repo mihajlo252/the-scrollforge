@@ -516,6 +516,63 @@
 	background: rgba(122, 107, 184, 0.15);
 }
 
+/* ── Pill toggle (segmented filters, condition toggles, etc.) ── */
+.pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 28px;
+	padding: 0 12px;
+	border: 1px solid var(--rule-2);
+	border-radius: 999px;
+	background: var(--bg-2);
+	color: var(--ink-dim);
+	font-family: var(--body), serif;
+	font-size: 0.8rem;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	transition:
+		background 0.12s ease,
+		color 0.12s ease,
+		border-color 0.12s ease;
+}
+.pill:hover {
+	color: var(--text);
+	border-color: var(--gold-deep);
+}
+.pill[data-active="true"] {
+	color: var(--gold-2);
+	border-color: var(--gold-deep);
+	background: rgba(201, 162, 74, 0.12);
+}
+
+/* ── Small square icon button ────────────────────────────── */
+.sf-icon-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	flex-shrink: 0;
+	border: 1px solid var(--rule-2);
+	border-radius: 4px;
+	background: var(--bg-2);
+	color: var(--ink-dim);
+	cursor: pointer;
+	transition:
+		background 0.12s ease,
+		color 0.12s ease,
+		border-color 0.12s ease;
+}
+.sf-icon-btn:hover {
+	color: var(--gold-2);
+	border-color: var(--gold-deep);
+}
+.sf-icon-btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
 /* ── Segmented tabs ──────────────────────────────────────── */
 .tabs {
 	display: flex;
@@ -905,8 +962,9 @@
 	background: transparent;
 }
 .sf-skill-dot.prof {
-	background: var(--gold);
+	background: var(--gold-2);
 	border-color: var(--gold);
+	box-shadow: 0 0 0 2px rgba(from var(--gold-2) r g b / .2);
 }
 .sf-skill-dot.expert {
 	background: var(--ember-2);

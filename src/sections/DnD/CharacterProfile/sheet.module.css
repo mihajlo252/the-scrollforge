@@ -255,6 +255,7 @@
 	gap: 4px;
 }
 .legendDot {
+	background-color: red;
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;

@@ -1,0 +1,121 @@
+/* ── Box / circle tracks (Stress, Hope, Armor Slots, HP) ─── */
+.track {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+.box {
+	width: 22px;
+	height: 22px;
+	border: 1.5px solid var(--rule-2);
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+	padding: 0;
+	transition:
+		background 0.1s ease,
+		border-color 0.1s ease;
+}
+.box:hover {
+	border-color: var(--gold-deep);
+}
+.box[data-shape="circle"] {
+	border-radius: 50%;
+}
+.box[data-filled] {
+	background: var(--_fill, var(--gold));
+	border-color: var(--_fill, var(--gold));
+}
+
+/* ── HP track + thresholds ──────────────────────────────── */
+.hpWrap {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.thresholds {
+	display: flex;
+	align-items: stretch;
+	gap: 8px;
+}
+.threshold {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 4px 10px;
+	border: 1px solid var(--rule);
+	border-radius: 4px;
+	background: var(--bg-2);
+	min-width: 64px;
+}
+.threshold[data-tone="minor"] {
+	border-color: var(--rule-2);
+}
+.threshold[data-tone="major"] {
+	border-color: var(--gold-deep);
+}
+.threshold[data-tone="severe"] {
+	border-color: #6a2a18;
+}
+.threshLabel {
+	font-size: 9px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+}
+.threshVal {
+	font-family: var(--mono), monospace;
+	font-size: 14px;
+	color: var(--gold-2);
+}
+.threshHint {
+	font-size: 9px;
+	color: var(--ink-faint);
+	font-style: italic;
+}
+
+/* ── Trait tile ─────────────────────────────────────────── */
+.traitRow {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 10px;
+}
+.traitTile {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 12px 6px;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+	text-align: center;
+}
+.traitTile[data-spellcast] {
+	border-color: var(--gold-deep);
+	background: rgba(201, 162, 74, 0.08);
+}
+.traitName {
+	font-size: 10px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink-dim);
+}
+.traitVal {
+	font-family: var(--display), serif;
+	font-size: 28px;
+	line-height: 1;
+	color: var(--text);
+}
+.traitStar {
+	font-size: 9px;
+	color: var(--gold-2);
+	letter-spacing: 0.04em;
+}
+
+@media (max-width: 640px) {
+	.traitRow {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
