@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Frame } from "../../../components/Frame/Frame";
 import { Popup } from "../../../components/Popup/Popup";
 import { Icon } from "../../../components/Primitives";
@@ -29,31 +29,55 @@ export const LevelUpModal = ({
 	state,
 	toggle,
 	onClose,
+	targetLevel,
 }: {
 	character: DaggerheartCharacter;
 	state: any;
 	toggle: boolean;
 	onClose: () => void;
+	/** When set (e.g. the level was typed in directly), walk every level from
+	 *  the character's current level up to this one, one advancement step at a
+	 *  time. Omitted → a single level-up. */
+	targetLevel?: number;
 }) => {
-	const level = character.characterProfile.level || 1;
+	// A working copy that accumulates each step's changes so a multi-level jump
+	// can be resolved without reloading between levels.
+	const [workingChar, setWorkingChar] = useState<DaggerheartCharacter>(character);
+	const [selected, setSelected] = useState<Record<string, AdvancementChoice>>({});
+	const [saving, setSaving] = useState(false);
+	const advancedRef = useRef(false);
+
+	// Re-sync to the freshly-read character each time the modal opens.
+	useEffect(() => {
+		if (toggle) {
+			setWorkingChar(character);
+			setSelected({});
+			setSaving(false);
+			advancedRef.current = false;
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [toggle]);
+
+	const startLevel = character.characterProfile.level || 1;
+	const level = workingChar.characterProfile.level || 1;
 	const newLevel = level + 1;
+	const target = Math.min(10, Math.max(newLevel, targetLevel ?? newLevel));
+	const stepsTotal = Math.max(1, target - startLevel);
+	const stepIndex = level - startLevel + 1;
 	const tier = tierForLevel(newLevel);
 	const enteredTier = tier > tierForLevel(level);
 	const atMax = level >= 10;
 
 	const options = tierOptions(tier);
-	const usage = tierUsage(character.dhAdvancements, tier);
-	const marked = enteredTier ? [] : character.dhAdvancements?.markedTraits ?? [];
+	const usage = tierUsage(workingChar.dhAdvancements, tier);
+	const marked = enteredTier ? [] : workingChar.dhAdvancements?.markedTraits ?? [];
 	const availableTraits = TRAIT_NAMES.filter((t) => !marked.includes(t));
-	const experiences = character.dhExperiences ?? [];
-	const classDomains = getDomains(character.characterProfile.class);
-	const ownedCardNames = new Set([...(character.dhDomainCards?.loadout ?? []), ...(character.dhDomainCards?.vault ?? [])].map((c) => c.name.toLowerCase()));
+	const experiences = workingChar.dhExperiences ?? [];
+	const classDomains = getDomains(workingChar.characterProfile.class);
+	const ownedCardNames = new Set([...(workingChar.dhDomainCards?.loadout ?? []), ...(workingChar.dhDomainCards?.vault ?? [])].map((c) => c.name.toLowerCase()));
 	const browseable = CATALOG.filter(
 		(c) => c.level <= newLevel && classDomains.some((d) => d.toUpperCase() === c.domain.toUpperCase()) && !ownedCardNames.has(c.name.toLowerCase()),
 	);
-
-	const [selected, setSelected] = useState<Record<string, AdvancementChoice>>({});
-	const [saving, setSaving] = useState(false);
 
 	const totalCost = Object.values(selected).reduce((sum, c) => {
 		const opt = options.find((o) => o.id === c.id);
@@ -120,20 +144,42 @@ export const LevelUpModal = ({
 	const apply = async () => {
 		if (!canApply) return;
 		setSaving(true);
-		const { patch } = commitLevelUp(character, Object.values(selected));
+		const { patch } = commitLevelUp(workingChar, Object.values(selected));
 		patchCharacter(state, patch);
 		await sendData("characters", character.id, patch as Record<string, any>);
-		toast({ style: "frame button-primary", message: `Advanced to Level ${newLevel}!` });
-		setSaving(false);
+		advancedRef.current = true;
+
+		if (newLevel >= target) {
+			toast({ style: "frame button-primary", message: `Advanced to Level ${newLevel}!` });
+			onClose();
+			// Re-read fresh state across all tabs.
+			window.location.reload();
+		} else {
+			// More levels to resolve — carry the accumulated state to the next step.
+			toast({ style: "frame button-primary", message: `Level ${newLevel} set — now choose your Level ${newLevel + 1} advancements.` });
+			setWorkingChar({ ...workingChar, ...patch });
+			setSelected({});
+			setSaving(false);
+		}
+	};
+
+	// If the user closes mid-way through a multi-level jump, the already-applied
+	// levels are persisted — reload so every tab reflects them.
+	const handleClose = () => {
+		if (advancedRef.current) {
+			window.location.reload();
+			return;
+		}
 		onClose();
-		// Re-read fresh state across all tabs.
-		window.location.reload();
 	};
 
 	return (
-		<Popup closerFunc={onClose} toggle={toggle}>
+		<Popup closerFunc={handleClose} toggle={toggle}>
 			<Frame classes="column-direction">
-				<h3 className="card-title">Level Up · LV {newLevel} · Tier {tier}</h3>
+				<h3 className="card-title">
+					Level Up · LV {newLevel} · Tier {tier}
+					{stepsTotal > 1 ? ` · step ${stepIndex} of ${stepsTotal}` : ""}
+				</h3>
 
 				{atMax && <div className={styles.empty}>You've reached the maximum level (10).</div>}
 
@@ -254,7 +300,7 @@ export const LevelUpModal = ({
 							<Icon name="crown" size={14} /> {saving ? "Advancing…" : `Advance to LV ${newLevel}`}
 						</button>
 					)}
-					<button type="button" className="button button-secondary stretch" onClick={onClose}>Close</button>
+					<button type="button" className="button button-secondary stretch" onClick={handleClose}>Close</button>
 				</div>
 			</Frame>
 		</Popup>

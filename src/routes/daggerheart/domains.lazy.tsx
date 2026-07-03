@@ -3,9 +3,10 @@ import { useMemo, useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
 import { DomainCardView } from "../../sections/Daggerheart/CharacterProfile/DomainCard";
-import { getDomains } from "../../utilities/daggerheart";
+import { getDomains, groupCardsByLevel } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { sendData } from "../../utilities/sendData";
 import { toast } from "../../utilities/toasterSonner";
@@ -22,6 +23,7 @@ const emptyCard = (domain: string): DomainCard => ({ name: "", domain, level: 1,
 
 function DomainsBody({ character, state }: { character: DaggerheartCharacter; state: any }) {
   const classDomains = getDomains(character.characterProfile.class);
+  const level = character.characterProfile.level || 1;
   const [cards, setCards] = useState<DHDomainCards>(character.dhDomainCards ?? { loadout: [], vault: [] });
   const [filter, setFilter] = useState<string>("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -57,9 +59,10 @@ function DomainsBody({ character, state }: { character: DaggerheartCharacter; st
     () => new Set([...cards.loadout, ...cards.vault].map((c) => c.name.toLowerCase())),
     [cards],
   );
+  // Only cards from the character's domains, at or below their level, not already owned.
   const browseable = CATALOG.filter(
-    (c) => classDomains.some((d) => d.toUpperCase() === c.domain.toUpperCase()) && !ownedNames.has(c.name.toLowerCase()),
-  );
+    (c) => c.level <= level && classDomains.some((d) => d.toUpperCase() === c.domain.toUpperCase()) && !ownedNames.has(c.name.toLowerCase()),
+  ).sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
 
   const addCard = (card: DomainCard) => {
     const toLoad = !loadoutFull;
@@ -107,16 +110,23 @@ function DomainsBody({ character, state }: { character: DaggerheartCharacter; st
           {loadout.length === 0 ? (
             <span className={styles.empty}>No cards in your loadout{filter !== "all" ? " for this domain" : ""}.</span>
           ) : (
-            <div className={styles.cardGrid}>
-              {loadout.map((card, i) => (
-                <DomainCardView key={`l-${card.name}-${i}`} card={card}>
-                  <button className="button button-ghost short" type="button" onClick={() => toVault(card)}>
-                    <Icon name="back" size={12} /> Vault
-                  </button>
-                  <button className="sf-icon-btn" type="button" onClick={() => remove(card, "loadout")} aria-label="Remove">
-                    <Icon name="trash" size={13} />
-                  </button>
-                </DomainCardView>
+            <div className={styles.section}>
+              {groupCardsByLevel(loadout).map(([lvl, cards]) => (
+                <div key={lvl} className={styles.cardLevelGroup}>
+                  <span className={styles.sectionTitle}>Level {lvl}</span>
+                  <div className={styles.cardGrid}>
+                    {cards.map((card, i) => (
+                      <DomainCardView key={`l-${lvl}-${card.name}-${i}`} card={card}>
+                        <button className="button button-ghost short" type="button" onClick={() => toVault(card)}>
+                          <Icon name="back" size={12} /> Vault
+                        </button>
+                        <ConfirmButton className="sf-icon-btn" aria-label="Remove" title="Remove card?" message={`Remove "${card.name}" from your loadout? This can't be undone.`} onConfirm={() => remove(card, "loadout")}>
+                          <Icon name="trash" size={13} />
+                        </ConfirmButton>
+                      </DomainCardView>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -133,16 +143,23 @@ function DomainsBody({ character, state }: { character: DaggerheartCharacter; st
           {vault.length === 0 ? (
             <span className={styles.empty}>Your vault is empty{filter !== "all" ? " for this domain" : ""}.</span>
           ) : (
-            <div className={styles.cardGrid}>
-              {vault.map((card, i) => (
-                <DomainCardView key={`v-${card.name}-${i}`} card={card}>
-                  <button className="button button-ghost short" type="button" onClick={() => toLoadout(card)} disabled={loadoutFull}>
-                    <Icon name="fwd" size={12} /> Loadout
-                  </button>
-                  <button className="sf-icon-btn" type="button" onClick={() => remove(card, "vault")} aria-label="Remove">
-                    <Icon name="trash" size={13} />
-                  </button>
-                </DomainCardView>
+            <div className={styles.section}>
+              {groupCardsByLevel(vault).map(([lvl, cards]) => (
+                <div key={lvl} className={styles.cardLevelGroup}>
+                  <span className={styles.sectionTitle}>Level {lvl}</span>
+                  <div className={styles.cardGrid}>
+                    {cards.map((card, i) => (
+                      <DomainCardView key={`v-${lvl}-${card.name}-${i}`} card={card}>
+                        <button className="button button-ghost short" type="button" onClick={() => toLoadout(card)} disabled={loadoutFull}>
+                          <Icon name="fwd" size={12} /> Loadout
+                        </button>
+                        <ConfirmButton className="sf-icon-btn" aria-label="Remove" title="Remove card?" message={`Remove "${card.name}" from your vault? This can't be undone.`} onConfirm={() => remove(card, "vault")}>
+                          <Icon name="trash" size={13} />
+                        </ConfirmButton>
+                      </DomainCardView>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -176,14 +193,19 @@ function DomainsBody({ character, state }: { character: DaggerheartCharacter; st
           {browseable.length > 0 && (
             <>
               <div className="rune-divider"><span className="rune" /></div>
-              <span className={styles.sectionTitle}>From the {character.characterProfile.class} domains</span>
+              <span className={styles.sectionTitle}>From the {character.characterProfile.class} domains · level {level} or lower</span>
               <div className={styles.browseList}>
-                {browseable.map((card) => (
-                  <DomainCardView key={card.name} card={card}>
-                    <button className="button button-primary short" type="button" onClick={() => addCard(card)}>
-                      <Icon name="plus" size={12} /> Add
-                    </button>
-                  </DomainCardView>
+                {groupCardsByLevel(browseable).map(([lvl, cards]) => (
+                  <div key={lvl} className={styles.cardLevelGroup}>
+                    <span className={styles.sectionTitle}>Level {lvl}</span>
+                    {cards.map((card) => (
+                      <DomainCardView key={card.name} card={card}>
+                        <button className="button button-primary short" type="button" onClick={() => addCard(card)}>
+                          <Icon name="plus" size={12} /> Add
+                        </button>
+                      </DomainCardView>
+                    ))}
+                  </div>
                 ))}
               </div>
             </>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
 import { getAncestry, getClass, getCommunity, getSubclass, flattenDescription, type Feature } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
@@ -155,9 +156,9 @@ function FeaturesBody({ character, state }: { character: DaggerheartCharacter; s
                     <button className="sf-icon-btn" type="button" onClick={() => openEdit(i)} aria-label="Edit">
                       <Icon name="edit" size={13} />
                     </button>
-                    <button className="sf-icon-btn" type="button" onClick={() => persist(experiences.filter((_, idx) => idx !== i))} aria-label="Delete">
+                    <ConfirmButton className="sf-icon-btn" aria-label="Delete" title="Delete experience?" message={`Remove "${x.name || "this experience"}"? This can't be undone.`} onConfirm={() => persist(experiences.filter((_, idx) => idx !== i))}>
                       <Icon name="trash" size={13} />
-                    </button>
+                    </ConfirmButton>
                   </div>
                 </div>
               ))}

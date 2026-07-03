@@ -57,6 +57,11 @@ function Vitals() {
   const [toggleNotes, setToggleNotes] = useState(false);
   const [toggleDice, setToggleDice] = useState(false);
   const [toggleLevelUp, setToggleLevelUp] = useState(false);
+  const [levelUpTarget, setLevelUpTarget] = useState<number | undefined>(undefined);
+  const openLevelUp = (target?: number) => {
+    setLevelUpTarget(target);
+    setToggleLevelUp(true);
+  };
   const [vitals, setVitals] = useState<DHVitals>(
     () => character?.dhVitals ?? defaultVitals(character?.characterProfile?.class, character?.characterProfile?.level ?? 1),
   );
@@ -94,7 +99,7 @@ function Vitals() {
   return (
     <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={styles.page}>
       <SheetTabs active="vitals" />
-      <SheetTopbar character={character} onNotes={() => setToggleNotes(true)} onRoll={() => setToggleDice(true)} onLevelUp={() => setToggleLevelUp(true)} />
+      <SheetTopbar character={character} onNotes={() => setToggleNotes(true)} onRoll={() => setToggleDice(true)} onLevelUp={openLevelUp} />
 
       {/* Traits */}
       <Frame classes="card">
@@ -149,7 +154,7 @@ function Vitals() {
               <div className={styles.divider} />
 
               <div className={styles.statRowLabel}>
-                <span className={styles.subLabel}>Hit Points · {vitals.hp.marked}/{vitals.hp.total} marked</span>
+                <span className={styles.subLabel}>Hit Points · {vitals.hp.marked}/{vitals.hp.total} remaining</span>
                 <HPTrack hp={vitals.hp} onChange={(m) => persistVitals({ ...vitals, hp: { ...vitals.hp, marked: m } })} />
               </div>
 
@@ -175,7 +180,7 @@ function Vitals() {
         <Frame classes="card">
           <div className="card-hdr">
             <div className="card-title">Hope</div>
-            <span className="mono" style={{ color: "var(--gold-2)" }}>{vitals.hope.total - vitals.hope.marked}/{vitals.hope.total}</span>
+            <span className="mono" style={{ color: "var(--gold-2)" }}>{vitals.hope.marked}/{vitals.hope.total}</span>
           </div>
           <div className="card-body">
             <div className={styles.section}>
@@ -196,6 +201,26 @@ function Vitals() {
           </div>
         </Frame>
       </div>
+
+      {/* Class features */}
+      {(cls?.classFeatures?.length ?? 0) > 0 && (
+        <Frame classes="card">
+          <div className="card-hdr">
+            <div className="card-title">Class Features</div>
+            <span className="caps" style={{ fontSize: 11, color: "var(--ink-faint)" }}>{cls?.name}</span>
+          </div>
+          <div className="card-body">
+            <div className={styles.featGrid}>
+              {(cls?.classFeatures ?? []).map((f) => (
+                <div key={f.name} className={styles.featureBox}>
+                  <div className={styles.featureName}>{f.name}</div>
+                  <div className={styles.featureText}>{flattenDescription(f.description)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Frame>
+      )}
 
       <div className={styles.lowerGrid}>
         {/* Active weapons */}
@@ -237,7 +262,7 @@ function Vitals() {
         </Frame>
       </div>
 
-      <LevelUpModal character={character} state={state} toggle={toggleLevelUp} onClose={() => setToggleLevelUp(false)} />
+      <LevelUpModal character={character} state={state} toggle={toggleLevelUp} targetLevel={levelUpTarget} onClose={() => setToggleLevelUp(false)} />
 
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
         <Notes />

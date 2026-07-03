@@ -2,6 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
 import { getSubclass, tierForLevel } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
@@ -61,7 +62,7 @@ function JournalBody({ character, state, openLevelUp }: { character: Daggerheart
               <div key={i} className={styles.bioEntry}>
                 <div className={styles.bioQ}>
                   <input className={`input ${styles.bioQText}`} value={entry.q} onChange={(e) => editQuestion(k, i, e.target.value)} />
-                  <button className="sf-icon-btn" type="button" onClick={() => removeEntry(k, i)} aria-label="Remove"><Icon name="trash" size={13} /></button>
+                  <ConfirmButton className="sf-icon-btn" aria-label="Remove" title="Delete entry?" message="Remove this entry? This can't be undone." onConfirm={() => removeEntry(k, i)}><Icon name="trash" size={13} /></ConfirmButton>
                 </div>
                 <textarea className="textarea" rows={2} value={entry.a} onChange={(e) => editAnswer(k, i, e.target.value)} />
               </div>

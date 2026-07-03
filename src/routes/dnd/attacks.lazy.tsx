@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { calculateProficiencyBonus } from "../../utilities/calculateStats";
 import { sendData } from "../../utilities/sendData";
@@ -140,9 +141,9 @@ function Attacks() {
                   <button className="button button-ghost short" onClick={() => openEdit(selected)} type="button">
                     <Icon name="edit" size={13} /> Edit
                   </button>
-                  <button className="button button-secondary short" onClick={() => deleteAttack(selected)} type="button">
+                  <ConfirmButton className="button button-secondary short" aria-label="Delete attack" title="Delete attack?" message="Remove this attack? This can't be undone." onConfirm={() => deleteAttack(selected)}>
                     <Icon name="trash" size={13} />
-                  </button>
+                  </ConfirmButton>
                 </div>
               </div>
 

@@ -86,6 +86,7 @@ export const commitLevelUp = (character: DaggerheartCharacter, picks: Advancemen
 				break;
 			case "hp":
 				vitals.hp.total += 1;
+					vitals.hp.marked += 1; // keep current HP topped up with the new slot
 				break;
 			case "stress":
 				vitals.stress.total += 1;

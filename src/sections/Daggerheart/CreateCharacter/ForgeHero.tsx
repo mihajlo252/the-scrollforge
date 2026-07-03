@@ -1,16 +1,31 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Icon } from "../../../components/Primitives";
 import { DomainCardView } from "../CharacterProfile/DomainCard";
 import {
 	allAncestries,
 	allClasses,
 	allCommunities,
+	allArmors,
+	primaryWeapons,
+	secondaryWeapons,
 	subclassesForClass,
 	getClass,
+	getSubclass,
+	getAncestry,
+	getCommunity,
 	getDomains,
 	getSpellcastTrait,
+	weaponById,
+	armorById,
+	weaponToDH,
+	armorToDH,
+	formatWeaponDamage,
+	titleWords,
+	tierForLevel,
 	flattenDescription,
+	groupCardsByLevel,
 	TRAIT_NAMES,
+	type Feature,
 } from "../../../utilities/daggerheart";
 import { Capitalize } from "../../../utilities/capitalize";
 import { getUserFromLocal } from "../../../utilities/getUserFromLocal";
@@ -21,7 +36,6 @@ import styles from "./ForgeHero.module.css";
 
 const CATALOG = domainCardsData as DomainCard[];
 const TRAIT_OPTIONS = [2, 1, 0, -1];
-const RECOMMENDED = [2, 1, 1, 0, 0, -1];
 
 const STEPS = [
 	{ id: "class", label: "Class & Subclass" },
@@ -45,6 +59,55 @@ const CONNECTION_PROMPTS = [
 ];
 
 const firstSubclass = (className: string) => subclassesForClass(className)[0]?.name ?? "";
+const byTierName = (a: { tier: number; name: string }, b: { tier: number; name: string }) => a.tier - b.tier || a.name.localeCompare(b.name);
+
+/** Label stacked above a single form control. */
+const Field = ({ label, children }: { label: string; children: ReactNode }) => (
+	<label className={styles.field}>
+		<span className={styles.fieldLabel}>{label}</span>
+		{children}
+	</label>
+);
+
+/** A named feature line for the details side-panel. */
+const FeatureLine = ({ f }: { f: Feature }) => (
+	<div className={styles.detailFeat}>
+		<span className={styles.detailFeatName}>{f.name}</span>
+		<span className={styles.detailFeatText}>{flattenDescription(f.description)}</span>
+	</div>
+);
+
+const WeaponPreview = ({ w }: { w: DHWeapon | null | undefined }) =>
+	w && w.name ? (
+		<div className={styles.gearPreview}>
+			<div className={styles.gearPreviewHead}>
+				<span className={styles.gearPreviewName}>{w.name}</span>
+				<span className="mono" style={{ color: "var(--gold-2)" }}>{w.damage}</span>
+			</div>
+			<div className={styles.gearPreviewMeta}>
+				<span className="chip">{w.trait}</span>
+				<span className="chip">{w.range}</span>
+				<span className="chip">{w.dtype === "mag" ? "Magic" : "Physical"}</span>
+				<span className="chip">{w.burden}</span>
+			</div>
+			{w.feature && <div className={styles.gearPreviewFeat}>{w.feature}</div>}
+		</div>
+	) : null;
+
+const ArmorPreview = ({ a }: { a: DHArmor | null | undefined }) =>
+	a && a.name ? (
+		<div className={styles.gearPreview}>
+			<div className={styles.gearPreviewHead}>
+				<span className={styles.gearPreviewName}>{a.name}</span>
+				<span className="mono" style={{ color: "var(--gold-2)" }}>Score {a.score}</span>
+			</div>
+			<div className={styles.gearPreviewMeta}>
+				<span className="chip">Major {a.thresholds.major}</span>
+				<span className="chip">Severe {a.thresholds.severe}</span>
+			</div>
+			{a.feature && <div className={styles.gearPreviewFeat}>{a.feature}</div>}
+		</div>
+	) : null;
 
 export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCreated: () => void }) => {
 	const [step, setStep] = useState(0);
@@ -57,8 +120,8 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 		ancestry: "Clank",
 		community: "Highborne",
 		traits: { Agility: 2, Strength: 1, Finesse: 1, Instinct: 0, Presence: 0, Knowledge: -1 },
-		weapons: { primary: { name: "", trait: "Agility", range: "Melee", damage: "", dtype: "phy", burden: "One-Handed", feature: "" }, secondary: null },
-		armor: { name: "", score: 0, thresholds: { major: 0, severe: 0 }, feature: "" },
+		weapons: { primary: weaponToDH(primaryWeapons()[0]), secondary: null },
+		armor: armorToDH(allArmors()[0]),
 		background: BACKGROUND_PROMPTS.map((q) => ({ q, a: "" })),
 		experiences: [
 			{ name: "", bonus: 2 },
@@ -68,20 +131,62 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 		connections: CONNECTION_PROMPTS.map((q) => ({ q, a: "" })),
 	}));
 
+	// Selected catalog ids for the gear pickers (kept alongside the mapped draft).
+	const [gear, setGear] = useState(() => ({
+		primaryId: primaryWeapons()[0]?.id ?? "",
+		secondaryId: "",
+		armorId: allArmors()[0]?.id ?? "",
+	}));
+
 	const set = (patch: Partial<ForgeDraft>) => setDraft((d) => ({ ...d, ...patch }));
 
 	const classDomains = getDomains(draft.class);
 	const spellTrait = getSpellcastTrait(draft.subclass);
+	const cls = getClass(draft.class);
+	const subclassCfg = getSubclass(draft.subclass);
+	const ancestryCfg = getAncestry(draft.ancestry);
+	const communityCfg = getCommunity(draft.community);
+	const gearTier = tierForLevel(draft.level);
 
 	const chooseClass = (name: string) => set({ class: name, subclass: firstSubclass(name), domainCards: [] });
 
-	const setTrait = (t: DHTraitName, v: number) => set({ traits: { ...draft.traits, [t]: v } });
+	// Trait assignment as a fixed pool: choosing a value swaps it away from the
+	// trait that currently holds it, so the +2/+1/+1/0/0/−1 spread always holds.
+	const assignTrait = (t: DHTraitName, v: number) => {
+		const cur = draft.traits[t];
+		if (v === cur) return;
+		const next = { ...draft.traits };
+		const other = TRAIT_NAMES.find((u) => u !== t && next[u] === v);
+		if (other) next[other] = cur;
+		next[t] = v;
+		set({ traits: next });
+	};
+
+	const pickPrimary = (id: string) => {
+		setGear((g) => ({ ...g, primaryId: id }));
+		const w = weaponById(id);
+		set({ weapons: { ...draft.weapons, primary: w ? weaponToDH(w) : null } });
+	};
+	const pickSecondary = (id: string) => {
+		setGear((g) => ({ ...g, secondaryId: id }));
+		const w = weaponById(id);
+		set({ weapons: { ...draft.weapons, secondary: w ? weaponToDH(w) : null } });
+	};
+	const pickArmor = (id: string) => {
+		setGear((g) => ({ ...g, armorId: id }));
+		const a = armorById(id);
+		set({ armor: a ? armorToDH(a) : null });
+	};
+
+	// Heroes begin with two cards at level 1; higher-level heroes may take one
+	// more per level (extras beyond a 5-card loadout spill to the vault on save).
+	const maxCards = draft.level + 1;
 
 	const toggleCard = (card: DomainCard) => {
 		const has = draft.domainCards.some((c) => c.name === card.name);
 		if (has) set({ domainCards: draft.domainCards.filter((c) => c.name !== card.name) });
-		else if (draft.domainCards.length < 2) set({ domainCards: [...draft.domainCards, card] });
-		else toast({ style: "frame button-primary", message: "Choose just two domain cards to start." });
+		else if (draft.domainCards.length < maxCards) set({ domainCards: [...draft.domainCards, card] });
+		else toast({ style: "frame button-primary", message: `Choose up to ${maxCards} domain cards.` });
 	};
 
 	const finish = async () => {
@@ -102,10 +207,6 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 			setSaving(false);
 		}
 	};
-
-	const cls = getClass(draft.class);
-	const traitTally = (v: number) => draft.traits ? Object.values(draft.traits).filter((x) => x === v).length : 0;
-	const matchesRecommended = TRAIT_OPTIONS.every((v) => traitTally(v) === RECOMMENDED.filter((r) => r === v).length);
 
 	const current = STEPS[step].id;
 
@@ -129,38 +230,61 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 							<div className={styles.panelHint}>Your class sets your domains, starting Evasion, and Hit Points.</div>
 						</div>
 						<div className={styles.body}>
-							<input className="input" placeholder="Hero name" value={draft.name} onChange={(e) => set({ name: e.target.value })} />
 							<div className={styles.formGrid2}>
-								<div>
-									<div className={styles.fieldLabel}>Level</div>
+								<Field label="Hero Name"><input className="input" placeholder="e.g. Kael the Bold" value={draft.name} onChange={(e) => set({ name: e.target.value })} /></Field>
+								<Field label="Level">
 									<select className="select" value={draft.level} onChange={(e) => set({ level: parseInt(e.target.value) })}>
 										{Array.from({ length: 10 }, (_, i) => i + 1).map((l) => <option key={l} value={l}>{l}</option>)}
 									</select>
+								</Field>
+							</div>
+							<div className={styles.pickLayout}>
+								<div className={styles.picks}>
+									<div className={styles.fieldLabel}>Class</div>
+									<div className={styles.pickGrid}>
+										{allClasses().map((c) => {
+											const name = Capitalize(c.name);
+											return (
+												<button key={c.id} type="button" className={styles.pick} data-active={draft.class === name} onClick={() => chooseClass(name)}>
+													<span className={styles.pickName}>{name}</span>
+													<span className={styles.pickMeta}>
+														{c.domains.map((d) => <span key={d} className="chip">{Capitalize(d)}</span>)}
+													</span>
+													<span className={styles.pickMeta}>EV {c.startingEvasion} · HP {c.startingHitPoints}</span>
+												</button>
+											);
+										})}
+									</div>
+									<div className={styles.fieldLabel}>Subclass</div>
+									<div className={styles.pickGrid}>
+										{subclassesForClass(draft.class).map((s) => (
+											<button key={s.id} type="button" className={styles.pick} data-active={draft.subclass === s.name} onClick={() => set({ subclass: s.name })}>
+												<span className={styles.pickName}>{s.name}</span>
+												<span className={styles.pickMeta}>{s.spellcastTrait ? `Spellcast: ${s.spellcastTrait}` : "Martial"}</span>
+											</button>
+										))}
+									</div>
 								</div>
-							</div>
-							<div className={styles.fieldLabel}>Class</div>
-							<div className={styles.pickGrid}>
-								{allClasses().map((c) => {
-									const name = Capitalize(c.name);
-									return (
-										<button key={c.id} type="button" className={styles.pick} data-active={draft.class === name} onClick={() => chooseClass(name)}>
-											<span className={styles.pickName}>{name}</span>
-											<span className={styles.pickMeta}>
-												{c.domains.map((d) => <span key={d} className="chip">{Capitalize(d)}</span>)}
-											</span>
-											<span className={styles.pickMeta}>EV {c.startingEvasion} · HP {c.startingHitPoints}</span>
-										</button>
-									);
-								})}
-							</div>
-							<div className={styles.fieldLabel}>Subclass</div>
-							<div className={styles.pickGrid}>
-								{subclassesForClass(draft.class).map((s) => (
-									<button key={s.id} type="button" className={styles.pick} data-active={draft.subclass === s.name} onClick={() => set({ subclass: s.name })}>
-										<span className={styles.pickName}>{s.name}</span>
-										<span className={styles.pickMeta}>{s.spellcastTrait ? `Spellcast: ${s.spellcastTrait}` : "Martial"}</span>
-									</button>
-								))}
+
+								<aside className={styles.details}>
+									{cls && (
+										<>
+											<div className={styles.detailTitle}>{cls.name}</div>
+											<div className={styles.detailMeta}>{cls.domains.map((d) => Capitalize(d)).join(" & ")} · Evasion {cls.startingEvasion} · HP {cls.startingHitPoints}</div>
+											<p className={styles.detailText}>{flattenDescription(cls.description)}</p>
+											<div className={styles.detailSection}>Class Features</div>
+											{cls.classFeatures.map((f) => <FeatureLine key={f.name} f={f} />)}
+											<div className={styles.detailSection}>Hope Feature</div>
+											<FeatureLine f={cls.hopeFeature} />
+											{subclassCfg && (
+												<>
+													<div className={styles.detailSection}>{subclassCfg.name} · {subclassCfg.spellcastTrait ? `Spellcast ${subclassCfg.spellcastTrait}` : "Martial"}</div>
+													{subclassCfg.foundation.features.map((f) => <FeatureLine key={`f-${f.name}`} f={f} />)}
+												</>
+											)}
+										</>
+									)}
+								</aside>
 							</div>
 						</div>
 					</>
@@ -174,23 +298,44 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 							<div className={styles.panelHint}>Your ancestry and community shape who you are and grant features.</div>
 						</div>
 						<div className={styles.body}>
-							<div className={styles.fieldLabel}>Ancestry</div>
-							<div className={styles.pickGrid}>
-								{allAncestries().map((a) => (
-									<button key={a.id} type="button" className={styles.pick} data-active={draft.ancestry === a.name} onClick={() => set({ ancestry: a.name })}>
-										<span className={styles.pickName}>{a.name}</span>
-										<span className={styles.pickMeta}>{a.features.map((f) => f.name).join(" · ")}</span>
-									</button>
-								))}
-							</div>
-							<div className={styles.fieldLabel}>Community</div>
-							<div className={styles.pickGrid}>
-								{allCommunities().map((c) => (
-									<button key={c.id} type="button" className={styles.pick} data-active={draft.community === c.name} onClick={() => set({ community: c.name })}>
-										<span className={styles.pickName}>{c.name}</span>
-										<span className={styles.pickMeta}>{c.features.map((f) => f.name).join(" · ")}</span>
-									</button>
-								))}
+							<div className={styles.pickLayout}>
+								<div className={styles.picks}>
+									<div className={styles.fieldLabel}>Ancestry</div>
+									<div className={styles.pickGrid}>
+										{allAncestries().map((a) => (
+											<button key={a.id} type="button" className={styles.pick} data-active={draft.ancestry === a.name} onClick={() => set({ ancestry: a.name })}>
+												<span className={styles.pickName}>{a.name}</span>
+												<span className={styles.pickMeta}>{a.features.map((f) => f.name).join(" · ")}</span>
+											</button>
+										))}
+									</div>
+									<div className={styles.fieldLabel}>Community</div>
+									<div className={styles.pickGrid}>
+										{allCommunities().map((c) => (
+											<button key={c.id} type="button" className={styles.pick} data-active={draft.community === c.name} onClick={() => set({ community: c.name })}>
+												<span className={styles.pickName}>{c.name}</span>
+												<span className={styles.pickMeta}>{c.features.map((f) => f.name).join(" · ")}</span>
+											</button>
+										))}
+									</div>
+								</div>
+
+								<aside className={styles.details}>
+									{ancestryCfg && (
+										<>
+											<div className={styles.detailTitle}>{ancestryCfg.name}</div>
+											<p className={styles.detailText}>{flattenDescription(ancestryCfg.description)}</p>
+											{ancestryCfg.features.map((f) => <FeatureLine key={`a-${f.name}`} f={f} />)}
+										</>
+									)}
+									{communityCfg && (
+										<>
+											<div className={styles.detailSection}>{communityCfg.name}</div>
+											<p className={styles.detailText}>{flattenDescription(communityCfg.description)}</p>
+											{communityCfg.features.map((f) => <FeatureLine key={`c-${f.name}`} f={f} />)}
+										</>
+									)}
+								</aside>
 							</div>
 						</div>
 					</>
@@ -201,21 +346,21 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 					<>
 						<div className={styles.panelHead}>
 							<div className={styles.panelTitle}>Traits</div>
-							<div className={styles.panelHint}>Recommended spread: +2, +1, +1, 0, 0, −1. {spellTrait ? `Your Spellcast trait is ${spellTrait}.` : ""}</div>
+							<div className={styles.panelHint}>Assign the standard array: +2, +1, +1, 0, 0, −1. {spellTrait ? `Your Spellcast trait is ${spellTrait}.` : ""}</div>
 						</div>
 						<div className={styles.body}>
 							<div className={styles.traitAssign}>
 								{TRAIT_NAMES.map((t) => (
 									<div key={t} className={styles.traitAssignRow} data-spellcast={!!spellTrait && spellTrait.toUpperCase() === t.toUpperCase()}>
 										<span className={styles.traitAssignName}>{t}</span>
-										<select className="select" value={draft.traits[t]} onChange={(e) => setTrait(t, parseInt(e.target.value))}>
+										<select className="select" value={draft.traits[t]} onChange={(e) => assignTrait(t, parseInt(e.target.value))}>
 											{TRAIT_OPTIONS.map((v) => <option key={v} value={v}>{v >= 0 ? `+${v}` : v}</option>)}
 										</select>
 									</div>
 								))}
 							</div>
 							<span className={styles.poolNote}>
-								{matchesRecommended ? "✓ Matches the recommended spread." : "Tip: the standard array uses one +2, two +1, two 0, and one −1."}
+								Each value comes from the fixed array — choosing one automatically swaps it with whichever trait held it, so you always have one +2, two +1, two 0, and one −1.
 							</span>
 						</div>
 					</>
@@ -226,31 +371,38 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 					<>
 						<div className={styles.panelHead}>
 							<div className={styles.panelTitle}>Equipment</div>
-							<div className={styles.panelHint}>Pick a primary weapon and armor. You can refine these later on the sheet.</div>
+							<div className={styles.panelHint}>Choose from the weapon and armor catalog (tier {gearTier} or lower). You can refine these later on the sheet.</div>
 						</div>
 						<div className={styles.body}>
-							<div className={styles.fieldLabel}>Primary Weapon</div>
-							<input className="input" placeholder="Weapon name" value={draft.weapons.primary?.name ?? ""} onChange={(e) => set({ weapons: { ...draft.weapons, primary: { ...(draft.weapons.primary as DHWeapon), name: e.target.value } } })} />
-							<div className={styles.formGrid2}>
-								<select className="select" value={draft.weapons.primary?.trait ?? "Agility"} onChange={(e) => set({ weapons: { ...draft.weapons, primary: { ...(draft.weapons.primary as DHWeapon), trait: e.target.value } } })}>
-									{TRAIT_NAMES.map((t) => <option key={t} value={t}>{t}</option>)}
+							<Field label="Primary Weapon">
+								<select className="select" value={gear.primaryId} onChange={(e) => pickPrimary(e.target.value)}>
+									<option value="">— None —</option>
+									{primaryWeapons().filter((w) => w.tier <= gearTier).sort(byTierName).map((w) => (
+										<option key={w.id} value={w.id}>{w.name} · T{w.tier} · {formatWeaponDamage(w)} {titleWords(w.trait)}</option>
+									))}
 								</select>
-								<input className="input" placeholder="Range (Melee, Far…)" value={draft.weapons.primary?.range ?? ""} onChange={(e) => set({ weapons: { ...draft.weapons, primary: { ...(draft.weapons.primary as DHWeapon), range: e.target.value } } })} />
-								<input className="input" placeholder="Damage (1d8+1)" value={draft.weapons.primary?.damage ?? ""} onChange={(e) => set({ weapons: { ...draft.weapons, primary: { ...(draft.weapons.primary as DHWeapon), damage: e.target.value } } })} />
-								<select className="select" value={draft.weapons.primary?.dtype ?? "phy"} onChange={(e) => set({ weapons: { ...draft.weapons, primary: { ...(draft.weapons.primary as DHWeapon), dtype: e.target.value } } })}>
-									<option value="phy">Physical</option>
-									<option value="mag">Magic</option>
-								</select>
-							</div>
+							</Field>
+							<WeaponPreview w={draft.weapons.primary} />
 
-							<div className={styles.fieldLabel}>Active Armor</div>
-							<input className="input" placeholder="Armor name" value={draft.armor?.name ?? ""} onChange={(e) => set({ armor: { ...(draft.armor as DHArmor), name: e.target.value } })} />
-							<div className={styles.formGrid2}>
-								<input className="input" type="number" placeholder="Armor Score" value={draft.armor?.score ?? 0} onChange={(e) => set({ armor: { ...(draft.armor as DHArmor), score: parseInt(e.target.value) || 0 } })} />
-								<span />
-								<input className="input" type="number" placeholder="Major threshold" value={draft.armor?.thresholds.major ?? 0} onChange={(e) => set({ armor: { ...(draft.armor as DHArmor), thresholds: { ...(draft.armor as DHArmor).thresholds, major: parseInt(e.target.value) || 0 } } })} />
-								<input className="input" type="number" placeholder="Severe threshold" value={draft.armor?.thresholds.severe ?? 0} onChange={(e) => set({ armor: { ...(draft.armor as DHArmor), thresholds: { ...(draft.armor as DHArmor).thresholds, severe: parseInt(e.target.value) || 0 } } })} />
-							</div>
+							<Field label="Secondary Weapon (optional)">
+								<select className="select" value={gear.secondaryId} onChange={(e) => pickSecondary(e.target.value)}>
+									<option value="">— None —</option>
+									{secondaryWeapons().filter((w) => w.tier <= gearTier).sort(byTierName).map((w) => (
+										<option key={w.id} value={w.id}>{w.name} · T{w.tier} · {formatWeaponDamage(w)} {titleWords(w.trait)}</option>
+									))}
+								</select>
+							</Field>
+							<WeaponPreview w={draft.weapons.secondary} />
+
+							<Field label="Active Armor">
+								<select className="select" value={gear.armorId} onChange={(e) => pickArmor(e.target.value)}>
+									<option value="">— None —</option>
+									{allArmors().filter((a) => a.tier <= gearTier).sort(byTierName).map((a) => (
+										<option key={a.id} value={a.id}>{a.name} · T{a.tier} · Score {a.baseScore} · {a.baseMajorThreshold}/{a.baseSevereThreshold}</option>
+									))}
+								</select>
+							</Field>
+							<ArmorPreview a={draft.armor} />
 						</div>
 					</>
 				)}
@@ -283,8 +435,12 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 						<div className={styles.body}>
 							{draft.experiences.map((x, i) => (
 								<div key={i} className={styles.formGrid2}>
-									<input className="input" placeholder={`Experience ${i + 1} (e.g. Silver Tongue)`} value={x.name} onChange={(e) => set({ experiences: draft.experiences.map((y, idx) => (idx === i ? { ...y, name: e.target.value } : y)) })} />
-									<input className="input" type="number" value={x.bonus} onChange={(e) => set({ experiences: draft.experiences.map((y, idx) => (idx === i ? { ...y, bonus: parseInt(e.target.value) || 0 } : y)) })} />
+									<Field label={`Experience ${i + 1}`}>
+										<input className="input" placeholder="e.g. Silver Tongue" value={x.name} onChange={(e) => set({ experiences: draft.experiences.map((y, idx) => (idx === i ? { ...y, name: e.target.value } : y)) })} />
+									</Field>
+									<Field label="Bonus">
+										<input className="input" type="number" value={x.bonus} onChange={(e) => set({ experiences: draft.experiences.map((y, idx) => (idx === i ? { ...y, bonus: parseInt(e.target.value) || 0 } : y)) })} />
+									</Field>
 								</div>
 							))}
 						</div>
@@ -296,19 +452,24 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 					<>
 						<div className={styles.panelHead}>
 							<div className={styles.panelTitle}>Domain Cards</div>
-							<div className={styles.panelHint}>Choose two level-1 cards from your {cls?.name} domains ({classDomains.map(Capitalize).join(" & ")}). Selected {draft.domainCards.length}/2.</div>
+							<div className={styles.panelHint}>Choose up to {maxCards} cards (level {draft.level} or lower) from your {cls?.name} domains ({classDomains.map(Capitalize).join(" & ")}). Selected {draft.domainCards.length}/{maxCards}.</div>
 						</div>
 						<div className={styles.body}>
-							{CATALOG.filter((c) => classDomains.some((d) => d.toUpperCase() === c.domain.toUpperCase())).map((card) => {
-								const active = draft.domainCards.some((c) => c.name === card.name);
-								return (
-									<DomainCardView key={card.name} card={card}>
-										<button type="button" className={`button ${active ? "button-secondary" : "button-primary"} short`} onClick={() => toggleCard(card)}>
-											<Icon name={active ? "check" : "plus"} size={12} /> {active ? "Selected" : "Select"}
-										</button>
-									</DomainCardView>
-								);
-							})}
+							{groupCardsByLevel(CATALOG.filter((c) => c.level <= draft.level && classDomains.some((d) => d.toUpperCase() === c.domain.toUpperCase()))).map(([lvl, cards]) => (
+								<div key={lvl} className={styles.cardLevelGroup}>
+									<div className={styles.fieldLabel}>Level {lvl}</div>
+									{cards.map((card) => {
+										const active = draft.domainCards.some((c) => c.name === card.name);
+										return (
+											<DomainCardView key={card.name} card={card}>
+												<button type="button" className={`button ${active ? "button-secondary" : "button-primary"} short`} onClick={() => toggleCard(card)}>
+													<Icon name={active ? "check" : "plus"} size={12} /> {active ? "Selected" : "Select"}
+												</button>
+											</DomainCardView>
+										);
+									})}
+								</div>
+							))}
 						</div>
 					</>
 				)}
@@ -340,6 +501,7 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 				{/* Footer nav */}
 				<div className={styles.nav}>
 					<button type="button" className="button button-secondary" onClick={onCancel}>Cancel</button>
+					<span className={styles.stepProgress}>Step {step + 1} / {STEPS.length} · {STEPS[step].label}</span>
 					<div className={styles.navSpacer} />
 					{step > 0 && (
 						<button type="button" className="button button-ghost" onClick={() => setStep(step - 1)}>

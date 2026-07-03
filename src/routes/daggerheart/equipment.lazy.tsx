@@ -3,8 +3,9 @@ import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
-import { TRAIT_NAMES } from "../../utilities/daggerheart";
+import { TRAIT_NAMES, primaryWeapons, secondaryWeapons, allArmors, weaponById, armorById, weaponToDH, armorToDH, formatWeaponDamage } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { sendData } from "../../utilities/sendData";
 import styles from "./sheetScreens.module.css";
@@ -211,7 +212,7 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
                   <div className={styles.invRight}>
                     <span className="mono" style={{ color: "var(--ink-dim)" }}>×{it.qty}</span>
                     <button className="sf-icon-btn" type="button" onClick={() => openItemEdit(i)} aria-label="Edit"><Icon name="edit" size={13} /></button>
-                    <button className="sf-icon-btn" type="button" onClick={() => persistInventory(inventory.filter((_, idx) => idx !== i))} aria-label="Delete"><Icon name="trash" size={13} /></button>
+                    <ConfirmButton className="sf-icon-btn" aria-label="Delete" title="Delete item?" message={`Remove "${it.name}" from your inventory? This can't be undone.`} onConfirm={() => persistInventory(inventory.filter((_, idx) => idx !== i))}><Icon name="trash" size={13} /></ConfirmButton>
                   </div>
                 </div>
               ))}
@@ -225,6 +226,15 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
         <form onSubmit={saveWeapon}>
           <Frame classes="column-direction">
             <h3 className="card-title">{weaponSlot === "primary" ? "Primary" : "Secondary"} Weapon</h3>
+            <select className="select" value="" onChange={(e) => { const w = weaponById(e.target.value); if (w) setWeaponForm(weaponToDH(w)); }}>
+              <option value="">Choose from catalog…</option>
+              {(weaponSlot === "secondary" ? secondaryWeapons() : primaryWeapons())
+                .slice()
+                .sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name))
+                .map((w) => (
+                  <option key={w.id} value={w.id}>{w.name} · T{w.tier} · {formatWeaponDamage(w)}</option>
+                ))}
+            </select>
             <input className="input" placeholder="Weapon name" value={weaponForm.name} autoFocus onChange={(e) => setWeaponForm({ ...weaponForm, name: e.target.value })} />
             <div className={styles.formGrid}>
               <select className="select" value={weaponForm.trait} onChange={(e) => setWeaponForm({ ...weaponForm, trait: e.target.value })}>
@@ -255,6 +265,15 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
         <form onSubmit={saveArmor}>
           <Frame classes="column-direction">
             <h3 className="card-title">Active Armor</h3>
+            <select className="select" value="" onChange={(e) => { const a = armorById(e.target.value); if (a) setArmorForm(armorToDH(a)); }}>
+              <option value="">Choose from catalog…</option>
+              {allArmors()
+                .slice()
+                .sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name))
+                .map((a) => (
+                  <option key={a.id} value={a.id}>{a.name} · T{a.tier} · Score {a.baseScore} · {a.baseMajorThreshold}/{a.baseSevereThreshold}</option>
+                ))}
+            </select>
             <input className="input" placeholder="Armor name" value={armorForm.name} autoFocus onChange={(e) => setArmorForm({ ...armorForm, name: e.target.value })} />
             <div className={styles.formGrid}>
               <input className="input" type="number" placeholder="Armor Score" value={armorForm.score} onChange={(e) => setArmorForm({ ...armorForm, score: parseInt(e.target.value) || 0 })} />

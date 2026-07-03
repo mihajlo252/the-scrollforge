@@ -17,26 +17,37 @@ export const SheetTopbar = ({
 	onNotes: () => void;
 	onRoll: () => void;
 	onRest?: () => void;
-	onLevelUp?: () => void;
+	/** targetLevel is passed when the level is typed directly, so the caller can
+	 *  walk the character through every gained level's advancements. */
+	onLevelUp?: (targetLevel?: number) => void;
 }) => {
 	const { characterProfile } = character;
-	const [level, setLevel] = useState<number>(characterProfile.level);
+	const committedLevel = characterProfile.level || 0;
+	const [draftLevel, setDraftLevel] = useState<string>(String(committedLevel));
 	const [conditions, setConditions] = useState<string[]>(character.dhVitals?.conditions ?? []);
 	const [adding, setAdding] = useState(false);
 	const [draft, setDraft] = useState("");
 
 	const subclass = getSubclass(characterProfile.subclass);
 	const initial = (characterProfile.name || "?").charAt(0).toUpperCase();
-	const tier = tierForLevel(level || 1);
+	const tier = tierForLevel(committedLevel || 1);
 
 	const readState = () => JSON.parse(localStorage.getItem("character") ?? "{}").state;
 
-	const handleChangeLevel = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = parseInt(e.target.value) || 0;
-		setLevel(value);
-		const state = readState();
-		patchCharacter(state, { characterProfile: { ...character.characterProfile, level: value } });
-		sendData("characters", character.id, { characterProfile: { ...character.characterProfile, level: value } });
+	// Typing a HIGHER level opens the level-up flow to choose every gained
+	// level's advancements; a lower/equal value is set directly.
+	const commitLevel = () => {
+		const value = parseInt(draftLevel) || 0;
+		if (value === committedLevel) return;
+		if (value > committedLevel) {
+			onLevelUp?.(Math.min(10, value));
+			setDraftLevel(String(committedLevel));
+		} else {
+			const next = { ...character.characterProfile, level: value };
+			const state = readState();
+			patchCharacter(state, { characterProfile: next });
+			sendData("characters", character.id, { characterProfile: next });
+		}
 	};
 
 	const persistConditions = (next: string[]) => {
@@ -64,7 +75,18 @@ export const SheetTopbar = ({
 					<div className={styles.name}>{characterProfile.name}</div>
 					<div className={styles.sub}>
 						<span className="mono" style={{ color: "var(--gold-2)" }}>LV</span>
-						<input type="text" placeholder="0" className={`input ${styles.levelInput}`} value={level ?? 0} onChange={handleChangeLevel} />
+						<input
+							type="text"
+							placeholder="0"
+							className={`input ${styles.levelInput}`}
+							value={draftLevel}
+							onChange={(e) => setDraftLevel(e.target.value)}
+							onBlur={commitLevel}
+							onKeyDown={(e) => {
+								if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+							}}
+							title="Set level — raising it lets you choose each new level's advancements"
+						/>
 						<span className="chip chip-gold">Tier {tier}</span>
 						<span>
 							· {characterProfile.ancestry} {characterProfile.community} · {characterProfile.class}
@@ -82,7 +104,7 @@ export const SheetTopbar = ({
 						</button>
 					)}
 					{onLevelUp && (
-						<button className="button button-secondary" onClick={onLevelUp} type="button">
+						<button className="button button-secondary" onClick={() => onLevelUp?.()} type="button">
 							<Icon name="crown" size={14} /> Level Up
 						</button>
 					)}

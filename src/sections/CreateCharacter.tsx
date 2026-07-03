@@ -81,7 +81,7 @@ export const CreateCharacter = ({
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
-					className="frame full column-direction"
+					className="frame full column-direction dh-wizard-frame"
 				>
 					<ForgeHero
 						onCancel={() => {

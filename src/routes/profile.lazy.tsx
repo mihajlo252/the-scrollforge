@@ -1,4 +1,4 @@
-import { CatchBoundary, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { CatchBoundary, createLazyFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useCharactersStore, useCharacterStore, useUserStore } from "../zustand/stores";
 import { DeletePopup } from "../components/DeletePopup";
@@ -44,6 +44,7 @@ function Profile() {
 	dragOrderRef.current = dragOrder;
 
 	const navigate = useNavigate();
+	const router = useRouter();
 
 	const handleGetCharacter = async () => {
 		if (!user) return;
@@ -55,13 +56,21 @@ function Profile() {
 		}
 	};
 
-	const handleNavigateToCharacter = (char: Character | DaggerheartCharacter) => {
+	const handleNavigateToCharacter = async (char: Character | DaggerheartCharacter) => {
 		if (char.gamemode === "dnd") {
 			setCharacter(char as Character);
 		} else {
 			setCharacter(char as DaggerheartCharacter);
 		}
-		navigate({ to: "/" + char.gamemode + "/character/" });
+		const to = "/" + char.gamemode + "/character/";
+		// Preload the (code-split) sheet chunk before navigating so the screen is
+		// ready on first visit instead of flashing while the chunk downloads.
+		try {
+			await router.preloadRoute({ to });
+		} catch {
+			// ignore preload failures — navigation still works
+		}
+		navigate({ to });
 	};
 
 	const handleDeletePopup = (char: Character | DaggerheartCharacter) => {
@@ -146,7 +155,7 @@ function Profile() {
 			<section className="column-direction stretch">
 				<section className="side-by-side apart">
 					<h1 className="text-content text-primary title">
-						<span className="eyebrow">{greeting}</span>
+						<span className={`eyebrow ${styles.greeting}`}>{greeting}</span>
 						{user?.user_metadata.username}
 					</h1>
 					<button type="button" onClick={() => setOpenCreateCharacter(true)} className="button button-primary">
@@ -237,6 +246,8 @@ const CharacterCard = ({
 	onEnter: (char: Character | DaggerheartCharacter) => void;
 	onDelete: (char: Character | DaggerheartCharacter) => void;
 }) => {
+	const router = useRouter();
+	const preload = () => router.preloadRoute({ to: "/" + character.gamemode + "/character/" }).catch(() => {});
 	const isDnd = character.gamemode === "dnd";
 	const profile: any = character.characterProfile;
 	const name = profile?.name ?? (character as any).name;
@@ -256,7 +267,7 @@ const CharacterCard = ({
 	const hasHP = typeof maxHP === "number" && maxHP > 0;
 
 	return (
-		<article className="frame hoverable">
+		<article className="frame hoverable" onMouseEnter={preload} onFocus={preload}>
 				<span className="frame-corner tl" />
 				<span className="frame-corner tr" />
 				<span className="frame-corner bl" />

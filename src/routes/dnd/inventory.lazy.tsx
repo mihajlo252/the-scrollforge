@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
 import { HPBar, Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { sendData } from "../../utilities/sendData";
 import styles from "./sheetScreens.module.css";
@@ -198,7 +199,7 @@ function InventoryScreen() {
             <div className={styles.formRow}>
               <button type="submit" className="button button-accent stretch">{editIndex === null ? "Add" : "Save"}</button>
               {editIndex !== null && (
-                <button type="button" className="button button-secondary stretch" onClick={() => { deleteItem(editIndex); setShowForm(false); }}>Delete</button>
+                <ConfirmButton className="button button-secondary stretch" title="Delete item?" message="Remove this item from your inventory? This can't be undone." onConfirm={() => { deleteItem(editIndex); setShowForm(false); }}>Delete</ConfirmButton>
               )}
               <button type="button" className="button button-secondary stretch" onClick={() => setShowForm(false)}>Close</button>
             </div>

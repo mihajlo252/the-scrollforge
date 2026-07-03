@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
 import { Heading, Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { ReorderRow } from "../../components/Reorderable";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { mergeReorder, stableKey } from "../../utilities/reorder";
@@ -180,7 +181,7 @@ const TraitCard = ({ t, onEdit, onDelete }: { t: TraitItem; onEdit: () => void; 
           <div className={styles.traitBody}>{t.text}</div>
           <div className={styles.traitCardActions}>
             <button className="button button-ghost short" onClick={onEdit} type="button"><Icon name="edit" size={12} /> Edit</button>
-            <button className="button button-secondary short" onClick={onDelete} type="button"><Icon name="trash" size={12} /></button>
+            <ConfirmButton className="button button-secondary short" title="Delete trait?" message="Remove this trait? This can't be undone." onConfirm={onDelete}><Icon name="trash" size={12} /></ConfirmButton>
           </div>
         </>
       )}

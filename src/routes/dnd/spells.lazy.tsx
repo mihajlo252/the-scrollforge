@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
 import { Popup } from "../../components/Popup/Popup";
 import { Dots, Icon } from "../../components/Primitives";
+import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { calculateProficiencyBonus } from "../../utilities/calculateStats";
 import { sendData } from "../../utilities/sendData";
@@ -225,9 +226,9 @@ function Spells() {
                   <button className="button button-ghost short" onClick={() => openEdit(selected)} type="button">
                     <Icon name="edit" size={13} /> Edit
                   </button>
-                  <button className="button button-secondary short" onClick={() => deleteSpell(selected)} type="button">
+                  <ConfirmButton className="button button-secondary short" aria-label="Delete spell" title="Delete spell?" message="Remove this spell? This can't be undone." onConfirm={() => deleteSpell(selected)}>
                     <Icon name="trash" size={13} />
-                  </button>
+                  </ConfirmButton>
                 </div>
               </div>
 

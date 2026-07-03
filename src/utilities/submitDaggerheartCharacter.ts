@@ -36,19 +36,22 @@ export const submitDaggerheartCharacter = async (draft: ForgeDraft, user: string
 		subclass: draft.subclass,
 	};
 
+	const hpTotal = cls?.startingHitPoints ?? 6;
 	const dhVitals: DHVitals = {
 		evasion: cls?.startingEvasion ?? 10,
 		proficiency: 1,
 		armorScore,
 		armorSlots: { total: armorScore, marked: 0 },
 		hp: {
-			total: cls?.startingHitPoints ?? 6,
-			marked: 0,
+			// `marked` = boxes filled = HP remaining, so a fresh hero starts full.
+			total: hpTotal,
+			marked: hpTotal,
 			major: (draft.armor?.thresholds.major ?? 6) + level,
 			severe: (draft.armor?.thresholds.severe ?? 12) + level,
 		},
 		stress: { total: 6, marked: 0 },
-		hope: { total: 6, marked: 0 },
+		// Every hero begins with 2 Hope (filled dots).
+		hope: { total: 6, marked: 2 },
 		conditions: [],
 	};
 
@@ -61,7 +64,8 @@ export const submitDaggerheartCharacter = async (draft: ForgeDraft, user: string
 		gamemode: "daggerheart",
 		dhTraits: draft.traits,
 		dhVitals,
-		dhDomainCards: { loadout: draft.domainCards, vault: [] },
+		// Loadout holds up to 5 cards; any extras (from higher-level creation) start in the vault.
+		dhDomainCards: { loadout: draft.domainCards.slice(0, 5), vault: draft.domainCards.slice(5) },
 		dhExperiences: draft.experiences,
 		dhWeapons: draft.weapons,
 		dhArmor: draft.armor,

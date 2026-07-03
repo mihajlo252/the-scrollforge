@@ -2,6 +2,13 @@
 	width: max-content;
 }
 
+/* The greeting inherits the large title size otherwise — keep it small. */
+.greeting {
+	display: block;
+	font-size: 0.95rem;
+	line-height: 1.4;
+}
+
 @media (max-width: 1024px) {
 	.filter {
 		place-self: center;

@@ -2,6 +2,9 @@
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	/* Never shrink below content — in a scrolling flex list the whole card must
+	 *  stay visible instead of squishing. */
+	flex-shrink: 0;
 	gap: 0.5rem;
 	padding: 0.85rem 0.95rem 0.85rem 1.15rem;
 	border: 1px solid var(--rule);

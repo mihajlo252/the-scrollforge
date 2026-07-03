@@ -36,40 +36,68 @@
 .thresholds {
 	display: flex;
 	align-items: stretch;
-	gap: 8px;
+	gap: 6px;
+	flex-wrap: wrap;
 }
-.threshold {
+.dmgZone {
+	flex: 1 1 0;
+	min-width: 58px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 2px;
-	padding: 4px 10px;
+	padding: 5px 8px;
 	border: 1px solid var(--rule);
 	border-radius: 4px;
 	background: var(--bg-2);
-	min-width: 64px;
 }
-.threshold[data-tone="minor"] {
+.dmgZone[data-tone="minor"] {
 	border-color: var(--rule-2);
 }
-.threshold[data-tone="major"] {
+.dmgZone[data-tone="major"] {
 	border-color: var(--gold-deep);
 }
-.threshold[data-tone="severe"] {
+.dmgZone[data-tone="severe"] {
 	border-color: #6a2a18;
 }
-.threshLabel {
+.dmgZoneLabel {
 	font-size: 9px;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	color: var(--ink-faint);
 }
-.threshVal {
+.dmgZoneMarks {
 	font-family: var(--mono), monospace;
-	font-size: 14px;
-	color: var(--gold-2);
+	font-size: 12px;
+	color: var(--ink-dim);
 }
-.threshHint {
+/* Threshold coin sits between two damage zones, showing the trigger value. */
+.threshCoin {
+	flex: 0 0 auto;
+	align-self: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1px;
+	min-width: 40px;
+	padding: 3px 6px;
+	border: 1.5px solid var(--gold-deep);
+	border-radius: 999px;
+	background: rgba(201, 162, 74, 0.1);
+}
+.threshCoinVal {
+	font-family: var(--mono), monospace;
+	font-size: 15px;
+	color: var(--gold-2);
+	line-height: 1;
+}
+.threshCoinLabel {
+	font-size: 8px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+}
+.threshFootnote {
 	font-size: 9px;
 	color: var(--ink-faint);
 	font-style: italic;

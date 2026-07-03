@@ -33,22 +33,37 @@ export const BoxTrack = ({
 	</div>
 );
 
-const Threshold = ({ tone, label, value, hint }: { tone: string; label: string; value: number; hint?: string }) => (
-	<div className={styles.threshold} data-tone={tone}>
-		<span className={styles.threshLabel}>{label}</span>
-		<span className={styles.threshVal}>{value}</span>
-		{hint && <span className={styles.threshHint}>{hint}</span>}
+/** A damage zone: how much HP you lose for a hit that lands in this band. */
+const DamageZone = ({ tone, label, marks }: { tone: string; label: string; marks: number }) => (
+	<div className={styles.dmgZone} data-tone={tone}>
+		<span className={styles.dmgZoneLabel}>{label}</span>
+		<span className={styles.dmgZoneMarks}>mark {marks}</span>
 	</div>
 );
 
+/** A threshold coin sitting between two damage zones (Major / Severe values). */
+const ThresholdCoin = ({ label, value }: { label: string; value: number }) => (
+	<div className={styles.threshCoin}>
+		<span className={styles.threshCoinVal}>{value}</span>
+		<span className={styles.threshCoinLabel}>{label}</span>
+	</div>
+);
+
+/** Daggerheart has TWO damage thresholds (Major, Severe) creating three bands:
+ *  below Major → Minor (mark 1), Major–Severe → mark 2, at/above Severe → mark 3.
+ *  A hit of at least double the Severe threshold marks 4. The HP boxes show
+ *  hit points REMAINING — click to spend them as you take damage. */
 export const HPTrack = ({ hp, onChange }: { hp: DHHPTrack; onChange?: (nextMarked: number) => void }) => (
 	<div className={styles.hpWrap}>
 		<BoxTrack total={hp.total} marked={hp.marked} onChange={onChange} color="var(--ember)" />
 		<div className={styles.thresholds}>
-			<Threshold tone="minor" label="Minor" value={1} hint="mark 1 HP" />
-			<Threshold tone="major" label="Major" value={hp.major} hint="mark 2 HP" />
-			<Threshold tone="severe" label="Severe" value={hp.severe} hint="mark 3 HP" />
+			<DamageZone tone="minor" label="Minor" marks={1} />
+			<ThresholdCoin label="Major" value={hp.major} />
+			<DamageZone tone="major" label="Major" marks={2} />
+			<ThresholdCoin label="Severe" value={hp.severe} />
+			<DamageZone tone="severe" label="Severe" marks={3} />
 		</div>
+		<span className={styles.threshFootnote}>Damage ≥ {hp.severe * 2} (double Severe) marks 4.</span>
 	</div>
 );
 

@@ -190,6 +190,25 @@
 	border-top: 0;
 }
 
+/* Daggerheart creation wizard frame: fixed-responsive on desktop, near
+ *  full-screen on mobile so the interactive content area gets the height. */
+.dh-wizard-frame {
+	width: min(960px, calc(100vw - 6rem));
+	height: min(86vh, 780px);
+	padding: 1.5rem;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+@media (max-width: 820px) {
+	.dh-wizard-frame {
+		width: 100%;
+		max-width: none;
+		height: calc(100vh - 1.5rem);
+		height: calc(100dvh - 1.5rem);
+		padding: 0.85rem;
+	}
+}
+
 .button {
 	--_color: var(--ink);
 	display: inline-flex;

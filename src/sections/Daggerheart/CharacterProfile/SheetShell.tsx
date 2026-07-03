@@ -27,6 +27,12 @@ export const SheetShell = ({
 	const [toggleNotes, setToggleNotes] = useState(false);
 	const [toggleDice, setToggleDice] = useState(false);
 	const [toggleLevelUp, setToggleLevelUp] = useState(false);
+	const [levelUpTarget, setLevelUpTarget] = useState<number | undefined>(undefined);
+
+	const openLevelUp = (target?: number) => {
+		setLevelUpTarget(target);
+		setToggleLevelUp(true);
+	};
 
 	// Gated until the Daggerheart sheet ships. To go live, set VITE_DEV_MODE
 	// (anything but "false"), or remove this block and the matching one in
@@ -48,12 +54,12 @@ export const SheetShell = ({
 				character={character}
 				onNotes={() => setToggleNotes(true)}
 				onRoll={() => setToggleDice(true)}
-				onLevelUp={() => setToggleLevelUp(true)}
+				onLevelUp={openLevelUp}
 			/>
 
-			{children({ character, state, openLevelUp: () => setToggleLevelUp(true) })}
+			{children({ character, state, openLevelUp: () => openLevelUp() })}
 
-			<LevelUpModal character={character} state={state} toggle={toggleLevelUp} onClose={() => setToggleLevelUp(false)} />
+			<LevelUpModal character={character} state={state} toggle={toggleLevelUp} targetLevel={levelUpTarget} onClose={() => setToggleLevelUp(false)} />
 
 			<Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
 				<Notes />
