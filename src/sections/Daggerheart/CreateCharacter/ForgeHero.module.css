@@ -280,7 +280,6 @@
 .poolNote {
 	font-size: 0.8rem;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .formGrid2 {
 	display: grid;

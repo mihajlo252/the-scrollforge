@@ -354,7 +354,6 @@
 	}
 	.alternate {
 		color: var(--primary);
-		font-style: italic;
 	}
 }
 .text-primary {
@@ -488,7 +487,6 @@
 }
 .eyebrow {
 	font-family: var(--display), serif;
-	font-style: italic;
 	font-weight: 500;
 	color: var(--ink-dim);
 	letter-spacing: 0.04em;
@@ -949,7 +947,6 @@
 	border-radius: 4px;
 	font-size: 12px;
 	color: var(--ink-dim);
-	font-style: italic;
 	display: flex;
 	align-items: center;
 	gap: 6px;

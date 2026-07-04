@@ -78,7 +78,6 @@
 .empty {
 	padding: 1rem 0.75rem;
 	color: var(--ink-faint);
-	font-style: italic;
 	font-size: 0.9rem;
 }
 
@@ -115,7 +114,6 @@
 	margin: auto;
 	text-align: center;
 	color: var(--ink-dim);
-	font-style: italic;
 }
 .sysMsg {
 	text-align: center;

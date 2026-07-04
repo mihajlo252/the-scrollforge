@@ -95,6 +95,5 @@
 .empty {
 	padding: 1rem 0;
 	color: var(--ink-faint);
-	font-style: italic;
 	text-align: center;
 }

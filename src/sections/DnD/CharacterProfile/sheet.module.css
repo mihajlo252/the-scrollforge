@@ -234,7 +234,6 @@
 .resSub {
 	font-size: 11px;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .resCount {
 	font-family: var(--mono), monospace;

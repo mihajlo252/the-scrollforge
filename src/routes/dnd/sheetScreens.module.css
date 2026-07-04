@@ -189,7 +189,6 @@
 .spellItemSchool {
 	font-size: 11px;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 
 .spellDetail {
@@ -237,7 +236,6 @@
 	line-height: 1;
 }
 .spellSub {
-	font-style: italic;
 	color: var(--ink-dim);
 	margin-top: 4px;
 }
@@ -417,7 +415,6 @@
 	line-height: 1.1;
 }
 .traitSub {
-	font-style: italic;
 	color: var(--ink-faint);
 	font-size: 13px;
 }
@@ -496,7 +493,6 @@
 	margin-top: 8px;
 	font-size: 12px;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .equippedList {
 	padding: 16px;
@@ -520,7 +516,6 @@
 .equippedSub {
 	font-size: 11px;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .invToolbar {
 	padding: 14px;
@@ -531,7 +526,7 @@
 }
 .invHeadRow {
 	display: grid;
-	grid-template-columns: 1fr 110px 64px 64px 36px;
+	grid-template-columns: 1fr 1fr;
 	gap: 12px;
 	padding: 10px 16px;
 	color: var(--ink-faint);
@@ -542,12 +537,30 @@
 }
 .invRow {
 	display: grid;
-	grid-template-columns: 1fr 110px 64px 64px 36px;
+	grid-template-columns: 1fr 1fr;
 	gap: 12px;
 	align-items: center;
 	padding: 12px 16px;
 	border-bottom: 1px solid var(--rule);
 	transition: background 120ms ease;
+	
+
+	> div:last-of-type {
+			grid-column: span 2;
+			order: 7;
+	}
+	 button {
+		place-self: end;
+	}	
+}
+.invItemInfo {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	@media (max-width: 767px) {
+		.right {
+			text-align: center;
+		}
+	}
 }
 .invRow:hover {
 	background: rgba(201, 162, 74, 0.06);
@@ -558,9 +571,8 @@
 	color: var(--ink);
 }
 .invItemSub {
-	font-size: 11px;
+	font-size: 15px;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .invItemMain {
 	display: flex;
@@ -600,7 +612,6 @@
 	padding: 2rem;
 	text-align: center;
 	color: var(--ink-dim);
-	font-style: italic;
 }
 
 /* ══ INSPIRATION ════════════════════════════════════════ */
@@ -663,5 +674,4 @@
 .inspCost {
 	font-size: 11px;
 	color: var(--ink-faint);
-	font-style: italic;
 }

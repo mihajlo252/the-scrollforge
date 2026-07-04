@@ -63,7 +63,6 @@
 .subHint {
 	font-size: 11px;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .monoVal {
 	font-family: var(--mono), monospace;
@@ -173,7 +172,6 @@
 .bioQText {
 	font-size: 0.9rem;
 	color: var(--gold-2);
-	font-style: italic;
 }
 .advHistory {
 	display: flex;
@@ -296,7 +294,6 @@
 .loadoutHint {
 	font-size: 0.8rem;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .browseList {
 	display: flex;
@@ -422,7 +419,6 @@
 }
 .empty {
 	color: var(--ink-faint);
-	font-style: italic;
 	font-size: 0.85rem;
 }
 
@@ -455,7 +451,6 @@
 .invNote {
 	font-size: 0.8rem;
 	color: var(--ink-faint);
-	font-style: italic;
 }
 .invRight {
 	display: flex;
