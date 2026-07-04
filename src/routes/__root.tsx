@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Navigation } from "../sections/Navigation/Navigation";
 import { ErrComp } from "../components/ErrComp/ErrComp";
 import { Toaster } from "sonner";
@@ -17,6 +17,11 @@ function Root() {
 	const { user: id } = useUserStore();
 	const pathname = useRouterState({ select: (s) => s.location.pathname });
 	const mainRef = useRef<HTMLElement>(null);
+
+	// <main> is the app's scroll container, so every screen change starts at the top.
+	useEffect(() => {
+		mainRef.current?.scrollTo(0, 0);
+	}, [pathname]);
 
 	return (
 		<>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Frame } from "../../../components/Frame/Frame";
 import { Popup } from "../../../components/Popup/Popup";
 import { Icon } from "../../../components/Primitives";
+import { DomainCardView } from "./DomainCard";
 import {
 	allClasses,
 	getDomains,
@@ -175,7 +176,7 @@ export const LevelUpModal = ({
 
 	return (
 		<Popup closerFunc={handleClose} toggle={toggle}>
-			<Frame classes="column-direction">
+			<Frame classes={`column-direction ${styles.levelUpFrame}`}>
 				<h3 className="card-title">
 					Level Up · LV {newLevel} · Tier {tier}
 					{stepsTotal > 1 ? ` · step ${stepIndex} of ${stepsTotal}` : ""}
@@ -257,6 +258,8 @@ export const LevelUpModal = ({
 														<option key={c.name} value={c.name}>{c.name} ({c.domain} Lv {c.level})</option>
 													))}
 												</select>
+												{/* Full card preview so the pick can be read before committing. */}
+												{choice?.card && <DomainCardView card={choice.card} />}
 											</div>
 										)}
 

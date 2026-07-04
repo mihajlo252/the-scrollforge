@@ -119,14 +119,25 @@ pre {
 	font-family: var(--globalFont), sans-serif;
 }
 
-.dice-box-canvas {
-	position: absolute;
-
+/* Full-screen 3D dice overlay: dice-box renders its canvas inside #dice-box
+   (see index.html). It sits above everything (popups are 1000) but never
+   blocks interaction, fading in for the roll and out once it settles. */
+#dice-box {
+	position: fixed;
+	inset: 0;
+	z-index: 1100;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 500ms ease-in-out;
+}
+#dice-box.rolling {
+	opacity: 1;
+}
+#dice-box canvas {
+	width: 100%;
+	height: 100%;
 	user-select: none;
 	touch-action: none;
-	pointer-events: none;
-	transition: opacity 500ms ease-in-out;
-	z-index: 99;
 }
 
 /* Chrome, Safari, Edge, Opera */

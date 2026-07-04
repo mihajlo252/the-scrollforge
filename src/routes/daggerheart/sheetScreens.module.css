@@ -243,6 +243,18 @@
 	flex-direction: column;
 	gap: 0.4rem;
 }
+/* Selects (domain card / multiclass pickers) must fill the card, never size it:
+   their longest option would otherwise widen the whole modal on mobile. */
+.advSub select {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+}
+/* The level-up modal keeps a fixed, viewport-bounded width so content choices
+   can't stretch it. */
+.levelUpFrame {
+	width: min(620px, 100%);
+}
 .advSubPills {
 	display: flex;
 	flex-wrap: wrap;
@@ -454,6 +466,12 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 0.5rem;
+}
+@media (max-width: 880px) {
+	.formGrid {
+		display: flex;
+		flex-direction: column;
+	}
 }
 
 /* ── Gold ───────────────────────────────────────────────── */

@@ -4,8 +4,10 @@ import DiceBox from "@3d-dice/dice-box";
 import { Popup } from "../components/Popup/Popup";
 import styles from "./DiceBox.module.css";
 
+// Renders into the dedicated full-screen overlay div in index.html.
 const diceBox = new DiceBox({
-  assetPath: "/the-scrollforge/assets/",
+  container: "#dice-box",
+  assetPath: `${import.meta.env.BASE_URL}assets/`,
 });
 diceBox.init();
 
@@ -18,8 +20,8 @@ export const DiceBoxComponent = () => {
   const throwDice = (dice: number) => {
     setResultArray([]);
     setDiceResult(0);
-    const canvas: any = document.querySelector(".dice-box-canvas");
-    canvas.style.opacity = "1";
+    const overlay = document.getElementById("dice-box");
+    overlay?.classList.add("rolling");
     diceBox.roll(`${quantity}d${dice}`);
     diceBox.onRollComplete = (rollResult: Array<any>) => {
       rollResult.forEach((result) => {
@@ -29,7 +31,8 @@ export const DiceBoxComponent = () => {
       });
       let result = rollResult.map((result) => result.rolls.reduce((acc: number, cur: { value: number }) => acc + cur.value, 0));
       setDiceResult(result[0]);
-      canvas.style.opacity = "0";
+      // Fade the overlay out, then clear the settled dice once it's invisible.
+      overlay?.classList.remove("rolling");
       setTimeout(() => {
         diceBox.clear();
       }, 500);
