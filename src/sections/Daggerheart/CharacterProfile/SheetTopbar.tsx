@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Frame } from "../../../components/Frame/Frame";
 import { Icon } from "../../../components/Primitives";
 import { getSubclass, tierForLevel } from "../../../utilities/daggerheart";
@@ -33,6 +34,20 @@ export const SheetTopbar = ({
 	const tier = tierForLevel(committedLevel || 1);
 
 	const readState = () => JSON.parse(localStorage.getItem("character") ?? "{}").state;
+
+	const [downloading, setDownloading] = useState(false);
+	// The pdf tooling only loads when asked for, so it stays out of the app bundle.
+	const downloadSheet = async () => {
+		setDownloading(true);
+		try {
+			const { downloadDaggerheartSheet } = await import("../../../utilities/daggerheartSheetPdf");
+			await downloadDaggerheartSheet(character);
+		} catch {
+			toast.error("Couldn't generate the character sheet PDF.");
+		} finally {
+			setDownloading(false);
+		}
+	};
 
 	// Typing a HIGHER level opens the level-up flow to choose every gained
 	// level's advancements; a lower/equal value is set directly.
@@ -95,6 +110,9 @@ export const SheetTopbar = ({
 					</div>
 				</div>
 				<div className={styles.topActions}>
+					<button className="button button-ghost" onClick={downloadSheet} disabled={downloading} type="button" title="Download a printable, filled-out character sheet">
+						<Icon name="download" size={14} /> {downloading ? "PDF…" : "PDF"}
+					</button>
 					<button className="button button-ghost" onClick={onNotes} type="button">
 						<Icon name="book" size={14} /> Notes
 					</button>

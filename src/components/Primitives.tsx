@@ -31,6 +31,11 @@ export const Icon = ({
 				<path d="M15 6l-6 6 6 6" />
 			</>
 		),
+		download: (
+			<>
+				<path d="M12 3v12M7 10l5 5 5-5M4 19h16" />
+			</>
+		),
 		fwd: (
 			<>
 				<path d="M9 6l6 6-6 6" />

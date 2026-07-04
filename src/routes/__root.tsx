@@ -4,7 +4,6 @@ import { useRef } from "react";
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Navigation } from "../sections/Navigation/Navigation";
 import { ErrComp } from "../components/ErrComp/ErrComp";
-import { PullToRefresh } from "../components/PullToRefresh/PullToRefresh";
 import { Toaster } from "sonner";
 import styles from "../routeStyles/root.module.css";
 import { useUserStore } from "../zustand/stores";
@@ -23,7 +22,6 @@ function Root() {
 	return (
 		<>
 			{id && <Navigation />}
-			<PullToRefresh containerRef={mainRef} />
 			<main ref={mainRef} className={`${styles.main}`}>
 				{/* Keyed by pathname so each navigation replays a smooth, eased
 				    fade + slide. (Enter-only: AnimatePresence exit is unreliable
