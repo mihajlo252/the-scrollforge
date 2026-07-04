@@ -22,7 +22,7 @@ const TABLE = advancementsData as Record<string, AdvancementOption[]>;
 
 export const tierOptions = (tier: number): AdvancementOption[] => TABLE[String(tier)] ?? [];
 
-export const tierRange = (tier: number): [number, number] =>
+const tierRange = (tier: number): [number, number] =>
 	tier === 4 ? [8, 10] : tier === 3 ? [5, 7] : tier === 2 ? [2, 4] : [1, 1];
 
 /** How many times each option id has been chosen earlier within the same tier. */

@@ -86,11 +86,8 @@ export const tierForLevel = (level: number): number => {
 
 export const TRAIT_NAMES: DHTraitName[] = ["Agility", "Strength", "Finesse", "Instinct", "Presence", "Knowledge"];
 
-/** Standard creation trait-assignment array. */
-export const TRAIT_ARRAY = [2, 1, 1, 0, 0, -1];
-
 /** Domain color map (the 9 Daggerheart domains), aligned to the app palette. */
-export const DH_DOMAIN_COLORS: Record<string, string> = {
+const DH_DOMAIN_COLORS: Record<string, string> = {
 	ARCANA: "#9b7fd0",
 	BLADE: "#c6584f",
 	BONE: "#b9ad94",
@@ -103,12 +100,6 @@ export const DH_DOMAIN_COLORS: Record<string, string> = {
 };
 
 export const domainColor = (domain?: string): string => DH_DOMAIN_COLORS[(domain ?? "").toUpperCase()] ?? "var(--rule)";
-
-/** Damage thresholds from armor + level: Major = armor major + level, Severe = armor severe + level. */
-export const computeThresholds = (armorMajor: number, armorSevere: number, level: number) => ({
-	major: armorMajor + level,
-	severe: armorSevere + level,
-});
 
 export const defaultTraits = (): DHTraits => ({ Agility: 0, Strength: 0, Finesse: 0, Instinct: 0, Presence: 0, Knowledge: 0 });
 
@@ -152,7 +143,6 @@ export type ConfigArmor = {
 const WEAPONS = weaponsData as unknown as ConfigWeapon[];
 const ARMORS = armorsData as unknown as ConfigArmor[];
 
-export const allWeapons = () => WEAPONS;
 export const allArmors = () => ARMORS;
 export const primaryWeapons = () => WEAPONS.filter((w) => w.type.startsWith("PRIMARY"));
 export const secondaryWeapons = () => WEAPONS.filter((w) => w.type === "SECONDARY");

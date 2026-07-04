@@ -1,7 +1,6 @@
 import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useRef } from "react";
-// import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Navigation } from "../sections/Navigation/Navigation";
 import { ErrComp } from "../components/ErrComp/ErrComp";
 import { Toaster } from "sonner";
@@ -36,7 +35,6 @@ function Root() {
 					<Outlet />
 				</motion.div>
 			</main>
-			{/* <TanStackRouterDevtools /> */}
 			<Toaster theme="dark" />
 		</>
 	);

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { TabBar } from "../../../components/Primitives";
 import styles from "./sheet.module.css";
 
-export const SHEET_TABS = [
+const SHEET_TABS = [
 	{ id: "combat", label: "Combat", icon: "sword", to: "/dnd/character" },
 	{ id: "spells", label: "Spells", icon: "sparkle", to: "/dnd/spells" },
 	{ id: "traits", label: "Traits", icon: "scroll", to: "/dnd/traits" },

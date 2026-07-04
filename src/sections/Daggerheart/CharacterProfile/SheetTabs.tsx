@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { TabBar } from "../../../components/Primitives";
 import styles from "./sheet.module.css";
 
-export const DH_SHEET_TABS = [
+const DH_SHEET_TABS = [
 	{ id: "vitals", label: "Vitals", icon: "heart", to: "/daggerheart/character" },
 	{ id: "domains", label: "Domains", icon: "sparkle", to: "/daggerheart/domains" },
 	{ id: "features", label: "Features", icon: "scroll", to: "/daggerheart/features" },

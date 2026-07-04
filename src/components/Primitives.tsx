@@ -668,15 +668,6 @@ export const AvatarIcon = ({
 	);
 };
 
-// Stat pill (large display value + caption)
-export const StatPill = ({ label, value, mod, onClick }: { label: string; value: any; mod: any; onClick: any }) => (
-	<div className="sf-stat" onClick={onClick}>
-		<div className="sf-stat-label caps">{label}</div>
-		<div className="sf-stat-value display">{value}</div>
-		{mod != null && <div className="sf-stat-mod mono">{mod >= 0 ? `+${mod}` : mod}</div>}
-	</div>
-);
-
 // Ornate section heading with flanking runes
 export const Heading = ({ children, size = 28, align = "left" }: { children: any; size: any; align: any }) => (
 	<div className="sf-heading display" style={{ fontSize: size, textAlign: align }}>
