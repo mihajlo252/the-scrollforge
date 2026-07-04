@@ -5,7 +5,7 @@ import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
-import { TRAIT_NAMES, primaryWeapons, secondaryWeapons, allArmors, weaponById, armorById, weaponToDH, armorToDH, formatWeaponDamage } from "../../utilities/daggerheart";
+import { TRAIT_NAMES, primaryWeapons, secondaryWeapons, allArmors, weaponById, armorById, weaponToDH, armorToDH, formatWeaponDamage, tierForLevel } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { sendData } from "../../utilities/sendData";
 import styles from "./sheetScreens.module.css";
@@ -20,12 +20,45 @@ const GOLD_UNITS: { key: keyof DHGold; label: string }[] = [
   { key: "chest", label: "Chest" },
 ];
 
+/** Module-level (NOT inline in EquipmentBody): an inline component gets a new
+ *  identity every render, so React would remount the card — a visible flicker
+ *  on each keystroke while an edit popup is open. */
+const WeaponCard = ({ w, label, onEdit }: { w: DHWeapon | null; label: string; onEdit: () => void }) => (
+  <div className={styles.weaponMini}>
+    <div className={styles.weaponMiniHead}>
+      <span className="caps" style={{ fontSize: 9 }}>{label}</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+        {w && <span className="mono" style={{ color: "var(--gold-2)", fontSize: 13 }}>{w.damage}</span>}
+        <button className="sf-icon-btn" type="button" onClick={onEdit} aria-label={`Edit ${label}`}>
+          <Icon name="edit" size={12} />
+        </button>
+      </div>
+    </div>
+    {w ? (
+      <>
+        <div className={styles.weaponMiniName}>{w.name}</div>
+        <div className={styles.weaponMiniMeta}>
+          <span className="chip">{w.trait}</span>
+          <span className="chip">{w.range}</span>
+          <span className="chip">{w.dtype}</span>
+          {w.burden && <span className="chip">{w.burden}</span>}
+        </div>
+        {w.feature && <div className={styles.featureText}>{w.feature}</div>}
+      </>
+    ) : (
+      <span className={styles.empty}>No weapon equipped</span>
+    )}
+  </div>
+);
+
 const emptyWeapon = (): DHWeapon => ({ name: "", trait: "Agility", range: "Melee", damage: "", dtype: "phy", burden: "One-Handed", feature: "" });
 const emptyArmor = (): DHArmor => ({ name: "", score: 0, thresholds: { major: 0, severe: 0 }, feature: "" });
 const emptyItem = (): DHInventoryItem => ({ name: "", qty: 1, note: "" });
 
 function EquipmentBody({ character, state }: { character: DaggerheartCharacter; state: any }) {
   const level = character.characterProfile.level || 1;
+  // Catalog picks are capped at the character's tier, like at creation.
+  const gearTier = tierForLevel(level);
   const [weapons, setWeapons] = useState<DHWeapons>(character.dhWeapons ?? { primary: null, secondary: null });
   const [armor, setArmor] = useState<DHArmor | null>(character.dhArmor ?? null);
   const [inventory, setInventory] = useState<DHInventoryItem[]>(character.dhInventory ?? []);
@@ -100,37 +133,6 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
     setItemOpen(false);
   };
 
-  const WeaponCard = ({ slot, label }: { slot: keyof DHWeapons; label: string }) => {
-    const w = weapons[slot];
-    return (
-      <div className={styles.weaponMini}>
-        <div className={styles.weaponMiniHead}>
-          <span className="caps" style={{ fontSize: 9 }}>{label}</span>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            {w && <span className="mono" style={{ color: "var(--gold-2)", fontSize: 13 }}>{w.damage}</span>}
-            <button className="sf-icon-btn" type="button" onClick={() => openWeapon(slot)} aria-label={`Edit ${label}`}>
-              <Icon name="edit" size={12} />
-            </button>
-          </div>
-        </div>
-        {w ? (
-          <>
-            <div className={styles.weaponMiniName}>{w.name}</div>
-            <div className={styles.weaponMiniMeta}>
-              <span className="chip">{w.trait}</span>
-              <span className="chip">{w.range}</span>
-              <span className="chip">{w.dtype}</span>
-              {w.burden && <span className="chip">{w.burden}</span>}
-            </div>
-            {w.feature && <div className={styles.featureText}>{w.feature}</div>}
-          </>
-        ) : (
-          <span className={styles.empty}>No weapon equipped</span>
-        )}
-      </div>
-    );
-  };
-
   return (
     <>
       {/* Weapons */}
@@ -138,8 +140,8 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
         <div className="card-hdr"><div className="card-title">Weapons</div></div>
         <div className="card-body">
           <div className={styles.weaponStrip}>
-            <WeaponCard slot="primary" label="Primary" />
-            <WeaponCard slot="secondary" label="Secondary" />
+            <WeaponCard w={weapons.primary} label="Primary" onEdit={() => openWeapon("primary")} />
+            <WeaponCard w={weapons.secondary} label="Secondary" onEdit={() => openWeapon("secondary")} />
           </div>
         </div>
       </Frame>
@@ -227,9 +229,9 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
           <Frame classes="column-direction">
             <h3 className="card-title">{weaponSlot === "primary" ? "Primary" : "Secondary"} Weapon</h3>
             <select className="select" value="" onChange={(e) => { const w = weaponById(e.target.value); if (w) setWeaponForm(weaponToDH(w)); }}>
-              <option value="">Choose from catalog…</option>
+              <option value="">Choose from catalog (Tier {gearTier} or lower)…</option>
               {(weaponSlot === "secondary" ? secondaryWeapons() : primaryWeapons())
-                .slice()
+                .filter((w) => w.tier <= gearTier)
                 .sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name))
                 .map((w) => (
                   <option key={w.id} value={w.id}>{w.name} · T{w.tier} · {formatWeaponDamage(w)}</option>
@@ -266,9 +268,9 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
           <Frame classes="column-direction">
             <h3 className="card-title">Active Armor</h3>
             <select className="select" value="" onChange={(e) => { const a = armorById(e.target.value); if (a) setArmorForm(armorToDH(a)); }}>
-              <option value="">Choose from catalog…</option>
+              <option value="">Choose from catalog (Tier {gearTier} or lower)…</option>
               {allArmors()
-                .slice()
+                .filter((a) => a.tier <= gearTier)
                 .sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name))
                 .map((a) => (
                   <option key={a.id} value={a.id}>{a.name} · T{a.tier} · Score {a.baseScore} · {a.baseMajorThreshold}/{a.baseSevereThreshold}</option>

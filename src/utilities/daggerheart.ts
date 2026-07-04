@@ -76,7 +76,7 @@ export const getDomains = (className?: string): string[] => getClass(className)?
 /** Spellcast trait from the subclass (martial subclasses return undefined). */
 export const getSpellcastTrait = (subclassName?: string): string | undefined => getSubclass(subclassName)?.spellcastTrait;
 
-/** Daggerheart tiers: lvl 1 = T1, 2–4 = T2, 5–7 = T3, 8–10 = T4. */
+/** Daggerheart tiers: lvl 1 = T1, 2-4 = T2, 5-7 = T3, 8-10 = T4. */
 export const tierForLevel = (level: number): number => {
 	if (level >= 8) return 4;
 	if (level >= 5) return 3;
@@ -102,6 +102,36 @@ const DH_DOMAIN_COLORS: Record<string, string> = {
 export const domainColor = (domain?: string): string => DH_DOMAIN_COLORS[(domain ?? "").toUpperCase()] ?? "var(--rule)";
 
 export const defaultTraits = (): DHTraits => ({ Agility: 0, Strength: 0, Finesse: 0, Instinct: 0, Presence: 0, Knowledge: 0 });
+
+export interface CreationBonuses {
+	hp: number;
+	stress: number;
+	evasion: number;
+	domainCards: number;
+}
+
+/** Flat creation-time grants parsed from the feature text of the hero's
+ *  ancestry, community, class, and subclass FOUNDATION (the only subclass tier
+ *  active at creation) — e.g. Human's extra Stress slot, Giant's extra Hit
+ *  Point slot, Simiah's permanent +1 Evasion, School of Knowledge's extra
+ *  domain card. Parsing the config text keeps homebrew entries working. */
+export const creationBonuses = (identity: { class?: string; subclass?: string; ancestry?: string; community?: string }): CreationBonuses => {
+	const features: Feature[] = [
+		...(getAncestry(identity.ancestry)?.features ?? []),
+		...(getCommunity(identity.community)?.features ?? []),
+		...(getClass(identity.class)?.classFeatures ?? []),
+		...(getSubclass(identity.subclass)?.foundation?.features ?? []),
+	];
+	const bonuses: CreationBonuses = { hp: 0, stress: 0, evasion: 0, domainCards: 0 };
+	features.forEach((f) => {
+		const text = flattenDescription(f.description);
+		if (/additional hit point slot/i.test(text)) bonuses.hp += 1;
+		if (/additional stress slot/i.test(text)) bonuses.stress += 1;
+		if (/permanent \+1 bonus to your evasion/i.test(text)) bonuses.evasion += 1;
+		if (/additional domain card/i.test(text)) bonuses.domainCards += 1;
+	});
+	return bonuses;
+};
 
 /** Group domain cards by level (ascending), each group's cards sorted by name.
  *  Used everywhere cards are listed so they're always organised by level. */

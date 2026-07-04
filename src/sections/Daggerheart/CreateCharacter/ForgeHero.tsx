@@ -1,6 +1,7 @@
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Icon } from "../../../components/Primitives";
 import { DomainCardView } from "../CharacterProfile/DomainCard";
+import { AdvancementPicker } from "../AdvancementPicker";
 import {
 	allAncestries,
 	allClasses,
@@ -24,20 +25,29 @@ import {
 	tierForLevel,
 	flattenDescription,
 	groupCardsByLevel,
+	creationBonuses,
 	TRAIT_NAMES,
 	type Feature,
 } from "../../../utilities/daggerheart";
 import { Capitalize } from "../../../utilities/capitalize";
 import { getUserFromLocal } from "../../../utilities/getUserFromLocal";
-import { submitDaggerheartCharacter, type ForgeDraft } from "../../../utilities/submitDaggerheartCharacter";
+import { forgeBaseCharacter, submitDaggerheartCharacter, type ForgeDraft } from "../../../utilities/submitDaggerheartCharacter";
+import {
+	advancementContext,
+	choiceIsValid,
+	commitLevelUp,
+	picksCost,
+	type AdvancementChoice,
+} from "../../../utilities/daggerheartLevelUp";
 import { toast } from "../../../utilities/toasterSonner";
 import domainCardsData from "../../../daggerheart-config/domain-cards.json";
 import styles from "./ForgeHero.module.css";
+import sheetStyles from "../../../routes/daggerheart/sheetScreens.module.css";
 
 const CATALOG = domainCardsData as DomainCard[];
 const TRAIT_OPTIONS = [2, 1, 0, -1];
 
-const STEPS = [
+const BASE_STEPS: { id: string; label: string }[] = [
 	{ id: "class", label: "Class & Subclass" },
 	{ id: "heritage", label: "Heritage" },
 	{ id: "traits", label: "Traits" },
@@ -46,7 +56,9 @@ const STEPS = [
 	{ id: "experiences", label: "Experiences" },
 	{ id: "domains", label: "Domain Cards" },
 	{ id: "connections", label: "Connections" },
-] as const;
+];
+// Heroes forged above level 1 also pick their per-level advancements.
+const ADV_STEP = { id: "advancements", label: "Advancements" };
 
 const BACKGROUND_PROMPTS = [
 	"What pivotal moment set you on your path?",
@@ -138,6 +150,9 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 		armorId: allArmors()[0]?.id ?? "",
 	}));
 
+	// Advancement picks per level (2..draft.level), same shape the LevelUpModal uses.
+	const [advPicks, setAdvPicks] = useState<Record<number, Record<string, AdvancementChoice>>>({});
+
 	const set = (patch: Partial<ForgeDraft>) => setDraft((d) => ({ ...d, ...patch }));
 
 	const classDomains = getDomains(draft.class);
@@ -147,8 +162,50 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 	const ancestryCfg = getAncestry(draft.ancestry);
 	const communityCfg = getCommunity(draft.community);
 	const gearTier = tierForLevel(draft.level);
+	const bonuses = creationBonuses(draft);
 
-	const chooseClass = (name: string) => set({ class: name, subclass: firstSubclass(name), domainCards: [] });
+	const steps = draft.level > 1 ? [...BASE_STEPS.slice(0, -1), ADV_STEP, BASE_STEPS[BASE_STEPS.length - 1]] : BASE_STEPS;
+
+	const chooseClass = (name: string) => {
+		set({ class: name, subclass: firstSubclass(name), domainCards: [] });
+		setAdvPicks({});
+	};
+	const chooseLevel = (level: number) => {
+		set({ level });
+		setAdvPicks({});
+	};
+
+	// Walk levels 2..draft.level: each level's picker context comes from the
+	// hero as of the previous level, so tier benefits, slot usage, and owned
+	// cards accumulate exactly like real level-ups. A level stays locked until
+	// every level before it is fully chosen.
+	const advStates = useMemo(() => {
+		let char = forgeBaseCharacter(draft);
+		let locked = false;
+		const states: { lvl: number; ctx: ReturnType<typeof advancementContext>; cost: number; complete: boolean; locked: boolean }[] = [];
+		for (let lvl = 2; lvl <= draft.level; lvl++) {
+			const ctx = advancementContext(char, CATALOG);
+			const picks = Object.values(advPicks[lvl] ?? {});
+			const cost = picksCost(ctx.options, picks);
+			const complete = cost === 2 && picks.every((c) => choiceIsValid(c, ctx.experiences.length));
+			states.push({ lvl, ctx, cost, complete, locked });
+			if (complete) char = { ...char, ...commitLevelUp(char, picks).patch };
+			else locked = true;
+		}
+		return states;
+	}, [draft, advPicks]);
+
+	// Editing a level invalidates everything chosen after it (slots, marked
+	// traits, and owned cards all depend on the earlier picks).
+	const setLevelPicks = (lvl: number, next: Record<string, AdvancementChoice>) =>
+		setAdvPicks((prev) => {
+			const out: Record<number, Record<string, AdvancementChoice>> = {};
+			Object.keys(prev).forEach((k) => {
+				if (parseInt(k) < lvl) out[parseInt(k)] = prev[parseInt(k)];
+			});
+			out[lvl] = next;
+			return out;
+		});
 
 	// Trait assignment as a fixed pool: choosing a value swaps it away from the
 	// trait that currently holds it, so the +2/+1/+1/0/0/−1 spread always holds.
@@ -179,8 +236,9 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 	};
 
 	// Heroes begin with two cards at level 1; higher-level heroes may take one
-	// more per level (extras beyond a 5-card loadout spill to the vault on save).
-	const maxCards = draft.level + 1;
+	// more per level (extras beyond a 5-card loadout spill to the vault on save),
+	// and features like School of Knowledge's "Prepared" add one more.
+	const maxCards = draft.level + 1 + bonuses.domainCards;
 
 	const toggleCard = (card: DomainCard) => {
 		const has = draft.domainCards.some((c) => c.name === card.name);
@@ -195,10 +253,17 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 			setStep(0);
 			return;
 		}
+		const unfinished = advStates.find((s) => !s.complete);
+		if (unfinished) {
+			toast({ style: "frame button-primary", message: `Choose the Level ${unfinished.lvl} advancements first.` });
+			setStep(steps.findIndex((s) => s.id === "advancements"));
+			return;
+		}
 		setSaving(true);
 		try {
 			const { user } = JSON.parse(getUserFromLocal());
-			await submitDaggerheartCharacter(draft, user.id);
+			const advancements = Object.fromEntries(advStates.map((s) => [s.lvl, Object.values(advPicks[s.lvl] ?? {})]));
+			await submitDaggerheartCharacter({ ...draft, advancements }, user.id);
 			toast({ style: "frame button-primary", message: `${draft.name} has been forged!` });
 			onCreated();
 		} catch {
@@ -208,12 +273,12 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 		}
 	};
 
-	const current = STEPS[step].id;
+	const current = steps[step].id;
 
 	return (
 		<div className={styles.wrap}>
 			<nav className={styles.rail}>
-				{STEPS.map((s, i) => (
+				{steps.map((s, i) => (
 					<button key={s.id} type="button" className={styles.step} data-active={i === step} data-done={i < step} onClick={() => setStep(i)}>
 						<span className={styles.stepIndex}>{i < step ? "✓" : i + 1}</span>
 						<span className={styles.stepLabel}>{s.label}</span>
@@ -233,7 +298,7 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 							<div className={styles.formGrid2}>
 								<Field label="Hero Name"><input className="input" placeholder="e.g. Kael the Bold" value={draft.name} onChange={(e) => set({ name: e.target.value })} /></Field>
 								<Field label="Level">
-									<select className="select" value={draft.level} onChange={(e) => set({ level: parseInt(e.target.value) })}>
+									<select className="select" value={draft.level} onChange={(e) => chooseLevel(parseInt(e.target.value))}>
 										{Array.from({ length: 10 }, (_, i) => i + 1).map((l) => <option key={l} value={l}>{l}</option>)}
 									</select>
 								</Field>
@@ -474,6 +539,41 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 					</>
 				)}
 
+				{/* ADVANCEMENTS (only for heroes forged above level 1) */}
+				{current === "advancements" && (
+					<>
+						<div className={styles.panelHead}>
+							<div className={styles.panelTitle}>Advancements</div>
+							<div className={styles.panelHint}>
+								Starting at level {draft.level} grants every level-up along the way: choose advancements worth 2 points for each level.
+								Tier entries (levels 2, 5, and 8) automatically add +1 Proficiency and a new Experience, and damage thresholds rise by 1 every level.
+							</div>
+						</div>
+						<div className={styles.body}>
+							{advStates.map(({ lvl, ctx, cost, complete, locked }) => (
+								<div key={lvl}>
+									<div className={styles.fieldLabel}>
+										Level {lvl} · Tier {tierForLevel(lvl)} · {complete ? "✓ done" : `${cost}/2 points`}
+									</div>
+									{locked ? (
+										<span className={styles.panelHint}>Finish the previous level first.</span>
+									) : (
+										<>
+											{ctx.enteredTier && (
+												<div className={sheetStyles.tierBanner} style={{ marginBottom: "0.5rem" }}>
+													<Icon name="crown" size={16} />
+													Entering Tier {ctx.tier}: +1 Proficiency, a new Experience (+2), and your marked traits clear.
+												</div>
+											)}
+											<AdvancementPicker ctx={ctx} selected={advPicks[lvl] ?? {}} onChange={(next) => setLevelPicks(lvl, next)} baseClass={draft.class} />
+										</>
+									)}
+								</div>
+							))}
+						</div>
+					</>
+				)}
+
 				{/* CONNECTIONS */}
 				{current === "connections" && (
 					<>
@@ -501,14 +601,14 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 				{/* Footer nav */}
 				<div className={styles.nav}>
 					<button type="button" className="button button-secondary" onClick={onCancel}>Cancel</button>
-					<span className={styles.stepProgress}>Step {step + 1} / {STEPS.length} · {STEPS[step].label}</span>
+					<span className={styles.stepProgress}>Step {step + 1} / {steps.length} · {steps[step].label}</span>
 					<div className={styles.navSpacer} />
 					{step > 0 && (
 						<button type="button" className="button button-ghost" onClick={() => setStep(step - 1)}>
 							<Icon name="back" size={13} /> Back
 						</button>
 					)}
-					{step < STEPS.length - 1 ? (
+					{step < steps.length - 1 ? (
 						<button type="button" className="button button-primary" onClick={() => setStep(step + 1)}>
 							Next <Icon name="fwd" size={13} />
 						</button>

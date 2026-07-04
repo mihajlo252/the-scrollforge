@@ -1,5 +1,5 @@
 import advancementsData from "../daggerheart-config/advancements.json";
-import { tierForLevel, defaultTraits, defaultVitals } from "./daggerheart";
+import { tierForLevel, defaultTraits, defaultVitals, getDomains, TRAIT_NAMES } from "./daggerheart";
 
 export interface AdvancementOption {
 	id: string;
@@ -37,14 +37,88 @@ export const tierUsage = (advancements: DHAdvancements | undefined, tier: number
 	return usage;
 };
 
+/** Total advancement points a set of picks costs within a tier's option table. */
+export const picksCost = (options: AdvancementOption[], picks: AdvancementChoice[]): number =>
+	picks.reduce((sum, c) => sum + (options.find((o) => o.id === c.id)?.cost ?? 1), 0);
+
+/** Whether a single pick has all the sub-choices it needs. */
+export const choiceIsValid = (c: AdvancementChoice, experienceCount: number): boolean => {
+	switch (c.id) {
+		case "trait":
+			return (c.traits?.length ?? 0) === 2;
+		case "experience":
+			return (c.experiences?.length ?? 0) === Math.min(2, experienceCount) && experienceCount > 0;
+		case "domain":
+			return !!c.card;
+		case "multiclass":
+			return !!c.multiclass?.class && !!c.multiclass?.domain;
+		default:
+			return true;
+	}
+};
+
+export interface AdvancementContext {
+	newLevel: number;
+	tier: number;
+	enteredTier: boolean;
+	options: AdvancementOption[];
+	usage: Record<string, number>;
+	availableTraits: DHTraitName[];
+	experiences: DHExperience[];
+	browseable: DomainCard[];
+}
+
+/** Everything the advancement picker needs to advance `character` one level. */
+export const advancementContext = (character: DaggerheartCharacter, catalog: DomainCard[]): AdvancementContext => {
+	const level = character.characterProfile.level || 1;
+	const newLevel = level + 1;
+	const tier = tierForLevel(newLevel);
+	const enteredTier = tier > tierForLevel(level);
+	// Entering a tier clears marked traits, so every trait is up for grabs again.
+	const marked = enteredTier ? [] : character.dhAdvancements?.markedTraits ?? [];
+	const classDomains = getDomains(character.characterProfile.class);
+	const owned = new Set([...(character.dhDomainCards?.loadout ?? []), ...(character.dhDomainCards?.vault ?? [])].map((c) => c.name.toLowerCase()));
+	return {
+		newLevel,
+		tier,
+		enteredTier,
+		options: tierOptions(tier),
+		usage: tierUsage(character.dhAdvancements, tier),
+		availableTraits: TRAIT_NAMES.filter((t) => !marked.includes(t)),
+		experiences: character.dhExperiences ?? [],
+		browseable: catalog.filter(
+			(c) => c.level <= newLevel && classDomains.some((d) => d.toUpperCase() === c.domain.toUpperCase()) && !owned.has(c.name.toLowerCase()),
+		),
+	};
+};
+
+/** Fold commitLevelUp over every level up to `targetLevel`, applying that
+ *  level's picks — used by higher-level character creation so a forged hero
+ *  gets exactly what leveling up would have granted. */
+export const applyLevelUps = (
+	base: DaggerheartCharacter,
+	targetLevel: number,
+	picksPerLevel: Record<number, AdvancementChoice[]>,
+): DaggerheartCharacter => {
+	let char = base;
+	for (let lvl = (base.characterProfile.level || 1) + 1; lvl <= targetLevel; lvl++) {
+		const { patch } = commitLevelUp(char, picksPerLevel[lvl] ?? []);
+		char = { ...char, ...patch };
+	}
+	return char;
+};
+
 export interface LevelUpResult {
 	patch: Partial<DaggerheartCharacter>;
 	newLevel: number;
 	enteredTier: boolean;
 }
 
-/** Pure: produce the column patch for advancing one level with the given picks. */
-export const commitLevelUp = (character: DaggerheartCharacter, picks: AdvancementChoice[]): LevelUpResult => {
+/** Pure: produce the column patch for advancing one level with the given picks.
+ *  `newCard` is the domain card every level-up grants on top of the two
+ *  advancement points — omitted at creation, where the wizard's Domain Cards
+ *  step already hands out one card per level. */
+export const commitLevelUp = (character: DaggerheartCharacter, picks: AdvancementChoice[], newCard?: DomainCard | null): LevelUpResult => {
 	const level = character.characterProfile.level || 1;
 	const newLevel = level + 1;
 	const prevTier = tierForLevel(level);
@@ -118,10 +192,20 @@ export const commitLevelUp = (character: DaggerheartCharacter, picks: Advancemen
 		}
 	});
 
-	advancements.perLevel[String(newLevel)] = picks.map((p) => ({
-		id: p.id,
-		label: tierOptions(tier).find((o) => o.id === p.id)?.label ?? p.id,
-	}));
+	if (newCard) {
+		if (domainCards.loadout.length < 5) domainCards.loadout.push(newCard);
+		else domainCards.vault.push(newCard);
+	}
+
+	advancements.perLevel[String(newLevel)] = [
+		...picks.map((p) => ({
+			id: p.id,
+			label: tierOptions(tier).find((o) => o.id === p.id)?.label ?? p.id,
+		})),
+		// Record the granted card in the history; "card" is not an advancement
+		// option id, so it never counts against tier slot usage.
+		...(newCard ? [{ id: "card", label: `Domain Card: ${newCard.name}` }] : []),
+	];
 
 	return {
 		newLevel,

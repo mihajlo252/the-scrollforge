@@ -50,7 +50,7 @@ const ThresholdCoin = ({ label, value }: { label: string; value: number }) => (
 );
 
 /** Daggerheart has TWO damage thresholds (Major, Severe) creating three bands:
- *  below Major → Minor (mark 1), Major–Severe → mark 2, at/above Severe → mark 3.
+ *  below Major → Minor (mark 1), Major-Severe → mark 2, at/above Severe → mark 3.
  *  A hit of at least double the Severe threshold marks 4. The HP boxes show
  *  hit points REMAINING — click to spend them as you take damage. */
 export const HPTrack = ({ hp, onChange }: { hp: DHHPTrack; onChange?: (nextMarked: number) => void }) => (

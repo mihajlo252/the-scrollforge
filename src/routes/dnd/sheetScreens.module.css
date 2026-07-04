@@ -313,6 +313,7 @@
 
 .sidebar {
 	padding: 16px;
+	height: max-content;
 	flex-direction: column;
 	align-items: stretch;
 	gap: 0;

@@ -126,6 +126,7 @@
 .frame {
 	--_padding: 2rem;
 	display: flex;
+	height: 100%;
 	gap: 1rem;
 	padding: var(--_padding) calc(var(--_padding) * 1.5);
 	transform-origin: center;

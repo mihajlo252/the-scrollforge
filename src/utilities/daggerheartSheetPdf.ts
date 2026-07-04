@@ -40,7 +40,7 @@ const fmtMod = (n: number) => (n > 0 ? `+${n}` : String(n));
 const sanitize = (text: string) =>
 	text
 		.replace(/−/g, "-")
-		.replace(/[–—]/g, "-")
+		.replace(/[-—]/g, "-")
 		.replace(/[“”]/g, '"')
 		.replace(/‘|’/g, "'")
 		.replace(/[^\x20-\x7e\xa0-\xff]/g, "");

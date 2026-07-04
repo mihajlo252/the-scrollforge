@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
+import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
@@ -15,10 +16,58 @@ export const Route = createLazyFileRoute("/daggerheart/journal")({
 
 const TIERS = [
   { n: 1, label: "Level 1" },
-  { n: 2, label: "Levels 2–4" },
-  { n: 3, label: "Levels 5–7" },
-  { n: 4, label: "Levels 8–10" },
+  { n: 2, label: "Levels 2-4" },
+  { n: 3, label: "Levels 5-7" },
+  { n: 4, label: "Levels 8-10" },
 ];
+
+/** Module-level (NOT inline in JournalBody): an inline component gets a new
+ *  identity every render, so React would remount the whole card — a visible
+ *  flicker on each keystroke while the edit popup is open. */
+const BioSection = ({
+  title,
+  k,
+  entries,
+  onAdd,
+  onEdit,
+  onRemove,
+}: {
+  title: string;
+  k: keyof DHBio;
+  entries: DHBioEntry[];
+  onAdd: (k: keyof DHBio) => void;
+  onEdit: (k: keyof DHBio, i: number) => void;
+  onRemove: (k: keyof DHBio, i: number) => void;
+}) => (
+  <Frame classes="card">
+    <div className="card-hdr">
+      <div className="card-title">{title}</div>
+      <button className="button button-primary short" type="button" onClick={() => onAdd(k)}>
+        <Icon name="plus" size={12} /> Add
+      </button>
+    </div>
+    <div className="card-body">
+      <div className={styles.section}>
+        {entries.length === 0 ? (
+          <span className={styles.empty}>Nothing written yet.</span>
+        ) : (
+          entries.map((entry, i) => (
+            <div key={i} className={styles.bioEntry}>
+              <div className={styles.bioQ}>
+                <span className={styles.bioQText}>{entry.q}</span>
+                <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                  <button className="sf-icon-btn" type="button" onClick={() => onEdit(k, i)} aria-label="Edit"><Icon name="edit" size={13} /></button>
+                  <ConfirmButton className="sf-icon-btn" aria-label="Remove" title="Delete entry?" message="Remove this entry? This can't be undone." onConfirm={() => onRemove(k, i)}><Icon name="trash" size={13} /></ConfirmButton>
+                </div>
+              </div>
+              {entry.a ? <div className={styles.featureText}>{entry.a}</div> : <span className={styles.empty}>Not answered yet.</span>}
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  </Frame>
+);
 
 function JournalBody({ character, state, openLevelUp }: { character: DaggerheartCharacter; state: any; openLevelUp: () => void }) {
   const profile = character.characterProfile;
@@ -29,49 +78,36 @@ function JournalBody({ character, state, openLevelUp }: { character: Daggerheart
 
   const [bio, setBio] = useState<DHBio>(character.dhBio ?? { background: [], connections: [] });
 
+  // Entries are edited through a popup form (like inventory items) so nothing
+  // is persisted until Save — inline inputs would fire a write per keystroke.
+  const [bioEdit, setBioEdit] = useState<{ key: keyof DHBio; index: number | null } | null>(null);
+  const [bioForm, setBioForm] = useState<DHBioEntry>({ q: "", a: "" });
+
   const persist = (next: DHBio) => {
     setBio(next);
     patchCharacter(state, { dhBio: next });
     sendData("characters", character.id, { dhBio: next });
   };
 
-  const editAnswer = (key: keyof DHBio, i: number, a: string) =>
-    persist({ ...bio, [key]: bio[key].map((x, idx) => (idx === i ? { ...x, a } : x)) });
-  const addEntry = (key: keyof DHBio) => persist({ ...bio, [key]: [...bio[key], { q: "New prompt", a: "" }] });
-  const editQuestion = (key: keyof DHBio, i: number, q: string) =>
-    persist({ ...bio, [key]: bio[key].map((x, idx) => (idx === i ? { ...x, q } : x)) });
+  const openBioAdd = (key: keyof DHBio) => {
+    setBioForm({ q: "", a: "" });
+    setBioEdit({ key, index: null });
+  };
+  const openBioEdit = (key: keyof DHBio, i: number) => {
+    setBioForm({ ...bio[key][i] });
+    setBioEdit({ key, index: i });
+  };
+  const saveBio = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!bioEdit || !bioForm.q.trim()) return;
+    const list = bioEdit.index === null ? [...bio[bioEdit.key], bioForm] : bio[bioEdit.key].map((x, i) => (i === bioEdit.index ? bioForm : x));
+    persist({ ...bio, [bioEdit.key]: list });
+    setBioEdit(null);
+  };
   const removeEntry = (key: keyof DHBio, i: number) =>
     persist({ ...bio, [key]: bio[key].filter((_, idx) => idx !== i) });
 
   const advHistory = Object.entries(character.dhAdvancements?.perLevel ?? {}).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
-
-  const BioSection = ({ title, k }: { title: string; k: keyof DHBio }) => (
-    <Frame classes="card">
-      <div className="card-hdr">
-        <div className="card-title">{title}</div>
-        <button className="button button-primary short" type="button" onClick={() => addEntry(k)}>
-          <Icon name="plus" size={12} /> Add
-        </button>
-      </div>
-      <div className="card-body">
-        <div className={styles.section}>
-          {bio[k].length === 0 ? (
-            <span className={styles.empty}>Nothing written yet.</span>
-          ) : (
-            bio[k].map((entry, i) => (
-              <div key={i} className={styles.bioEntry}>
-                <div className={styles.bioQ}>
-                  <input className={`input ${styles.bioQText}`} value={entry.q} onChange={(e) => editQuestion(k, i, e.target.value)} />
-                  <ConfirmButton className="sf-icon-btn" aria-label="Remove" title="Delete entry?" message="Remove this entry? This can't be undone." onConfirm={() => removeEntry(k, i)}><Icon name="trash" size={13} /></ConfirmButton>
-                </div>
-                <textarea className="textarea" rows={2} value={entry.a} onChange={(e) => editAnswer(k, i, e.target.value)} />
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </Frame>
-  );
 
   return (
     <>
@@ -96,8 +132,8 @@ function JournalBody({ character, state, openLevelUp }: { character: Daggerheart
         </div>
       </Frame>
 
-      <BioSection title="Background" k="background" />
-      <BioSection title="Connections" k="connections" />
+      <BioSection title="Background" k="background" entries={bio.background} onAdd={openBioAdd} onEdit={openBioEdit} onRemove={removeEntry} />
+      <BioSection title="Connections" k="connections" entries={bio.connections} onAdd={openBioAdd} onEdit={openBioEdit} onRemove={removeEntry} />
 
       {/* Advancement */}
       <Frame classes="card">
@@ -122,6 +158,23 @@ function JournalBody({ character, state, openLevelUp }: { character: Daggerheart
           )}
         </div>
       </Frame>
+
+      {/* Background / Connections entry form */}
+      <Popup closerFunc={() => setBioEdit(null)} toggle={bioEdit !== null}>
+        <form onSubmit={saveBio}>
+          <Frame classes="column-direction">
+            <h3 className="card-title">
+              {bioEdit?.index === null ? "Add" : "Edit"} {bioEdit?.key === "connections" ? "Connection" : "Background"} Entry
+            </h3>
+            <input className="input" placeholder="Prompt / question" value={bioForm.q} autoFocus onChange={(e) => setBioForm({ ...bioForm, q: e.target.value })} required />
+            <textarea className="textarea" rows={4} placeholder="Your answer" value={bioForm.a} onChange={(e) => setBioForm({ ...bioForm, a: e.target.value })} />
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <button type="submit" className="button button-accent stretch">{bioEdit?.index === null ? "Add" : "Save"}</button>
+              <button type="button" className="button button-secondary stretch" onClick={() => setBioEdit(null)}>Close</button>
+            </div>
+          </Frame>
+        </form>
+      </Popup>
     </>
   );
 }

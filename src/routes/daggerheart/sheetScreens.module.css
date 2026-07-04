@@ -243,9 +243,10 @@
 	flex-direction: column;
 	gap: 0.4rem;
 }
-/* Selects (domain card / multiclass pickers) must fill the card, never size it:
-   their longest option would otherwise widen the whole modal on mobile. */
-.advSub select {
+/* Selects (domain card / multiclass pickers) must fill their container, never
+   size it: their longest option would otherwise widen the whole modal on mobile. */
+.advSub select,
+.levelUpFrame select {
 	width: 100%;
 	min-width: 0;
 	max-width: 100%;
