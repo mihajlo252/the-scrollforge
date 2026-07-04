@@ -54,9 +54,13 @@
 	color: var(--gold-2);
 }
 .topActions {
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	flex-wrap: wrap;
 	align-items: center;
+	justify-content: flex-end;
 	gap: 0.5rem;
+	width: 30%;
 }
 .vDivider {
 	width: 1px;

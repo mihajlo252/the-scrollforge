@@ -126,7 +126,6 @@ export const SheetTopbar = ({
 							<Icon name="crown" size={14} /> Level Up
 						</button>
 					)}
-					<div className={styles.vDivider} />
 					<button className="button button-primary" onClick={onRoll} type="button">
 						<Icon name="dice" size={14} /> Roll
 					</button>
