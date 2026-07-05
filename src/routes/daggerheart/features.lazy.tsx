@@ -69,7 +69,7 @@ function FeaturesBody({ character, state }: { character: DaggerheartCharacter; s
       {/* Class features */}
       <Frame classes="card">
         <div className="card-hdr">
-          <div className="card-title">{cls?.name ?? profile.class} Features</div>
+          <div className="card-title">{profile.class ?? cls?.name } Features</div>
         </div>
         <div className="card-body">
           <div className={styles.featGrid}>

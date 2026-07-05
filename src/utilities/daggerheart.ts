@@ -212,6 +212,77 @@ export const armorToDH = (a: ConfigArmor): DHArmor => ({
 	feature: flattenFeatures(a.features),
 });
 
+// ── Gear stat modifiers (parsed from equipped items' feature text) ─────────
+export interface GearModifiers {
+	traits: Partial<DHTraits>;
+	evasion: number;
+	armorScore: number;
+	thresholds: { major: number; severe: number };
+}
+
+const emptyGearMods = (): GearModifiers => ({ traits: {}, evasion: 0, armorScore: 0, thresholds: { major: 0, severe: 0 } });
+
+/** Flat "±N to <stat>" clauses in gear feature text. Longest alternatives
+ *  first so "all character traits and Evasion" isn't eaten by "Evasion".
+ *  Conditional wordings ("by +2 until…", "bonus to your Evasion equal to…")
+ *  don't fit this shape, so they stay display-only text. */
+const GEAR_MOD_RE =
+	/([+-]\d+)\s+to\s+(all character traits and evasion|armor score|major damage threshold|severe damage threshold|evasion|agility|strength|finesse|instinct|presence|knowledge)/gi;
+
+/** Parse one item's feature text into flat stat modifiers (e.g. Full Plate's
+ *  "-2 to Evasion; -1 to Agility"). Reading the string stored on the character
+ *  (not the config) keeps homebrew gear and already-equipped items working. */
+export const parseGearFeature = (feature?: string): GearModifiers => {
+	const mods = emptyGearMods();
+	for (const m of (feature ?? "").matchAll(GEAR_MOD_RE)) {
+		const n = parseInt(m[1]);
+		const stat = m[2].toLowerCase();
+		if (stat === "evasion") mods.evasion += n;
+		else if (stat === "armor score") mods.armorScore += n;
+		else if (stat === "major damage threshold") mods.thresholds.major += n;
+		else if (stat === "severe damage threshold") mods.thresholds.severe += n;
+		else if (stat === "all character traits and evasion") {
+			mods.evasion += n;
+			TRAIT_NAMES.forEach((t) => (mods.traits[t] = (mods.traits[t] ?? 0) + n));
+		} else {
+			const trait = TRAIT_NAMES.find((t) => t.toLowerCase() === stat);
+			if (trait) mods.traits[trait] = (mods.traits[trait] ?? 0) + n;
+		}
+	}
+	return mods;
+};
+
+/** Combined modifiers from everything equipped (both weapons + armor).
+ *  Applied at DISPLAY time on top of the stored base stats — never written
+ *  back, so equipping/unequipping can't drift the stored values. */
+export const gearModifiers = (weapons?: DHWeapons, armor?: DHArmor | null): GearModifiers => {
+	const mods = emptyGearMods();
+	[weapons?.primary?.feature, weapons?.secondary?.feature, armor?.feature].forEach((feature) => {
+		const m = parseGearFeature(feature);
+		mods.evasion += m.evasion;
+		mods.armorScore += m.armorScore;
+		mods.thresholds.major += m.thresholds.major;
+		mods.thresholds.severe += m.thresholds.severe;
+		(Object.entries(m.traits) as [DHTraitName, number][]).forEach(([t, n]) => (mods.traits[t] = (mods.traits[t] ?? 0) + n));
+	});
+	return mods;
+};
+
+/** "-2 Evasion · -1 Agility" summary for gear cards/hints; "" when empty. */
+export const formatGearMods = (m: GearModifiers): string => {
+	const sign = (n: number) => (n > 0 ? `+${n}` : `${n}`);
+	const parts: string[] = [];
+	if (m.evasion) parts.push(`${sign(m.evasion)} Evasion`);
+	if (m.armorScore) parts.push(`${sign(m.armorScore)} Armor Score`);
+	TRAIT_NAMES.forEach((t) => {
+		const n = m.traits[t];
+		if (n) parts.push(`${sign(n)} ${t}`);
+	});
+	if (m.thresholds.major) parts.push(`${sign(m.thresholds.major)} Major threshold`);
+	if (m.thresholds.severe) parts.push(`${sign(m.thresholds.severe)} Severe threshold`);
+	return parts.join(" · ");
+};
+
 /** Vitals seeded from class config — used to fill gaps for characters that
  *  predate the dh* columns (and as the wizard's starting point). */
 export const defaultVitals = (className?: string, level = 1): DHVitals => {

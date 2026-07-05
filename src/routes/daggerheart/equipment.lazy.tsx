@@ -5,7 +5,7 @@ import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
-import { TRAIT_NAMES, primaryWeapons, secondaryWeapons, allArmors, weaponById, armorById, weaponToDH, armorToDH, formatWeaponDamage, tierForLevel } from "../../utilities/daggerheart";
+import { TRAIT_NAMES, primaryWeapons, secondaryWeapons, allArmors, weaponById, armorById, weaponToDH, armorToDH, formatWeaponDamage, tierForLevel, parseGearFeature, formatGearMods } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { sendData } from "../../utilities/sendData";
 import styles from "./sheetScreens.module.css";
@@ -23,33 +23,37 @@ const GOLD_UNITS: { key: keyof DHGold; label: string }[] = [
 /** Module-level (NOT inline in EquipmentBody): an inline component gets a new
  *  identity every render, so React would remount the card — a visible flicker
  *  on each keystroke while an edit popup is open. */
-const WeaponCard = ({ w, label, onEdit }: { w: DHWeapon | null; label: string; onEdit: () => void }) => (
-  <div className={styles.weaponMini}>
-    <div className={styles.weaponMiniHead}>
-      <span className="caps" style={{ fontSize: 9 }}>{label}</span>
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        {w && <span className="mono" style={{ color: "var(--gold-2)", fontSize: 13 }}>{w.damage}</span>}
-        <button className="sf-icon-btn" type="button" onClick={onEdit} aria-label={`Edit ${label}`}>
-          <Icon name="edit" size={12} />
-        </button>
-      </div>
-    </div>
-    {w ? (
-      <>
-        <div className={styles.weaponMiniName}>{w.name}</div>
-        <div className={styles.weaponMiniMeta}>
-          <span className="chip">{w.trait}</span>
-          <span className="chip">{w.range}</span>
-          <span className="chip">{w.dtype}</span>
-          {w.burden && <span className="chip">{w.burden}</span>}
+const WeaponCard = ({ w, label, onEdit }: { w: DHWeapon | null; label: string; onEdit: () => void }) => {
+  const modsLine = w ? formatGearMods(parseGearFeature(w.feature)) : "";
+  return (
+    <div className={styles.weaponMini}>
+      <div className={styles.weaponMiniHead}>
+        <span className="caps" style={{ fontSize: 9 }}>{label}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {w && <span className="mono" style={{ color: "var(--gold-2)", fontSize: 13 }}>{w.damage}</span>}
+          <button className="sf-icon-btn" type="button" onClick={onEdit} aria-label={`Edit ${label}`}>
+            <Icon name="edit" size={12} />
+          </button>
         </div>
-        {w.feature && <div className={styles.featureText}>{w.feature}</div>}
-      </>
-    ) : (
-      <span className={styles.empty}>No weapon equipped</span>
-    )}
-  </div>
-);
+      </div>
+      {w ? (
+        <>
+          <div className={styles.weaponMiniName}>{w.name}</div>
+          <div className={styles.weaponMiniMeta}>
+            <span className="chip">{w.trait}</span>
+            <span className="chip">{w.range}</span>
+            <span className="chip">{w.dtype}</span>
+            {w.burden && <span className="chip">{w.burden}</span>}
+          </div>
+          {w.feature && <div className={styles.featureText}>{w.feature}</div>}
+          {modsLine && <span className={styles.subHint}>Applies to your sheet: {modsLine}</span>}
+        </>
+      ) : (
+        <span className={styles.empty}>No weapon equipped</span>
+      )}
+    </div>
+  );
+};
 
 const emptyWeapon = (): DHWeapon => ({ name: "", trait: "Agility", range: "Melee", damage: "", dtype: "phy", burden: "One-Handed", feature: "" });
 const emptyArmor = (): DHArmor => ({ name: "", score: 0, thresholds: { major: 0, severe: 0 }, feature: "" });
@@ -72,6 +76,8 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
   const [itemOpen, setItemOpen] = useState(false);
   const [itemIndex, setItemIndex] = useState<number | null>(null);
   const [itemForm, setItemForm] = useState<DHInventoryItem>(emptyItem());
+
+  const armorModsLine = armor ? formatGearMods(parseGearFeature(armor.feature)) : "";
 
   const persist = (patch: Partial<DaggerheartCharacter>) => {
     patchCharacter(state, patch);
@@ -165,6 +171,7 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
                   <div className={styles.statRowLabel}><span className={styles.subLabel}>Severe</span><span className={styles.monoVal}>{armor.thresholds.severe}</span></div>
                 </div>
                 {armor.feature && <div className={styles.featureText}>{armor.feature}</div>}
+                {armorModsLine && <span className={styles.subHint}>Applies to your sheet: {armorModsLine}</span>}
               </div>
             ) : (
               <span className={styles.empty}>No armor equipped</span>

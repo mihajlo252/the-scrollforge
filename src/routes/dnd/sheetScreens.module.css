@@ -336,6 +336,7 @@
 }
 .searchInput {
 	padding-left: 36px;
+	width: min-content;
 }
 .catList {
 	display: flex;
@@ -444,7 +445,8 @@
 }
 @media (max-width: 1024px) {
 	.invGrid {
-		grid-template-columns: 1fr;
+		display: flex;
+		flex-direction: column;
 	}
 }
 .invLeft {
@@ -522,7 +524,11 @@
 	display: flex;
 	gap: 10px;
 	align-items: center;
+	justify-content: space-between;
 	border-bottom: 1px solid var(--rule);
+	@media (max-width: 767px) {
+		flex-wrap: wrap;
+	}
 }
 .invHeadRow {
 	display: grid;
@@ -557,9 +563,14 @@
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	@media (max-width: 767px) {
+		/* display: flex; */
+		justify-content: space-between;
 		.right {
 			text-align: center;
 		}
+		/* .type, .weight {
+			display: none;
+		} */
 	}
 }
 .invRow:hover {

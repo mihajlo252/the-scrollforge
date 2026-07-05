@@ -11,7 +11,7 @@ import { SheetTabs } from "../../sections/Daggerheart/CharacterProfile/SheetTabs
 import { SheetTopbar } from "../../sections/Daggerheart/CharacterProfile/SheetTopbar";
 import { LevelUpModal } from "../../sections/Daggerheart/CharacterProfile/LevelUpModal";
 import { BoxTrack, HPTrack, DHTraitTile } from "../../sections/Daggerheart/CharacterProfile/Trackers";
-import { TRAIT_NAMES, getClass, getSpellcastTrait, flattenDescription, defaultVitals, defaultTraits } from "../../utilities/daggerheart";
+import { TRAIT_NAMES, getClass, getSpellcastTrait, flattenDescription, defaultVitals, defaultTraits, gearModifiers, formatGearMods } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { sendData } from "../../utilities/sendData";
 import gate from "./character.module.css";
@@ -82,6 +82,13 @@ function Vitals() {
   const cls = getClass(profile.class);
   const spellTrait = getSpellcastTrait(profile.subclass);
 
+  // Equipped-gear modifiers (e.g. Full Plate's "-2 to Evasion; -1 to Agility")
+  // are layered on top of the stored base stats at display time.
+  const gear = gearModifiers(character.dhWeapons, character.dhArmor);
+  const gearTraitHint = formatGearMods({ ...gear, evasion: 0, armorScore: 0, thresholds: { major: 0, severe: 0 } });
+  const gearVitalsHint = formatGearMods({ ...gear, traits: {} });
+  const armorSlotTotal = Math.max(0, vitals.armorSlots.total + gear.armorScore);
+
   const persistVitals = (next: DHVitals) => {
     setVitals(next);
     patchCharacter(state, { dhVitals: next });
@@ -110,9 +117,10 @@ function Vitals() {
         <div className="card-body">
           <div className={styles.traitRow}>
             {TRAIT_NAMES.map((t) => (
-              <DHTraitTile key={t} name={t} value={traits[t] ?? 0} spellcast={!!spellTrait && spellTrait.toUpperCase() === t.toUpperCase()} />
+              <DHTraitTile key={t} name={t} value={(traits[t] ?? 0) + (gear.traits[t] ?? 0)} spellcast={!!spellTrait && spellTrait.toUpperCase() === t.toUpperCase()} />
             ))}
           </div>
+          {gearTraitHint && <span className={styles.subHint}>Includes gear: {gearTraitHint}</span>}
         </div>
       </Frame>
 
@@ -127,25 +135,26 @@ function Vitals() {
             <div className={styles.section}>
               <div className={styles.statRow}>
                 <div className={styles.bigStat}>
-                  <span className={styles.bigStatVal}>{vitals.evasion}</span>
+                  <span className={styles.bigStatVal}>{vitals.evasion + gear.evasion}</span>
                   <span className={styles.bigStatLabel}>Evasion</span>
                 </div>
                 <div className={styles.statRowLabel} style={{ alignItems: "flex-end" }}>
                   <span className={styles.subLabel}>Armor Score</span>
-                  <span className={styles.monoVal}>{vitals.armorScore}</span>
+                  <span className={styles.monoVal}>{vitals.armorScore + gear.armorScore}</span>
                 </div>
               </div>
+              {gearVitalsHint && <span className={styles.subHint}>Includes gear: {gearVitalsHint}</span>}
 
               <div className={styles.divider} />
 
               <div className={styles.statRow}>
                 <div className={styles.statRowLabel}>
                   <span className={styles.subLabel}>Armor Slots</span>
-                  <span className={styles.subHint}>{vitals.armorSlots.marked}/{vitals.armorSlots.total} marked</span>
+                  <span className={styles.subHint}>{Math.min(vitals.armorSlots.marked, armorSlotTotal)}/{armorSlotTotal} marked</span>
                 </div>
                 <BoxTrack
-                  total={vitals.armorSlots.total}
-                  marked={vitals.armorSlots.marked}
+                  total={armorSlotTotal}
+                  marked={Math.min(vitals.armorSlots.marked, armorSlotTotal)}
                   color="var(--arcane)"
                   onChange={(m) => persistVitals({ ...vitals, armorSlots: { ...vitals.armorSlots, marked: m } })}
                 />
@@ -155,7 +164,10 @@ function Vitals() {
 
               <div className={styles.statRowLabel}>
                 <span className={styles.subLabel}>Hit Points · {vitals.hp.marked}/{vitals.hp.total} remaining</span>
-                <HPTrack hp={vitals.hp} onChange={(m) => persistVitals({ ...vitals, hp: { ...vitals.hp, marked: m } })} />
+                <HPTrack
+                  hp={{ ...vitals.hp, major: vitals.hp.major + gear.thresholds.major, severe: vitals.hp.severe + gear.thresholds.severe }}
+                  onChange={(m) => persistVitals({ ...vitals, hp: { ...vitals.hp, marked: m } })}
+                />
               </div>
 
               <div className={styles.divider} />

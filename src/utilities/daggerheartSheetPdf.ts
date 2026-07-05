@@ -1,4 +1,5 @@
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from "pdf-lib";
+import { gearModifiers } from "./daggerheart";
 
 /* Fills the official Darrington Press character sheet (public/daggerheart-sheets.pdf)
  * with a character's data and offers it as a download. The source PDF has no form
@@ -111,6 +112,8 @@ const drawWeapon = (ctx: Ctx, weapon: DHWeapon | null | undefined, nameY: number
 const fillFrontPage = (ctx: Ctx, character: DaggerheartCharacter, isBlankSheet: boolean) => {
 	const profile = character.characterProfile;
 	const vitals = character.dhVitals;
+	// Same gear-derived overlay the on-screen sheet applies (base + equipped mods).
+	const gear = gearModifiers(character.dhWeapons, character.dhArmor);
 
 	// Header strip
 	draw(ctx, profile.name ?? "", { x: 241, y: 22, size: 11, bold: true, maxWidth: 152 });
@@ -130,16 +133,16 @@ const fillFrontPage = (ctx: Ctx, character: DaggerheartCharacter, isBlankSheet: 
 	// Traits
 	if (character.dhTraits) {
 		for (const { key, x } of TRAIT_ORDER) {
-			draw(ctx, fmtMod(character.dhTraits[key] ?? 0), { x, y: 104, size: 13, bold: true, center: true });
+			draw(ctx, fmtMod((character.dhTraits[key] ?? 0) + (gear.traits[key] ?? 0)), { x, y: 104, size: 13, bold: true, center: true });
 		}
 	}
 
 	if (vitals) {
-		draw(ctx, String(vitals.evasion), { x: 40, y: 100, size: 13, bold: true, center: true });
-		draw(ctx, String(vitals.armorScore), { x: 105, y: 100, size: 13, bold: true, center: true });
+		draw(ctx, String(vitals.evasion + gear.evasion), { x: 40, y: 100, size: 13, bold: true, center: true });
+		draw(ctx, String(vitals.armorScore + gear.armorScore), { x: 105, y: 100, size: 13, bold: true, center: true });
 		// Damage thresholds: the circles between the Minor/Major/Severe banners.
-		draw(ctx, String(vitals.hp.major), { x: 95, y: 203, size: 11, bold: true, center: true });
-		draw(ctx, String(vitals.hp.severe), { x: 181, y: 203, size: 11, bold: true, center: true });
+		draw(ctx, String(vitals.hp.major + gear.thresholds.major), { x: 95, y: 203, size: 11, bold: true, center: true });
+		draw(ctx, String(vitals.hp.severe + gear.thresholds.severe), { x: 181, y: 203, size: 11, bold: true, center: true });
 		// Proficiency pips (first circle is pre-printed filled).
 		const pips = Math.min(vitals.proficiency, 6);
 		for (let i = 1; i < pips; i++) {

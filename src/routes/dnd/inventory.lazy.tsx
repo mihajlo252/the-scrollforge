@@ -147,11 +147,12 @@ function InventoryScreen() {
 				{/* Item table */}
 				<Frame classes={`card ${styles.alignList}`}>
 					<div className={styles.invToolbar}>
-						<div style={{ position: "relative", flex: 1 }}>
+						<div style={{ position: "relative" }}>
 							<span className={styles.searchIcon}>
 								<Icon name="search" size={14} />
 							</span>
 							<input
+								id="search"
 								className={`input ${styles.searchInput}`}
 								placeholder="Search inventory…"
 								value={q}
@@ -165,9 +166,9 @@ function InventoryScreen() {
 					<div className={styles.invHeadRow}>
 						<span>Item</span>
             <div className={styles.invItemInfo}>
-              <span className={styles.right}>Type</span>
-              <span className={styles.right}>Qty</span>
-              <span className={styles.right}>Weight</span>
+              <span className={`${styles.right} ${styles.type}`}>Type</span>
+              <span className={`${styles.right} ${styles.qty}`}>Qty</span>
+              <span className={`${styles.right} ${styles.weight}`}>Weight</span>
               <span />
             </div>
 					</div>
@@ -184,11 +185,11 @@ function InventoryScreen() {
 								</div>
 							</div>
 							<div className={styles.invItemInfo}>
-								<span className={styles.right} style={{ color: "var(--ink-dim)", fontSize: 13 }}>{i.type}</span>
-								<span className={`mono ${styles.right}`} style={{ color: "var(--gold-2)" }}>
+								<span className={`${styles.right} ${styles.type}`} style={{ color: "var(--ink-dim)", fontSize: 13 }}>{i.type}</span>
+								<span className={`mono ${styles.right} ${styles.qty}`} style={{ color: "var(--gold-2)" }}>
 									×{i.qty}
 								</span>
-								<span className={`mono ${styles.right}`} style={{ color: "var(--ink-dim)" }}>
+								<span className={`mono ${styles.right} ${styles.weight}`} style={{ color: "var(--ink-dim)" }}>
 									{i.wt}lb
 								</span>
 								<button
