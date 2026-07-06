@@ -1,4 +1,4 @@
-import{O as ds}from"./index-KT_JRZQg.js";import{L as vs}from"./domain-cards-Bcr2wd37.js";import"./capitalize-ChUA2ALQ.js";/*! *****************************************************************************
+import{O as ds}from"./index-Be2keu-X.js";import{L as vs}from"./domain-cards-Box3SyTm.js";import"./capitalize-ChUA2ALQ.js";/*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
