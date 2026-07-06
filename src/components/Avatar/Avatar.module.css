@@ -33,7 +33,7 @@
 			inset: -1.5px;
 			top: -0.5rem;
 			z-index: 99;
-			border-image: url("./avatar-border-dnd.png");
+			border-image: url("/avatar-border-dnd.png");
 
 			border-image-slice: var(--_border-image-slice);
 			border-image-width: var(--_border-image-width);
@@ -44,7 +44,7 @@
 			inset: -1.5px;
 			top: -0.5rem;
 			z-index: 99;
-			border-image: url("./avatar-border-daggerheart.png");
+			border-image: url("/avatar-border-daggerheart.png");
 
 			border-image-slice: var(--_border-image-slice);
 			border-image-width: var(--_border-image-width);

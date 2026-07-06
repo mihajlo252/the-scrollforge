@@ -258,12 +258,16 @@ const CharacterCard = ({
 		: [profile?.ancestry, profile?.community].filter(Boolean).join(" ");
 	const job = [profile?.class, profile?.subclass].filter(Boolean).join(" ");
 
-	const dhMaxHP = !isDnd
-		? (DaggerheartClasses as any[]).find((c) => c.name === (profile?.class ?? "").toUpperCase())?.startingHitPoints
-		: undefined;
+	// Daggerheart hp.marked counts HP REMAINING (boxes still filled), not damage.
+	// Fall back to the class starting HP for legacy characters without dhVitals.
+	const dhHP = !isDnd ? (character as DaggerheartCharacter).dhVitals?.hp : undefined;
+	const dhMaxHP =
+		dhHP?.total ??
+		(!isDnd
+			? (DaggerheartClasses as any[]).find((c) => c.name === (profile?.class ?? "").toUpperCase())?.startingHitPoints
+			: undefined);
 	const maxHP = isDnd ? (character as any).stats?.maxHP : dhMaxHP;
-	// Daggerheart HP marks aren't persisted, so show the character at full HP.
-	const currentHP = isDnd ? (character as any).currentHP : dhMaxHP;
+	const currentHP = isDnd ? (character as any).currentHP : dhHP?.marked ?? dhMaxHP;
 	const hasHP = typeof maxHP === "number" && maxHP > 0;
 
 	return (
