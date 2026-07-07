@@ -7,7 +7,7 @@ import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
 import { getAncestry, getClass, getCommunity, getSubclass, flattenDescription, type Feature } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/daggerheart/features")({
@@ -43,7 +43,7 @@ function FeaturesBody({ character, state }: { character: DaggerheartCharacter; s
   const persist = (next: DHExperience[]) => {
     setExperiences(next);
     patchCharacter(state, { dhExperiences: next });
-    sendData("characters", character.id, { dhExperiences: next });
+    queueCharacterSave(character.id, { dhExperiences: next });
   };
 
   const openAdd = () => {

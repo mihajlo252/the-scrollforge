@@ -2,16 +2,11 @@ import React, { useState } from "react";
 import { Frame } from "../../../components/Frame/Frame";
 import { HPBar, Icon } from "../../../components/Primitives";
 import { calculateModifiers } from "../../../utilities/calculateStats";
-import { sendData } from "../../../utilities/sendData";
+import { patchCharacter } from "../../../utilities/patchCharacter";
+import { queueCharacterSave } from "../../../utilities/autosaveCharacter";
 import styles from "./sheet.module.css";
 
-export const HPCard = ({
-	character,
-	setStatChange,
-}: {
-	character: Character;
-	setStatChange: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+export const HPCard = ({ character }: { character: Character }) => {
 	const {
 		id,
 		currentHP,
@@ -26,7 +21,6 @@ export const HPCard = ({
 	const [hp, setHp] = useState<number>(currentHP);
 	const [max, setMax] = useState<number>(maxHP);
 	const [delta, setDelta] = useState("");
-	const [hpDirty, setHpDirty] = useState(false);
 	const [characterAC, setCharacterAC] = useState<number>(ac);
 	const [characterHitDice, setCharacterHitDice] = useState<string>(hitDice);
 	const [succ, setSucc] = useState(0);
@@ -34,18 +28,14 @@ export const HPCard = ({
 
 	const writeHP = (nextHp: number, nextMax: number) => {
 		const { state } = JSON.parse(localStorage.getItem("character")!);
-		localStorage.setItem(
-			"character",
-			JSON.stringify({
-				state: { ...state, character: { ...state.character, currentHP: nextHp, stats: { ...state.character.stats, maxHP: nextMax } } },
-				version: 1,
-			}),
-		);
-		setHpDirty(true);
+		const stats = { ...state.character.stats, maxHP: nextMax };
+		patchCharacter(state, { currentHP: nextHp, stats });
+		queueCharacterSave(id, { currentHP: nextHp, stats });
 	};
 
 	const applyDelta = (sign: 1 | -1) => {
-		const amount = parseInt(delta) || 0;
+		// Empty box = step by 1; a typed number is added/subtracted instead.
+		const amount = parseInt(delta) || 1;
 		const next = Math.max(0, Math.min(max, hp + sign * amount));
 		setHp(next);
 		setDelta("");
@@ -60,25 +50,13 @@ export const HPCard = ({
 		writeHP(nextHp, nextMax);
 	};
 
-	const saveHP = async () => {
-		const { state } = JSON.parse(localStorage.getItem("character")!);
-		await sendData("characters", id, { currentHP: hp, stats: { ...state.character.stats, maxHP: max } });
-		setHpDirty(false);
-	};
-
 	const handleStatChange = (e: React.ChangeEvent<HTMLInputElement>, setFunc: React.Dispatch<React.SetStateAction<any>>) => {
 		if (e.target.value[0] === "0") e.target.value = e.target.value.slice(1);
 		setFunc(e.target.value);
 		const { state } = JSON.parse(localStorage.getItem("character")!);
-		const mHP = state.character.stats.maxHP;
-		localStorage.setItem(
-			"character",
-			JSON.stringify({
-				state: { character: { ...character, stats: { ...character.stats, [e.target.name]: e.target.value, maxHP: mHP } } },
-				version: 0,
-			}),
-		);
-		setStatChange(true);
+		const stats = { ...state.character.stats, [e.target.name]: e.target.value };
+		patchCharacter(state, { stats });
+		queueCharacterSave(id, { stats });
 	};
 
 	const toggleDeath = (kind: "succ" | "fail", index: number) => {
@@ -91,13 +69,7 @@ export const HPCard = ({
 		<Frame classes="card">
 			<div className="card-hdr">
 				<div className="card-title">Vitals</div>
-				{hpDirty ? (
-					<button className="button button-accent short" type="button" onClick={saveHP}>
-						Save HP
-					</button>
-				) : (
-					<span className="caps">Combat HUD</span>
-				)}
+				<span className="caps">Combat HUD</span>
 			</div>
 			<div className="card-body">
 				<div className={styles.hpTop}>

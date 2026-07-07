@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Frame } from "../../../components/Frame/Frame";
 import { Icon } from "../../../components/Primitives";
+import { patchCharacter } from "../../../utilities/patchCharacter";
+import { queueCharacterSave } from "../../../utilities/autosaveCharacter";
 import styles from "./sheet.module.css";
 
 export const SheetTopbar = ({
 	character,
-	setStatChange,
 	onRoll,
 	onNotes,
 }: {
 	character: Character;
-	setStatChange: React.Dispatch<React.SetStateAction<boolean>>;
 	onRoll: () => void;
 	onNotes: () => void;
 }) => {
@@ -21,21 +21,9 @@ export const SheetTopbar = ({
 		const value = parseInt(e.target.value) || 0;
 		setLevel(value);
 		const { state } = JSON.parse(localStorage.getItem("character")!);
-		const mHP = state.character.stats.maxHP;
-		localStorage.setItem(
-			"character",
-			JSON.stringify({
-				state: {
-					character: {
-						...character,
-						stats: { ...character.stats, maxHP: mHP },
-						characterProfile: { ...character.characterProfile, level: value },
-					},
-				},
-				version: 0,
-			}),
-		);
-		setStatChange(true);
+		const next = { ...state.character.characterProfile, level: value };
+		patchCharacter(state, { characterProfile: next });
+		queueCharacterSave(character.id, { characterProfile: next });
 	};
 
 	const initial = (characterProfile.name || "?").charAt(0).toUpperCase();

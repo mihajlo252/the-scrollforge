@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Frame } from "../../../components/Frame/Frame";
 import { calculateSaves, calculateSkills, calculateProficiencyBonus } from "../../../utilities/calculateStats";
+import { patchCharacter } from "../../../utilities/patchCharacter";
+import { queueCharacterSave } from "../../../utilities/autosaveCharacter";
 import styles from "./sheet.module.css";
 
 const SKILL_DEFS: { key: keyof SkillProficiency; name: string; abil: string; stat: keyof Values }[] = [
@@ -35,13 +37,7 @@ const SAVE_DEFS: { key: keyof SaveThrowsProficiency; label: string; stat: keyof 
 
 const EXPERTISE_CLASSES = ["artificer", "bard", "ranger", "rogue", "wizard", "redacted"];
 
-export const SkillsCard = ({
-	character,
-	setStatChange,
-}: {
-	character: Character;
-	setStatChange: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+export const SkillsCard = ({ character }: { character: Character }) => {
 	const {
 		stats: { primaryStats, saveThrowsProficiency, skillProficiency },
 		characterProfile: { level, class: characterClass },
@@ -53,15 +49,9 @@ export const SkillsCard = ({
 
 	const persist = (key: "skillProficiency" | "saveThrowsProficiency", value: SkillProficiency | SaveThrowsProficiency) => {
 		const { state } = JSON.parse(localStorage.getItem("character")!);
-		const mHP = state.character.stats.maxHP;
-		localStorage.setItem(
-			"character",
-			JSON.stringify({
-				state: { character: { ...character, stats: { ...character.stats, maxHP: mHP, [key]: value } } },
-				version: 0,
-			}),
-		);
-		setStatChange(true);
+		const stats = { ...state.character.stats, [key]: value };
+		patchCharacter(state, { stats });
+		queueCharacterSave(character.id, { stats });
 	};
 
 	const toggleSkill = (key: keyof SkillProficiency) => {

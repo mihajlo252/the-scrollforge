@@ -8,7 +8,7 @@ import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShe
 import { DomainCardView } from "../../sections/Daggerheart/CharacterProfile/DomainCard";
 import { getDomains, groupCardsByLevel } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import { toast } from "../../utilities/toasterSonner";
 import domainCardsData from "../../daggerheart-config/domain-cards.json";
 import styles from "./sheetScreens.module.css";
@@ -32,7 +32,7 @@ function DomainsBody({ character, state }: { character: DaggerheartCharacter; st
   const persist = (next: DHDomainCards) => {
     setCards(next);
     patchCharacter(state, { dhDomainCards: next });
-    sendData("characters", character.id, { dhDomainCards: next });
+    queueCharacterSave(character.id, { dhDomainCards: next });
   };
 
   const loadoutFull = cards.loadout.length >= LOADOUT_CAP;

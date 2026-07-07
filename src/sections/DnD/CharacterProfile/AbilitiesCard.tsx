@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { Frame } from "../../../components/Frame/Frame";
 import { calculateModifiers } from "../../../utilities/calculateStats";
+import { patchCharacter } from "../../../utilities/patchCharacter";
+import { queueCharacterSave } from "../../../utilities/autosaveCharacter";
 import { toast } from "../../../utilities/toasterSonner";
 import styles from "./sheet.module.css";
 
-export const AbilitiesCard = ({
-	character,
-	setStatChange,
-}: {
-	character: Character;
-	setStatChange: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+export const AbilitiesCard = ({ character }: { character: Character }) => {
 	const {
 		stats: { primaryStats },
 	} = character;
@@ -30,24 +26,12 @@ export const AbilitiesCard = ({
 		if (e.target.value[0] === "0") e.target.value = e.target.value.slice(1);
 		setFunc(parseInt(e.target.value) || 0);
 		const { state } = JSON.parse(localStorage.getItem("character")!);
-		const mHP = state.character.stats.maxHP;
-		localStorage.setItem(
-			"character",
-			JSON.stringify({
-				state: {
-					character: {
-						...character,
-						stats: {
-							...character.stats,
-							maxHP: mHP,
-							primaryStats: { ...character.stats.primaryStats, [e.target.name]: parseInt(e.target.value) || 0 },
-						},
-					},
-				},
-				version: 0,
-			}),
-		);
-		setStatChange(true);
+		const stats = {
+			...state.character.stats,
+			primaryStats: { ...state.character.stats.primaryStats, [e.target.name]: parseInt(e.target.value) || 0 },
+		};
+		patchCharacter(state, { stats });
+		queueCharacterSave(character.id, { stats });
 	};
 
 	const abilities = [

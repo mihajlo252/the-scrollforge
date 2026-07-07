@@ -7,7 +7,7 @@ import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
 import { getSubclass, tierForLevel } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/daggerheart/journal")({
@@ -86,7 +86,7 @@ function JournalBody({ character, state, openLevelUp }: { character: Daggerheart
   const persist = (next: DHBio) => {
     setBio(next);
     patchCharacter(state, { dhBio: next });
-    sendData("characters", character.id, { dhBio: next });
+    queueCharacterSave(character.id, { dhBio: next });
   };
 
   const openBioAdd = (key: keyof DHBio) => {

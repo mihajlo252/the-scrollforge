@@ -2,9 +2,9 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Frame } from "../../components/Frame/Frame";
-import { Icon } from "../../components/Primitives";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
-import { sendData } from "../../utilities/sendData";
+import { patchCharacter } from "../../utilities/patchCharacter";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import { toast } from "../../utilities/toasterSonner";
 import styles from "./sheetScreens.module.css";
 
@@ -34,29 +34,28 @@ function Inspiration() {
 
 	const [insp, setInsp] = useState<Inspiration>(character.stats.inspiration);
 
+	const persist = (next: Inspiration) => {
+		setInsp(next);
+		const stats = { ...character.stats, inspiration: next };
+		patchCharacter(state, { stats });
+		queueCharacterSave(character.id, { stats });
+	};
+
 	const handleIncrease = (key: keyof Inspiration) => {
 		if (key === "regular") {
-			setInsp((p) => ({ ...p, regular: p.regular + 1 }));
+			persist({ ...insp, regular: insp.regular + 1 });
 			return;
 		}
 		if (insp.regular < EXCHANGE_COST) {
 			toast({ style: "", message: `Need ${EXCHANGE_COST} regular gems to exchange.` });
 			return;
 		}
-		setInsp((p) => ({ ...p, regular: p.regular - EXCHANGE_COST, [key]: p[key] + 1 }));
+		persist({ ...insp, regular: insp.regular - EXCHANGE_COST, [key]: insp[key] + 1 });
 	};
 
 	const handleDecrease = (key: keyof Inspiration) => {
-		setInsp((p) => (p[key] < 1 ? p : { ...p, [key]: p[key] - 1 }));
-	};
-
-	const handleSave = async () => {
-		localStorage.setItem(
-			"character",
-			JSON.stringify({ state: { ...state, character: { ...character, stats: { ...character.stats, inspiration: insp } } }, version: 1 }),
-		);
-		await sendData("characters", character.id, { stats: { ...character.stats, inspiration: insp } });
-		toast({ style: "", message: "Saved!" });
+		if (insp[key] < 1) return;
+		persist({ ...insp, [key]: insp[key] - 1 });
 	};
 
 	return (
@@ -76,10 +75,6 @@ function Inspiration() {
 								regular gems available to exchange
 							</div>
 						</div>
-						<div className={styles.spacer} />
-						<button className="button button-primary short" onClick={handleSave} type="button">
-							<Icon name="check" size={12} /> Save
-						</button>
 					</div>
 				</div>
 			</Frame>

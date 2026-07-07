@@ -7,7 +7,7 @@ import { Dots, Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { calculateProficiencyBonus } from "../../utilities/calculateStats";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/dnd/spells")({
@@ -60,13 +60,13 @@ function Spells() {
   const persistSpells = async (next: Spell[]) => {
     setSpells(next);
     patchCharacter(state, { descriptions: { ...character.descriptions, spells: next } });
-    await sendData("characters", character.id, { descriptions: { ...character.descriptions, spells: next } });
+    queueCharacterSave(character.id, { descriptions: { ...character.descriptions, spells: next } });
   };
 
   const persistSlots = async (next: SpellSlots) => {
     setSlots(next);
     patchCharacter(state, { spellSlots: next });
-    await sendData("characters", character.id, { spellSlots: next });
+    queueCharacterSave(character.id, { spellSlots: next });
   };
 
   const filtered = spells.filter((s) => levelFilter === "all" || (s.level ?? 0) === levelFilter);

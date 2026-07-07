@@ -6,7 +6,7 @@ import { Popup } from "../../components/Popup/Popup";
 import { HPBar, Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/dnd/inventory")({
@@ -51,12 +51,12 @@ function InventoryScreen() {
 	const persistItems = async (next: InventoryItem[]) => {
 		setItems(next);
 		localStorage.setItem("character", JSON.stringify({ state: { ...state, character: { ...character, inventory: next } }, version: 1 }));
-		await sendData("characters", character.id, { inventory: next });
+		queueCharacterSave(character.id, { inventory: next });
 	};
 	const persistCurrency = async (next: Currency) => {
 		setCurrency(next);
 		localStorage.setItem("character", JSON.stringify({ state: { ...state, character: { ...character, currency: next } }, version: 1 }));
-		await sendData("characters", character.id, { currency: next });
+		queueCharacterSave(character.id, { currency: next });
 	};
 
 	const filtered = items.map((i, idx) => ({ i, idx })).filter(({ i }) => !q || i.name.toLowerCase().includes(q.toLowerCase()));

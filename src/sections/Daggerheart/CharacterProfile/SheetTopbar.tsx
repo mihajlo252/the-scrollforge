@@ -4,7 +4,7 @@ import { Frame } from "../../../components/Frame/Frame";
 import { Icon } from "../../../components/Primitives";
 import { getSubclass, tierForLevel } from "../../../utilities/daggerheart";
 import { patchCharacter } from "../../../utilities/patchCharacter";
-import { sendData } from "../../../utilities/sendData";
+import { queueCharacterSave } from "../../../utilities/autosaveCharacter";
 import styles from "./sheet.module.css";
 
 export const SheetTopbar = ({
@@ -61,7 +61,7 @@ export const SheetTopbar = ({
 			const next = { ...character.characterProfile, level: value };
 			const state = readState();
 			patchCharacter(state, { characterProfile: next });
-			sendData("characters", character.id, { characterProfile: next });
+			queueCharacterSave(character.id, { characterProfile: next });
 		}
 	};
 
@@ -70,7 +70,7 @@ export const SheetTopbar = ({
 		const vitals = { ...(character.dhVitals as DHVitals), conditions: next };
 		const state = readState();
 		patchCharacter(state, { dhVitals: vitals });
-		sendData("characters", character.id, { dhVitals: vitals });
+		queueCharacterSave(character.id, { dhVitals: vitals });
 	};
 
 	const addCondition = (e: React.FormEvent) => {

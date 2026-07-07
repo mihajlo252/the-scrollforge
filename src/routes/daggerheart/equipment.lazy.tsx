@@ -7,7 +7,7 @@ import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
 import { TRAIT_NAMES, primaryWeapons, secondaryWeapons, allArmors, weaponById, armorById, weaponToDH, armorToDH, formatWeaponDamage, tierForLevel, parseGearFeature, formatGearMods } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/daggerheart/equipment")({
@@ -81,7 +81,7 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
 
   const persist = (patch: Partial<DaggerheartCharacter>) => {
     patchCharacter(state, patch);
-    sendData("characters", character.id, patch as Record<string, any>);
+    queueCharacterSave(character.id, patch as Record<string, any>);
   };
 
   const persistWeapons = (next: DHWeapons) => { setWeapons(next); persist({ dhWeapons: next }); };

@@ -13,7 +13,7 @@ import { LevelUpModal } from "../../sections/Daggerheart/CharacterProfile/LevelU
 import { BoxTrack, HPTrack, DHTraitTile } from "../../sections/Daggerheart/CharacterProfile/Trackers";
 import { TRAIT_NAMES, getClass, getSpellcastTrait, flattenDescription, defaultVitals, defaultTraits, gearModifiers, formatGearMods } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import gate from "./character.module.css";
 import styles from "./sheetScreens.module.css";
 
@@ -92,12 +92,12 @@ function Vitals() {
   const persistVitals = (next: DHVitals) => {
     setVitals(next);
     patchCharacter(state, { dhVitals: next });
-    sendData("characters", character.id, { dhVitals: next });
+    queueCharacterSave(character.id, { dhVitals: next });
   };
   const persistGold = (next: DHGold) => {
     setGold(next);
     patchCharacter(state, { dhGold: next });
-    sendData("characters", character.id, { dhGold: next });
+    queueCharacterSave(character.id, { dhGold: next });
   };
 
   const stepGold = (key: keyof DHGold, delta: number) =>

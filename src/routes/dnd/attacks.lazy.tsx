@@ -7,7 +7,7 @@ import { Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { calculateProficiencyBonus } from "../../utilities/calculateStats";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/dnd/attacks")({
@@ -45,7 +45,7 @@ function Attacks() {
   const persist = async (next: Attack[]) => {
     setAttacks(next);
     patchCharacter(state, { descriptions: { ...character.descriptions, attacks: next } });
-    await sendData("characters", character.id, { descriptions: { ...character.descriptions, attacks: next } });
+    queueCharacterSave(character.id, { descriptions: { ...character.descriptions, attacks: next } });
   };
 
   const sel = attacks[selected];

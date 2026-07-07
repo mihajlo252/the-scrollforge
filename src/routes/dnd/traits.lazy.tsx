@@ -8,7 +8,7 @@ import { ConfirmButton } from "../../components/ConfirmButton";
 import { ReorderRow } from "../../components/Reorderable";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { mergeReorder, stableKey } from "../../utilities/reorder";
-import { sendData } from "../../utilities/sendData";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/dnd/traits")({
@@ -33,7 +33,7 @@ function TraitsScreen() {
   const persist = async (next: TraitItem[]) => {
     setTraits(next);
     localStorage.setItem("character", JSON.stringify({ state: { ...state, character: { ...character, traits: next } }, version: 1 }));
-    await sendData("characters", character.id, { traits: next });
+    queueCharacterSave(character.id, { traits: next });
   };
 
   const matches = (t: TraitItem) =>
@@ -53,7 +53,7 @@ function TraitsScreen() {
     const next = pending.current;
     pending.current = null;
     localStorage.setItem("character", JSON.stringify({ state: { ...state, character: { ...character, traits: next } }, version: 1 }));
-    await sendData("characters", character.id, { traits: next });
+    queueCharacterSave(character.id, { traits: next });
   };
 
   const openAdd = () => {
