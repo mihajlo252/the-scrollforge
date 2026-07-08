@@ -28,7 +28,7 @@ export const DNDForm = ({
 						onChange={(e) => setCharacterProfile({ ...characterProfile, name: e.target.value })}
 					/>
 				</div>
-				<section className="wrapped">
+				<section className="autoGrid">
 					<div className="inputWrapper">
 						<label htmlFor="level">Level: </label>
 						<input

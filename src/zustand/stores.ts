@@ -29,6 +29,7 @@ export const useCharacterStore = create<CharacterStore>()(
         }),
         {
             name: "character",
+            version: 1,
         }
     )
 );

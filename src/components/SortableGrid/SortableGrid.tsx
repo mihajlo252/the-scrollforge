@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useDragControls, type PanInfo } from "framer-motion";
-import { useRef } from "react";
+import { forwardRef, useRef } from "react";
 import { Icon } from "../Primitives";
 import styles from "./SortableGrid.module.css";
 
@@ -83,22 +83,17 @@ export function SortableGrid<T>({
 	);
 }
 
-function SortableItem({
-	className,
-	onStart,
-	onDrag,
-	onEnd,
-	children,
-}: {
+const SortableItem = forwardRef<HTMLLIElement, {
 	className?: string;
 	onStart: () => void;
 	onDrag: (info: PanInfo) => void;
 	onEnd: () => void;
 	children: React.ReactNode;
-}) {
+}>(({ className, onStart, onDrag, onEnd, children }, ref) => {
 	const controls = useDragControls();
 	return (
 		<motion.li
+			ref={ref}
 			layout
 			drag
 			dragControls={controls}
@@ -129,4 +124,4 @@ function SortableItem({
 			{children}
 		</motion.li>
 	);
-}
+});

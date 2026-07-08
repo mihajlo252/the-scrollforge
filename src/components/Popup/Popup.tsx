@@ -15,9 +15,7 @@ export const Popup = ({
 	useEffect(() => {
 
 		const handleClosePopup = (e: KeyboardEvent) => {
-			console.log(e);
 			if (e.key == "Escape") {
-				console.log(e.key);
 				closerFunc(false);
 			}
 		};

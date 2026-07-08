@@ -400,24 +400,27 @@ function Spells() {
 
 			{/* Edit slots */}
 			<Popup closerFunc={setShowSlotEdit} toggle={showSlotEdit}>
-				<Frame classes={styles.addFrame}>
+				<Frame classes={`${styles.addFrame} ${styles.slotsPopup}`}>
 					<h3 className="card-title">Spell Slots</h3>
-					{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lv) => (
-						<div key={lv} className={styles.formRow} style={{ alignItems: "center" }}>
-							<span className="caps">Level {lv}</span>
-							<input
-								type="number"
-								className="input"
-								min={0}
-								value={slots.slots[lv]?.total ?? 0}
-								onChange={(e) => {
-									const total = parseInt(e.target.value) || 0;
-									const used = Math.min(slots.slots[lv]?.used ?? 0, total);
-									setSlots({ ...slots, slots: { ...slots.slots, [lv]: { total, used } } });
-								}}
-							/>
-						</div>
-					))}
+
+					<section className={`${styles.spellSlotsForm} ${styles.scrollArea}`}>
+						{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lv) => (
+							<div key={lv} className={styles.formRow} style={{ alignItems: "center" }}>
+								<span className="caps">Level {lv}</span>
+								<input
+									type="number"
+									className="input"
+									min={0}
+									value={slots.slots[lv]?.total ?? 0}
+									onChange={(e) => {
+										const total = parseInt(e.target.value) || 0;
+										const used = Math.min(slots.slots[lv]?.used ?? 0, total);
+										setSlots({ ...slots, slots: { ...slots.slots, [lv]: { total, used } } });
+									}}
+								/>
+							</div>
+						))}
+					</section>
 					<div className={styles.formRow}>
 						<button
 							type="button"
