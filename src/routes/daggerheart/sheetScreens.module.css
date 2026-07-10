@@ -1,0 +1,504 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	flex: 1;
+	position: relative;
+}
+
+.saveBtn {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 30;
+}
+
+/* ── Generic card section ───────────────────────────────── */
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+}
+.sectionTitle {
+	font-size: 11px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--gold-deep);
+}
+.bigStat {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+}
+.bigStatVal {
+	font-family: var(--display), serif;
+	font-size: 48px;
+	line-height: 0.95;
+	color: var(--text);
+}
+.bigStatLabel {
+	font-size: 11px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--ink-dim);
+}
+.statRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+.statRowLabel {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.subLabel {
+	font-size: 11px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink-dim);
+}
+.subHint {
+	font-size: 11px;
+	color: var(--ink-faint);
+}
+.monoVal {
+	font-family: var(--mono), monospace;
+	font-size: 16px;
+	color: var(--gold-2);
+}
+.divider {
+	height: 1px;
+	background: var(--rule);
+	margin: 0.25rem 0;
+}
+
+/* ── Traits row ─────────────────────────────────────────── */
+.traitRow {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 10px;
+}
+@media (max-width: 640px) {
+	.traitRow {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+/* ── Vitals tab layout ──────────────────────────────────── */
+.vitalsGrid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+.lowerGrid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+@media (max-width: 1000px) {
+	.vitalsGrid,
+	.lowerGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ── Hope ───────────────────────────────────────────────── */
+.featureBox {
+	border: 1px dashed var(--rule-2);
+	border-radius: 6px;
+	padding: 0.85rem;
+	background: var(--bg-2);
+}
+.featureName {
+	font-family: var(--display), serif;
+	font-size: 1.05rem;
+	color: var(--gold-2);
+	margin-bottom: 0.25rem;
+}
+.featureText {
+	font-size: 0.85rem;
+	line-height: 1.5;
+	color: var(--ink-dim);
+	white-space: pre-wrap;
+}
+
+/* ── Journal / Character tab ────────────────────────────── */
+.tierBar {
+	display: flex;
+	gap: 0.5rem;
+}
+.tierStep {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 0.5rem;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+	color: var(--ink-faint);
+}
+.tierStep[data-active="true"] {
+	border-color: var(--gold);
+	background: rgba(201, 162, 74, 0.1);
+	color: var(--gold-2);
+}
+.tierStepN {
+	font-family: var(--display), serif;
+	font-size: 1.4rem;
+}
+.tierStepL {
+	font-size: 9px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+.bioEntry {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+.bioQ {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+.bioQText {
+	font-size: 0.9rem;
+	color: var(--gold-2);
+}
+.advHistory {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+.advHistoryRow {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-size: 0.85rem;
+	color: var(--ink-dim);
+}
+
+/* ── Level-up modal ─────────────────────────────────────── */
+.advGrid {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	max-height: 50vh;
+	overflow-y: auto;
+	padding-right: 0.25rem;
+}
+.advCard {
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	padding: 0.7rem 0.85rem;
+	background: var(--bg-2);
+	cursor: pointer;
+	transition: border-color 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+}
+.advCard[data-active="true"] {
+	border-color: var(--gold);
+	background: rgba(201, 162, 74, 0.1);
+}
+.advCard[data-disabled="true"] {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+.advHead {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+.advTitle {
+	font-family: var(--display), serif;
+	font-size: 1.05rem;
+	flex: 1;
+}
+.advMeta {
+	display: flex;
+	gap: 0.4rem;
+	align-items: center;
+	font-size: 11px;
+	color: var(--ink-dim);
+}
+.advDesc {
+	font-size: 0.82rem;
+	color: var(--ink-dim);
+	margin-top: 0.25rem;
+}
+.advSub {
+	margin-top: 0.6rem;
+	padding-top: 0.6rem;
+	border-top: 1px dashed var(--rule-2);
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+/* Selects (domain card / multiclass pickers) must fill their container, never
+   size it: their longest option would otherwise widen the whole modal on mobile. */
+.advSub select,
+.levelUpFrame select {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+}
+/* The level-up modal keeps a fixed, viewport-bounded width so content choices
+   can't stretch it. */
+.levelUpFrame {
+	width: min(620px, 100%);
+	/* Stay centered even if the wrapper is forced to full viewport width by
+	   wide card text — an auto inline margin overrides the flex start-alignment
+	   a fixed-width flex item would otherwise get. */
+	margin-inline: auto;
+}
+.advSubPills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+}
+.tierBanner {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 0.85rem;
+	border: 1px solid var(--gold-deep);
+	border-radius: 6px;
+	background: rgba(201, 162, 74, 0.08);
+	color: var(--gold-2);
+	font-size: 0.85rem;
+}
+
+/* ── Domains tab ────────────────────────────────────────── */
+.filterRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	align-items: center;
+}
+.cardGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0.85rem;
+}
+.cardGridSingle {
+	grid-template-columns: 1fr;
+}
+@media (max-width: 768px) {
+	.cardGrid {
+		grid-template-columns: 1fr;
+	}
+}
+.loadoutHint {
+	font-size: 0.8rem;
+	color: var(--ink-faint);
+}
+.browseList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	max-height: 55vh;
+	overflow-y: auto;
+	padding-right: 0.4rem;
+}
+/* Keep each card at its natural height so the list scrolls instead of
+ *  squishing the cards to fit. */
+.browseList > * {
+	flex-shrink: 0;
+}
+/* A "Level N" group of domain cards (loadout / vault / browse). */
+.cardLevelGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	flex-shrink: 0;
+}
+
+/* ── Feature cards (Features tab) ───────────────────────── */
+.featGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.85rem;
+}
+@media (max-width: 768px) {
+	.featGrid {
+		grid-template-columns: 1fr;
+	}
+}
+.featCard {
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	padding: 0.85rem 1rem;
+	background: var(--bg-2);
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+.featCard[data-locked] {
+	opacity: 0.5;
+}
+.featHead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+.featName {
+	font-family: var(--display), serif;
+	font-size: 1.1rem;
+	color: var(--gold-2);
+}
+.featSpan {
+	grid-column: 1 / -1;
+}
+
+/* ── Experiences ────────────────────────────────────────── */
+.expList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.expItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.6rem 0.85rem;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+}
+.expName {
+	font-family: var(--display), serif;
+	font-size: 1.05rem;
+}
+.expRight {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+/* ── Weapons strip ──────────────────────────────────────── */
+.weaponStrip {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.75rem;
+}
+@media (max-width: 640px) {
+	.weaponStrip {
+		grid-template-columns: 1fr;
+	}
+}
+.weaponMini {
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	padding: 0.75rem;
+	background: var(--bg-2);
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.weaponMiniHead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+.weaponMiniName {
+	font-family: var(--display), serif;
+	font-size: 1.05rem;
+}
+.weaponMiniMeta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	font-size: 11px;
+	color: var(--ink-dim);
+}
+.empty {
+	color: var(--ink-faint);
+	font-size: 0.85rem;
+}
+
+/* ── Inventory list ─────────────────────────────────────── */
+.invList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.invItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.6rem 0.85rem;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+}
+.invMain {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+.invName {
+	font-family: var(--display), serif;
+	font-size: 1.05rem;
+}
+.invNote {
+	font-size: 0.8rem;
+	color: var(--ink-faint);
+}
+.invRight {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	flex-shrink: 0;
+}
+.formGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.5rem;
+}
+@media (max-width: 880px) {
+	.formGrid {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+/* ── Gold ───────────────────────────────────────────────── */
+.goldRow {
+	display: flex;
+	gap: 1.25rem;
+	flex-wrap: wrap;
+}
+.goldUnit {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+}
+.goldVal {
+	font-family: var(--mono), monospace;
+	font-size: 22px;
+	color: var(--gold-2);
+}
+.goldStepper {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.goldLabel {
+	font-size: 10px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink-dim);
+}

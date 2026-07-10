@@ -1,13 +1,12 @@
 import React from "react";
-import { BoxSection } from "./BoxSection";
 import { deleteCharacter } from "../utilities/deleteCharacter";
-import { Popup } from "./Popup";
+import { Popup } from "./Popup/Popup";
 export const DeletePopup = ({
   deleteID,
   setDeleteID,
   setIsDeleted,
   setIsDelete,
-  toggle,
+  toggle
 }: {
   deleteID: string;
   setDeleteID: React.Dispatch<React.SetStateAction<string>>;
@@ -15,7 +14,8 @@ export const DeletePopup = ({
   setIsDelete: React.Dispatch<React.SetStateAction<boolean>>;
   toggle?: boolean;
 }) => {
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (e: React.FormEvent, id: string) => {
+    e.preventDefault()
     await deleteCharacter(id);
     setIsDeleted(true);
     setIsDelete(false);
@@ -28,20 +28,20 @@ export const DeletePopup = ({
     setDeleteID("");
   };
 
-  // const MotionBoxSection = motion(BoxSection);
+  // const MotionFrame = motion(Frame);
   return (
     <Popup closerFunc={setIsDelete} toggle={toggle}>
-      <BoxSection styles={`h-min px-10 py-16 flex flex-col gap-5`}>
+      <form className="frame form column-direction" onSubmit={(e) => handleDelete(e, deleteID)}>
         <p>Are you sure you want to continue?</p>
-        <div className="flex items-center justify-center gap-20">
-          <button type="button" className="btn btn-secondary" onClick={() => handleDelete(deleteID)}>
+        <div className="side-by-side">
+          <button type="submit" className="button button-primary ">
             Yes
           </button>
-          <button type="button" className="btn btn-primary" onClick={handleCancel}>
+          <button type="button" className="button button-secondary " onClick={handleCancel}>
             Cancel
           </button>
         </div>
-      </BoxSection>
+      </form>
     </Popup>
   );
 };

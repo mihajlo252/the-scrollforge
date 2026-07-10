@@ -1,0 +1,357 @@
+.wrap {
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	gap: 1.5rem;
+	min-height: 0;
+	/* Fill the fixed-size wizard frame (sized in CreateCharacter) so the layout
+	 *  stays put between steps; the step body scrolls internally instead. */
+	height: 100%;
+	width: 100%;
+}
+
+
+/* ── Stepper rail ───────────────────────────────────────── */
+.rail {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+.step {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.55rem 0.7rem;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--ink-dim);
+	cursor: pointer;
+	text-align: left;
+	transition: background 0.12s ease, color 0.12s ease;
+}
+.step:hover {
+	color: var(--text);
+}
+.step[data-active="true"] {
+	background: rgba(201, 162, 74, 0.1);
+	border-color: var(--gold-deep);
+	color: var(--gold-2);
+}
+.stepIndex {
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1.5px solid var(--rule-2);
+	font-family: var(--mono), monospace;
+	font-size: 12px;
+}
+.step[data-done="true"] .stepIndex {
+	background: var(--gold);
+	border-color: var(--gold);
+	color: #1a1a1a;
+}
+.stepLabel {
+	font-size: 0.85rem;
+	letter-spacing: 0.02em;
+}
+
+/* ── Panel ──────────────────────────────────────────────── */
+.panel {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	min-width: 0;
+	min-height: 0;
+}
+.panelHead {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+.panelTitle {
+	font-family: var(--display), serif;
+	font-size: 1.6rem;
+	color: var(--text);
+}
+.panelHint {
+	font-size: 0.85rem;
+	color: var(--ink-dim);
+}
+.body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	padding-right: 4px;
+}
+
+/* Labelled field wrapper (label stacked above its control). */
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+.field > span {
+	margin-top: 0;
+}
+
+/* ── Domain card level groups ───────────────────────────── */
+.cardLevelGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+/* ── Picks + details side panel ─────────────────────────── */
+.pickLayout {
+	display: grid;
+	grid-template-columns: 1fr minmax(230px, 300px);
+	gap: 1rem;
+	align-items: start;
+}
+@media (max-width: 760px) {
+	.pickLayout {
+		grid-template-columns: 1fr;
+	}
+}
+.picks {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+	min-width: 0;
+}
+.details {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	border: 1px solid var(--rule);
+	border-radius: 8px;
+	background: var(--bg-2);
+	padding: 0.85rem;
+}
+.detailTitle {
+	font-family: var(--display), serif;
+	font-size: 1.2rem;
+	color: var(--gold-2);
+	line-height: 1.1;
+}
+.detailMeta {
+	font-size: 11px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--ink-dim);
+}
+.detailText {
+	font-size: 0.82rem;
+	line-height: 1.5;
+	color: var(--ink-dim);
+	white-space: pre-wrap;
+	margin: 0;
+}
+.detailSection {
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--gold-deep);
+	margin-top: 0.35rem;
+	padding-top: 0.4rem;
+	border-top: 1px solid var(--rule);
+}
+.detailFeat {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+.detailFeatName {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--text);
+}
+.detailFeatText {
+	font-size: 0.78rem;
+	line-height: 1.45;
+	color: var(--ink-dim);
+	white-space: pre-wrap;
+}
+
+/* ── Gear preview (equipment step) ──────────────────────── */
+.gearPreview {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+	padding: 0.6rem 0.75rem;
+}
+.gearPreviewHead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+.gearPreviewName {
+	font-family: var(--display), serif;
+	font-size: 1.05rem;
+}
+.gearPreviewMeta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+}
+.gearPreviewFeat {
+	font-size: 0.8rem;
+	line-height: 1.4;
+	color: var(--ink-dim);
+	white-space: pre-wrap;
+}
+
+/* ── Selectable pick cards ──────────────────────────────── */
+.pickGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 0.6rem;
+}
+.pick {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	padding: 0.75rem;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+	cursor: pointer;
+	text-align: left;
+	transition: border-color 0.12s ease, background 0.12s ease;
+}
+.pick:hover {
+	border-color: var(--gold-deep);
+}
+.pick[data-active="true"] {
+	border-color: var(--gold);
+	background: rgba(201, 162, 74, 0.1);
+}
+.pickName {
+	font-family: var(--display), serif;
+	font-size: 1.1rem;
+	color: var(--text);
+}
+.pickMeta {
+	font-size: 11px;
+	color: var(--ink-dim);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+}
+
+/* ── Trait assignment ───────────────────────────────────── */
+.traitAssign {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.6rem;
+}
+@media (max-width: 640px) {
+	.traitAssign {
+		grid-template-columns: 1fr;
+	}
+}
+.traitAssignRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.6rem;
+	padding: 0.6rem 0.75rem;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+}
+.traitAssignRow[data-spellcast="true"] {
+	border-color: var(--gold-deep);
+}
+.traitAssignName {
+	font-size: 0.9rem;
+}
+.poolNote {
+	font-size: 0.8rem;
+	color: var(--ink-faint);
+}
+.formGrid2 {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.5rem;
+}
+@media (max-width: 560px) {
+	.formGrid2 {
+		grid-template-columns: 1fr;
+	}
+	.panelTitle {
+		font-size: 1.35rem;
+	}
+}
+.fieldLabel {
+	font-size: 11px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--gold-deep);
+	margin-top: 0.25rem;
+}
+
+/* ── Footer nav ─────────────────────────────────────────── */
+.nav {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-top: auto;
+	padding-top: 1rem;
+	border-top: 1px solid var(--rule);
+}
+.navSpacer {
+	flex: 1;
+}
+/* Mobile-only step indicator (the rail is hidden there). */
+.stepProgress {
+	display: none;
+	font-size: 0.8rem;
+	color: var(--ink-dim);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+@media (max-width: 820px) {
+	.wrap {
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr;
+		gap: 0;
+	}
+	/* No step rail on mobile — navigate with Back / Next only. */
+	.rail {
+		display: none;
+	}
+	.stepProgress {
+		display: inline;
+	}
+	/* Trim chrome so the scrolling content area gets the height. */
+	.panel {
+		gap: 0.6rem;
+	}
+	.panelHead {
+		gap: 0.1rem;
+	}
+	.panelTitle {
+		font-size: 1.25rem;
+	}
+	.body {
+		gap: 0.6rem;
+	}
+	.nav {
+		padding-top: 0.6rem;
+	}
+}

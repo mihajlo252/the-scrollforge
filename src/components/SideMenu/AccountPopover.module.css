@@ -1,0 +1,37 @@
+.accountPopoverWrapper {
+    position: absolute;
+    isolation: isolate;
+    position-anchor: --accountButton;
+    top: calc(anchor(bottom) - 1rem);
+    right: calc(anchor(left) - 1rem);
+    z-index: 50;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 5px;
+    width: max-content;
+    height: max-content;
+    /* background-color: hsla(from var(--background) h s calc(l + 2) / .9); */
+}
+
+.backdrop {
+    position: absolute;
+    inset: 0;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+}
+
+.accountPopover {
+    --_padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: max-content;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    box-shadow: var(--shadow-2);
+} 

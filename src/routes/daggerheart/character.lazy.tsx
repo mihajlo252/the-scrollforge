@@ -1,87 +1,289 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-
 import { motion } from "framer-motion";
-import { BoxSection } from "../../components/BoxSection";
+import { useState } from "react";
+import { Frame } from "../../components/Frame/Frame";
 import { Load } from "../../components/Load";
-import { DiceBoxComponent } from "../../sections/DiceBox";
-import { useEffect, useState } from "react";
-import { sendData } from "../../utilities/sendData";
-import { Popup } from "../../components/Popup";
+import { Popup } from "../../components/Popup/Popup";
+import { Icon } from "../../components/Primitives";
 import { Notes } from "../../sections/Notes";
-import { CharacterProfile } from "../../sections/Daggerheart/CharacterProfile/CharacterProfile";
-// import ClassesData from "../../daggerheart-config/classes_cleaned.json"
-// import SubclassesData from "../../daggerheart-config/subclasses_clean.json"
-// import CommunitiesData from "../../daggerheart-config/communities_clean.json"
-// import AncestriesData from "../../daggerheart-config/ancestries_clean.json"
+import { DiceBoxComponent } from "../../sections/DiceBox";
+import { SheetTabs } from "../../sections/Daggerheart/CharacterProfile/SheetTabs";
+import { SheetTopbar } from "../../sections/Daggerheart/CharacterProfile/SheetTopbar";
+import { LevelUpModal } from "../../sections/Daggerheart/CharacterProfile/LevelUpModal";
+import { BoxTrack, HPTrack, DHTraitTile } from "../../sections/Daggerheart/CharacterProfile/Trackers";
+import { TRAIT_NAMES, getClass, getSpellcastTrait, flattenDescription, defaultVitals, defaultTraits, gearModifiers, formatGearMods } from "../../utilities/daggerheart";
+import { patchCharacter } from "../../utilities/patchCharacter";
+import { queueCharacterSave } from "../../utilities/autosaveCharacter";
+import gate from "./character.module.css";
+import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/daggerheart/character")({
-  component: Character,
+  component: Vitals,
 });
 
-function Character() {
-  const dev = import.meta.env.VITE_DEV_MODE
-  
-  if (dev === "false") {
-    return (
-      <BoxSection styles="w-full h-full flex flex-col justify-center items-center">
-        <h1 className="text-primary text-4xl">Currently unavailable. Please check back later!</h1>
-      </BoxSection>
-    )
-  }
+const GOLD_UNITS: { key: keyof DHGold; label: string }[] = [
+  { key: "handfuls", label: "Handfuls" },
+  { key: "bags", label: "Bags" },
+  { key: "chest", label: "Chest" },
+];
+
+const WeaponMini = ({ weapon, slot }: { weapon: DHWeapon | null | undefined; slot: string }) => (
+  <div className={styles.weaponMini}>
+    <div className={styles.weaponMiniHead}>
+      <span className="caps" style={{ fontSize: 9 }}>{slot}</span>
+      {weapon && <span className="mono" style={{ color: "var(--gold-2)", fontSize: 13 }}>{weapon.damage}</span>}
+    </div>
+    {weapon ? (
+      <>
+        <div className={styles.weaponMiniName}>{weapon.name}</div>
+        <div className={styles.weaponMiniMeta}>
+          <span className="chip">{weapon.trait}</span>
+          <span className="chip">{weapon.range}</span>
+          {weapon.burden && <span className="chip">{weapon.burden}</span>}
+        </div>
+      </>
+    ) : (
+      <span className={styles.empty}>No weapon equipped</span>
+    )}
+  </div>
+);
+
+function Vitals() {
+  const dev = import.meta.env.VITE_DEV_MODE;
 
   const { state } = JSON.parse(localStorage.getItem("character") ?? "{}");
-  const [statChange, setStatChange] = useState(false);
-  const [isSave, setIsSave] = useState(false);
+  const character: DaggerheartCharacter | undefined = state?.character;
+
   const [toggleNotes, setToggleNotes] = useState(false);
   const [toggleDice, setToggleDice] = useState(false);
+  const [toggleLevelUp, setToggleLevelUp] = useState(false);
+  const [levelUpTarget, setLevelUpTarget] = useState<number | undefined>(undefined);
+  const openLevelUp = (target?: number) => {
+    setLevelUpTarget(target);
+    setToggleLevelUp(true);
+  };
+  const [vitals, setVitals] = useState<DHVitals>(
+    () => character?.dhVitals ?? defaultVitals(character?.characterProfile?.class, character?.characterProfile?.level ?? 1),
+  );
+  const [gold, setGold] = useState<DHGold>(() => character?.dhGold ?? { handfuls: 0, bags: 0, chest: 0 });
 
-  if (!state.character) {
-    return <Load />;
+  if (dev === "false") {
+    return (
+      <Frame classes={gate.unavailable}>
+        <h1 className="text-content text-primary">Currently unavailable. Please check back later!</h1>
+      </Frame>
+    );
   }
 
-  const handleSaveCharacter = async (stats: Stats) => {
-    await sendData("characters", state.character.id, { stats: { ...stats }, characterProfile: { ...state.character.characterProfile } });
-    setIsSave(false);
+  if (!character) return <Load />;
+
+  const profile = character.characterProfile;
+  const traits = character.dhTraits ?? defaultTraits();
+  const cls = getClass(profile.class);
+  const spellTrait = getSpellcastTrait(profile.subclass);
+
+  // Equipped-gear modifiers (e.g. Full Plate's "-2 to Evasion; -1 to Agility")
+  // are layered on top of the stored base stats at display time.
+  const gear = gearModifiers(character.dhWeapons, character.dhArmor);
+  const gearTraitHint = formatGearMods({ ...gear, evasion: 0, armorScore: 0, thresholds: { major: 0, severe: 0 } });
+  const gearVitalsHint = formatGearMods({ ...gear, traits: {} });
+  const armorSlotTotal = Math.max(0, vitals.armorSlots.total + gear.armorScore);
+
+  const persistVitals = (next: DHVitals) => {
+    setVitals(next);
+    patchCharacter(state, { dhVitals: next });
+    queueCharacterSave(character.id, { dhVitals: next });
+  };
+  const persistGold = (next: DHGold) => {
+    setGold(next);
+    patchCharacter(state, { dhGold: next });
+    queueCharacterSave(character.id, { dhGold: next });
   };
 
-  useEffect(() => {
-    setStatChange(false);
-    if (statChange) setIsSave(true);
-  }, [statChange]);
+  const stepGold = (key: keyof DHGold, delta: number) =>
+    persistGold({ ...gold, [key]: Math.max(0, (gold[key] ?? 0) + delta) });
+
   return (
-    <motion.main className={`grid h-full w-full grid-rows-[.2fr_1fr] gap-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      {isSave && (
-        <button
-          className="btn btn-ghost absolute top-5 m-0 h-min min-h-0 place-self-center border-2 border-accent px-4 py-2 text-accent hover:border-accent hover:bg-accent hover:text-base-100 active:-translate-x-1/2"
-          onClick={() => handleSaveCharacter(state.character.stats)}
-        >
-          Save Character
-        </button>
+    <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={styles.page}>
+      <SheetTabs active="vitals" />
+      <SheetTopbar character={character} onNotes={() => setToggleNotes(true)} onRoll={() => setToggleDice(true)} onLevelUp={openLevelUp} />
+
+      {/* Traits */}
+      <Frame classes="card">
+        <div className="card-hdr">
+          <div className="card-title">Traits</div>
+          <span className="caps" style={{ fontSize: 11, color: "var(--ink-faint)" }}>✦ marks Spellcast trait</span>
+        </div>
+        <div className="card-body">
+          <div className={styles.traitRow}>
+            {TRAIT_NAMES.map((t) => (
+              <DHTraitTile key={t} name={t} value={(traits[t] ?? 0) + (gear.traits[t] ?? 0)} spellcast={!!spellTrait && spellTrait.toUpperCase() === t.toUpperCase()} />
+            ))}
+          </div>
+          {gearTraitHint && <span className={styles.subHint}>Includes gear: {gearTraitHint}</span>}
+        </div>
+      </Frame>
+
+      <div className={styles.vitalsGrid}>
+        {/* Vitals card */}
+        <Frame classes="card">
+          <div className="card-hdr">
+            <div className="card-title">Vitals</div>
+            <span className="chip chip-gold">Proficiency {vitals.proficiency}</span>
+          </div>
+          <div className="card-body">
+            <div className={styles.section}>
+              <div className={styles.statRow}>
+                <div className={styles.bigStat}>
+                  <span className={styles.bigStatVal}>{vitals.evasion + gear.evasion}</span>
+                  <span className={styles.bigStatLabel}>Evasion</span>
+                </div>
+                <div className={styles.statRowLabel} style={{ alignItems: "flex-end" }}>
+                  <span className={styles.subLabel}>Armor Score</span>
+                  <span className={styles.monoVal}>{vitals.armorScore + gear.armorScore}</span>
+                </div>
+              </div>
+              {gearVitalsHint && <span className={styles.subHint}>Includes gear: {gearVitalsHint}</span>}
+
+              <div className={styles.divider} />
+
+              <div className={styles.statRow}>
+                <div className={styles.statRowLabel}>
+                  <span className={styles.subLabel}>Armor Slots</span>
+                  <span className={styles.subHint}>{Math.min(vitals.armorSlots.marked, armorSlotTotal)}/{armorSlotTotal} marked</span>
+                </div>
+                <BoxTrack
+                  total={armorSlotTotal}
+                  marked={Math.min(vitals.armorSlots.marked, armorSlotTotal)}
+                  color="var(--arcane)"
+                  onChange={(m) => persistVitals({ ...vitals, armorSlots: { ...vitals.armorSlots, marked: m } })}
+                />
+              </div>
+
+              <div className={styles.divider} />
+
+              <div className={styles.statRowLabel}>
+                <span className={styles.subLabel}>Hit Points · {vitals.hp.marked}/{vitals.hp.total} remaining</span>
+                <HPTrack
+                  hp={{ ...vitals.hp, major: vitals.hp.major + gear.thresholds.major, severe: vitals.hp.severe + gear.thresholds.severe }}
+                  onChange={(m) => persistVitals({ ...vitals, hp: { ...vitals.hp, marked: m } })}
+                />
+              </div>
+
+              <div className={styles.divider} />
+
+              <div className={styles.statRow}>
+                <div className={styles.statRowLabel}>
+                  <span className={styles.subLabel}>Stress</span>
+                  <span className={styles.subHint}>{vitals.stress.marked}/{vitals.stress.total} marked</span>
+                </div>
+                <BoxTrack
+                  total={vitals.stress.total}
+                  marked={vitals.stress.marked}
+                  color="var(--ember)"
+                  onChange={(m) => persistVitals({ ...vitals, stress: { ...vitals.stress, marked: m } })}
+                />
+              </div>
+            </div>
+          </div>
+        </Frame>
+
+        {/* Hope card */}
+        <Frame classes="card">
+          <div className="card-hdr">
+            <div className="card-title">Hope</div>
+            <span className="mono" style={{ color: "var(--gold-2)" }}>{vitals.hope.marked}/{vitals.hope.total}</span>
+          </div>
+          <div className="card-body">
+            <div className={styles.section}>
+              <BoxTrack
+                total={vitals.hope.total}
+                marked={vitals.hope.marked}
+                shape="circle"
+                color="var(--gold)"
+                onChange={(m) => persistVitals({ ...vitals, hope: { ...vitals.hope, marked: m } })}
+              />
+              {cls?.hopeFeature && (
+                <div className={styles.featureBox}>
+                  <div className={styles.featureName}>{cls.hopeFeature.name}</div>
+                  <div className={styles.featureText}>{flattenDescription(cls.hopeFeature.description)}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        </Frame>
+      </div>
+
+      {/* Class features */}
+      {(cls?.classFeatures?.length ?? 0) > 0 && (
+        <Frame classes="card">
+          <div className="card-hdr">
+            <div className="card-title">Class Features</div>
+            <span className="caps" style={{ fontSize: 11, color: "var(--ink-faint)" }}>{cls?.name}</span>
+          </div>
+          <div className="card-body">
+            <div className={styles.featGrid}>
+              {(cls?.classFeatures ?? []).map((f) => (
+                <div key={f.name} className={styles.featureBox}>
+                  <div className={styles.featureName}>{f.name}</div>
+                  <div className={styles.featureText}>{flattenDescription(f.description)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Frame>
       )}
-      <section className={`flex gap-5`}>
-        <CharacterProfile setStatChange={setStatChange} />
-        <BoxSection styles="w-[10%] flex flex-col justify-start">
-          <nav className="flex flex-col gap-3 p-3">
-            <button onClick={() => setToggleNotes(true)} className="btn btn-primary">
-              Notes
-            </button>
-            <button className="btn btn-primary" onClick={() => setToggleDice(true)}>
-              Dice
-            </button>
-          </nav>
-        </BoxSection>
-      </section>
-      {/* <BoxSection styles="w-[20%] flex justify-around items-center p-5">
-        <DiceBoxComponent />
-      </BoxSection> */}
+
+      <div className={styles.lowerGrid}>
+        {/* Active weapons */}
+        <Frame classes="card">
+          <div className="card-hdr">
+            <div className="card-title">Active Weapons</div>
+          </div>
+          <div className="card-body">
+            <div className={styles.weaponStrip}>
+              <WeaponMini weapon={character.dhWeapons?.primary} slot="Primary" />
+              <WeaponMini weapon={character.dhWeapons?.secondary} slot="Secondary" />
+            </div>
+          </div>
+        </Frame>
+
+        {/* Gold */}
+        <Frame classes="card">
+          <div className="card-hdr">
+            <div className="card-title">Gold</div>
+          </div>
+          <div className="card-body">
+            <div className={styles.goldRow}>
+              {GOLD_UNITS.map(({ key, label }) => (
+                <div key={key} className={styles.goldUnit}>
+                  <span className={styles.goldVal}>{gold[key] ?? 0}</span>
+                  <div className={styles.goldStepper}>
+                    <button type="button" className="sf-icon-btn" onClick={() => stepGold(key, -1)} aria-label={`Decrease ${label}`}>
+                      <Icon name="back" size={13} />
+                    </button>
+                    <button type="button" className="sf-icon-btn" onClick={() => stepGold(key, 1)} aria-label={`Increase ${label}`}>
+                      <Icon name="plus" size={13} />
+                    </button>
+                  </div>
+                  <span className={styles.goldLabel}>{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Frame>
+      </div>
+
+      <LevelUpModal character={character} state={state} toggle={toggleLevelUp} targetLevel={levelUpTarget} onClose={() => setToggleLevelUp(false)} />
+
       <Popup closerFunc={setToggleNotes} toggle={toggleNotes}>
         <Notes />
       </Popup>
       <Popup closerFunc={setToggleDice} toggle={toggleDice}>
-        <BoxSection styles="w-[20%] flex justify-around items-center p-5">
+        <Frame classes="column-direction">
           <DiceBoxComponent />
-        </BoxSection>
+        </Frame>
       </Popup>
-    </motion.main>
+    </motion.section>
   );
 }

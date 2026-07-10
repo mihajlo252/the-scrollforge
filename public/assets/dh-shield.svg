@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="512" height="512" viewBox="292.5 73.5 512 512">
+<g id="document" fill="#" fill-rule="nonzero" font-family="none" font-weight="none" font-size="none">
+  <rect x="292.5" y="73.5" width="512" height="512" id="Shape-1-1"/>
+</g>
+<g fill="none" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" font-family="none" font-weight="none" font-size="none">
+  <g id="stage">
+    <g id="layer1-1">
+      <path d="M301.60313,336.81234" id="Path-1" stroke-width="1"/>
+      <path d="M337.6427,158.05276c0,0 96.33283,43.90897 210.8573,-69.74115c114.52446,113.65014 210.8573,69.74115 210.8573,69.74115c33.38465,305.34796 -204.81469,411.10344 -209.43109,413.40471c-0.09809,0.0489 -0.03944,0.06093 -0.20597,-0.03684c-6.04474,-3.5491 -245.4622,-108.01989 -212.07754,-413.36787z" id="Path-7824-1" stroke-width="15"/>
+      <path d="M770.17625,281.80751" id="Path-1-1" stroke-width="1"/>
+      <path d="M362.26355,189.33849c0,0 85.08139,36.59048 186.22971,-58.11708c101.14832,94.70759 186.22971,58.11708 186.22971,58.11708c29.48541,254.4543 -180.89287,342.58305 -184.97008,344.50077c-0.08664,0.04076 -0.03484,0.05079 -0.18192,-0.0307c-5.33872,-2.95756 -216.79285,-90.01574 -187.30744,-344.47006z" id="Path-264-1" stroke-width="5"/>
+    </g>
+  </g>
+</g>
+</svg>

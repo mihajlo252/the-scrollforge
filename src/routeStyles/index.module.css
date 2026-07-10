@@ -1,0 +1,42 @@
+.landingPage {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+	column-gap: 5rem;
+	row-gap: 2rem;
+	place-content: center;
+}
+
+.landingHeroSection {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2rem;
+}
+@media (max-width: 911px) {
+	.landingHeroSection {
+		text-align: center;
+	}
+}
+
+.formBox {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	position: relative;
+	width: 100%;
+	max-width: 520px;
+	justify-self: center;
+	padding: 2.75rem 3rem;
+}
+
+.createAccountOverlay {
+	position: absolute;
+	inset: 0;
+	background: hsla(from var(--background) h s l / 0.9);
+	padding: 1.5rem 1.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	text-align: center;
+}
