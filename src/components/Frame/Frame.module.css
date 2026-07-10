@@ -1,0 +1,16 @@
+.hoverableCard {
+	gap: 1rem;
+	cursor: pointer;
+	transition:
+		border-color 0.15s cubic-bezier(0.1, 0.7, 0.1, 1),
+		background 0.15s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+.hoverableCard:hover,
+.hoverableCard:focus-visible {
+	border-color: var(--gold);
+	background: linear-gradient(180deg, var(--panel-2), var(--bg-3));
+}
+
+.hoverableCard:focus-visible {
+	outline: 0;
+}

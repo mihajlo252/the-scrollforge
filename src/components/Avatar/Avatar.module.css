@@ -1,0 +1,72 @@
+.avatar {
+	--_transition-duration: 0.7s;
+	--_img-width: clamp(20px, 10vw, 5rem);
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: var(--_img-width);
+	isolation: isolate;
+
+	> * {
+		grid-area: 1 / 1;
+	}
+	.imageContainer {
+		--_border-image-slice: 15%;
+		--_border-image-width: 15px;
+		display: flex;
+		background-color: hsl(from var(--accent) h s l / 0.2);
+		color: var(--primary);
+		width: var(--_img-width);
+		aspect-ratio: 1;
+		justify-content: center;
+		align-items: center;
+		pointer-events: none;
+		/* overflow: hidden; */
+		/* border-radius: 1rem; */
+		border: 1px solid hsl(from var(--primary) h s calc(l - 40) / 1);
+		/* corner-shape: superellipse(2); */
+		position: relative;
+
+		&.dnd::after {
+			content: "";
+			position: absolute;
+			inset: -1.5px;
+			top: -0.5rem;
+			z-index: 99;
+			border-image: url("/avatar-border-dnd.png");
+
+			border-image-slice: var(--_border-image-slice);
+			border-image-width: var(--_border-image-width);
+		}
+		&.dh::after {
+			content: "";
+			position: absolute;
+			inset: -1.5px;
+			top: -0.5rem;
+			z-index: 99;
+			border-image: url("/avatar-border-daggerheart.png");
+
+			border-image-slice: var(--_border-image-slice);
+			border-image-width: var(--_border-image-width);
+		}
+	}
+	img {
+		width: 100%;
+	}
+	button {
+		position: absolute;
+		inset: 1px;
+		background: hsla(from var(--background) h s l / 0.6);
+		border: none;
+		opacity: 0;
+		color: var(--text);
+		box-shadow: none;
+		transition: opacity var(--_transition-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		border-radius: 1rem;
+		corner-shape: superellipse(2);
+	}
+	button:hover {
+		opacity: 1;
+		cursor: pointer;
+	}
+}

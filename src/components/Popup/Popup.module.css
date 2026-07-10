@@ -1,0 +1,40 @@
+.popupWrapper {
+    position: fixed;
+    isolation: isolate;
+    inset: 0;
+    top: 65px;
+    z-index: 50;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    /* Cap at the viewport so wide intrinsic content (e.g. a domain card's
+       pre-wrap text) can't stretch the wrapper past the screen and shove the
+       popup off to one side. 100% (not 100vw) avoids the scrollbar-width
+       horizontal-overflow gotcha. */
+    max-width: 100%;
+    margin-inline: auto;
+    justify-content: safe center;
+    overflow-y: auto;
+    gap: 5px;
+    padding-inline: 2.5rem;
+    padding-block: 1.25rem;
+    max-height: calc(100svh - 65px);
+    scrollbar-width: 0 !important;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    margin: 0;
+    padding: 0;
+}
+
+@media (max-width: 820px) {
+    .popupWrapper {
+        padding-inline: 0.75rem;
+        padding-block: 0.75rem;
+    }
+}

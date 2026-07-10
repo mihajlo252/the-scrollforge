@@ -1,0 +1,108 @@
+.filter {
+	width: max-content;
+}
+
+/* The greeting inherits the large title size otherwise — keep it small. */
+.greeting {
+	display: block;
+	font-size: 0.95rem;
+	line-height: 1.4;
+}
+
+@media (max-width: 1024px) {
+	.filter {
+		place-self: center;
+	}
+}
+
+.characterList {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 1.25rem;
+}
+
+.characterCard {
+	display: flex;
+}
+
+.characterCard > article {
+	flex: 1;
+	flex-direction: column;
+	padding: 0;
+	overflow: hidden;
+}
+
+.portrait {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 150px;
+	padding: 1.5rem;
+	cursor: pointer;
+	border-bottom: 1px solid var(--rule);
+	background:
+		radial-gradient(ellipse at 50% 30%, rgba(201, 162, 74, 0.08), transparent 60%),
+		linear-gradient(180deg, var(--bg-3), var(--panel));
+}
+
+.sysChip {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+}
+
+.cardBody {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1.125rem 1.25rem 1.25rem;
+}
+
+.cardHead {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.meta {
+	color: var(--ink-dim);
+	font-size: 0.85rem;
+	line-height: 1.4;
+}
+.metaSub {
+	color: var(--ink-faint);
+}
+
+.hpBlock {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+.hpRow {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+.actions {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 0.25rem;
+}
+.delete {
+	width: max-content;
+	aspect-ratio: 1;
+	padding: 0.5rem;
+}
+
+.characterPopup {
+	gap: 2rem;
+	flex-grow: 1;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}

@@ -1,0 +1,301 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	flex: 1;
+	position: relative;
+}
+
+.saveBtn {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 30;
+}
+
+.tabsRow {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* ── Topbar ─────────────────────────────────────────────── */
+.topbar {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: 1.25rem;
+	flex-wrap: wrap;
+}
+.avatar {
+	width: 64px;
+	height: 64px;
+	flex-shrink: 0;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: var(--display), serif;
+	font-size: 36px;
+	color: #fff;
+	border: 1px solid var(--gold-deep);
+	background: linear-gradient(135deg, #4a3a6b, #2a1f3e);
+}
+.name {
+	font-family: var(--display), serif;
+	font-size: 1.875rem;
+	line-height: 1;
+}
+.sub {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	color: var(--ink-dim);
+	font-size: 0.8125rem;
+	margin-top: 0.35rem;
+	.classRace {
+		display: flex;
+		gap: .2rem;
+	}
+}
+.identity {
+	flex: 1;
+	min-width: 0;
+}
+.levelInput {
+	width: 3.5ch;
+	text-align: center;
+	padding: 0.1rem 0.25rem;
+	color: var(--gold-2);
+}
+.spacer {
+	flex: 1;
+}
+.topActions {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+.vDivider {
+	width: 1px;
+	height: 40px;
+	background: var(--rule);
+}
+
+.topFrame {
+		--_padding: 1rem;
+	}
+
+@media (max-width: 640px) {
+	
+	.topbar {
+		gap: 0.85rem;
+	}
+	.avatar {
+		width: 52px;
+		height: 52px;
+		font-size: 28px;
+	}
+	.name {
+		font-size: 1.5rem;
+	}
+	.topActions {
+		flex-basis: 100%;
+	}
+	.topActions button {
+		flex: 1;
+	}
+	.vDivider {
+		display: none;
+	}
+}
+
+/* ── Card grid rows ─────────────────────────────────────── */
+.row3 {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+}
+.row2 {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+	> section:first-of-type {
+		grid-column: span 2;	
+	}
+}
+@media (max-width: 1024px) {
+	.row3,
+	.row2 {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+/* ── Vitals / HP card ───────────────────────────────────── */
+.hpTop {
+	display: flex;
+	align-items: flex-end;
+	gap: 14px;
+	margin-bottom: 12px;
+}
+.hpBig {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+}
+.hpCur {
+	font-family: var(--display), serif;
+	font-size: 60px;
+	line-height: 0.95;
+}
+.hpMax {
+	font-family: var(--display), serif;
+	font-size: 26px;
+	color: var(--ink-dim);
+}
+.hpMaxInput {
+	width: 4ch;
+	font-family: var(--display), serif;
+	font-size: 26px;
+	color: var(--ink-dim);
+	background: transparent;
+	border: 0;
+	border-bottom: 1px dashed var(--rule-2);
+	padding: 0;
+}
+.hpMaxInput:focus {
+	outline: none;
+	color: var(--gold-2);
+}
+.hpDelta {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+}
+.deltaInput {
+	width: 64px;
+	height: 40px;
+	text-align: center;
+}
+.minifields {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 14px;
+}
+.deathRow {
+	margin-top: 16px;
+	padding-top: 14px;
+	border-top: 1px solid var(--rule);
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+.deathGroup {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+.deathGroup > span {
+	font-size: 11px;
+	color: var(--ink-dim);
+}
+.deathDots {
+	display: inline-flex;
+	gap: 6px;
+}
+
+/* ── Abilities card ─────────────────────────────────────── */
+.abilGrid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+}
+
+/* ── Resources card ─────────────────────────────────────── */
+.resList {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.resHead {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+}
+.resName {
+	font-family: var(--display), serif;
+	font-size: 17px;
+}
+.resSub {
+	font-size: 11px;
+	color: var(--ink-faint);
+}
+.resCount {
+	font-family: var(--mono), monospace;
+	font-size: 13px;
+	color: var(--ink-dim);
+}
+
+/* ── Skills & Saves card ────────────────────────────────── */
+.legend {
+	display: flex;
+	gap: 8px;
+	font-size: 11px;
+	color: var(--ink-dim);
+}
+.legend > span {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.legendDot {
+	background-color: red;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+}
+.savesTitle {
+	margin: 0 0 0.5rem;
+	font-size: 11px;
+	letter-spacing: 0.08em;
+	color: var(--gold-deep);
+}
+.skillsGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+	margin-top: 1rem;
+}
+.skillCol {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+@media (max-width: 640px) {
+	.skillsGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ── Defenses card ──────────────────────────────────────── */
+.kvList {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.kv {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+}
+.kvVal {
+	font-family: var(--mono), monospace;
+	color: var(--gold-2);
+	font-size: 16px;
+}

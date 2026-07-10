@@ -1,0 +1,19 @@
+.form {
+	position: relative;
+	padding: 0;
+	width: 100%;
+	min-width: min(70vw, 640px);
+	min-height: 70vh;
+}
+.textarea {
+	height: 100%;
+	width: 100%;
+	min-height: 50vh;
+	resize: none;
+	overflow-y: auto;
+}
+.save {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+}

@@ -1,0 +1,737 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	flex: 1;
+	position: relative;
+}
+
+/* ── Drag-to-reorder ────────────────────────────────────── */
+.dragHandle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 22px;
+	align-self: stretch;
+	color: var(--ink-faint);
+	cursor: grab;
+	touch-action: none;
+	transition: color 0.15s ease;
+}
+.dragHandle:hover {
+	color: var(--gold);
+}
+.dragHandle:active {
+	cursor: grabbing;
+}
+/* Card row: handle + a Frame card (traits) */
+.reorderCard {
+	display: flex;
+	align-items: stretch;
+	gap: 6px;
+}
+.reorderCard > :last-child {
+	flex: 1;
+	min-width: 0;
+}
+.reorderCardGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+/* ── Shared add/edit form ───────────────────────────────── */
+.addForm {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: max-content;
+}
+.addFrame {
+	--_padding: 1.5rem;
+	flex-direction: column;
+	gap: 0.85rem;
+	align-items: stretch;
+}
+/* Inputs must be allowed to shrink (flex items default to min-width:auto,
+   which overflows the row), and never exceed the form width. */
+.addFrame :global(.input),
+.addFrame :global(.select),
+.addFrame :global(.textarea) {
+	width: 100%;
+	max-width: 100%;
+}
+.formRow {
+	display: flex;
+	gap: 0.75rem;
+}
+.formRow > * {
+	flex: 1 1 0;
+	min-width: 0;
+}
+@media (max-width: 480px) {
+	.formRow {
+		flex-direction: column;
+	}
+}
+.checkRow {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* ══ SPELLS ═════════════════════════════════════════════ */
+.castHeader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	flex-wrap: wrap;
+}
+.spellcasting {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-self: center;
+}
+.castInfo {
+	color: var(--ink-dim);
+	font-size: 13px;
+	margin-top: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+.castSelect {
+	width: 100%;
+	padding: 0.15rem 0.5rem;
+}
+.vdiv {
+	width: 1px;
+	height: 44px;
+	background: var(--rule);
+	@media (max-width: 767px) {
+		display: none;
+	}
+}
+.slotRail {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.slot {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 8px 14px;
+	background: rgba(0, 0, 0, 0.2);
+	border: 1px solid var(--rule);
+	border-radius: 4px;
+	cursor: pointer;
+	color: var(--ink-dim);
+	min-width: 84px;
+}
+.slot[data-active] {
+	border-color: var(--gold);
+	background: rgba(201, 162, 74, 0.12);
+}
+.spacer {
+	flex: 1;
+}
+
+/* The grid scrolls internally within its own bound, instead of Frame
+   growing past the viewport and pushing the footer buttons off the page. */
+.scrollArea {
+	max-height: 60vh;
+	overflow-y: auto;
+}
+.slotsPopup {
+	height: max-content;
+}
+.spellSlotsForm {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem 0.6rem;
+	padding: 2px;
+	:global(.caps) {
+		flex: 0 0 auto;
+	}
+	input {
+		flex: 1 1 auto;
+		width: 100%;
+		min-width: 3.5ch;
+	}
+	@media (max-width: 480px) {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+@media (max-width: 480px) {
+	.slotsPopup {
+		--_padding: 0.85rem;
+	}
+}
+
+.spellGrid {
+	margin-top: 1rem;
+	display: grid;
+	grid-template-columns: 340px 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+@media (max-width: 1024px) {
+	.spellGrid {
+		grid-template-columns: 1fr;
+	}
+}
+.spellListBody {
+	padding: 8px;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+.spellsTopActions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+.spellGroupLabel {
+	padding: 6px 10px;
+	color: var(--gold-deep);
+}
+.spellItem {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	background: transparent;
+	border: 0;
+	border-radius: 3px;
+	cursor: pointer;
+	color: var(--ink);
+	text-align: left;
+}
+.spellItem:hover {
+	background: rgba(201, 162, 74, 0.06);
+}
+.spellItem[data-active] {
+	background: rgba(201, 162, 74, 0.14);
+	box-shadow: inset 0 0 0 1px var(--gold-deep);
+}
+.spellItemBar {
+	width: 4px;
+	height: 28px;
+	border-radius: 2px;
+	flex-shrink: 0;
+}
+.spellItemName {
+	font-family: var(--display), serif;
+	font-size: 16px;
+}
+.spellItemSchool {
+	font-size: 11px;
+	color: var(--ink-faint);
+}
+
+.spellDetail {
+	padding: 20px 24px 24px;
+}
+.spellDetailEmpty {
+	padding: 3rem;
+	text-align: center;
+	color: var(--ink-dim);
+}
+.spellDetailHead {
+	border-bottom: 1px solid var(--rule);
+	padding-bottom: 16px;
+	margin-bottom: 16px;
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+.spellAvatar {
+	width: 64px;
+	height: 64px;
+	border-radius: 4px;
+	background: linear-gradient(135deg, var(--arcane), #3a326a);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	font-family: var(--display), serif;
+	font-size: 32px;
+	border: 1px solid var(--gold-deep);
+	flex-shrink: 0;
+}
+.spellTitleRow {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.spellTitle {
+	font-family: var(--display), serif;
+	font-size: 32px;
+	margin: 0;
+	color: var(--gold-2);
+	line-height: 1;
+}
+.spellSub {
+	color: var(--ink-dim);
+	margin-top: 4px;
+}
+.spellActions {
+	display: flex;
+	gap: 6px;
+	margin-left: auto;
+}
+.spellStatStrip {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 12px;
+	margin-bottom: 18px;
+}
+@media (max-width: 640px) {
+	.spellStatStrip {
+		grid-template-columns: 1fr 1fr;
+	}
+	/* Spells & Attacks detail header: avatar + title on one row,
+	   edit/delete actions on their own full-width row below. */
+	.spellDetail {
+		padding: 16px;
+	}
+	.spellDetailHead {
+		gap: 12px;
+	}
+	.spellAvatar {
+		width: 48px;
+		height: 48px;
+		font-size: 24px;
+	}
+	.spellTitle {
+		font-size: 24px;
+	}
+	.spellActions {
+		flex-basis: 100%;
+		margin-left: 0;
+		justify-content: flex-end;
+	}
+}
+.spellStat {
+	padding: 10px 12px;
+	background: rgba(0, 0, 0, 0.2);
+	border: 1px solid var(--rule);
+	border-radius: 3px;
+}
+.spellStatVal {
+	font-family: var(--display), serif;
+	font-size: 15px;
+	color: var(--ink);
+	line-height: 1.25;
+}
+.spellText {
+	font-size: 16px;
+	line-height: 1.7;
+	color: var(--ink);
+	white-space: pre-wrap;
+}
+
+/* ══ TRAITS ═════════════════════════════════════════════ */
+.traitsGrid {
+	display: grid;
+	grid-template-columns: 260px 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+@media (max-width: 1024px) {
+	.traitsGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.sidebar {
+	padding: 16px;
+	height: max-content;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0;
+}
+@media (min-width: 1025px) {
+	.sidebar {
+		position: sticky;
+		top: 0;
+	}
+}
+.searchWrap {
+	position: relative;
+	margin-bottom: 14px;
+}
+.searchIcon {
+	position: absolute;
+	left: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--ink-faint);
+	pointer-events: none;
+}
+.searchInput {
+	padding-left: 36px;
+	width: 100%;
+}
+.catList {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.catBtn {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 9px 12px;
+	background: transparent;
+	border: 1px solid transparent;
+	border-left: 2px solid transparent;
+	color: var(--ink-dim);
+	font-family: var(--body), serif;
+	font-size: 14px;
+	border-radius: 3px;
+	cursor: pointer;
+	text-align: left;
+}
+.catBtn:hover {
+	color: var(--text);
+	background: rgba(201, 162, 74, 0.06);
+}
+.catBtn[data-active] {
+	color: var(--gold-2);
+	background: linear-gradient(90deg, rgba(201, 162, 74, 0.15), transparent);
+	border-left-color: var(--gold);
+}
+.contentCol {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.contentHead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+.traitCard {
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0;
+	padding: 0;
+	align-items: center;
+}
+.traitCardHead {
+	padding: 14px 20px;
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	cursor: pointer;
+}
+.traitIcon {
+	flex-shrink: 0;
+	width: 38px;
+	height: 38px;
+	border-radius: 4px;
+	background: rgba(201, 162, 74, 0.1);
+	border: 1px solid var(--gold-deep);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--gold-2);
+}
+.traitTitleRow {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.traitName {
+	font-family: var(--display), serif;
+	font-size: 20px;
+	line-height: 1.1;
+}
+.traitSub {
+	color: var(--ink-faint);
+	font-size: 13px;
+}
+.traitBody {
+	padding: 0 20px 18px 20px;
+	color: var(--ink);
+	font-size: 15px;
+	line-height: 1.6;
+	white-space: pre-wrap;
+}
+.traitChevron {
+	margin-left: auto;
+	transition: transform 200ms ease;
+}
+.traitCardActions {
+	display: flex;
+	gap: 6px;
+	padding: 0 20px 16px 20px;
+}
+
+/* ══ INVENTORY ══════════════════════════════════════════ */
+.invGrid {
+	display: grid;
+	grid-template-columns: 320px 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+@media (max-width: 1024px) {
+	.invGrid {
+		display: flex;
+		flex-direction: column;
+	}
+}
+.invLeft {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.coinGrid {
+	padding: 16px;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 8px;
+}
+.coin {
+	text-align: center;
+	padding: 10px 4px;
+	background: rgba(0, 0, 0, 0.2);
+	border: 1px solid var(--rule);
+	border-radius: 3px;
+}
+.coinDot {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	margin: 0 auto 4px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.coinInput {
+	width: 100%;
+	text-align: center;
+	background: transparent;
+	border: 0;
+	padding: 0;
+	font-family: var(--mono), monospace;
+	font-size: 14px;
+	color: var(--ink);
+}
+.coinInput:focus {
+	outline: none;
+	color: var(--gold-2);
+}
+.encBody {
+	padding: 16px;
+}
+.encNote {
+	margin-top: 8px;
+	font-size: 12px;
+	color: var(--ink-faint);
+}
+.equippedList {
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.equippedRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	background: rgba(201, 162, 74, 0.06);
+	border: 1px solid var(--rule);
+	border-radius: 3px;
+}
+.equippedName {
+	font-family: var(--display), serif;
+	font-size: 14px;
+}
+.equippedSub {
+	font-size: 11px;
+	color: var(--ink-faint);
+}
+.invToolbar {
+	padding: 14px;
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid var(--rule);
+	@media (max-width: 767px) {
+		flex-wrap: wrap;
+	}
+}
+.invHeadRow {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	padding: 10px 16px;
+	color: var(--ink-faint);
+	font-size: 10px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	border-bottom: 1px solid var(--rule);
+}
+.invRow {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	align-items: center;
+	padding: 12px 16px;
+	border-bottom: 1px solid var(--rule);
+	transition: background 120ms ease;
+
+	> div:last-of-type {
+		grid-column: span 2;
+		order: 7;
+	}
+	button {
+		place-self: end;
+	}
+}
+.invItemInfo {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	@media (max-width: 767px) {
+		/* display: flex; */
+		justify-content: space-between;
+		.right {
+			text-align: center;
+		}
+		/* .type, .weight {
+			display: none;
+		} */
+	}
+}
+.invRow:hover {
+	background: rgba(201, 162, 74, 0.06);
+}
+.invItemName {
+	font-family: var(--display), serif;
+	font-size: 16px;
+	color: var(--ink);
+}
+.invItemSub {
+	font-size: 15px;
+	color: var(--ink-faint);
+}
+.invItemMain {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+}
+.equippedTag {
+	font-size: 10px;
+	color: var(--gold-deep);
+	margin-left: 6px;
+	letter-spacing: 0.12em;
+}
+.rarityDot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+.right {
+	text-align: right;
+}
+.alignList {
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0;
+	padding: 0;
+}
+
+/* ══ ATTACKS ════════════════════════════════════════════ */
+/* Reuses the spell master-detail families (spellGrid / spellItem* /
+   spellDetail* / spellStatStrip). Only the avatar tint differs. */
+.attackAvatar {
+	background: linear-gradient(135deg, var(--ember), #5a1c10);
+}
+.attackEmpty {
+	padding: 2rem;
+	text-align: center;
+	color: var(--ink-dim);
+}
+
+/* ══ INSPIRATION ════════════════════════════════════════ */
+.inspGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	gap: 1rem;
+	align-items: stretch;
+}
+.inspCard {
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 0.6rem;
+	padding: 20px 16px;
+}
+.inspCardSpecial {
+	box-shadow: inset 0 0 0 1px var(--gold-deep);
+	background: linear-gradient(180deg, rgba(201, 162, 74, 0.08), transparent);
+}
+.inspGem {
+	height: 4.5rem;
+	width: 4.5rem;
+	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+.inspName {
+	font-family: var(--display), serif;
+	font-size: 18px;
+	letter-spacing: 0.04em;
+	text-transform: capitalize;
+}
+.inspCount {
+	font-family: var(--mono), monospace;
+	font-size: 2.5rem;
+	line-height: 1;
+	color: var(--gold-2);
+}
+.inspDesc {
+	font-size: 13px;
+	color: var(--ink-dim);
+	line-height: 1.5;
+	flex: 1;
+}
+.inspCounter {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	margin-top: 4px;
+}
+.inspStepper {
+	width: 34px;
+	height: 34px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	padding: 0;
+}
+.inspCost {
+	font-size: 11px;
+	color: var(--ink-faint);
+}

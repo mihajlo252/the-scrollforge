@@ -1,0 +1,148 @@
+/* ── Box / circle tracks (Stress, Hope, Armor Slots, HP) ─── */
+.track {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+.box {
+	width: 22px;
+	height: 22px;
+	border: 1.5px solid var(--rule-2);
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+	padding: 0;
+	transition:
+		background 0.1s ease,
+		border-color 0.1s ease;
+}
+.box:hover {
+	border-color: var(--gold-deep);
+}
+.box[data-shape="circle"] {
+	border-radius: 50%;
+}
+.box[data-filled] {
+	background: var(--_fill, var(--gold));
+	border-color: var(--_fill, var(--gold));
+}
+
+/* ── HP track + thresholds ──────────────────────────────── */
+.hpWrap {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.thresholds {
+	display: flex;
+	align-items: stretch;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+.dmgZone {
+	flex: 1 1 0;
+	min-width: 58px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 5px 8px;
+	border: 1px solid var(--rule);
+	border-radius: 4px;
+	background: var(--bg-2);
+}
+.dmgZone[data-tone="minor"] {
+	border-color: var(--rule-2);
+}
+.dmgZone[data-tone="major"] {
+	border-color: var(--gold-deep);
+}
+.dmgZone[data-tone="severe"] {
+	border-color: #6a2a18;
+}
+.dmgZoneLabel {
+	font-size: 9px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+}
+.dmgZoneMarks {
+	font-family: var(--mono), monospace;
+	font-size: 12px;
+	color: var(--ink-dim);
+}
+/* Threshold coin sits between two damage zones, showing the trigger value. */
+.threshCoin {
+	flex: 0 0 auto;
+	align-self: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1px;
+	min-width: 40px;
+	padding: 3px 6px;
+	border: 1.5px solid var(--gold-deep);
+	border-radius: 999px;
+	background: rgba(201, 162, 74, 0.1);
+}
+.threshCoinVal {
+	font-family: var(--mono), monospace;
+	font-size: 15px;
+	color: var(--gold-2);
+	line-height: 1;
+}
+.threshCoinLabel {
+	font-size: 8px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+}
+.threshFootnote {
+	font-size: 9px;
+	color: var(--ink-faint);
+}
+
+/* ── Trait tile ─────────────────────────────────────────── */
+.traitRow {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 10px;
+}
+.traitTile {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 12px 6px;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+	text-align: center;
+}
+.traitTile[data-spellcast] {
+	border-color: var(--gold-deep);
+	background: rgba(201, 162, 74, 0.08);
+}
+.traitName {
+	font-size: 10px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink-dim);
+}
+.traitVal {
+	font-family: var(--display), serif;
+	font-size: 28px;
+	line-height: 1;
+	color: var(--text);
+}
+.traitStar {
+	font-size: 9px;
+	color: var(--gold-2);
+	letter-spacing: 0.04em;
+}
+
+@media (max-width: 640px) {
+	.traitRow {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

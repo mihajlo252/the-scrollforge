@@ -1,10 +1,13 @@
 import { useState } from "react";
 
 import DiceBox from "@3d-dice/dice-box";
-import { Popup } from "../components/Popup";
+import { Popup } from "../components/Popup/Popup";
+import styles from "./DiceBox.module.css";
 
+// Renders into the dedicated full-screen overlay div in index.html.
 const diceBox = new DiceBox({
-  assetPath: "/assets/",
+  container: "#dice-box",
+  assetPath: `${import.meta.env.BASE_URL}assets/`,
 });
 diceBox.init();
 
@@ -17,8 +20,8 @@ export const DiceBoxComponent = () => {
   const throwDice = (dice: number) => {
     setResultArray([]);
     setDiceResult(0);
-    const canvas: any = document.querySelector(".dice-box-canvas");
-    canvas.style.opacity = "1";
+    const overlay = document.getElementById("dice-box");
+    overlay?.classList.add("rolling");
     diceBox.roll(`${quantity}d${dice}`);
     diceBox.onRollComplete = (rollResult: Array<any>) => {
       rollResult.forEach((result) => {
@@ -28,7 +31,8 @@ export const DiceBoxComponent = () => {
       });
       let result = rollResult.map((result) => result.rolls.reduce((acc: number, cur: { value: number }) => acc + cur.value, 0));
       setDiceResult(result[0]);
-      canvas.style.opacity = "0";
+      // Fade the overlay out, then clear the settled dice once it's invisible.
+      overlay?.classList.remove("rolling");
       setTimeout(() => {
         diceBox.clear();
       }, 500);
@@ -36,41 +40,25 @@ export const DiceBoxComponent = () => {
   };
 
   return (
-    <div className="w-full">
-      <div className={`flex flex-col gap-2`}>
+    <div className={styles.wrap}>
+      <div className={styles.col}>
         <input
           type="number"
-          className="input input-bordered h-min w-full"
+          className="input"
           onChange={(e) => setQuantity(parseInt(e.target.value))}
           value={quantity}
           placeholder="Quantity"
         />
-        <div className="grid grid-cols-2 gap-2">
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(4)}>
-            D4
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(6)}>
-            D6
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(8)}>
-            D8
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(10)}>
-            D10
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(12)}>
-            D12
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(20)}>
-            D20
-          </button>
-          <button type="button" className="btn btn-primary h-[2rem] min-h-[2rem]" onClick={() => throwDice(100)}>
-            D100
-          </button>
+        <div className={styles.grid}>
+          {[4, 6, 8, 10, 12, 20, 100].map((d) => (
+            <button key={d} type="button" className="button button-primary short" onClick={() => throwDice(d)}>
+              D{d}
+            </button>
+          ))}
         </div>
-        <p className="text-neutral">
+        <p className={styles.result}>
           {resultArray.length > 4 ? (
-            <button type="button" className="text-primary" onClick={() => setShowDice(true)}>
+            <button type="button" className={styles.link} onClick={() => setShowDice(true)}>
               Show Dice
             </button>
           ) : (
@@ -80,7 +68,7 @@ export const DiceBoxComponent = () => {
         </p>
       </div>
       <Popup closerFunc={setShowDice} toggle={showDice}>
-        <p className="text-2xl">
+        <p className={styles.popupResult}>
           {resultArray.join(" + ")} = {diceResult}
         </p>
       </Popup>
