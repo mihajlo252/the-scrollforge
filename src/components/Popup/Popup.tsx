@@ -20,10 +20,10 @@ export const Popup = ({
 			}
 		};
 
-		window.addEventListener("keypress", handleClosePopup);
+		window.addEventListener("keyup", handleClosePopup);
 
 		return () => {
-			window.removeEventListener("keypress", handleClosePopup);
+			window.removeEventListener("keyup", handleClosePopup);
 		};
 	}, []);
 

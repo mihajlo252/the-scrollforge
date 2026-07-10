@@ -253,6 +253,10 @@
    can't stretch it. */
 .levelUpFrame {
 	width: min(620px, 100%);
+	/* Stay centered even if the wrapper is forced to full viewport width by
+	   wide card text — an auto inline margin overrides the flex start-alignment
+	   a fixed-width flex item would otherwise get. */
+	margin-inline: auto;
 }
 .advSubPills {
 	display: flex;
