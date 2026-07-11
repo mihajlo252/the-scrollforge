@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "@tanstack/react-router";
 import { signOut } from "../../utilities/signOut";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useUserStore } from "../../zustand/stores";
 import { Popup } from "../../components/Popup/Popup";
 import { BackButton } from "../../components/NavButtons";
@@ -10,8 +10,10 @@ import styles from "./Navigation.module.css";
 import { Icon } from "../../components/Primitives";
 import { AccountPopover } from "../../components/SideMenu/AccountPopover";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
+import { getSeenPatchVersion, latestPatchVersion, markPatchSeen } from "../../help/patchNotesData";
 
 const HelpCenter = lazy(() => import("../../help/HelpCenter"));
+const PatchNotes = lazy(() => import("../../help/PatchNotes"));
 
 export const Navigation = () => {
 	const navigate = useNavigate();
@@ -27,6 +29,26 @@ export const Navigation = () => {
 		setHelpMounted(true);
 		setHelp(true);
 	};
+
+	const [patch, setPatch] = useState(false);
+	const [patchMounted, setPatchMounted] = useState(false);
+	const openPatch = () => {
+		markPatchSeen();
+		setPatchMounted(true);
+		setPatch(true);
+	};
+
+	// On first entry after an update, surface the What's New popup once. Brand-new
+	// users (no stored version) are recorded silently so they don't see history.
+	useEffect(() => {
+		const seen = getSeenPatchVersion();
+		if (seen === null) {
+			markPatchSeen();
+			return;
+		}
+		if (latestPatchVersion && seen !== latestPatchVersion) openPatch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 
 	const handleSignOut = async (e: React.FormEvent) => {
@@ -79,6 +101,17 @@ export const Navigation = () => {
 							<Icon name="help" size={16} />
 							<span>Guide</span>
 						</button>
+						<button
+							type="button"
+							className={styles.menuRow}
+							onClick={() => {
+								setMenu(false);
+								openPatch();
+							}}
+						>
+							<Icon name="sparkle" size={16} />
+							<span>What's New</span>
+						</button>
 						<button type="button" className={styles.menuRow} onClick={() => handleRedirect("/tickets")}>
 							<Icon name="book" size={16} />
 							<span>Help &amp; Support</span>
@@ -98,6 +131,12 @@ export const Navigation = () => {
 			{helpMounted && (
 				<Suspense fallback={null}>
 					<HelpCenter toggle={help} closerFunc={setHelp} />
+				</Suspense>
+			)}
+
+			{patchMounted && (
+				<Suspense fallback={null}>
+					<PatchNotes toggle={patch} closerFunc={setPatch} />
 				</Suspense>
 			)}
 
