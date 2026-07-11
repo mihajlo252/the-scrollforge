@@ -12,7 +12,7 @@
 	font-weight: 400;
 
 	font-family: var(--globalFont), sans-serif;
-
+	user-select: none;
 }
 
 :root {

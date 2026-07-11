@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Frame } from "../../../components/Frame/Frame";
 import { HPBar, Icon } from "../../../components/Primitives";
 import { calculateModifiers } from "../../../utilities/calculateStats";
 import { patchCharacter } from "../../../utilities/patchCharacter";
 import { queueCharacterSave } from "../../../utilities/autosaveCharacter";
+import { useHoldRepeat } from "../../../hooks/useHoldRepeat";
 import styles from "./sheet.module.css";
 
 export const HPCard = ({ character }: { character: Character }) => {
@@ -21,6 +22,12 @@ export const HPCard = ({ character }: { character: Character }) => {
 	const [hp, setHp] = useState<number>(currentHP);
 	const [max, setMax] = useState<number>(maxHP);
 	const [delta, setDelta] = useState("");
+	// Mirror the live HP so hold-to-repeat ticks compound off the freshest value
+	// even before React has committed the previous tick's render.
+	const hpRef = useRef(hp);
+	useEffect(() => {
+		hpRef.current = hp;
+	}, [hp]);
 	const [characterAC, setCharacterAC] = useState<number>(ac);
 	const [characterHitDice, setCharacterHitDice] = useState<string>(hitDice);
 	const [succ, setSucc] = useState(0);
@@ -33,14 +40,21 @@ export const HPCard = ({ character }: { character: Character }) => {
 		queueCharacterSave(id, { currentHP: nextHp, stats });
 	};
 
-	const applyDelta = (sign: 1 | -1) => {
+	const stepHP = (sign: 1 | -1) => {
 		// Empty box = step by 1; a typed number is added/subtracted instead.
 		const amount = parseInt(delta) || 1;
-		const next = Math.max(0, Math.min(max, hp + sign * amount));
+		const prev = hpRef.current;
+		const next = Math.max(0, Math.min(max, prev + sign * amount));
+		if (next === prev) return;
+		hpRef.current = next;
 		setHp(next);
-		setDelta("");
 		writeHP(next, max);
 	};
+
+	// Press-and-hold to keep adjusting; delta clears once when the press ends.
+	const clearDelta = () => setDelta("");
+	const holdDown = useHoldRepeat(() => stepHP(-1), { onRelease: clearDelta });
+	const holdUp = useHoldRepeat(() => stepHP(1), { onRelease: clearDelta });
 
 	const changeMax = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const nextMax = parseInt(e.target.value) || 0;
@@ -91,10 +105,10 @@ export const HPCard = ({ character }: { character: Character }) => {
 							onChange={(e) => setDelta(e.target.value.replace(/[^0-9]/g, ""))}
 							placeholder="0"
 						/>
-						<button className="button button-secondary short" type="button" onClick={() => applyDelta(-1)}>
+						<button className="button button-secondary short" type="button" aria-label="Subtract HP" {...holdDown}>
 							−
 						</button>
-						<button className="button button-primary short" type="button" onClick={() => applyDelta(1)}>
+						<button className="button button-primary short" type="button" aria-label="Add HP" {...holdUp}>
 							+
 						</button>
 					</div>
