@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "@tanstack/react-router";
 import { signOut } from "../../utilities/signOut";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { useUserStore } from "../../zustand/stores";
 import { Popup } from "../../components/Popup/Popup";
 import { BackButton } from "../../components/NavButtons";
@@ -11,12 +11,22 @@ import { Icon } from "../../components/Primitives";
 import { AccountPopover } from "../../components/SideMenu/AccountPopover";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 
+const HelpCenter = lazy(() => import("../../help/HelpCenter"));
+
 export const Navigation = () => {
 	const navigate = useNavigate();
 
 	const { user, removeUser } = useUserStore();
 	const [openSignOut, setOpenSignOut] = useState(false);
 	const [menu, setMenu] = useState(false);
+	const [help, setHelp] = useState(false);
+	// Defer loading the guide chunk until it's first opened, then keep it mounted
+	// so its open/close animation can play on later toggles.
+	const [helpMounted, setHelpMounted] = useState(false);
+	const openHelp = () => {
+		setHelpMounted(true);
+		setHelp(true);
+	};
 
 
 	const handleSignOut = async (e: React.FormEvent) => {
@@ -58,6 +68,17 @@ export const Navigation = () => {
 					</div>
 					<div className={styles.accountDivider} />
 					<div className={styles.accountActions}>
+						<button
+							type="button"
+							className={styles.menuRow}
+							onClick={() => {
+								setMenu(false);
+								openHelp();
+							}}
+						>
+							<Icon name="help" size={16} />
+							<span>Guide</span>
+						</button>
 						<button type="button" className={styles.menuRow} onClick={() => handleRedirect("/tickets")}>
 							<Icon name="book" size={16} />
 							<span>Help &amp; Support</span>
@@ -73,6 +94,12 @@ export const Navigation = () => {
 					</div>
 				</div>
 			</AccountPopover>
+
+			{helpMounted && (
+				<Suspense fallback={null}>
+					<HelpCenter toggle={help} closerFunc={setHelp} />
+				</Suspense>
+			)}
 
 			<Popup closerFunc={setOpenSignOut} toggle={openSignOut}>
 				<form className="frame form column-direction" onSubmit={handleSignOut}>

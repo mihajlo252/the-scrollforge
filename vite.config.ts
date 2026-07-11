@@ -7,5 +7,5 @@ export default defineConfig({
   plugins: [react(), TanStackRouterVite({
     autoCodeSplitting: true,
   })],
-  base: '/',
+  base: '/the-scrollforge/',
 })

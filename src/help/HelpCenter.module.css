@@ -1,0 +1,178 @@
+.frame {
+	width: min(880px, 92vw);
+	max-width: 100%;
+	height: min(78vh, 640px);
+	gap: 0.85rem;
+	padding: 1.1rem 1.25rem;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	flex-shrink: 0;
+}
+
+.search {
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex: 1;
+	min-width: 0;
+}
+.search :global(svg) {
+	position: absolute;
+	left: 0.6rem;
+	color: var(--ink-faint);
+	pointer-events: none;
+}
+.search :global(.input) {
+	width: 100%;
+	padding-left: 2rem;
+}
+
+.body {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	gap: 1rem;
+}
+
+.list {
+	flex: 0 0 220px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	padding-right: 0.5rem;
+	border-right: 1px solid var(--rule);
+}
+.group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+.group .caps,
+.group > :global(.caps) {
+	margin-bottom: 0.3rem;
+	color: var(--gold-deep);
+}
+.topicBtn {
+	text-align: left;
+	background: none;
+	border: none;
+	color: var(--ink-dim);
+	font-family: var(--body), serif;
+	font-size: 0.95rem;
+	padding: 0.35rem 0.5rem;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background 0.15s, color 0.15s;
+}
+.topicBtn:hover {
+	background: var(--bg-2);
+	color: var(--text);
+}
+.topicBtn[data-active] {
+	background: var(--bg-3);
+	color: var(--text);
+	box-shadow: inset 2px 0 0 var(--gold);
+}
+
+.reader {
+	flex: 1;
+	min-width: 0;
+	overflow-y: auto;
+	padding-right: 0.25rem;
+}
+.backBtn {
+	display: none;
+	margin-bottom: 0.6rem;
+}
+
+.markdown :global(h1) {
+	font-family: var(--display), serif;
+	font-size: 1.55rem;
+	line-height: 1.15;
+	margin: 0 0 0.6rem;
+	color: var(--text);
+}
+.markdown :global(h2) {
+	font-family: var(--display), serif;
+	font-size: 1.2rem;
+	margin: 1.1rem 0 0.4rem;
+	color: var(--gold-2);
+}
+.markdown :global(h3) {
+	font-size: 1.02rem;
+	margin: 0.9rem 0 0.3rem;
+	color: var(--text);
+}
+.markdown :global(p) {
+	margin: 0 0 0.75rem;
+	line-height: 1.6;
+	color: var(--ink-dim);
+}
+.markdown :global(ul),
+.markdown :global(ol) {
+	margin: 0 0 0.85rem 1.15rem;
+	line-height: 1.6;
+	color: var(--ink-dim);
+}
+.markdown :global(li) {
+	margin-bottom: 0.25rem;
+}
+.markdown :global(blockquote) {
+	margin: 0 0 0.85rem;
+	padding: 0.55rem 0.85rem;
+	border-left: 3px solid var(--gold-deep);
+	background: rgba(201, 162, 74, 0.08);
+	border-radius: 4px;
+	color: var(--ink-dim);
+}
+.markdown :global(blockquote) :global(p) {
+	margin: 0;
+}
+.markdown :global(code) {
+	font-family: var(--mono), monospace;
+	font-size: 0.85em;
+	background: var(--bg-3);
+	padding: 0.1em 0.35em;
+	border-radius: 4px;
+}
+.markdown :global(strong) {
+	color: var(--text);
+}
+.markdown :global(a) {
+	color: var(--accent);
+}
+
+.empty {
+	color: var(--ink-faint);
+	padding: 1rem 0;
+}
+
+/* Narrow screens: one pane at a time, toggled by the reading flag. */
+@media (max-width: 720px) {
+	.frame {
+		width: 94vw;
+		height: min(82vh, 720px);
+	}
+	.list {
+		flex: 1;
+		border-right: none;
+		padding-right: 0;
+	}
+	.reader {
+		display: none;
+	}
+	.body[data-reading] .list {
+		display: none;
+	}
+	.body[data-reading] .reader {
+		display: block;
+	}
+	.backBtn {
+		display: inline-flex;
+	}
+}

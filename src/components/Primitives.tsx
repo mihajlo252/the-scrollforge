@@ -200,6 +200,13 @@ export const Icon = ({
 				<path d="M21 3v5h-5" />
 			</>
 		),
+		help: (
+			<>
+				<circle cx="12" cy="12" r="9" />
+				<path d="M9.5 9a2.5 2.5 0 013.9-2c.7.5 1.1 1.2 1.1 2 0 1.5-2.5 2-2.5 3.5" />
+				<path d="M12 17h.01" />
+			</>
+		),
 	};
 	return (
 		<svg
