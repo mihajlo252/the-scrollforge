@@ -6,7 +6,7 @@ export const Logo = ({ size, focusable, compact }: { size?: string; focusable?: 
 
 	return (
 		<Link to={"/"} className={`${styles.logo} ${compact ? styles.compact : ""}`} tabIndex={focusable ? 0 : -1} style={logoStyle}>
-			<img src=".\assets\the-scrollforge-logo.png" width="100" />
+			<img src=".\assets\the-scrollforge-logo.png" width={size} />
 		</Link>
 	);
 };

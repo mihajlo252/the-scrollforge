@@ -33,7 +33,7 @@ export const Navigation = () => {
 
 	return (
 		<motion.nav className={styles.nav} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-			<Logo compact />
+			<Logo size="100" compact />
 			<div className={styles.menuItems}>
 				<BackButton classes="button button-primary" />
 				<button type="button" className="button button-accent" onClick={() => handleRedirect("/chat")}>

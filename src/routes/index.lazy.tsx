@@ -76,7 +76,7 @@ function Index() {
 					<span className="frame-corner tr" />
 					<span className="frame-corner bl" />
 					<span className="frame-corner br" />
-					<Logo focusable={false} />
+					<Logo size="200" focusable={false} />
 					<RuneDivider />
 					<div className="column-direction">
 						<div className="tabs full">
