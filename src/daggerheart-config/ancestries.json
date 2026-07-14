@@ -230,7 +230,8 @@
           {
             "paragraph": "Gain a bonus to your damage thresholds equal to your Proficiency."
           }
-        ]
+        ],
+        "modifiers": { "thresholds": "proficiency" }
       },
       {
         "name": "Retract",

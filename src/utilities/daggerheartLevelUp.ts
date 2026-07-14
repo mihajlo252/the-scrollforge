@@ -22,19 +22,28 @@ const TABLE = advancementsData as Record<string, AdvancementOption[]>;
 
 export const tierOptions = (tier: number): AdvancementOption[] => TABLE[String(tier)] ?? [];
 
-const tierRange = (tier: number): [number, number] =>
-	tier === 4 ? [8, 10] : tier === 3 ? [5, 7] : tier === 2 ? [2, 4] : [1, 1];
-
-/** How many times each option id has been chosen earlier within the same tier. */
-export const tierUsage = (advancements: DHAdvancements | undefined, tier: number): Record<string, number> => {
+/** Total times each option id has been chosen across ALL levels so far.
+ *  Advancement slots accumulate across tiers, so usage is tracked globally
+ *  rather than reset per tier. */
+export const cumulativeUsage = (advancements: DHAdvancements | undefined): Record<string, number> => {
 	const usage: Record<string, number> = {};
 	if (!advancements) return usage;
-	const [lo, hi] = tierRange(tier);
-	Object.entries(advancements.perLevel ?? {}).forEach(([lvl, picks]) => {
-		const n = parseInt(lvl);
-		if (n >= lo && n <= hi) (picks ?? []).forEach((p: any) => (usage[p.id] = (usage[p.id] ?? 0) + 1));
+	Object.values(advancements.perLevel ?? {}).forEach((picks) => {
+		(picks ?? []).forEach((p: any) => (usage[p.id] = (usage[p.id] ?? 0) + 1));
 	});
 	return usage;
+};
+
+/** An option's total available slots at a given tier: its per-tier allotment
+ *  summed over every tier from 2 up to the current one. Unspent slots from an
+ *  earlier tier therefore carry forward — e.g. Hit Point Slot (2 per tier) is
+ *  worth 2 at Tier 2, 4 at Tier 3, and 6 at Tier 4 before usage is subtracted. */
+export const cumulativeSlots = (optionId: string, tier: number): number => {
+	let total = 0;
+	for (let t = 2; t <= tier; t++) {
+		total += (TABLE[String(t)] ?? []).find((o) => o.id === optionId)?.slots ?? 0;
+	}
+	return total;
 };
 
 /** Total advancement points a set of picks costs within a tier's option table. */
@@ -78,12 +87,19 @@ export const advancementContext = (character: DaggerheartCharacter, catalog: Dom
 	const marked = enteredTier ? [] : character.dhAdvancements?.markedTraits ?? [];
 	const classDomains = getDomains(character.characterProfile.class);
 	const owned = new Set([...(character.dhDomainCards?.loadout ?? []), ...(character.dhDomainCards?.vault ?? [])].map((c) => c.name.toLowerCase()));
+	// Once Mastery is unlocked (which requires Specialization first), there's no
+	// further subclass card to take, so drop that advancement option.
+	const mastered = character.dhAdvancements?.subclassUnlocked?.mastery ?? false;
 	return {
 		newLevel,
 		tier,
 		enteredTier,
-		options: tierOptions(tier),
-		usage: tierUsage(character.dhAdvancements, tier),
+		// Each option's slots accumulate across tiers (unspent ones carry forward),
+		// so its effective cap here is the summed allotment up to the current tier.
+		options: tierOptions(tier)
+			.filter((o) => o.id !== "subclass" || !mastered)
+			.map((o) => ({ ...o, slots: cumulativeSlots(o.id, tier) })),
+		usage: cumulativeUsage(character.dhAdvancements),
 		availableTraits: TRAIT_NAMES.filter((t) => !marked.includes(t)),
 		experiences: character.dhExperiences ?? [],
 		browseable: catalog.filter(
@@ -183,8 +199,11 @@ export const commitLevelUp = (character: DaggerheartCharacter, picks: Advancemen
 				vitals.proficiency += 1;
 				break;
 			case "subclass":
-				if (tier === 4) advancements.subclassUnlocked.mastery = true;
-				else advancements.subclassUnlocked.specialization = true;
+				// Subclass cards are sequential: grant the next one you don't have
+				// yet — Specialization first, then Mastery. A skipped Specialization
+				// is therefore picked up here in a later tier before Mastery.
+				if (!advancements.subclassUnlocked.specialization) advancements.subclassUnlocked.specialization = true;
+				else advancements.subclassUnlocked.mastery = true;
 				break;
 			case "multiclass":
 				if (pick.multiclass) advancements.multiclass = pick.multiclass;

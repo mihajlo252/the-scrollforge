@@ -26,7 +26,7 @@
     { "id": "experience", "label": "Boost Two Experiences", "description": "Gain a +1 bonus to two Experiences.", "icon": "star", "slots": 1, "cost": 1 },
     { "id": "domain", "label": "Extra Domain Card", "description": "Take an additional domain card of your level or lower.", "icon": "sparkle", "slots": 1, "cost": 1 },
     { "id": "evasion", "label": "Evasion", "description": "Gain a +1 bonus to your Evasion.", "icon": "eye", "slots": 1, "cost": 1 },
-    { "id": "subclass", "label": "Upgraded Subclass Card", "description": "Take your subclass's Mastery card.", "icon": "scroll", "slots": 1, "cost": 1 },
+    { "id": "subclass", "label": "Upgraded Subclass Card", "description": "Take your subclass's next card — Specialization if you skipped it, otherwise Mastery.", "icon": "scroll", "slots": 1, "cost": 1 },
     { "id": "multiclass", "label": "Multiclass", "description": "Choose an additional class and one of its domains. (Costs both advancements.)", "icon": "hex", "slots": 1, "cost": 2 },
     { "id": "proficiency", "label": "Proficiency", "description": "Gain a +1 bonus to your Proficiency. (Costs both advancements.)", "icon": "crown", "slots": 1, "cost": 2 }
   ]

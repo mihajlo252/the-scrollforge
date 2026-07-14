@@ -150,6 +150,7 @@
 	font-family: var(--display), serif;
 	font-size: 60px;
 	line-height: 0.95;
+	width: 2ch;
 }
 .hpMax {
 	font-family: var(--display), serif;

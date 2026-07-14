@@ -1,9 +1,11 @@
 .form {
 	position: relative;
 	padding: 0;
-	width: 100%;
-	min-width: min(70vw, 640px);
+	width: calc(80svw - 2 * 2.5rem);
 	min-height: 70vh;
+	@media (max-width: 767px) {
+		width: 80svw;
+	}
 }
 .textarea {
 	height: 100%;

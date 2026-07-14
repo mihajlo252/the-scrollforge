@@ -1,3 +1,11 @@
+## 14-07-2026 · The Guide Update
+
+**Fixes**
+
+- **Fixed** - issues with heratige and subclass features that give permanent upgrades to traits of a character weren't being applied.
+- **Fixed** - layout issues with Level Up Wizard for Daggerheart characters.
+
+
 ## 11-07-2026 · The Guide Update
 
 **New**
