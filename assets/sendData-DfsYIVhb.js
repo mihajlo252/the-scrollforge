@@ -1,1 +1,0 @@
-import{s as o}from"./index-B0V6040d.js";const n=async(e,s,a)=>{try{const{error:r}=await o.from(e).update(a).eq("id",s);return r?(console.error(r),!1):!0}catch(r){return console.error(r),!1}};export{n as s};
