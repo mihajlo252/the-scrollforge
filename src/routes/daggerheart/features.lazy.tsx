@@ -5,7 +5,7 @@ import { Popup } from "../../components/Popup/Popup";
 import { Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShell";
-import { getAncestry, getClass, getCommunity, getSubclass, flattenDescription, type Feature } from "../../utilities/daggerheart";
+import { getAncestry, getClass, getCommunity, getSubclass, subclassTiersActive, flattenDescription, type Feature } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import styles from "./sheetScreens.module.css";
@@ -30,10 +30,9 @@ function FeaturesBody({ character, state }: { character: DaggerheartCharacter; s
   const subclass = getSubclass(profile.subclass);
   const ancestry = getAncestry(profile.ancestry);
   const community = getCommunity(profile.community);
-  const level = profile.level || 1;
-  const unlocked = character.dhAdvancements?.subclassUnlocked ?? { specialization: false, mastery: false };
-  const specUnlocked = unlocked.specialization || level >= 5;
-  const masteryUnlocked = unlocked.mastery || level >= 8;
+  // Specialization/Mastery are active only once the "Upgraded Subclass Card"
+  // advancement is taken (tiers 3/4) — not automatically at level 5/8.
+  const tiers = subclassTiersActive(character);
 
   const [experiences, setExperiences] = useState<DHExperience[]>(character.dhExperiences ?? []);
   const [showForm, setShowForm] = useState(false);
@@ -101,14 +100,14 @@ function FeaturesBody({ character, state }: { character: DaggerheartCharacter; s
             <span className={styles.sectionTitle}>Specialization</span>
             <div className={styles.featGrid}>
               {(subclass?.specialization.features ?? []).map((f) => (
-                <FeatureCard key={f.name} feature={f} locked={!specUnlocked} unlockHint="Unlocks LV 5" />
+                <FeatureCard key={f.name} feature={f} locked={!tiers.specialization} unlockHint="Advancement · LV 5+" />
               ))}
             </div>
 
             <span className={styles.sectionTitle}>Mastery</span>
             <div className={styles.featGrid}>
               {(subclass?.mastery.features ?? []).map((f) => (
-                <FeatureCard key={f.name} feature={f} locked={!masteryUnlocked} unlockHint="Unlocks LV 8" />
+                <FeatureCard key={f.name} feature={f} locked={!tiers.mastery} unlockHint="Advancement · LV 8+" />
               ))}
             </div>
           </div>

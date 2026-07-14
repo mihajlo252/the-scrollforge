@@ -12,7 +12,20 @@ import weaponsData from "../daggerheart-config/weapons.json";
 import armorsData from "../daggerheart-config/armors.json";
 
 export type DescBlock = { paragraph?: string; list?: string[] };
-export type Feature = { name: string; description: DescBlock[] };
+export type Feature = { name: string; description: DescBlock[]; modifiers?: FeatureModifiers };
+
+/** An always-on stat bonus declared on a heritage/subclass feature. A number is
+ *  a flat bonus; "proficiency" scales with the character's live Proficiency
+ *  (e.g. Galapa's Shell). Slot/card grants are NOT expressed here — those bake
+ *  into totals at creation via `creationBonuses`. */
+export type StatModifier = number | "proficiency";
+export interface FeatureModifiers {
+	/** Applies to BOTH damage thresholds (Major and Severe). */
+	thresholds?: StatModifier;
+	majorThreshold?: StatModifier;
+	severeThreshold?: StatModifier;
+	evasion?: StatModifier;
+}
 
 type ClassConfig = {
 	id: string;
@@ -266,6 +279,72 @@ export const gearModifiers = (weapons?: DHWeapons, armor?: DHArmor | null): Gear
 		(Object.entries(m.traits) as [DHTraitName, number][]).forEach(([t, n]) => (mods.traits[t] = (mods.traits[t] ?? 0) + n));
 	});
 	return mods;
+};
+
+/** Which subclass tiers are active for this character. Foundation is granted at
+ *  creation; Specialization and Mastery are unlocked ONLY by taking the
+ *  "Upgraded Subclass Card" advancement (offered at tiers 3 and 4) — reaching
+ *  level 5/8 does not grant them automatically, so a player who spends their
+ *  advancements elsewhere doesn't get the tier's features or their bonuses. */
+export const subclassTiersActive = (character: DaggerheartCharacter): { foundation: boolean; specialization: boolean; mastery: boolean } => {
+	const unlocked = character.dhAdvancements?.subclassUnlocked ?? { specialization: false, mastery: false };
+	return {
+		foundation: true,
+		specialization: unlocked.specialization,
+		mastery: unlocked.mastery,
+	};
+};
+
+const resolveMod = (m: StatModifier | undefined, proficiency: number): number =>
+	m === undefined ? 0 : m === "proficiency" ? proficiency : m;
+
+/** Always-on stat bonuses from heritage & active subclass features (Galapa's
+ *  Shell, Stalwart's threshold trio, etc.), declared via each feature's
+ *  `modifiers` key. Applied at DISPLAY time on top of the stored base stats —
+ *  like `gearModifiers`, never written back. Only thresholds and Evasion are
+ *  handled here; slot/card grants bake into totals at creation instead (see
+ *  `creationBonuses`), so nothing is double-counted. */
+export const featureModifiers = (character: DaggerheartCharacter): GearModifiers => {
+	const mods = emptyGearMods();
+	const profile = character.characterProfile;
+	const proficiency = character.dhVitals?.proficiency ?? 1;
+	const sub = getSubclass(profile?.subclass);
+	const tiers = subclassTiersActive(character);
+
+	const features: Feature[] = [
+		...(getAncestry(profile?.ancestry)?.features ?? []),
+		...(getCommunity(profile?.community)?.features ?? []),
+		...(getClass(profile?.class)?.classFeatures ?? []),
+		...(tiers.foundation ? sub?.foundation?.features ?? [] : []),
+		...(tiers.specialization ? sub?.specialization?.features ?? [] : []),
+		...(tiers.mastery ? sub?.mastery?.features ?? [] : []),
+	];
+
+	features.forEach((f) => {
+		const m = f.modifiers;
+		if (!m) return;
+		const both = resolveMod(m.thresholds, proficiency);
+		mods.thresholds.major += both + resolveMod(m.majorThreshold, proficiency);
+		mods.thresholds.severe += both + resolveMod(m.severeThreshold, proficiency);
+		mods.evasion += resolveMod(m.evasion, proficiency);
+	});
+	return mods;
+};
+
+/** Gear + feature modifiers combined — the full display-time delta over the
+ *  stored base stats, used wherever the sheet or PDF renders derived numbers. */
+export const combinedModifiers = (character: DaggerheartCharacter): GearModifiers => {
+	const gear = gearModifiers(character.dhWeapons, character.dhArmor);
+	const feat = featureModifiers(character);
+	return {
+		traits: { ...gear.traits },
+		evasion: gear.evasion + feat.evasion,
+		armorScore: gear.armorScore + feat.armorScore,
+		thresholds: {
+			major: gear.thresholds.major + feat.thresholds.major,
+			severe: gear.thresholds.severe + feat.thresholds.severe,
+		},
+	};
 };
 
 /** "-2 Evasion · -1 Agility" summary for gear cards/hints; "" when empty. */

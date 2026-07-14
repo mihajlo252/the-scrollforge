@@ -1,5 +1,5 @@
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from "pdf-lib";
-import { gearModifiers } from "./daggerheart";
+import { combinedModifiers } from "./daggerheart";
 
 /* Fills the official Darrington Press character sheet (public/daggerheart-sheets.pdf)
  * with a character's data and offers it as a download. The source PDF has no form
@@ -112,8 +112,9 @@ const drawWeapon = (ctx: Ctx, weapon: DHWeapon | null | undefined, nameY: number
 const fillFrontPage = (ctx: Ctx, character: DaggerheartCharacter, isBlankSheet: boolean) => {
 	const profile = character.characterProfile;
 	const vitals = character.dhVitals;
-	// Same gear-derived overlay the on-screen sheet applies (base + equipped mods).
-	const gear = gearModifiers(character.dhWeapons, character.dhArmor);
+	// Same display overlay the on-screen sheet applies: equipped gear plus
+	// always-on heritage/subclass feature bonuses (Shell, Stalwart, etc.).
+	const gear = combinedModifiers(character);
 
 	// Header strip
 	draw(ctx, profile.name ?? "", { x: 241, y: 22, size: 11, bold: true, maxWidth: 152 });

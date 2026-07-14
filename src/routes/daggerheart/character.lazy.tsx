@@ -11,7 +11,7 @@ import { SheetTabs } from "../../sections/Daggerheart/CharacterProfile/SheetTabs
 import { SheetTopbar } from "../../sections/Daggerheart/CharacterProfile/SheetTopbar";
 import { LevelUpModal } from "../../sections/Daggerheart/CharacterProfile/LevelUpModal";
 import { BoxTrack, HPTrack, DHTraitTile } from "../../sections/Daggerheart/CharacterProfile/Trackers";
-import { TRAIT_NAMES, getClass, getSpellcastTrait, flattenDescription, defaultVitals, defaultTraits, gearModifiers, formatGearMods } from "../../utilities/daggerheart";
+import { TRAIT_NAMES, getClass, getSpellcastTrait, flattenDescription, defaultVitals, defaultTraits, gearModifiers, featureModifiers, combinedModifiers, formatGearMods } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { queueCharacterSave } from "../../utilities/autosaveCharacter";
 import gate from "./character.module.css";
@@ -82,12 +82,18 @@ function Vitals() {
   const cls = getClass(profile.class);
   const spellTrait = getSpellcastTrait(profile.subclass);
 
-  // Equipped-gear modifiers (e.g. Full Plate's "-2 to Evasion; -1 to Agility")
-  // are layered on top of the stored base stats at display time.
+  // Modifiers layered on top of the stored base stats at display time: equipped
+  // gear (e.g. Full Plate's "-2 Evasion") plus always-on heritage/subclass
+  // features (e.g. Galapa's Shell, Stalwart's threshold bonuses). `mods` is the
+  // combined delta used for the displayed numbers; the two are kept separate so
+  // each source can be called out in its own hint line.
   const gear = gearModifiers(character.dhWeapons, character.dhArmor);
+  const feat = featureModifiers(character);
+  const mods = combinedModifiers(character);
   const gearTraitHint = formatGearMods({ ...gear, evasion: 0, armorScore: 0, thresholds: { major: 0, severe: 0 } });
   const gearVitalsHint = formatGearMods({ ...gear, traits: {} });
-  const armorSlotTotal = Math.max(0, vitals.armorSlots.total + gear.armorScore);
+  const featVitalsHint = formatGearMods({ ...feat, traits: {} });
+  const armorSlotTotal = Math.max(0, vitals.armorSlots.total + mods.armorScore);
 
   const persistVitals = (next: DHVitals) => {
     setVitals(next);
@@ -117,7 +123,7 @@ function Vitals() {
         <div className="card-body">
           <div className={styles.traitRow}>
             {TRAIT_NAMES.map((t) => (
-              <DHTraitTile key={t} name={t} value={(traits[t] ?? 0) + (gear.traits[t] ?? 0)} spellcast={!!spellTrait && spellTrait.toUpperCase() === t.toUpperCase()} />
+              <DHTraitTile key={t} name={t} value={(traits[t] ?? 0) + (mods.traits[t] ?? 0)} spellcast={!!spellTrait && spellTrait.toUpperCase() === t.toUpperCase()} />
             ))}
           </div>
           {gearTraitHint && <span className={styles.subHint}>Includes gear: {gearTraitHint}</span>}
@@ -135,15 +141,16 @@ function Vitals() {
             <div className={styles.section}>
               <div className={styles.statRow}>
                 <div className={styles.bigStat}>
-                  <span className={styles.bigStatVal}>{vitals.evasion + gear.evasion}</span>
+                  <span className={styles.bigStatVal}>{vitals.evasion + mods.evasion}</span>
                   <span className={styles.bigStatLabel}>Evasion</span>
                 </div>
                 <div className={styles.statRowLabel} style={{ alignItems: "flex-end" }}>
                   <span className={styles.subLabel}>Armor Score</span>
-                  <span className={styles.monoVal}>{vitals.armorScore + gear.armorScore}</span>
+                  <span className={styles.monoVal}>{vitals.armorScore + mods.armorScore}</span>
                 </div>
               </div>
               {gearVitalsHint && <span className={styles.subHint}>Includes gear: {gearVitalsHint}</span>}
+              {featVitalsHint && <span className={styles.subHint}>From heritage &amp; subclass: {featVitalsHint}</span>}
 
               <div className={styles.divider} />
 
@@ -165,7 +172,7 @@ function Vitals() {
               <div className={styles.statRowLabel}>
                 <span className={styles.subLabel}>Hit Points · {vitals.hp.marked}/{vitals.hp.total} remaining</span>
                 <HPTrack
-                  hp={{ ...vitals.hp, major: vitals.hp.major + gear.thresholds.major, severe: vitals.hp.severe + gear.thresholds.severe }}
+                  hp={{ ...vitals.hp, major: vitals.hp.major + mods.thresholds.major, severe: vitals.hp.severe + mods.thresholds.severe }}
                   onChange={(m) => persistVitals({ ...vitals, hp: { ...vitals.hp, marked: m } })}
                 />
               </div>

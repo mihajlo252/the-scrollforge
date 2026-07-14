@@ -191,9 +191,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.6rem;
-	max-height: 50vh;
-	overflow-y: auto;
-	padding-right: 0.25rem;
+	/* No independent scroll — the whole .levelUpFrame is the scroll container,
+	   so the advancement list flows and scrolls with everything else. */
 }
 .advCard {
 	border: 1px solid var(--rule);
@@ -249,14 +248,25 @@
 	min-width: 0;
 	max-width: 100%;
 }
-/* The level-up modal keeps a fixed, viewport-bounded width so content choices
-   can't stretch it. */
+/* The level-up modal keeps a fixed width so content choices can't stretch it.
+   The width is VIEWPORT-relative (vw), not 100% of the max-content .popupWrapper
+   — a percentage here creates a circular intrinsic-size loop with a domain
+   card's wide pre-wrap text, which makes the popup jump width and flicker when a
+   card is selected. A definite vw width breaks that loop; the card text then
+   simply wraps inside the frame. min-width:0 stops the flex item from growing to
+   its content's min-content. */
 .levelUpFrame {
-	width: min(620px, 100%);
-	/* Stay centered even if the wrapper is forced to full viewport width by
-	   wide card text — an auto inline margin overrides the flex start-alignment
-	   a fixed-width flex item would otherwise get. */
+	width: min(620px, 92vw);
+	min-width: 0;
+	/* Stay centered even if the wrapper ends up wider than the frame. */
 	margin-inline: auto;
+	/* The frame itself is the scroll container (not the shared .popupWrapper):
+	   cap its height to the wrapper's available space and scroll internally.
+	   Subtracting the wrapper's desktop padding-block (2.5rem) keeps the frame
+	   within the wrapper on every breakpoint, so the wrapper never also scrolls. */
+	max-height: calc(100svh - 65px - 2.5rem);
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 .advSubPills {
 	display: flex;

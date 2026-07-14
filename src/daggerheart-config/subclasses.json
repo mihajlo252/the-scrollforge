@@ -319,7 +319,8 @@
             {
               "paragraph": "Gain a permanent +1 bonus to your Evasion. You can use your “Shadow Stepper” feature to move within Very Far range."
             }
-          ]
+          ],
+          "modifiers": { "evasion": 1 }
         },
         {
           "name": "Vanishing Act",
@@ -542,7 +543,8 @@
             {
               "paragraph": "Gain a permanent +1 bonus to your damage thresholds."
             }
-          ]
+          ],
+          "modifiers": { "thresholds": 1 }
         },
         {
           "name": "Iron Will",
@@ -562,7 +564,8 @@
             {
               "paragraph": "Gain a permanent +2 bonus to your damage thresholds."
             }
-          ]
+          ],
+          "modifiers": { "thresholds": 2 }
         },
         {
           "name": "Partners-in-Arms",
@@ -582,7 +585,8 @@
             {
               "paragraph": "Gain a permanent +3 bonus to your damage thresholds."
             }
-          ]
+          ],
+          "modifiers": { "thresholds": 3 }
         },
         {
           "name": "Loyal Protector",
@@ -1002,7 +1006,8 @@
             {
               "paragraph": "Gain a permanent +4 bonus to your Severe damage threshold."
             }
-          ]
+          ],
+          "modifiers": { "severeThreshold": 4 }
         },
         {
           "name": "Power of the Gods",

@@ -23,6 +23,19 @@ function Root() {
 		mainRef.current?.scrollTo(0, 0);
 	}, [pathname]);
 
+	useEffect(() => {
+		const handleContextMenu = (e: any) => {
+			const isTablet = window.matchMedia("(max-width: 1024px)").matches;
+			if (isTablet) {
+				e.preventDefault();
+			}
+		};
+		document.addEventListener("contextmenu", handleContextMenu);
+		return () => {
+			document.removeEventListener("contextmenu", handleContextMenu);
+		};
+	}, []);
+
 	return (
 		<>
 			{id && <Navigation />}
