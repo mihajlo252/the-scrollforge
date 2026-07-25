@@ -25,7 +25,11 @@ function Root() {
 
 	useEffect(() => {
 		const handleContextMenu = (e: any) => {
-			const isTablet = window.matchMedia("(max-width: 1024px)").matches;
+			const userAgent = navigator.userAgent.toLowerCase();
+			// RegEx checking for distinct tablet indicators across major operating systems
+			const tabletRegex = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk)/g;
+			const isTablet = tabletRegex.test(userAgent)
+			
 			if (isTablet) {
 				e.preventDefault();
 			}
