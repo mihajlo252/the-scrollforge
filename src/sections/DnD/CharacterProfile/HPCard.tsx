@@ -105,12 +105,14 @@ export const HPCard = ({ character }: { character: Character }) => {
 							onChange={(e) => setDelta(e.target.value.replace(/[^0-9]/g, ""))}
 							placeholder="0"
 						/>
-						<button className="button button-secondary short" type="button" aria-label="Subtract HP" {...holdDown}>
-							−
-						</button>
-						<button className="button button-primary short" type="button" aria-label="Add HP" {...holdUp}>
-							+
-						</button>
+						<div className={styles.hpControls}>
+							<button className="button button-secondary short" type="button" aria-label="Subtract HP" {...holdDown}>
+								−
+							</button>
+							<button className="button button-primary short" type="button" aria-label="Add HP" {...holdUp}>
+								+
+							</button>
+						</div>
 					</div>
 				</div>
 
@@ -155,7 +157,9 @@ export const HPCard = ({ character }: { character: Character }) => {
 				</div>
 
 				<div className={styles.deathRow}>
-					<span className="caps" style={{ color: "var(--ember-2)" }}>Death Saves</span>
+					<span className="caps" style={{ color: "var(--ember-2)" }}>
+						Death Saves
+					</span>
 					<div className={styles.deathGroup}>
 						<span>SUCC</span>
 						<div className={styles.deathDots}>
