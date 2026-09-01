@@ -2,8 +2,10 @@
     position: absolute;
     isolation: isolate;
     position-anchor: --accountButton;
-    top: calc(anchor(bottom) - 1rem);
-    right: calc(anchor(left) - 1rem);
+    /* Drop straight down from the account button, right edges aligned, with a
+       small gap — reads as a dropdown belonging to the button. */
+    top: calc(anchor(bottom) + 0.5rem);
+    right: anchor(right);
     z-index: 50;
     box-sizing: border-box;
     display: flex;
@@ -34,4 +36,6 @@
     width: max-content;
     background: linear-gradient(180deg, var(--panel), var(--panel-2));
     box-shadow: var(--shadow-2);
-} 
+    /* Animate as if unfolding from the account button in the top-right corner. */
+    transform-origin: top right;
+}
