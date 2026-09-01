@@ -602,6 +602,7 @@ export const ForgeHero = ({ onCancel, onCreated }: { onCancel: () => void; onCre
 				<div className={styles.nav}>
 					<button type="button" className="button button-secondary" onClick={onCancel}>Cancel</button>
 					<span className={styles.stepProgress}>Step {step + 1} / {steps.length} · {steps[step].label}</span>
+
 					<div className={styles.navSpacer} />
 					{step > 0 && (
 						<button type="button" className="button button-ghost" onClick={() => setStep(step - 1)}>
