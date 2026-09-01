@@ -1,5 +1,13 @@
 .filter {
 	width: max-content;
+	/* Never wider than the screen — scroll horizontally when the tabs overflow. */
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+/* Keep tabs at their natural size inside the scroll container instead of shrinking. */
+.filter :global(.tab) {
+	flex-shrink: 0;
 }
 
 /* The greeting inherits the large title size otherwise — keep it small. */

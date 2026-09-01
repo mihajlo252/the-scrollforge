@@ -68,9 +68,9 @@ export const Navigation = () => {
 			<Logo size="100" compact />
 			<div className={styles.menuItems}>
 				<BackButton classes="button button-primary" />
-				<button type="button" className="button button-accent" onClick={() => handleRedirect("/chat")}>
+				{/* <button type="button" className="button button-accent" onClick={() => handleRedirect("/chat")}>
 					Chat
-				</button>
+				</button> */}
 				<ThemeToggle />
 				<button type="button" className={`button button-primary ${styles.account}`} onClick={() => setMenu(true)}>
 					<Icon name="user" />

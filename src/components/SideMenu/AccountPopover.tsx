@@ -27,10 +27,10 @@ export const AccountPopover = ({
 					></motion.div>
 					<div className={styles.accountPopoverWrapper}>
 						<motion.div
-							initial={{ opacity: 0}}
-							animate={{ opacity: 1}}
-							exit={{ opacity: 0}}
-							transition={{ duration: 0.35, delay: 0 }}
+							initial={{ opacity: 0, y: -8, scale: 0.96 }}
+							animate={{ opacity: 1, y: 0, scale: 1 }}
+							exit={{ opacity: 0, y: -8, scale: 0.96 }}
+							transition={{ duration: 0.18, ease: "easeOut", delay: 0 }}
 							className={`frame ${styles.accountPopover}`}
 						>
 							{children}
