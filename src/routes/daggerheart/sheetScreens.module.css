@@ -132,6 +132,12 @@
 	display: flex;
 	gap: 0.5rem;
 }
+@media (max-width: 390px) {
+	.tierBar {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
 .tierStep {
 	flex: 1;
 	display: flex;
@@ -267,6 +273,7 @@
 	max-height: calc(100svh - 65px - 2.5rem);
 	overflow-y: auto;
 	overflow-x: hidden;
+	padding-inline: 16px;
 }
 .advSubPills {
 	display: flex;

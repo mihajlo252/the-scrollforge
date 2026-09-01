@@ -39,6 +39,15 @@
 	gap: 6px;
 	flex-wrap: wrap;
 }
+@media (max-width: 480px) {
+	.thresholds {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		:last-child {
+			grid-column: span 2;
+		}
+	}
+}
 .dmgZone {
 	flex: 1 1 0;
 	min-width: 58px;
