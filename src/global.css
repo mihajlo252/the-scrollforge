@@ -70,6 +70,7 @@
 }
 .textarea {
 	resize: vertical;
+	width: 100%;
 	line-height: 1.6;
 }
 [data-theme="light"] .input,
@@ -386,6 +387,14 @@
 	flex-wrap: wrap;
 	gap: 1rem;
 }
+
+.max-h {
+	min-height: 85svh;
+	max-height: 85svh;
+	min-width: 90svw;
+	max-width: 90svw;
+}
+
 .stretch {
 	flex-grow: 1;
 }

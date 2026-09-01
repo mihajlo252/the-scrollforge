@@ -176,6 +176,12 @@
 	gap: 6px;
 	align-items: center;
 }
+.hpControls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	justify-content: flex-end;
+}
 .deltaInput {
 	width: 64px;
 	height: 40px;
