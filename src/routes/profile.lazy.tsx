@@ -205,6 +205,9 @@ function Profile() {
 								animate={{ opacity: 1 }}
 								exit={{ opacity: 0 }}
 								transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
+								// Use the main-thread animator, not the accelerated WAAPI path,
+								// to avoid the one-frame opacity flash on exit. See Popup.tsx.
+								onUpdate={() => {}}
 								className="frame full column-direction"
 							>
 								<span className="frame-corner tl" />
