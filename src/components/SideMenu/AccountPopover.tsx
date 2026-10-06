@@ -17,6 +17,8 @@ export const AccountPopover = ({
 		<AnimatePresence>
 			{toggle && (
 				<>
+					{/* onUpdate forces the main-thread animator (not WAAPI) to avoid the
+					    one-frame opacity flash on exit. See Popup.tsx. */}
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
@@ -24,6 +26,7 @@ export const AccountPopover = ({
 						transition={{ duration: 0.35, delay: 0 }}
 						className={styles.backdrop}
 						onClick={() => closerFunc(false)}
+						onUpdate={() => {}}
 					></motion.div>
 					<div className={styles.accountPopoverWrapper}>
 						<motion.div
@@ -31,6 +34,7 @@ export const AccountPopover = ({
 							animate={{ opacity: 1, y: 0, scale: 1 }}
 							exit={{ opacity: 0, y: -8, scale: 0.96 }}
 							transition={{ duration: 0.18, ease: "easeOut", delay: 0 }}
+							onUpdate={() => {}}
 							className={`frame ${styles.accountPopover}`}
 						>
 							{children}

@@ -15,7 +15,7 @@ export const Notes = () => {
     };
 
     return (
-        <motion.div className={`frame full ${styles.form}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div className={`frame full ${styles.form}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onUpdate={() => {}}>
             <textarea
                 id="notes"
                 className={`textarea ${styles.textarea}`}
