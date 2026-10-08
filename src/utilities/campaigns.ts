@@ -123,3 +123,42 @@ export const savePartyOrder = async (rows: CampaignCharacter[]) => {
 		),
 	);
 };
+
+// The GM's one allowed write on a player's sheet (read-only view): append an
+// item to the inventory column. Goes straight to Supabase — the normal
+// autosave is blocked while viewOnly — and re-reads the column first so a
+// player's own recent inventory changes aren't overwritten by the GM's
+// cached copy. Mirrors the result into the locally cached sheet so the other
+// sheet tabs show it. Returns the saved list, or null on failure.
+export const gmAddInventoryItem = async <T>(
+	characterID: string,
+	field: "inventory" | "dhInventory",
+	item: T,
+): Promise<T[] | null> => {
+	const { data, error } = await supabase.from("characters").select(field).eq("id", characterID).single();
+	if (error) {
+		console.error(error);
+		return null;
+	}
+	const next = [...(((data as Record<string, unknown>)?.[field] as T[] | null) ?? []), item];
+	const { data: updated, error: saveError } = await supabase
+		.from("characters")
+		.update({ [field]: next })
+		.eq("id", characterID)
+		.select("id");
+	// An RLS-blocked update doesn't error, it just matches no rows.
+	if (saveError || !updated?.length) {
+		if (saveError) console.error(saveError);
+		return null;
+	}
+	try {
+		const raw = JSON.parse(localStorage.getItem("character") ?? "{}");
+		if (raw?.state?.character?.id === characterID) {
+			raw.state.character = { ...raw.state.character, [field]: next };
+			localStorage.setItem("character", JSON.stringify(raw));
+		}
+	} catch {
+		/* local mirror is best-effort */
+	}
+	return next;
+};
