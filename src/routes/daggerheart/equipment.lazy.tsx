@@ -8,6 +8,9 @@ import { SheetShell } from "../../sections/Daggerheart/CharacterProfile/SheetShe
 import { TRAIT_NAMES, primaryWeapons, secondaryWeapons, allArmors, weaponById, armorById, weaponToDH, armorToDH, formatWeaponDamage, tierForLevel, parseGearFeature, formatGearMods } from "../../utilities/daggerheart";
 import { patchCharacter } from "../../utilities/patchCharacter";
 import { queueCharacterSave } from "../../utilities/autosaveCharacter";
+import { gmAddInventoryItem } from "../../utilities/campaigns";
+import { toast } from "../../utilities/toasterSonner";
+import { useCharacterStore } from "../../zustand/stores";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/daggerheart/equipment")({
@@ -23,7 +26,7 @@ const GOLD_UNITS: { key: keyof DHGold; label: string }[] = [
 /** Module-level (NOT inline in EquipmentBody): an inline component gets a new
  *  identity every render, so React would remount the card — a visible flicker
  *  on each keystroke while an edit popup is open. */
-const WeaponCard = ({ w, label, onEdit }: { w: DHWeapon | null; label: string; onEdit: () => void }) => {
+const WeaponCard = ({ w, label, onEdit }: { w: DHWeapon | null; label: string; onEdit?: () => void }) => {
   const modsLine = w ? formatGearMods(parseGearFeature(w.feature)) : "";
   return (
     <div className={styles.weaponMini}>
@@ -31,9 +34,11 @@ const WeaponCard = ({ w, label, onEdit }: { w: DHWeapon | null; label: string; o
         <span className="caps" style={{ fontSize: 9 }}>{label}</span>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           {w && <span className="mono" style={{ color: "var(--gold-2)", fontSize: 13 }}>{w.damage}</span>}
-          <button className="sf-icon-btn" type="button" onClick={onEdit} aria-label={`Edit ${label}`}>
-            <Icon name="edit" size={12} />
-          </button>
+          {onEdit && (
+            <button className="sf-icon-btn" type="button" onClick={onEdit} aria-label={`Edit ${label}`}>
+              <Icon name="edit" size={12} />
+            </button>
+          )}
         </div>
       </div>
       {w ? (
@@ -78,6 +83,10 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
   const [itemForm, setItemForm] = useState<DHInventoryItem>(emptyItem());
 
   const armorModsLine = armor ? formatGearMods(parseGearFeature(armor.feature)) : "";
+
+  // Read-only GM view: everything is locked EXCEPT adding inventory items,
+  // which go through gmAddInventoryItem (the normal autosave is blocked).
+  const viewOnly = useCharacterStore((s) => s.viewOnly);
 
   const persist = (patch: Partial<DaggerheartCharacter>) => {
     patchCharacter(state, patch);
@@ -131,9 +140,16 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
 
   const openItemAdd = () => { setItemForm(emptyItem()); setItemIndex(null); setItemOpen(true); };
   const openItemEdit = (i: number) => { setItemForm({ ...inventory[i] }); setItemIndex(i); setItemOpen(true); };
-  const saveItem = (e: React.FormEvent) => {
+  const saveItem = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!itemForm.name.trim()) return;
+    if (viewOnly) {
+      const saved = await gmAddInventoryItem(character.id, "dhInventory", itemForm);
+      if (saved) setInventory(saved);
+      toast(saved ? { style: "", message: "Item added to inventory" } : { style: "frame button-primary", message: "Couldn't add the item." });
+      setItemOpen(false);
+      return;
+    }
     const next = itemIndex === null ? [...inventory, itemForm] : inventory.map((x, i) => (i === itemIndex ? itemForm : x));
     persistInventory(next);
     setItemOpen(false);
@@ -146,8 +162,8 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
         <div className="card-hdr"><div className="card-title">Weapons</div></div>
         <div className="card-body">
           <div className={styles.weaponStrip}>
-            <WeaponCard w={weapons.primary} label="Primary" onEdit={() => openWeapon("primary")} />
-            <WeaponCard w={weapons.secondary} label="Secondary" onEdit={() => openWeapon("secondary")} />
+            <WeaponCard w={weapons.primary} label="Primary" onEdit={viewOnly ? undefined : () => openWeapon("primary")} />
+            <WeaponCard w={weapons.secondary} label="Secondary" onEdit={viewOnly ? undefined : () => openWeapon("secondary")} />
           </div>
         </div>
       </Frame>
@@ -157,9 +173,11 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
         <Frame classes="card">
           <div className="card-hdr">
             <div className="card-title">Active Armor</div>
-            <button className="button button-primary short" type="button" onClick={openArmor}>
-              <Icon name={armor ? "edit" : "plus"} size={12} /> {armor ? "Edit" : "Equip"}
-            </button>
+            {!viewOnly && (
+              <button className="button button-primary short" type="button" onClick={openArmor}>
+                <Icon name={armor ? "edit" : "plus"} size={12} /> {armor ? "Edit" : "Equip"}
+              </button>
+            )}
           </div>
           <div className="card-body">
             {armor ? (
@@ -187,10 +205,12 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
               {GOLD_UNITS.map(({ key, label }) => (
                 <div key={key} className={styles.goldUnit}>
                   <span className={styles.goldVal}>{gold[key] ?? 0}</span>
-                  <div className={styles.goldStepper}>
-                    <button type="button" className="sf-icon-btn" onClick={() => stepGold(key, -1)} aria-label={`Decrease ${label}`}><Icon name="back" size={13} /></button>
-                    <button type="button" className="sf-icon-btn" onClick={() => stepGold(key, 1)} aria-label={`Increase ${label}`}><Icon name="plus" size={13} /></button>
-                  </div>
+                  {!viewOnly && (
+                    <div className={styles.goldStepper}>
+                      <button type="button" className="sf-icon-btn" onClick={() => stepGold(key, -1)} aria-label={`Decrease ${label}`}><Icon name="back" size={13} /></button>
+                      <button type="button" className="sf-icon-btn" onClick={() => stepGold(key, 1)} aria-label={`Increase ${label}`}><Icon name="plus" size={13} /></button>
+                    </div>
+                  )}
                   <span className={styles.goldLabel}>{label}</span>
                 </div>
               ))}
@@ -220,8 +240,12 @@ function EquipmentBody({ character, state }: { character: DaggerheartCharacter; 
                   </div>
                   <div className={styles.invRight}>
                     <span className="mono" style={{ color: "var(--ink-dim)" }}>×{it.qty}</span>
-                    <button className="sf-icon-btn" type="button" onClick={() => openItemEdit(i)} aria-label="Edit"><Icon name="edit" size={13} /></button>
-                    <ConfirmButton className="sf-icon-btn" aria-label="Delete" title="Delete item?" message={`Remove "${it.name}" from your inventory? This can't be undone.`} onConfirm={() => persistInventory(inventory.filter((_, idx) => idx !== i))}><Icon name="trash" size={13} /></ConfirmButton>
+                    {!viewOnly && (
+                      <>
+                        <button className="sf-icon-btn" type="button" onClick={() => openItemEdit(i)} aria-label="Edit"><Icon name="edit" size={13} /></button>
+                        <ConfirmButton className="sf-icon-btn" aria-label="Delete" title="Delete item?" message={`Remove "${it.name}" from your inventory? This can't be undone.`} onConfirm={() => persistInventory(inventory.filter((_, idx) => idx !== i))}><Icon name="trash" size={13} /></ConfirmButton>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}

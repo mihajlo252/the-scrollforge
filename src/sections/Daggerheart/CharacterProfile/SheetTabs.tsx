@@ -1,6 +1,8 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { TabBar } from "../../../components/Primitives";
+import { ReadOnlyBanner } from "../../../components/ReadOnlyBanner/ReadOnlyBanner";
+import { useCharacterStore } from "../../../zustand/stores";
 import styles from "./sheet.module.css";
 
 const DH_SHEET_TABS = [
@@ -23,16 +25,22 @@ export const SheetTabs = ({ active }: { active: string }) => {
 		});
 	}, [router]);
 
+	// Shown on every Daggerheart tab while a GM views a player's sheet.
+	const viewOnly = useCharacterStore((s) => s.viewOnly);
+
 	return (
-		<div className={styles.tabsRow}>
-			<TabBar
-				tabs={DH_SHEET_TABS}
-				active={active}
-				onChange={(id: string) => {
-					const tab = DH_SHEET_TABS.find((t) => t.id === id);
-					if (tab && tab.id !== active) navigate({ to: tab.to });
-				}}
-			/>
-		</div>
+		<>
+			{viewOnly && <ReadOnlyBanner />}
+			<div className={styles.tabsRow}>
+				<TabBar
+					tabs={DH_SHEET_TABS}
+					active={active}
+					onChange={(id: string) => {
+						const tab = DH_SHEET_TABS.find((t) => t.id === id);
+						if (tab && tab.id !== active) navigate({ to: tab.to });
+					}}
+				/>
+			</div>
+		</>
 	);
 };

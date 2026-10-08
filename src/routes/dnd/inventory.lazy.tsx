@@ -7,7 +7,7 @@ import { HPBar, Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { queueCharacterSave } from "../../utilities/autosaveCharacter";
-import { sendData } from "../../utilities/sendData";
+import { gmAddInventoryItem } from "../../utilities/campaigns";
 import { useCharacterStore } from "../../zustand/stores";
 import { toast } from "../../utilities/toasterSonner";
 import styles from "./sheetScreens.module.css";
@@ -81,14 +81,14 @@ function InventoryScreen() {
 	};
 	const submitForm = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const next = editIndex === null ? [...items, form] : items.map((it, i) => (i === editIndex ? form : it));
 		if (viewOnly) {
-			// GM carve-out: only adding is allowed, and it bypasses the read-only
-			// write-block by writing the inventory column directly.
-			setItems(next);
-			const ok = await sendData("characters", character.id, { inventory: next });
-			toast(ok ? { style: "", message: "Item added to inventory" } : { style: "frame button-primary", message: "Couldn't add the item." });
+			// GM carve-out: only adding is allowed (edit is hidden in read-only
+			// view). Appends to the player's current inventory server-side.
+			const saved = await gmAddInventoryItem(character.id, "inventory", form);
+			if (saved) setItems(saved);
+			toast(saved ? { style: "", message: "Item added to inventory" } : { style: "frame button-primary", message: "Couldn't add the item." });
 		} else {
+			const next = editIndex === null ? [...items, form] : items.map((it, i) => (i === editIndex ? form : it));
 			await persistItems(next);
 		}
 		setShowForm(false);
