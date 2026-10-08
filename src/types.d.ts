@@ -298,6 +298,53 @@ interface CharactersStore {
 interface CharacterStore {
     character: Character | DaggerheartCharacter;
     setCharacter: (character: Character | DaggerheartCharacter) => void;
+    // True while a GM is viewing another player's character from a campaign:
+    // all edits are blocked except the GM adding inventory items.
+    viewOnly: boolean;
+    setViewOnly: (viewOnly: boolean) => void;
+}
+
+interface Campaign {
+    id: string;
+    name: string;
+    dmID: string;
+    dmName?: string | null;      // copied from the GM's username at creation
+    gamemode: string;            // 'dnd' | 'daggerheart'
+    description?: string;
+    seats?: number;              // party size limit (default 6)
+    glyph?: string | null;       // sigil the GM picked when forging
+    created_at: string;
+}
+
+interface CampaignCharacter {
+    id: string;
+    campaignID: string;
+    characterID: string;
+    profileID: string;
+    playerName?: string | null;  // copied from the player's username at request time
+    status: string;              // 'pending' | 'accepted'
+    sortOrder?: number | null;   // GM's party order on the campaign page
+    created_at: string;
+}
+
+interface CampaignStore {
+    campaign: Campaign | null;
+    setCampaign: (campaign: Campaign) => void;
+}
+
+// Last-fetched campaign data, so the Campaigns screens render instantly on
+// revisit (then refresh in the background), plus the user's card order.
+interface CampaignCacheStore {
+    owner: string | null;                         // user the cache belongs to
+    campaigns: Campaign[];
+    rows: CampaignCharacter[];
+    heroes: (Character | DaggerheartCharacter)[]; // characters seen in rows + my own
+    myCharacters: (Character | DaggerheartCharacter)[];
+    order: Record<string, string[]>;              // group ("gm" | "playing" | "browse") -> campaign ids
+    setHub: (owner: string, data: { campaigns: Campaign[]; rows: CampaignCharacter[]; heroes: (Character | DaggerheartCharacter)[]; myCharacters: (Character | DaggerheartCharacter)[] }) => void;
+    mergeRoster: (owner: string, campaignID: string, rows: CampaignCharacter[], heroes: (Character | DaggerheartCharacter)[]) => void;
+    removeCampaign: (campaignID: string) => void;
+    setOrder: (group: string, ids: string[]) => void;
 }
 
 interface Ticket {

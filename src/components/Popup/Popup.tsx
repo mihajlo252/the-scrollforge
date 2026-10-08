@@ -1,6 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./Popup.module.css";
+
+// Open popups, oldest first. Escape only closes the topmost one, so a popup
+// opened from inside another (e.g. the glyph picker over Forge a Campaign)
+// doesn't take its parent down with it.
+const openStack: symbol[] = [];
 
 export const Popup = ({
 	children,
@@ -12,11 +17,17 @@ export const Popup = ({
 	toggle?: boolean;
 }) => {
 
+	const id = useRef(Symbol("popup")).current;
+	const closeRef = useRef(closerFunc);
+	closeRef.current = closerFunc;
+
 	useEffect(() => {
+		if (!toggle) return;
+		openStack.push(id);
 
 		const handleClosePopup = (e: KeyboardEvent) => {
-			if (e.key == "Escape") {
-				closerFunc(false);
+			if (e.key == "Escape" && openStack[openStack.length - 1] === id) {
+				closeRef.current(false);
 			}
 		};
 
@@ -24,8 +35,11 @@ export const Popup = ({
 
 		return () => {
 			window.removeEventListener("keyup", handleClosePopup);
+			const i = openStack.lastIndexOf(id);
+			if (i >= 0) openStack.splice(i, 1);
 		};
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [toggle]);
 
 	return (
 		<AnimatePresence>

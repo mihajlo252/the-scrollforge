@@ -3,14 +3,13 @@ import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useCharactersStore, useCharacterStore, useUserStore } from "../zustand/stores";
 import { DeletePopup } from "../components/DeletePopup";
 import { CreateCharacter } from "../sections/CreateCharacter";
-import { Avatar } from "../components/Avatar/Avatar";
 import { Popup } from "../components/Popup/Popup";
-import { HPBar, Icon, RuneDivider } from "../components/Primitives";
+import { Icon, RuneDivider } from "../components/Primitives";
+import { CharacterCard } from "../components/CharacterCard/CharacterCard";
 import { SortableGrid } from "../components/SortableGrid/SortableGrid";
 import { sendData } from "../utilities/sendData";
 import { activeButtonsToggle, getRandomGreeting } from "../utilities/utilityFunctions";
 import { motion } from "framer-motion";
-import DaggerheartClasses from "../daggerheart-config/classes.json";
 
 import styles from "../routeStyles/profile.module.css";
 
@@ -27,7 +26,7 @@ const filters = [
 function Profile() {
 	const { user } = useUserStore();
 	const { characters, setCharacters }: CharactersStore = useCharactersStore();
-	const { setCharacter }: CharacterStore = useCharacterStore();
+	const { setCharacter, setViewOnly }: CharacterStore = useCharacterStore();
 	const [isDeleted, setIsDeleted] = useState(false);
 	const [characterDelete, setCharacterDelete] = useState("");
 	const [openCreateCharacter, setOpenCreateCharacter] = useState(false);
@@ -57,6 +56,8 @@ function Profile() {
 	};
 
 	const handleNavigateToCharacter = async (char: Character | DaggerheartCharacter) => {
+		// Owner opening their own character: full edit access.
+		setViewOnly(false);
 		if (char.gamemode === "dnd") {
 			setCharacter(char as Character);
 		} else {
@@ -110,9 +111,7 @@ function Profile() {
 		setDragOrder(null);
 	}, [characters]);
 
-	const ordered = dragOrder
-		? (dragOrder.map((id) => byId.get(id)).filter(Boolean) as (Character | DaggerheartCharacter)[])
-		: sortedCharacters;
+	const ordered = dragOrder ? (dragOrder.map((id) => byId.get(id)).filter(Boolean) as (Character | DaggerheartCharacter)[]) : sortedCharacters;
 	const displayed = ordered.filter((c) => characterFilter === "all" || c.gamemode === characterFilter);
 
 	// Reorder within the visible (filtered) set, merged back into the full order.
@@ -138,6 +137,11 @@ function Profile() {
 		});
 	};
 
+	const handleRedirect = (path: string) => {
+		// setMenu(false);
+		navigate({ to: path });
+	};
+
 	useEffect(() => {
 		if (isDeleted || isSave) {
 			handleGetCharacter();
@@ -158,9 +162,14 @@ function Profile() {
 						<span className={`eyebrow ${styles.greeting}`}>{greeting}</span>
 						{user?.user_metadata.username}
 					</h1>
-					<button type="button" onClick={() => setOpenCreateCharacter(true)} className="button button-primary">
-						<Icon name="plus" size={16} /> Forge New Hero
-					</button>
+					<div className="side-by-side">
+						<button type="button" className="button button-primary" onClick={() => handleRedirect("/campaigns")}>
+							<Icon name="crown" size={16} /> Campaigns
+						</button>
+						<button type="button" onClick={() => setOpenCreateCharacter(true)} className="button button-primary">
+							<Icon name="plus" size={16} /> Forge New Hero
+						</button>
+					</div>
 				</section>
 				<RuneDivider />
 				<div className={`tabs ${styles.filter}`}>
@@ -239,89 +248,3 @@ function Profile() {
 		</CatchBoundary>
 	);
 }
-
-const CharacterCard = ({
-	character,
-	onEnter,
-	onDelete,
-}: {
-	character: Character | DaggerheartCharacter;
-	onEnter: (char: Character | DaggerheartCharacter) => void;
-	onDelete: (char: Character | DaggerheartCharacter) => void;
-}) => {
-	const router = useRouter();
-	const preload = () => router.preloadRoute({ to: "/" + character.gamemode + "/character/" }).catch(() => {});
-	const isDnd = character.gamemode === "dnd";
-	const profile: any = character.characterProfile;
-	const name = profile?.name ?? (character as any).name;
-	const level = profile?.level;
-
-	const lineage = isDnd
-		? [profile?.race, profile?.subrace].filter(Boolean).join(" ")
-		: [profile?.ancestry, profile?.community].filter(Boolean).join(" ");
-	const job = [profile?.class, profile?.subclass].filter(Boolean).join(" ");
-
-	// Daggerheart hp.marked counts HP REMAINING (boxes still filled), not damage.
-	// Fall back to the class starting HP for legacy characters without dhVitals.
-	const dhHP = !isDnd ? (character as DaggerheartCharacter).dhVitals?.hp : undefined;
-	const dhMaxHP =
-		dhHP?.total ??
-		(!isDnd
-			? (DaggerheartClasses as any[]).find((c) => c.name === (profile?.class ?? "").toUpperCase())?.startingHitPoints
-			: undefined);
-	const maxHP = isDnd ? (character as any).stats?.maxHP : dhMaxHP;
-	const currentHP = isDnd ? (character as any).currentHP : dhHP?.marked ?? dhMaxHP;
-	const hasHP = typeof maxHP === "number" && maxHP > 0;
-
-	return (
-		<article className="frame hoverable" onMouseEnter={preload} onFocus={preload}>
-				<span className="frame-corner tl" />
-				<span className="frame-corner tr" />
-				<span className="frame-corner bl" />
-				<span className="frame-corner br" />
-
-				<div className={styles.portrait} onClick={() => onEnter(character)}>
-					<Avatar characterClass={profile?.class ?? ""} gameMode={character.gamemode} />
-					<span className={`chip ${isDnd ? "chip-gold" : "chip-arcane"} ${styles.sysChip}`}>{isDnd ? "D&D" : "Daggerheart"}</span>
-				</div>
-
-				<div className={styles.cardBody}>
-					<div className={styles.cardHead}>
-						<span className="display" style={{ fontSize: "1.5rem", lineHeight: 1.05 }}>
-							{name}
-						</span>
-						{level != null && (
-							<span className="mono" style={{ color: "var(--gold-2)", fontSize: "0.85rem" }}>
-								LV <span style={{ fontSize: "1.15rem" }}>{level}</span>
-							</span>
-						)}
-					</div>
-					<div className={styles.meta}>
-						{lineage && <div>{lineage}</div>}
-						{job && <div className={styles.metaSub}>{job}</div>}
-					</div>
-
-					{hasHP && (
-						<div className={styles.hpBlock}>
-							<div className={styles.hpRow}>
-								<span className="caps">Hit Points</span>
-								<span className="mono" style={{ color: "var(--text)" }}>
-									{currentHP ?? maxHP} / {maxHP}
-								</span>
-							</div>
-							<HPBar cur={currentHP ?? maxHP} max={maxHP} temp={0} />
-						</div>
-					)}
-
-					<div className={styles.actions}>
-						<button className="button stretch" onClick={() => onEnter(character)}>
-							Open Scroll
-						</button>
-						<button className={`button button-secondary ${styles.delete}`} onClick={() => onDelete(character)}>
-							<Icon name="trash" size={14} />
-						</button>
-					</div>
-				</div>
-			</article>
-	);
-};

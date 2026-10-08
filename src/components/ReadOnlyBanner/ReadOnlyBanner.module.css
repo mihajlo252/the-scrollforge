@@ -1,0 +1,77 @@
+/* Arcane-striped strip from the Claude Design redesign (.sfc-ro). */
+.banner {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 12px 20px;
+	margin-bottom: 0.75rem;
+	border: 1px solid var(--arcane);
+	border-radius: 6px;
+	background:
+		repeating-linear-gradient(135deg, rgba(122, 107, 184, 0.12) 0 10px, rgba(122, 107, 184, 0.05) 10px 20px),
+		var(--bg-2);
+}
+
+.icon {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	border: 1px solid var(--arcane);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #aea1e0;
+	background: var(--panel);
+	flex-shrink: 0;
+}
+:global([data-theme="light"]) .icon {
+	color: var(--arcane);
+}
+
+.text {
+	flex: 1;
+	min-width: 0;
+	font-size: 15px;
+	color: var(--ink-dim);
+	line-height: 1.35;
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 8px;
+	align-items: baseline;
+}
+.text b {
+	font-family: var(--display);
+	font-size: 19px;
+	color: var(--text);
+	font-weight: 600;
+}
+
+.back {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 34px;
+	padding: 0 14px;
+	font-size: 13.5px;
+	white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+	.banner {
+		flex-wrap: wrap;
+		padding: 12px 14px;
+		gap: 10px 12px;
+		align-items: flex-start;
+	}
+	.text {
+		font-size: 13.5px;
+	}
+	.text b {
+		font-size: 17px;
+		flex-basis: 100%;
+	}
+	.back {
+		width: 100%;
+		justify-content: center;
+	}
+}

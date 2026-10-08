@@ -207,6 +207,24 @@ export const Icon = ({
 				<path d="M12 17h.01" />
 			</>
 		),
+		lock: (
+			<>
+				<rect x="5" y="11" width="14" height="10" rx="2" />
+				<path d="M8 11V7a4 4 0 018 0v4" />
+			</>
+		),
+		users: (
+			<>
+				<circle cx="9" cy="8" r="3.5" />
+				<path d="M2 20a7 7 0 0114 0" />
+				<path d="M16 4.5a3.5 3.5 0 010 7M18 20a7 7 0 00-2.5-5.4" />
+			</>
+		),
+		hourglass: (
+			<>
+				<path d="M6 2h12M6 22h12M7 2v3a5 5 0 0010 0V2M7 22v-3a5 5 0 0110 0v3" />
+			</>
+		),
 	};
 	return (
 		<svg

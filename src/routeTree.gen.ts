@@ -21,6 +21,7 @@ const ThanksLazyImport = createFileRoute('/thanks')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const ChatLazyImport = createFileRoute('/chat')()
 const IndexLazyImport = createFileRoute('/')()
+const CampaignsIndexLazyImport = createFileRoute('/campaigns/')()
 const DndTraitsLazyImport = createFileRoute('/dnd/traits')()
 const DndSpellsLazyImport = createFileRoute('/dnd/spells')()
 const DndInventoryLazyImport = createFileRoute('/dnd/inventory')()
@@ -36,6 +37,7 @@ const DaggerheartDomainsLazyImport = createFileRoute('/daggerheart/domains')()
 const DaggerheartCharacterLazyImport = createFileRoute(
   '/daggerheart/character',
 )()
+const CampaignsDetailLazyImport = createFileRoute('/campaigns/detail')()
 
 // Create/Update Routes
 
@@ -68,6 +70,14 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const CampaignsIndexLazyRoute = CampaignsIndexLazyImport.update({
+  id: '/campaigns/',
+  path: '/campaigns/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/campaigns/index.lazy').then((d) => d.Route),
+)
 
 const DndTraitsLazyRoute = DndTraitsLazyImport.update({
   id: '/dnd/traits',
@@ -147,6 +157,14 @@ const DaggerheartCharacterLazyRoute = DaggerheartCharacterLazyImport.update({
   import('./routes/daggerheart/character.lazy').then((d) => d.Route),
 )
 
+const CampaignsDetailLazyRoute = CampaignsDetailLazyImport.update({
+  id: '/campaigns/detail',
+  path: '/campaigns/detail',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/campaigns/detail.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -184,6 +202,13 @@ declare module '@tanstack/react-router' {
       path: '/tickets'
       fullPath: '/tickets'
       preLoaderRoute: typeof TicketsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/campaigns/detail': {
+      id: '/campaigns/detail'
+      path: '/campaigns/detail'
+      fullPath: '/campaigns/detail'
+      preLoaderRoute: typeof CampaignsDetailLazyImport
       parentRoute: typeof rootRoute
     }
     '/daggerheart/character': {
@@ -263,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DndTraitsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/campaigns/': {
+      id: '/campaigns/'
+      path: '/campaigns'
+      fullPath: '/campaigns'
+      preLoaderRoute: typeof CampaignsIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -274,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
+  '/campaigns/detail': typeof CampaignsDetailLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
   '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
   '/daggerheart/equipment': typeof DaggerheartEquipmentLazyRoute
@@ -285,6 +318,7 @@ export interface FileRoutesByFullPath {
   '/dnd/inventory': typeof DndInventoryLazyRoute
   '/dnd/spells': typeof DndSpellsLazyRoute
   '/dnd/traits': typeof DndTraitsLazyRoute
+  '/campaigns': typeof CampaignsIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -293,6 +327,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
+  '/campaigns/detail': typeof CampaignsDetailLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
   '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
   '/daggerheart/equipment': typeof DaggerheartEquipmentLazyRoute
@@ -304,6 +339,7 @@ export interface FileRoutesByTo {
   '/dnd/inventory': typeof DndInventoryLazyRoute
   '/dnd/spells': typeof DndSpellsLazyRoute
   '/dnd/traits': typeof DndTraitsLazyRoute
+  '/campaigns': typeof CampaignsIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -313,6 +349,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
+  '/campaigns/detail': typeof CampaignsDetailLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
   '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
   '/daggerheart/equipment': typeof DaggerheartEquipmentLazyRoute
@@ -324,6 +361,7 @@ export interface FileRoutesById {
   '/dnd/inventory': typeof DndInventoryLazyRoute
   '/dnd/spells': typeof DndSpellsLazyRoute
   '/dnd/traits': typeof DndTraitsLazyRoute
+  '/campaigns/': typeof CampaignsIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -334,6 +372,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/thanks'
     | '/tickets'
+    | '/campaigns/detail'
     | '/daggerheart/character'
     | '/daggerheart/domains'
     | '/daggerheart/equipment'
@@ -345,6 +384,7 @@ export interface FileRouteTypes {
     | '/dnd/inventory'
     | '/dnd/spells'
     | '/dnd/traits'
+    | '/campaigns'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -352,6 +392,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/thanks'
     | '/tickets'
+    | '/campaigns/detail'
     | '/daggerheart/character'
     | '/daggerheart/domains'
     | '/daggerheart/equipment'
@@ -363,6 +404,7 @@ export interface FileRouteTypes {
     | '/dnd/inventory'
     | '/dnd/spells'
     | '/dnd/traits'
+    | '/campaigns'
   id:
     | '__root__'
     | '/'
@@ -370,6 +412,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/thanks'
     | '/tickets'
+    | '/campaigns/detail'
     | '/daggerheart/character'
     | '/daggerheart/domains'
     | '/daggerheart/equipment'
@@ -381,6 +424,7 @@ export interface FileRouteTypes {
     | '/dnd/inventory'
     | '/dnd/spells'
     | '/dnd/traits'
+    | '/campaigns/'
   fileRoutesById: FileRoutesById
 }
 
@@ -390,6 +434,7 @@ export interface RootRouteChildren {
   ProfileLazyRoute: typeof ProfileLazyRoute
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
+  CampaignsDetailLazyRoute: typeof CampaignsDetailLazyRoute
   DaggerheartCharacterLazyRoute: typeof DaggerheartCharacterLazyRoute
   DaggerheartDomainsLazyRoute: typeof DaggerheartDomainsLazyRoute
   DaggerheartEquipmentLazyRoute: typeof DaggerheartEquipmentLazyRoute
@@ -401,6 +446,7 @@ export interface RootRouteChildren {
   DndInventoryLazyRoute: typeof DndInventoryLazyRoute
   DndSpellsLazyRoute: typeof DndSpellsLazyRoute
   DndTraitsLazyRoute: typeof DndTraitsLazyRoute
+  CampaignsIndexLazyRoute: typeof CampaignsIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -409,6 +455,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileLazyRoute: ProfileLazyRoute,
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
+  CampaignsDetailLazyRoute: CampaignsDetailLazyRoute,
   DaggerheartCharacterLazyRoute: DaggerheartCharacterLazyRoute,
   DaggerheartDomainsLazyRoute: DaggerheartDomainsLazyRoute,
   DaggerheartEquipmentLazyRoute: DaggerheartEquipmentLazyRoute,
@@ -420,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   DndInventoryLazyRoute: DndInventoryLazyRoute,
   DndSpellsLazyRoute: DndSpellsLazyRoute,
   DndTraitsLazyRoute: DndTraitsLazyRoute,
+  CampaignsIndexLazyRoute: CampaignsIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -437,6 +485,7 @@ export const routeTree = rootRoute
         "/profile",
         "/thanks",
         "/tickets",
+        "/campaigns/detail",
         "/daggerheart/character",
         "/daggerheart/domains",
         "/daggerheart/equipment",
@@ -447,7 +496,8 @@ export const routeTree = rootRoute
         "/dnd/inspiration",
         "/dnd/inventory",
         "/dnd/spells",
-        "/dnd/traits"
+        "/dnd/traits",
+        "/campaigns/"
       ]
     },
     "/": {
@@ -464,6 +514,9 @@ export const routeTree = rootRoute
     },
     "/tickets": {
       "filePath": "tickets.lazy.tsx"
+    },
+    "/campaigns/detail": {
+      "filePath": "campaigns/detail.lazy.tsx"
     },
     "/daggerheart/character": {
       "filePath": "daggerheart/character.lazy.tsx"
@@ -497,6 +550,9 @@ export const routeTree = rootRoute
     },
     "/dnd/traits": {
       "filePath": "dnd/traits.lazy.tsx"
+    },
+    "/campaigns/": {
+      "filePath": "campaigns/index.lazy.tsx"
     }
   }
 }

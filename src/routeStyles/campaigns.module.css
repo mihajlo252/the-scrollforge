@@ -1,0 +1,1384 @@
+	/* Campaigns hub + detail — ported from the Claude Design "Scrollforge Redesign"
+   (sf-campaigns-css.js). Design tokens are mapped onto the app's names:
+   --ink → --text, --bg → --background, parchment → [data-theme="light"],
+   and its 720px container query → a viewport media query. */
+
+.root {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Page content wrapper. The design uses a container query for its phone
+   layout; here it's a viewport media query instead (the content spans the
+   main column, so they match). container-type would add layout containment,
+   which turns the element into the containing block for the fixed-position
+   Popup overlays rendered inside the page. */
+.cq {
+	display: flex;
+	flex-direction: column;
+}
+
+/* ── Hub header ─────────────────────────────────────────────── */
+.hubHead {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 24px;
+	padding-bottom: 20px;
+}
+.eyebrow {
+	font-size: 17px;
+}
+.h1 {
+	font-size: 54px;
+	margin: 2px 0 0;
+	color: var(--gold-2);
+	line-height: 1;
+	font-weight: 500;
+}
+.sub {
+	color: var(--ink-dim);
+	margin-top: 8px;
+	font-size: 15px;
+}
+.subPending {
+	color: var(--gold-2);
+	font-style: italic;
+}
+.newBtn {
+	height: 48px;
+}
+.short {
+	display: none;
+}
+
+.toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 20px 0 16px;
+	flex-wrap: wrap;
+}
+.tabCount {
+	font-family: var(--mono);
+	font-size: 11px;
+	opacity: 0.6;
+	margin-left: 4px;
+}
+.filters {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+.search {
+	position: relative;
+	width: 280px;
+}
+.search svg {
+	position: absolute;
+	left: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--ink-faint);
+	z-index: 1;
+}
+.search :global(.input) {
+	height: 44px;
+	padding-left: 36px;
+	font-size: 15px;
+	width: 100%;
+}
+.seg {
+	display: flex;
+	gap: 2px;
+	background: var(--bg-2);
+	border: 1px solid var(--rule);
+	border-radius: 4px;
+	padding: 4px;
+}
+.seg :global(.sf-tab) {
+	padding: 8px 14px;
+	font-size: 13px;
+}
+.divider {
+	margin: 0 0 22px;
+}
+
+/* ── Hub groups ─────────────────────────────────────────────── */
+.mine {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+.secHd {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 14px;
+	color: var(--gold);
+}
+.secHd :global(.display) {
+	font-size: 24px;
+	color: var(--text);
+}
+.secHd::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: linear-gradient(90deg, var(--rule-2), transparent);
+}
+.count {
+	font-size: 11.5px;
+	color: var(--gold-2);
+	border: 1px solid var(--gold-deep);
+	border-radius: 999px;
+	padding: 2px 9px;
+	white-space: nowrap;
+}
+.stack {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+.browse {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+	gap: 16px;
+}
+
+/* ── Campaign card ──────────────────────────────────────────── */
+.card {
+	display: flex;
+	flex-direction: row;
+	gap: 0;
+	padding: 0;
+	height: auto;
+}
+.sigil {
+	flex: 0 0 88px;
+	position: relative;
+	border-right: 1px solid var(--rule);
+	border-radius: 5px 0 0 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+.sigil::before {
+	content: "";
+	position: absolute;
+	inset: 6px;
+	border: 1px solid rgba(255, 240, 210, 0.16);
+	border-radius: 3px;
+	z-index: 2;
+}
+.sigil::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(ellipse at 50% 35%, transparent 25%, rgba(0, 0, 0, 0.5));
+}
+.sigil :global(.display) {
+	position: relative;
+	z-index: 1;
+	font-size: 42px;
+	color: rgba(255, 246, 226, 0.92);
+	text-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
+}
+.cardBody {
+	flex: 1;
+	min-width: 0;
+	padding: 14px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.cardTop {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+.cardName {
+	font-size: 25px;
+	line-height: 1.05;
+	color: var(--text);
+	text-wrap: balance;
+}
+.chips {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	flex-shrink: 0;
+}
+.chips :global(.chip) {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+.cardMeta {
+	display: flex;
+	gap: 16px;
+	font-size: 13.5px;
+	color: var(--ink-dim);
+	flex-wrap: wrap;
+}
+.cardMeta :global(.caps) {
+	font-size: 9.5px;
+	color: var(--ink-faint);
+	margin-right: 6px;
+}
+.cardDesc {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.4;
+	color: var(--ink-dim);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-wrap: pretty;
+	min-height: 2.8em;
+}
+.muted {
+	font-style: italic;
+	color: var(--ink-faint);
+}
+.cardFoot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 4px;
+	padding-top: 10px;
+	border-top: 1px dashed var(--rule);
+}
+.cardActions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.btnSm {
+	display: inline-flex;
+	align-items: center;
+	height: 34px;
+	padding: 0 14px;
+	font-size: 13.5px;
+	gap: 6px;
+}
+.reqPip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12.5px;
+	color: var(--ember-2);
+	font-style: italic;
+}
+.reqPip :global(.mono) {
+	background: var(--ember);
+	color: #fff;
+	border-radius: 999px;
+	min-width: 18px;
+	height: 18px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 10.5px;
+	padding: 0 5px;
+	font-style: normal;
+}
+
+/* ── Hero emblems / avatars ─────────────────────────────────── */
+.heroAv {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	border-radius: 4px;
+	border: 1px solid var(--gold-deep);
+	color: rgba(255, 246, 226, 0.92);
+	box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
+	overflow: hidden;
+}
+.emblems {
+	display: flex;
+	align-items: center;
+}
+.embFilled {
+	display: flex;
+}
+.emblem {
+	display: inline-flex;
+	margin-right: -5px;
+	border-radius: 4px;
+	box-shadow: 0 0 0 2px var(--panel-2);
+}
+.embOpen {
+	display: flex;
+	gap: 4px;
+	margin-left: 12px;
+}
+.emblemOpen {
+	border: 1px dashed var(--rule-2);
+	border-radius: 3px;
+}
+.seats {
+	font-size: 11.5px;
+	color: var(--ink-faint);
+	margin-left: 10px;
+}
+.pendingChip {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	border-style: dashed;
+	border-color: var(--gold-deep);
+	color: var(--gold-2);
+	font-style: italic;
+	background: transparent;
+}
+
+/* ── Empty states ───────────────────────────────────────────── */
+.empty {
+	border: 1px dashed var(--rule-2);
+	border-radius: 6px;
+	padding: 32px 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 6px;
+	background: radial-gradient(ellipse at 50% 0%, rgba(201, 162, 74, 0.06), transparent 70%);
+}
+.emptySeal {
+	width: 54px;
+	height: 54px;
+	border-radius: 50%;
+	border: 1px solid var(--gold-deep);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--gold-2);
+	box-shadow:
+		0 0 0 4px var(--background),
+		0 0 0 5px var(--rule);
+	margin-bottom: 8px;
+	background: var(--panel);
+}
+.emptyTitle {
+	font-size: 22px;
+	color: var(--text);
+	line-height: 1.15;
+	text-wrap: balance;
+}
+.emptyBody {
+	font-size: 14px;
+	color: var(--ink-dim);
+	max-width: 360px;
+	line-height: 1.45;
+	margin-bottom: 8px;
+	text-wrap: pretty;
+}
+
+/* ── Modals (Forge / Join) ──────────────────────────────────── */
+.modal {
+	flex-direction: column;
+	gap: 0;
+	padding: 0;
+	height: auto;
+	/* Popup wrapper: max-height 100svh - 65px with 20px padding top + bottom. */
+	max-height: calc(100svh - 110px);
+	box-shadow: var(--shadow-2);
+}
+.modalHd {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 22px 26px 14px;
+}
+.modalTitle {
+	font-size: 32px;
+	line-height: 1.05;
+	color: var(--gold-2);
+	margin-top: 2px;
+	text-wrap: balance;
+}
+.modalSub {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	margin-top: 10px;
+	flex-wrap: wrap;
+	font-size: 13.5px;
+	color: var(--ink-dim);
+}
+.modalSub :global(.chip) {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+.modalRule {
+	margin: 0 26px;
+}
+.modalBd {
+	padding: 18px 26px 8px;
+	overflow: auto;
+	min-height: 0;
+}
+.modalFt {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 14px 26px 20px;
+	border-top: 1px solid var(--rule);
+	margin-top: 12px;
+}
+.modalFt :global(.button[disabled]) {
+	opacity: 0.45;
+	cursor: not-allowed;
+	filter: none;
+	box-shadow: none;
+}
+.field {
+	margin-bottom: 18px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.fieldRow {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+}
+.perm {
+	display: inline-flex;
+	gap: 5px;
+	align-items: center;
+	font-size: 9.5px;
+	color: var(--ember-2);
+}
+.sysGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+.sysTile {
+	position: relative;
+	display: flex;
+	gap: 14px;
+	align-items: flex-start;
+	text-align: left;
+	padding: 16px;
+	border: 1px solid var(--rule-2);
+	border-radius: 5px;
+	background: rgba(0, 0, 0, 0.18);
+	color: var(--text);
+	cursor: pointer;
+	font-family: var(--body);
+	transition:
+		border-color 120ms,
+		background 120ms;
+}
+:global([data-theme="light"]) .sysTile {
+	background: rgba(255, 255, 255, 0.35);
+}
+.sysTile:hover {
+	border-color: var(--gold-deep);
+}
+.sysTile[data-on] {
+	border-color: var(--gold);
+	background: linear-gradient(180deg, rgba(201, 162, 74, 0.16), rgba(201, 162, 74, 0.04));
+	box-shadow: inset 0 0 0 1px var(--gold-deep);
+}
+.sysTile[data-sys="daggerheart"][data-on] {
+	border-color: var(--arcane);
+	background: linear-gradient(180deg, rgba(122, 107, 184, 0.2), rgba(122, 107, 184, 0.05));
+	box-shadow: inset 0 0 0 1px var(--arcane);
+}
+.sysIc {
+	width: 48px;
+	height: 48px;
+	flex-shrink: 0;
+	border-radius: 50%;
+	border: 1px solid var(--gold-deep);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--gold-2);
+	background: var(--panel);
+}
+.sysTile[data-sys="daggerheart"] .sysIc {
+	border-color: var(--arcane);
+	color: #aea1e0;
+}
+:global([data-theme="light"]) .sysTile[data-sys="daggerheart"] .sysIc {
+	color: var(--arcane);
+}
+.sysName {
+	display: block;
+	font-size: 23px;
+	line-height: 1;
+}
+.sysBlurb {
+	display: block;
+	font-size: 13px;
+	color: var(--ink-dim);
+	margin-top: 6px;
+	line-height: 1.35;
+}
+.sysCheck {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: var(--gold);
+	color: #1a140a;
+	display: none;
+	align-items: center;
+	justify-content: center;
+}
+.sysTile[data-on] .sysCheck {
+	display: flex;
+}
+.sysTile[data-sys="daggerheart"] .sysCheck {
+	background: var(--arcane);
+	color: #fff;
+}
+.sealNote {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	margin-top: 12px;
+	padding: 10px 12px;
+	border-radius: 4px;
+	border: 1px dashed var(--rule-2);
+	font-size: 13.5px;
+	color: var(--ink-dim);
+	line-height: 1.4;
+}
+.sealNote[data-on] {
+	border-style: solid;
+	border-color: var(--ember);
+	background: rgba(180, 69, 42, 0.08);
+	color: var(--text);
+}
+.sealNote svg {
+	flex-shrink: 0;
+	margin-top: 2px;
+	color: var(--ember-2);
+}
+.textarea {
+	height: auto;
+	padding: 12px 14px;
+	resize: none;
+	line-height: 1.45;
+	display: block;
+	width: 100%;
+}
+.opt {
+	font-style: italic;
+	color: var(--ink-faint);
+	font-size: 13px;
+	margin-left: 6px;
+	text-transform: none;
+	letter-spacing: 0;
+}
+.joinIntro {
+	font-size: 14.5px;
+	color: var(--ink-dim);
+	margin: 0 0 14px;
+	line-height: 1.45;
+}
+.picklist {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.pick {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	width: 100%;
+	padding: 10px 14px 10px 10px;
+	border: 1px solid var(--rule);
+	border-radius: 5px;
+	background: rgba(0, 0, 0, 0.14);
+	color: var(--text);
+	font-family: var(--body);
+	text-align: left;
+	cursor: pointer;
+	transition:
+		border-color 120ms,
+		background 120ms;
+}
+:global([data-theme="light"]) .pick {
+	background: rgba(255, 255, 255, 0.3);
+}
+.pick:hover {
+	border-color: var(--gold);
+	background: rgba(201, 162, 74, 0.09);
+}
+.pick[disabled] {
+	opacity: 0.6;
+	cursor: progress;
+}
+.pickMain {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+.pickName {
+	font-size: 21px;
+	line-height: 1;
+	display: flex;
+	gap: 10px;
+	align-items: baseline;
+}
+.lv {
+	font-size: 11.5px;
+	color: var(--gold-2);
+	margin-left: 10px;
+	white-space: nowrap;
+}
+.pickName .lv {
+	margin-left: 0;
+}
+.pickSub,
+.reqSub {
+	font-size: 13px;
+	color: var(--ink-dim);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.pickGo {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: var(--ink-faint);
+	white-space: nowrap;
+}
+.pick:hover .pickGo {
+	color: var(--gold-2);
+}
+.hiddenNote {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	margin-top: 12px;
+	font-size: 12.5px;
+	color: var(--ink-faint);
+	font-style: italic;
+}
+.sent {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 6px;
+	padding: 14px 10px 6px;
+}
+
+/* ── Detail ─────────────────────────────────────────────────── */
+.detHead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	padding: 14px 0 20px;
+	border-bottom: 1px solid var(--rule);
+}
+.detIdent {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	gap: 18px;
+}
+.detActions {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.detActions :global(.button) {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	white-space: nowrap;
+}
+.back {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 38px;
+	padding: 0 14px;
+	font-size: 13.5px;
+	align-self: flex-start;
+	margin-right: 8px;
+}
+.detSigil {
+	flex: 0 0 84px;
+	height: 84px;
+	border: 1px solid var(--gold-deep);
+	border-radius: 5px;
+}
+.detSigil :global(.display) {
+	font-size: 46px;
+}
+.detTitles {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.detEyebrow {
+	font-size: 15px;
+}
+.detH1 {
+	font-size: 44px;
+	margin: 0;
+	line-height: 1.05;
+	color: var(--gold-2);
+	font-weight: 500;
+	/* Long campaign names wrap instead of pushing the layout sideways. */
+	overflow-wrap: anywhere;
+	text-wrap: balance;
+}
+.detJoin {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.detGrid {
+	display: grid;
+	grid-template-columns: 400px minmax(0, 1fr);
+	gap: 32px;
+	padding-top: 24px;
+	align-items: start;
+}
+.aside {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+.panel {
+	flex-direction: column;
+	gap: 0;
+	padding: 0;
+	height: auto;
+}
+.chron {
+	padding: 14px 14px 16px;
+}
+.chronDesc {
+	margin: 0 0 14px;
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--ink-dim);
+	font-style: italic;
+	text-wrap: pretty;
+}
+.dl {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 10px 16px;
+	margin: 0;
+	padding-top: 12px;
+	border-top: 1px dashed var(--rule);
+	align-items: center;
+}
+.dl dt {
+	font-size: 9.5px;
+	color: var(--ink-faint);
+}
+.dl dd {
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14.5px;
+	min-width: 0;
+}
+.dl dd :global(.chip) {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+.dmAv {
+	width: 24px;
+	height: 24px;
+	border-radius: 3px;
+	background: linear-gradient(135deg, #c9a24a, #8a6b2d);
+	color: #1a140a;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-family: var(--display);
+	font-size: 14px;
+	text-transform: uppercase;
+}
+.you {
+	font-size: 9px;
+	color: var(--gold-2);
+	border: 1px solid var(--gold-deep);
+	padding: 1px 6px;
+	border-radius: 2px;
+}
+.sealed {
+	display: inline-flex;
+	gap: 4px;
+	align-items: center;
+	font-size: 12px;
+	color: var(--ink-faint);
+	font-style: italic;
+}
+.countPip {
+	min-width: 24px;
+	height: 24px;
+	border-radius: 999px;
+	background: var(--ember);
+	color: #fff;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	padding: 0 7px;
+}
+.countPip[data-zero] {
+	background: transparent;
+	color: var(--ink-faint);
+	border: 1px solid var(--rule-2);
+}
+.req {
+	padding: 14px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.req + .req {
+	border-top: 1px solid var(--rule);
+}
+.reqTop {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+.reqName {
+	font-size: 20px;
+	line-height: 1.05;
+	color: var(--text);
+}
+.reqBot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+.reqFrom {
+	font-size: 12.5px;
+	color: var(--ink-faint);
+	font-style: italic;
+}
+.reqFrom b {
+	color: var(--ink-dim);
+	font-weight: 500;
+	font-style: normal;
+}
+.reqAct {
+	display: flex;
+	gap: 6px;
+}
+.reqAct :global(.button) {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	height: 32px;
+	padding: 0 12px;
+	font-size: 13px;
+}
+.reqAct :global(.button[disabled]) {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+.reqEmpty {
+	display: flex;
+	gap: 14px;
+	align-items: flex-start;
+	padding: 18px;
+	color: var(--ink-dim);
+	font-size: 13.5px;
+	line-height: 1.4;
+}
+.reqEmpty > svg {
+	color: var(--gold-deep);
+	margin-top: 3px;
+	flex-shrink: 0;
+}
+.yours {
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	align-items: flex-start;
+}
+.yoursNote {
+	margin: 0;
+	font-size: 13.5px;
+	color: var(--ink-dim);
+	line-height: 1.45;
+}
+.partyHd {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 16px;
+	gap: 12px;
+}
+.party {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 16px;
+}
+.partyItem {
+	display: flex;
+}
+.quiet {
+	display: block;
+	margin: 10px auto 0;
+	background: none;
+	border: 0;
+	padding: 2px 0;
+	color: var(--ink-faint);
+	font-family: var(--body);
+	font-size: 12.5px;
+	cursor: pointer;
+	text-decoration: underline;
+	text-decoration-color: var(--rule-2);
+	text-underline-offset: 3px;
+}
+.quiet:hover {
+	color: var(--ember-2);
+	text-decoration-color: currentColor;
+}
+
+/* ── Narrow layouts (phone) ─────────────────────────────────── */
+/* ── Tablet portrait (≤1024px) ──────────────────────────────── */
+@media (max-width: 1024px) {
+	.detH1 {
+		font-size: 36px;
+	}
+	.detSigil {
+		flex-basis: 72px;
+		height: 72px;
+	}
+	.detSigil :global(.display) {
+		font-size: 38px;
+	}
+	/* The 400px sidebar leaves too little room for the party, so stack: the
+	   Chronicle / requests / your-heroes panels share a row above the party. */
+	.detGrid {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 24px;
+	}
+	.aside {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		align-items: start;
+		gap: 16px;
+	}
+	.party {
+		grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	}
+}
+
+@media (max-width: 720px) {
+	.h1 {
+		font-size: 38px;
+	}
+	.eyebrow {
+		font-size: 14px;
+	}
+	.sub {
+		font-size: 13px;
+	}
+	.newBtn {
+		height: 40px;
+		padding: 0 14px;
+	}
+	.long {
+		display: inline;
+	}
+	.short {
+		display: none;
+	}
+	.toolbar {
+		margin: 14px 0 12px;
+		gap: 10px;
+	}
+	.toolbar :global(.sf-tabs) {
+		width: 100%;
+	}
+	.toolbar :global(.sf-tab) {
+		flex: 1;
+		justify-content: center;
+		padding: 9px 6px;
+		font-size: 13px;
+	}
+	.filters {
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 8px;
+	}
+	.search {
+		width: 100%;
+	}
+	.mine {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 24px;
+	}
+	.browse {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 12px;
+	}
+	.stack {
+		gap: 12px;
+	}
+	.sigil {
+		flex-basis: 56px;
+	}
+	.sigil :global(.display) {
+		font-size: 28px;
+	}
+	.cardBody {
+		padding: 12px 12px 12px 14px;
+		gap: 5px;
+	}
+	.cardTop {
+		flex-direction: column;
+		gap: 6px;
+	}
+	.chips {
+		justify-content: flex-start;
+	}
+	.cardName {
+		font-size: 21px;
+	}
+	.cardDesc {
+		font-size: 13px;
+	}
+	.cardMeta {
+		font-size: 12.5px;
+		gap: 10px;
+	}
+	.card .embOpen {
+		display: none;
+	}
+	.cardFoot {
+		flex-wrap: wrap;
+		row-gap: 8px;
+	}
+	.cardActions {
+		margin-left: auto;
+	}
+	.reqPip {
+		font-size: 0;
+		gap: 0;
+	}
+	.btnSm {
+		padding: 0 11px;
+		font-size: 13px;
+	}
+	/* Header: actions become a top bar (back left, Delete right) above the
+	   campaign's sigil + name. */
+	.detHead {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 14px;
+		padding: 0 0 16px;
+	}
+	.detActions {
+		order: -1;
+		justify-content: space-between;
+	}
+	.detActions :global(.button) {
+		height: 36px;
+		padding: 0 12px;
+		font-size: 13px;
+	}
+	.detBack {
+		order: -1;
+	}
+	.detDelete {
+		margin-left: auto;
+	}
+	.detIdent {
+		gap: 14px;
+		align-items: flex-start;
+	}
+	.detSigil {
+		flex-basis: 60px;
+		height: 60px;
+	}
+	.detSigil :global(.display) {
+		font-size: 32px;
+	}
+	.detEyebrow {
+		font-size: 13px;
+	}
+	.detH1 {
+		font-size: 28px;
+	}
+	.detJoin {
+		width: 100%;
+		justify-content: center;
+	}
+	.detGrid {
+		grid-template-columns: minmax(0, 1fr);
+		padding-top: 16px;
+		gap: 18px;
+	}
+	.aside {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.party {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.partyHd {
+		flex-wrap: wrap;
+		row-gap: 6px;
+	}
+	.partyHd :global(.sf-heading) {
+		font-size: 24px !important;
+	}
+	.reqBot {
+		flex-wrap: wrap;
+		row-gap: 8px;
+	}
+	.reqAct {
+		margin-left: auto;
+	}
+	.chronDesc {
+		font-size: 14px;
+	}
+}
+
+/* Modal tweaks for narrow screens. */
+@media (max-width: 720px) {
+	.modalHd {
+		padding: 18px 14px 10px;
+	}
+	.modalTitle {
+		font-size: 26px;
+	}
+	.modalRule {
+		margin: 0 18px;
+	}
+	.modalBd {
+		padding: 14px 14px 6px;
+	}
+	.modalFt {
+		padding: 12px 14px 22px;
+	}
+	.modalFt :global(.button) {
+		flex: 1;
+	}
+	.sysGrid {
+		grid-template-columns: 1fr;
+		gap: 8px;
+	}
+	.sysTile {
+		padding: 12px;
+		align-items: center;
+	}
+	.sysIc {
+		width: 40px;
+		height: 40px;
+	}
+	.sysBlurb {
+		font-size: 12.5px;
+		margin-top: 4px;
+	}
+	.pick {
+		gap: 12px;
+		padding: 8px 10px 8px 8px;
+	}
+	.pickName {
+		font-size: 19px;
+	}
+	.pickGo span {
+		display: none;
+	}
+}
+
+/* ── Drag-and-drop lists (SortableGrid renders ul > li) ─────── */
+.sortList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.sortItem {
+	display: flex;
+}
+.sortItem > article {
+	flex: 1;
+	min-width: 0;
+}
+
+/* Square trash button on a GM's campaign card. */
+.iconBtn {
+	width: 34px;
+	padding: 0;
+	justify-content: center;
+}
+
+/* ── Delete campaign ────────────────────────────────────────── */
+.detDelete {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.dangerNote {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	margin-bottom: 16px;
+	padding: 10px 12px;
+	border-radius: 4px;
+	border: 1px solid var(--ember);
+	background: rgba(180, 69, 42, 0.08);
+	color: var(--text);
+	font-size: 13.5px;
+	line-height: 1.45;
+}
+.dangerNote svg {
+	flex-shrink: 0;
+	margin-top: 2px;
+	color: var(--ember-2);
+}
+.confirmName {
+	color: var(--gold-2);
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+/* ── Glyph: Forge field + picker ────────────────────────────── */
+.glyphField {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 10px;
+	border: 1px solid var(--rule-2);
+	border-radius: 5px;
+	background: rgba(0, 0, 0, 0.14);
+}
+:global([data-theme="light"]) .glyphField {
+	background: rgba(255, 255, 255, 0.3);
+}
+.glyphPreview {
+	flex: 0 0 56px;
+	height: 56px;
+	border: 1px solid var(--gold-deep);
+	border-radius: 5px;
+}
+.glyphPreview :global(.display) {
+	font-size: 30px;
+}
+.glyphInfo {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.glyphInfoName {
+	font-size: 20px;
+	line-height: 1.1;
+	color: var(--text);
+}
+.glyphInfoHint {
+	font-size: 12.5px;
+	color: var(--ink-dim);
+}
+.glyphGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+	gap: 10px;
+}
+.glyphCard {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 6px 7px;
+	border: 1px solid var(--rule);
+	border-radius: 5px;
+	background: rgba(0, 0, 0, 0.14);
+	color: var(--text);
+	cursor: pointer;
+	font-family: var(--body);
+	transition:
+		border-color 120ms,
+		background 120ms,
+		transform 120ms;
+}
+:global([data-theme="light"]) .glyphCard {
+	background: rgba(255, 255, 255, 0.3);
+}
+.glyphCard:hover {
+	border-color: var(--gold-deep);
+	transform: translateY(-1px);
+}
+.glyphCard[data-on] {
+	border-color: var(--gold);
+	background: linear-gradient(180deg, rgba(201, 162, 74, 0.16), rgba(201, 162, 74, 0.04));
+	box-shadow: inset 0 0 0 1px var(--gold-deep);
+}
+.glyphSigil {
+	flex: 0 0 auto;
+	width: 60px;
+	height: 60px;
+	border: 1px solid var(--gold-deep);
+	border-radius: 5px;
+}
+.glyphSigil :global(.display) {
+	font-size: 32px;
+}
+.glyphName {
+	font-size: 9.5px;
+	color: var(--ink-dim);
+}
+.glyphCard[data-on] .glyphName {
+	color: var(--gold-2);
+}
+
+@media (max-width: 720px) {
+	.glyphGrid {
+		grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+		gap: 8px;
+	}
+	.glyphSigil {
+		width: 48px;
+		height: 48px;
+	}
+	.glyphSigil :global(.display) {
+		font-size: 26px;
+	}
+	.glyphField {
+		flex-wrap: wrap;
+	}
+}
