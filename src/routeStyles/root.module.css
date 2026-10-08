@@ -23,6 +23,9 @@
     min-height: 100%;
     /* justify-content: safe center; */
 }
+.loginPageWrap {
+    justify-content: safe center;
+}
 .main::after {
     content: "";
     position: fixed;
