@@ -1,6 +1,8 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { TabBar } from "../../../components/Primitives";
+import { useCharacterStore } from "../../../zustand/stores";
+import { ReadOnlyBanner } from "../../../components/ReadOnlyBanner/ReadOnlyBanner";
 import styles from "./sheet.module.css";
 
 const SHEET_TABS = [
@@ -25,16 +27,21 @@ export const SheetTabs = ({ active }: { active: string }) => {
 		});
 	}, [router]);
 
+	const viewOnly = useCharacterStore((s) => s.viewOnly);
+
 	return (
-		<div className={styles.tabsRow}>
-			<TabBar
-				tabs={SHEET_TABS}
-				active={active}
-				onChange={(id: string) => {
-					const tab = SHEET_TABS.find((t) => t.id === id);
-					if (tab && tab.id !== active) navigate({ to: tab.to });
-				}}
-			/>
-		</div>
+		<>
+			{viewOnly && <ReadOnlyBanner />}
+			<div className={styles.tabsRow}>
+				<TabBar
+					tabs={SHEET_TABS}
+					active={active}
+					onChange={(id: string) => {
+						const tab = SHEET_TABS.find((t) => t.id === id);
+						if (tab && tab.id !== active) navigate({ to: tab.to });
+					}}
+				/>
+			</div>
+		</>
 	);
 };

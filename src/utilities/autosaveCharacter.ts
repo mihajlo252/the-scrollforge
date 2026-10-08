@@ -1,5 +1,6 @@
 import { sendData } from "./sendData";
 import { toast } from "./toasterSonner";
+import { useCharacterStore } from "../zustand/stores";
 
 /* Debounced Supabase autosave for character edits. Every edit already lands in
  * localStorage synchronously (patchCharacter) — this queue only batches the
@@ -22,6 +23,10 @@ const flush = async (id: string) => {
 };
 
 export const queueCharacterSave = (id: string, patch: Record<string, any>) => {
+	// Read-only guard: a GM viewing another player's character must never write
+	// to it through the normal autosave path. (The GM's inventory-add uses its
+	// own un-gated write.)
+	if (useCharacterStore.getState().viewOnly) return;
 	const prev = pending.get(id);
 	if (prev) window.clearTimeout(prev.timer);
 	pending.set(id, {

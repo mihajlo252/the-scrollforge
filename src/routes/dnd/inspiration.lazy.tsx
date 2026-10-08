@@ -24,7 +24,7 @@ const GEMS: { key: keyof Inspiration; img: string; color: string; desc: string }
 	{ key: "red", img: red, color: "var(--ember-2)", desc: "Auto natural 20!" },
 	{ key: "pink", img: pink, color: "#d98cc0", desc: "+10 to AC and saving throws for two rounds." },
 	{ key: "white", img: white, color: "#d9d9e8", desc: "Dead? Not dead!" },
-	{ key: "purple", img: purple, color: "var(--arcane)", desc: "Get one straight answer from the DM." },
+	{ key: "purple", img: purple, color: "var(--arcane)", desc: "Get one straight answer from the GM." },
 	{ key: "yellow", img: yellow, color: "var(--gold-2)", desc: "One Legendary action or Legendary resistance." },
 ];
 

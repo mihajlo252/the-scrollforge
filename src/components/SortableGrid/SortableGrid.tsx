@@ -20,6 +20,7 @@ export function SortableGrid<T>({
 	className,
 	itemClassName,
 	renderItem,
+	animateOnMount = false,
 }: {
 	items: T[];
 	getId: (item: T) => string;
@@ -28,6 +29,9 @@ export function SortableGrid<T>({
 	className?: string;
 	itemClassName?: string;
 	renderItem: (item: T) => React.ReactNode;
+	/** Also play the enter animation for items present on first render (lists
+	 *  that mount once their data arrives, e.g. the Campaign screens). */
+	animateOnMount?: boolean;
 }) {
 	const containerRef = useRef<HTMLUListElement>(null);
 	const cellRects = useRef<DOMRect[]>([]);
@@ -61,9 +65,9 @@ export function SortableGrid<T>({
 
 	return (
 		<ul ref={containerRef} className={className}>
-			{/* initial={false} → no animation on first mount (calm page load);
-			    additions/removals/reorders still animate. */}
-			<AnimatePresence mode="popLayout" initial={false}>
+			{/* initial={false} by default → no animation on first mount (calm page
+			    load); additions/removals/reorders still animate. */}
+			<AnimatePresence mode="popLayout" initial={animateOnMount}>
 				{items.map((item) => {
 					const id = getId(item);
 					return (
@@ -108,6 +112,9 @@ const SortableItem = forwardRef<HTMLLIElement, {
 			animate={{ opacity: 1, scale: 1 }}
 			exit={{ opacity: 0, scale: 0.96 }}
 			transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+			// Main-thread animator, so a removed item doesn't flash back to full
+			// opacity for a frame before it unmounts (see Popup.tsx).
+			onUpdate={() => {}}
 			className={`${styles.item} ${className ?? ""}`}
 		>
 			<button

@@ -23,6 +23,20 @@ const CLASS_PAGES: Record<string, { front: number; extras: number[] }> = {
 };
 const BLANK_SHEET_PAGE = 21;
 
+/** Source pages carrying the BACKGROUND QUESTIONS / CONNECTIONS block (the last
+ *  guide page of every class; the universal blank sheet has none). */
+const BIO_PAGES = new Set([1, 5, 7, 10, 12, 14, 16, 18, 20]);
+
+/** The two columns of that block, in top-left coordinates of the guide page
+ *  (629×809 — guide pages include print bleed, unlike the 612×792 fronts): the
+ *  area we white out (`clear`, printed prompts + answer brackets) and the area we
+ *  write into (`text`). Below the printed intro line; the left column stops above
+ *  "Then work with the GM…". */
+const BIO_COLUMNS = {
+	background: { clear: { x: 24, y: 266, w: 282, h: 168 }, text: { x: 32, y: 272, w: 262, bottom: 428 } },
+	connections: { clear: { x: 322, y: 266, w: 282, h: 170 }, text: { x: 338, y: 272, w: 252, bottom: 428 } },
+};
+
 const TRAIT_ORDER: { key: DHTraitName; x: number }[] = [
 	{ key: "Agility", x: 226 },
 	{ key: "Strength", x: 296 },
@@ -48,8 +62,8 @@ const sanitize = (text: string) =>
 
 type Ctx = { page: PDFPage; font: PDFFont; bold: PDFFont };
 
-/** Draw text at top-left-origin coordinates (the map below was measured from a
- *  top-left render), shrinking to fit maxWidth when given. */
+/** Draw text at top-left-origin coordinates (the maps were measured from a
+ *  top-left render of each page), shrinking to fit maxWidth when given. */
 const draw = (
 	ctx: Ctx,
 	text: string,
@@ -64,7 +78,7 @@ const draw = (
 	}
 	let x = opts.x;
 	if (opts.center) x -= font.widthOfTextAtSize(value, size) / 2;
-	ctx.page.drawText(value, { x, y: PAGE_H - opts.y, size, font, color: ink });
+	ctx.page.drawText(value, { x, y: ctx.page.getHeight() - opts.y, size, font, color: ink });
 };
 
 const wrapText = (font: PDFFont, text: string, size: number, maxWidth: number): string[] => {
@@ -182,6 +196,46 @@ const fillFrontPage = (ctx: Ctx, character: DaggerheartCharacter, isBlankSheet: 
 	});
 };
 
+/** Writes the character's own Background / Connections questions and answers
+ *  over the class's printed prompts. A column is only cleared when the
+ *  character has something to put there, so empty journals keep the printed
+ *  questions to answer by hand. Text that won't fit ends with an ellipsis. */
+const fillBioPage = (ctx: Ctx, bio: DHBio | undefined) => {
+	(["background", "connections"] as const).forEach((key) => {
+		const entries = (bio?.[key] ?? []).filter((e) => e.q.trim() || e.a.trim());
+		if (!entries.length) return;
+		const { clear, text } = BIO_COLUMNS[key];
+		ctx.page.drawRectangle({
+			x: clear.x,
+			y: ctx.page.getHeight() - clear.y - clear.h,
+			width: clear.w,
+			height: clear.h,
+			color: rgb(1, 1, 1),
+		});
+
+		const qSize = 8.5;
+		const aSize = 8;
+		const lead = 10;
+		const lines: { text: string; bold: boolean }[] = [];
+		entries.forEach((e, i) => {
+			if (i > 0) lines.push({ text: "", bold: false }); // gap between entries
+			if (e.q.trim()) wrapText(ctx.bold, e.q, qSize, text.w).forEach((t) => lines.push({ text: t, bold: true }));
+			if (e.a.trim()) wrapText(ctx.font, e.a, aSize, text.w).forEach((t) => lines.push({ text: t, bold: false }));
+		});
+
+		const maxLines = Math.floor((text.bottom - text.y) / lead) + 1;
+		if (lines.length > maxLines) {
+			lines.length = maxLines;
+			const last = lines[maxLines - 1];
+			last.text = `${last.text.replace(/\s+\S*$/, "")}...`;
+		}
+		lines.forEach((l, i) => {
+			if (!l.text) return;
+			draw(ctx, l.text, { x: text.x, y: text.y + i * lead + 6, size: l.bold ? qSize : aSize, bold: l.bold });
+		});
+	});
+};
+
 /** Pure fill step (kept separate from the browser download wrapper so it can be
  *  exercised from a Node script). */
 export const fillDaggerheartSheet = async (
@@ -204,6 +258,8 @@ export const fillDaggerheartSheet = async (
 		bold: await out.embedFont(StandardFonts.HelveticaBold),
 	};
 	fillFrontPage(ctx, character, pages.front === BLANK_SHEET_PAGE);
+	const bioIndex = pages.extras.findIndex((i) => BIO_PAGES.has(i));
+	if (bioIndex >= 0) fillBioPage({ ...ctx, page: copied[bioIndex + 1] }, character.dhBio);
 	return out.save();
 };
 

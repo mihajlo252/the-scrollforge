@@ -404,6 +404,7 @@
 	align-items: center;
 	gap: 14px;
 	color: var(--gold-deep);
+	padding-block: 5px;
 }
 
 .rune-divider::before,
@@ -655,7 +656,7 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 1rem;
-	padding: 1.125rem 1.25rem 0.875rem;
+	padding: 1.125rem .875rem 0.875rem;
 	border-bottom: 1px solid var(--rule);
 }
 .card-title {

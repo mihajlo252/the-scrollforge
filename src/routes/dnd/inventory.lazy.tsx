@@ -7,6 +7,9 @@ import { HPBar, Icon } from "../../components/Primitives";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { SheetTabs } from "../../sections/DnD/CharacterProfile/SheetTabs";
 import { queueCharacterSave } from "../../utilities/autosaveCharacter";
+import { sendData } from "../../utilities/sendData";
+import { useCharacterStore } from "../../zustand/stores";
+import { toast } from "../../utilities/toasterSonner";
 import styles from "./sheetScreens.module.css";
 
 export const Route = createLazyFileRoute("/dnd/inventory")({
@@ -44,6 +47,10 @@ function InventoryScreen() {
 	const [editIndex, setEditIndex] = useState<number | null>(null);
 	const [form, setForm] = useState<InventoryItem>(emptyItem());
 
+	// Read-only GM view: everything is locked EXCEPT adding items to the
+	// player's inventory, which persists through a direct (un-gated) write.
+	const viewOnly = useCharacterStore((s) => s.viewOnly);
+
 	const str = character.stats.primaryStats.str ?? 10;
 	const capacity = str * 15;
 	const weight = items.reduce((a, i) => a + (i.wt || 0) * (i.qty || 0), 0);
@@ -75,7 +82,15 @@ function InventoryScreen() {
 	const submitForm = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const next = editIndex === null ? [...items, form] : items.map((it, i) => (i === editIndex ? form : it));
-		await persistItems(next);
+		if (viewOnly) {
+			// GM carve-out: only adding is allowed, and it bypasses the read-only
+			// write-block by writing the inventory column directly.
+			setItems(next);
+			const ok = await sendData("characters", character.id, { inventory: next });
+			toast(ok ? { style: "", message: "Item added to inventory" } : { style: "frame button-primary", message: "Couldn't add the item." });
+		} else {
+			await persistItems(next);
+		}
 		setShowForm(false);
 	};
 	const deleteItem = async (idx: number) => persistItems(items.filter((_, i) => i !== idx));
@@ -100,6 +115,7 @@ function InventoryScreen() {
 										type="number"
 										className={styles.coinInput}
 										value={currency[key] ?? 0}
+										disabled={viewOnly}
 										onChange={(e) => persistCurrency({ ...currency, [key]: parseInt(e.target.value) || 0 })}
 									/>
 									<div className="caps" style={{ fontSize: 9 }}>
@@ -192,15 +208,17 @@ function InventoryScreen() {
 								<span className={`mono ${styles.right} ${styles.weight}`} style={{ color: "var(--ink-dim)" }}>
 									{i.wt}lb
 								</span>
-								<button
-									className="sf-icon-btn"
-									style={{ width: 28, height: 28 }}
-									onClick={() => openEdit(idx)}
-									type="button"
-									aria-label="Edit item"
-								>
-									<Icon name="edit" size={12} />
-								</button>
+								{!viewOnly && (
+									<button
+										className="sf-icon-btn"
+										style={{ width: 28, height: 28 }}
+										onClick={() => openEdit(idx)}
+										type="button"
+										aria-label="Edit item"
+									>
+										<Icon name="edit" size={12} />
+									</button>
+								)}
 							</div>
 							{(i.dmg || i.note) && <div className={styles.invItemSub}>{i.dmg || i.note}</div>}
 						</div>
