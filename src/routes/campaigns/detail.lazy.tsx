@@ -1,6 +1,6 @@
 import { createLazyFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore, useCampaignStore, useCharacterStore, useCampaignCacheStore } from "../../zustand/stores";
 import { CharacterCard } from "../../components/CharacterCard/CharacterCard";
 import { Heading, Icon } from "../../components/Primitives";
@@ -14,9 +14,11 @@ import {
 	requestJoinCampaign,
 	savePartyOrder,
 	setMemberStatus,
+	updateCampaignChronicle,
 } from "../../utilities/campaigns";
 import { toast } from "../../utilities/toasterSonner";
 import {
+	ChronicleModal,
 	DeleteCampaignModal,
 	Emblems,
 	EmptyGroup,
@@ -41,7 +43,7 @@ type Hero = Character | DaggerheartCharacter;
 
 function CampaignDetail() {
 	const { user } = useUserStore();
-	const { campaign } = useCampaignStore();
+	const { campaign, setCampaign } = useCampaignStore();
 	const { setCharacter, setViewOnly } = useCharacterStore();
 	const navigate = useNavigate();
 	const router = useRouter();
@@ -59,6 +61,10 @@ function CampaignDetail() {
 	const [myCharacters, setMyCharacters] = useState<Hero[]>(() => (fresh ? cache.myCharacters : []));
 	const [joinOpen, setJoinOpen] = useState(false);
 	const [deleteOpen, setDeleteOpen] = useState(false);
+	const [chronicleOpen, setChronicleOpen] = useState(false);
+	// Set once the campaign is deleted; we leave the page after the delete
+	// popup has faded out (navigating straight away cuts the fade short).
+	const deletedRef = useRef(false);
 
 	// Live party order while the GM drags; null = the saved order.
 	const [dragOrder, setDragOrder] = useState<string[] | null>(null);
@@ -105,13 +111,7 @@ function CampaignDetail() {
 	if (!campaign) return null;
 
 	const isDM = campaign.dmID === me;
-	const role: Role = isDM
-		? "dm"
-		: myRows.some((r) => r.status === "accepted")
-			? "player"
-			: myRows.length
-				? "pending"
-				: null;
+	const role: Role = isDM ? "dm" : myRows.some((r) => r.status === "accepted") ? "player" : myRows.length ? "pending" : null;
 	const S = sysOf(campaign.gamemode);
 	const seats = campaign.seats ?? 6;
 	const full = party.length >= seats;
@@ -152,6 +152,19 @@ function CampaignDetail() {
 		savePartyOrder(orderedRows);
 	};
 
+	// GM rewrote the chronicle: update the open page and the cached hub list.
+	const saveChronicle = async (description: string) => {
+		const updated = await updateCampaignChronicle(campaign.id, description);
+		if (!updated) {
+			toast({ style: "frame button-primary", message: "Couldn't save the chronicle." });
+			return false;
+		}
+		setCampaign(updated);
+		cache.updateCampaign(updated);
+		toast({ style: "", message: "Chronicle updated." });
+		return true;
+	};
+
 	const destroy = async (c: Campaign) => {
 		const ok = await deleteCampaign(c.id);
 		if (!ok) {
@@ -159,9 +172,9 @@ function CampaignDetail() {
 			return;
 		}
 		cache.removeCampaign(c.id);
+		deletedRef.current = true;
 		setDeleteOpen(false);
 		toast({ style: "", message: `${c.name} has been struck from the ledger.` });
-		navigate({ to: "/campaigns" });
 	};
 
 	const remove = async (row: CampaignCharacter, failMsg = "Couldn't update the campaign.") => {
@@ -240,15 +253,37 @@ function CampaignDetail() {
 							<Corners />
 							<div className="card-hdr">
 								<div className="card-title">Chronicle</div>
-								<span style={{ color: "var(--gold-deep)" }}>
-									<Icon name="scroll" size={16} />
-								</span>
+								{isDM ? (
+									<button
+										type="button"
+										className={`button button-ghost ${styles.chronEdit}`}
+										onClick={() => setChronicleOpen(true)}
+										aria-label="Edit chronicle"
+									>
+										<Icon name="edit" size={12} />
+										Edit
+									</button>
+								) : (
+									<span style={{ color: "var(--gold-deep)" }}>
+										<Icon name="scroll" size={16} />
+									</span>
+								)}
 							</div>
 							<div className={styles.chron}>
 								{campaign.description ? (
 									<p className={styles.chronDesc}>{campaign.description}</p>
 								) : (
-									<p className={`${styles.chronDesc} ${styles.muted}`}>No chronicle written yet.</p>
+									<p className={`${styles.chronDesc} ${styles.muted}`}>
+										No chronicle written yet.
+										{isDM && (
+											<>
+												{" "}
+												<button type="button" className={`${styles.quiet} ${styles.chronWrite}`} onClick={() => setChronicleOpen(true)}>
+													Write one
+												</button>
+											</>
+										)}
+									</p>
 								)}
 								<dl className={styles.dl}>
 									<dt className="caps">{S.dmTitle}</dt>
@@ -388,7 +423,9 @@ function CampaignDetail() {
 													type="button"
 													className={styles.quiet}
 													style={{ margin: 0, alignSelf: "flex-end" }}
-													onClick={() => remove(row, pending ? "Couldn't withdraw the request." : "Couldn't leave the campaign.")}
+													onClick={() =>
+														remove(row, pending ? "Couldn't withdraw the request." : "Couldn't leave the campaign.")
+													}
 												>
 													{pending ? "Withdraw request" : "Leave campaign"}
 												</button>
@@ -398,8 +435,8 @@ function CampaignDetail() {
 								</div>
 								<div className={styles.yours}>
 									<p className={styles.yoursNote}>
-										{dmName} can view your seated heroes’ sheets and add items to their inventories. Pending heroes take a
-										seat once accepted.
+										{dmName} can view your seated heroes’ sheets and add items to their inventories. Pending heroes take a seat
+										once accepted.
 									</p>
 									<button type="button" className={`button ${styles.btnSm}`} onClick={() => setJoinOpen(true)}>
 										<Icon name="plus" size={13} />
@@ -455,27 +492,40 @@ function CampaignDetail() {
 				</div>
 			</div>
 
-			{joinOpen && (
-				<JoinModal
+			<JoinModal
+				open={joinOpen}
+				campaign={campaign}
+				heroes={myCharacters}
+				excludeIds={myRows.map((r) => r.characterID)}
+				onClose={() => setJoinOpen(false)}
+				onForgeHero={() => navigate({ to: "/profile" })}
+				onSend={async (hero) => {
+					if (!me) return false;
+					try {
+						await requestJoinCampaign(campaign.id, hero.id, me, myName);
+						load();
+						return true;
+					} catch {
+						return false;
+					}
+				}}
+			/>
+
+			{isDM && (
+				<ChronicleModal
+					open={chronicleOpen}
 					campaign={campaign}
-					heroes={myCharacters}
-					excludeIds={myRows.map((r) => r.characterID)}
-					onClose={() => setJoinOpen(false)}
-					onForgeHero={() => navigate({ to: "/profile" })}
-					onSend={async (hero) => {
-						if (!me) return false;
-						try {
-							await requestJoinCampaign(campaign.id, hero.id, me, myName);
-							load();
-							return true;
-						} catch {
-							return false;
-						}
-					}}
+					onClose={() => setChronicleOpen(false)}
+					onSave={saveChronicle}
 				/>
 			)}
 
-			<DeleteCampaignModal campaign={deleteOpen ? campaign : null} onClose={() => setDeleteOpen(false)} onDelete={destroy} />
+			<DeleteCampaignModal
+				campaign={deleteOpen ? campaign : null}
+				onClose={() => setDeleteOpen(false)}
+				onDelete={destroy}
+				onExitComplete={() => deletedRef.current && navigate({ to: "/campaigns" })}
+			/>
 		</motion.section>
 	);
 }

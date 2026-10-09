@@ -60,7 +60,10 @@ function Campaigns() {
 	const heroes = fresh ? cache.heroes : [];
 
 	const [forgeOpen, setForgeOpen] = useState(false);
+	// joinTarget keeps the last campaign so the popup can fade out with its
+	// content; joinOpen is what opens/closes it.
 	const [joinTarget, setJoinTarget] = useState<Campaign | null>(null);
+	const [joinOpen, setJoinOpen] = useState(false);
 	const [deleteTarget, setDeleteTarget] = useState<Campaign | null>(null);
 
 	const load = async () => {
@@ -158,7 +161,10 @@ function Campaigns() {
 				pendingCount={e.pending.length}
 				context={context}
 				onOpen={() => open(c)}
-				onJoin={() => setJoinTarget(c)}
+				onJoin={() => {
+					setJoinTarget(c);
+					setJoinOpen(true);
+				}}
 				onDelete={() => setDeleteTarget(c)}
 			/>
 		);
@@ -324,9 +330,10 @@ function Campaigns() {
 
 			{joinTarget && (
 				<JoinModal
+					open={joinOpen}
 					campaign={joinTarget}
 					heroes={myCharacters}
-					onClose={() => setJoinTarget(null)}
+					onClose={() => setJoinOpen(false)}
 					onForgeHero={() => navigate({ to: "/profile" })}
 					onSend={async (hero) => {
 						if (!me) return false;

@@ -783,6 +783,7 @@
 	padding: 14px 14px 16px;
 }
 .chronDesc {
+	white-space: pre-line; /* keep the GM's line breaks */
 	margin: 0 0 14px;
 	font-size: 15px;
 	line-height: 1.5;
@@ -1381,4 +1382,25 @@
 	.glyphField {
 		flex-wrap: wrap;
 	}
+}
+
+/* ── Chronicle editing ──────────────────────────────────────── */
+.chronEdit {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	height: 30px;
+	padding: 0 10px;
+	font-size: 12.5px;
+}
+.chronWrite {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	font-style: normal;
+}
+.fieldHint {
+	font-size: 12.5px;
+	color: var(--ink-faint);
+	font-style: italic;
 }

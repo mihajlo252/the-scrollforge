@@ -1,3 +1,13 @@
+## 09-10-2026 · Campaigns and small fixes
+
+**Campaigns**
+
+- **Campaign Chronicles** - now able to edit them
+
+**Fix**
+
+- **Popup** - fixed popup closing animation
+
 ## 08-10-2026 · Campaigns
 
 # New

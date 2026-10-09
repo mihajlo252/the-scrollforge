@@ -93,6 +93,8 @@ export const useCampaignCacheStore = create<CampaignCacheStore>()(
                     campaigns: s.campaigns.filter((c) => c.id !== campaignID),
                     rows: s.rows.filter((r) => r.campaignID !== campaignID),
                 })),
+            updateCampaign: (campaign) =>
+                set((s) => ({ campaigns: s.campaigns.map((c) => (c.id === campaign.id ? campaign : c)) })),
             setOrder: (group, ids) => set((s) => ({ order: { ...s.order, [group]: ids } })),
         }),
         {

@@ -278,9 +278,11 @@ export const CampaignModal = ({
 	footer,
 	width = 600,
 	children,
+	onExitComplete,
 }: {
 	open: boolean;
 	onClose: () => void;
+	onExitComplete?: () => void;
 	eyebrow: string;
 	title: string;
 	sub?: React.ReactNode;
@@ -288,7 +290,7 @@ export const CampaignModal = ({
 	width?: number;
 	children: React.ReactNode;
 }) => (
-	<Popup toggle={open} closerFunc={() => onClose()}>
+	<Popup toggle={open} closerFunc={() => onClose()} onExitComplete={onExitComplete}>
 		<div className={`frame ${styles.modal}`} style={{ width: `min(${width}px, calc(100vw - 32px))` }}>
 			<span className="frame-corner tl" />
 			<span className="frame-corner tr" />
@@ -413,6 +415,7 @@ export const CampaignCard = ({
 
 // Pick one same-system hero and send a join request (hub Browse + detail).
 export const JoinModal = ({
+	open,
 	campaign,
 	heroes,
 	onClose,
@@ -420,6 +423,8 @@ export const JoinModal = ({
 	onForgeHero,
 	excludeIds = [],
 }: {
+	/** Keep JoinModal mounted and toggle this, so the close animation plays. */
+	open: boolean;
 	campaign: Campaign;
 	heroes: (Character | DaggerheartCharacter)[];
 	/** Characters already in (or requested into) this campaign. */
@@ -430,6 +435,13 @@ export const JoinModal = ({
 }) => {
 	const [sent, setSent] = useState<Character | DaggerheartCharacter | null>(null);
 	const [busy, setBusy] = useState(false);
+	// Each opening starts at the hero picker, not the previous "Request sent".
+	React.useEffect(() => {
+		if (open) {
+			setSent(null);
+			setBusy(false);
+		}
+	}, [open]);
 	const L = sysOf(campaign.gamemode).label;
 	const sameSystem = heroes.filter((h) => h.gamemode === campaign.gamemode);
 	const fits = sameSystem.filter((h) => !excludeIds.includes(h.id));
@@ -529,7 +541,7 @@ export const JoinModal = ({
 
 	return (
 		<CampaignModal
-			open
+			open={open}
 			onClose={onClose}
 			eyebrow="Present a hero"
 			title={`Join ${campaign.name}`}
@@ -636,10 +648,13 @@ export const DeleteCampaignModal = ({
 	campaign,
 	onClose,
 	onDelete,
+	onExitComplete,
 }: {
 	campaign: Campaign | null;
 	onClose: () => void;
 	onDelete: (campaign: Campaign) => Promise<void>;
+	/** e.g. navigate away after a delete, once the popup has faded out. */
+	onExitComplete?: () => void;
 }) => {
 	const [typed, setTyped] = useState("");
 	const [busy, setBusy] = useState(false);
@@ -659,6 +674,7 @@ export const DeleteCampaignModal = ({
 		<CampaignModal
 			open={!!campaign}
 			onClose={onClose}
+			onExitComplete={onExitComplete}
 			eyebrow="Strike from the ledger"
 			title={`Delete ${campaign?.name ?? "campaign"}`}
 			width={560}
@@ -700,6 +716,74 @@ export const DeleteCampaignModal = ({
 					onChange={(e) => setTyped(e.target.value)}
 				/>
 			</form>
+		</CampaignModal>
+	);
+};
+
+// GM-only: rewrite a campaign's chronicle (its pitch / description).
+export const ChronicleModal = ({
+	open,
+	campaign,
+	onClose,
+	onSave,
+}: {
+	open: boolean;
+	campaign: Campaign;
+	onClose: () => void;
+	onSave: (description: string) => Promise<boolean>;
+}) => {
+	const [text, setText] = useState(campaign.description ?? "");
+	const [busy, setBusy] = useState(false);
+	// Start from the saved chronicle each time it opens.
+	React.useEffect(() => {
+		if (open) {
+			setText(campaign.description ?? "");
+			setBusy(false);
+		}
+	}, [open, campaign.description]);
+	const unchanged = text.trim() === (campaign.description ?? "").trim();
+
+	const submit = async () => {
+		if (busy || unchanged) return;
+		setBusy(true);
+		const ok = await onSave(text.trim());
+		setBusy(false);
+		if (ok) onClose();
+	};
+
+	return (
+		<CampaignModal
+			open={open}
+			onClose={onClose}
+			eyebrow={campaign.name}
+			title="Edit Chronicle"
+			width={600}
+			footer={
+				<>
+					<button type="button" className="button button-ghost" onClick={onClose}>
+						Cancel
+					</button>
+					<button type="button" className="button button-primary" disabled={busy || unchanged} onClick={submit}>
+						<Icon name="check" size={14} />
+						Save Chronicle
+					</button>
+				</>
+			}
+		>
+			<div className={styles.field} style={{ marginBottom: 6 }}>
+				<label className="field-label" htmlFor="campaign-chronicle">
+					Chronicle <span className={styles.opt}>optional</span>
+				</label>
+				<textarea
+					id="campaign-chronicle"
+					className={`input ${styles.textarea}`}
+					rows={6}
+					placeholder="Pitch, schedule, tone — what players see in Browse."
+					value={text}
+					onChange={(e) => setText(e.target.value)}
+				></textarea>
+				<span className={styles.fieldHint}>Players see this on the campaign’s card and page. Leave it empty to remove it.</span>
+			</div>
 		</CampaignModal>
 	);
 };

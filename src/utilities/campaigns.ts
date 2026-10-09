@@ -162,3 +162,18 @@ export const gmAddInventoryItem = async <T>(
 	}
 	return next;
 };
+
+// GM only (RLS). Returns the updated campaign, or null if nothing was saved —
+// an RLS-blocked update doesn't error, it just matches no rows.
+export const updateCampaignChronicle = async (id: string, description: string): Promise<Campaign | null> => {
+	const { data, error } = await supabase
+		.from("campaigns")
+		.update({ description: description || null })
+		.eq("id", id)
+		.select();
+	if (error) {
+		console.error(error);
+		return null;
+	}
+	return ((data ?? [])[0] as Campaign) ?? null;
+};

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Popup } from "./Popup/Popup";
 import { Frame } from "./Frame/Frame";
 
@@ -20,13 +20,25 @@ export const ConfirmButton = ({
 	confirmLabel?: string;
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "type">) => {
 	const [open, setOpen] = useState(false);
+	// Confirmed, waiting for the popup to finish closing before onConfirm runs.
+	// (onConfirm often deletes the row this button sits in, which would unmount
+	// the popup before its close animation could play.)
+	const confirmed = useRef(false);
 
 	return (
 		<>
 			<button type="button" onClick={() => setOpen(true)} {...rest}>
 				{children}
 			</button>
-			<Popup toggle={open} closerFunc={setOpen}>
+			<Popup
+				toggle={open}
+				closerFunc={setOpen}
+				onExitComplete={() => {
+					if (!confirmed.current) return;
+					confirmed.current = false;
+					onConfirm();
+				}}
+			>
 				<Frame classes="column-direction">
 					<h3 className="card-title">{title}</h3>
 					<p className="text-content">{message}</p>
@@ -35,7 +47,7 @@ export const ConfirmButton = ({
 							type="button"
 							className="button button-primary stretch"
 							onClick={() => {
-								onConfirm();
+								confirmed.current = true;
 								setOpen(false);
 							}}
 						>

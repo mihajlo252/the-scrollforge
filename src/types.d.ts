@@ -344,6 +344,7 @@ interface CampaignCacheStore {
     setHub: (owner: string, data: { campaigns: Campaign[]; rows: CampaignCharacter[]; heroes: (Character | DaggerheartCharacter)[]; myCharacters: (Character | DaggerheartCharacter)[] }) => void;
     mergeRoster: (owner: string, campaignID: string, rows: CampaignCharacter[], heroes: (Character | DaggerheartCharacter)[]) => void;
     removeCampaign: (campaignID: string) => void;
+    updateCampaign: (campaign: Campaign) => void;
     setOrder: (group: string, ids: string[]) => void;
 }
 

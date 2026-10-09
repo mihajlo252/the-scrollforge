@@ -11,10 +11,15 @@ export const Popup = ({
 	children,
 	closerFunc,
 	toggle,
+	onExitComplete,
 }: {
 	children: React.ReactNode;
 	closerFunc: React.Dispatch<React.SetStateAction<boolean>>;
 	toggle?: boolean;
+	/** Runs once the close animation has finished. Use it for anything that
+	 *  would unmount this Popup's owner (deleting the row it lives in,
+	 *  navigating away) — doing that immediately cuts the fade-out short. */
+	onExitComplete?: () => void;
 }) => {
 
 	const id = useRef(Symbol("popup")).current;
@@ -41,8 +46,10 @@ export const Popup = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [toggle]);
 
+	// Keep this Popup mounted while it closes: an owner that unmounts it with
+	// the toggle (e.g. `{open && <Thing />}`) skips the exit animation.
 	return (
-		<AnimatePresence>
+		<AnimatePresence onExitComplete={onExitComplete}>
 			{toggle && (
 				<motion.div
 					key="popup"
