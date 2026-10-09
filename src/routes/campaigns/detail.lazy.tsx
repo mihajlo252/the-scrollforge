@@ -1,6 +1,6 @@
 import { createLazyFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useUserStore, useCampaignStore, useCharacterStore, useCampaignCacheStore } from "../../zustand/stores";
 import { CharacterCard } from "../../components/CharacterCard/CharacterCard";
 import { Heading, Icon } from "../../components/Primitives";
