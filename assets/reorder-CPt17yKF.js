@@ -1,0 +1,1 @@
+function u(t,e,i){const r=[...t],s=[];return t.forEach((n,o)=>{i(n)&&s.push(o)}),s.forEach((n,o)=>{r[n]=e[o]}),r}const a=new WeakMap;let c=0;function f(t){let e=a.get(t);return e===void 0&&(e=++c,a.set(t,e)),e}export{u as m,f as s};

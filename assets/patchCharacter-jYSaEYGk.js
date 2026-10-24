@@ -1,0 +1,1 @@
+import{B as a}from"./index-CbIMQq5T.js";const c=(r,t)=>{a.getState().viewOnly||localStorage.setItem("character",JSON.stringify({state:{...r,character:{...r.character,...t}},version:1}))};export{c as p};
