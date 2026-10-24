@@ -1,3 +1,9 @@
+## 24-10-2026 · Account
+
+**Account**
+
+- **Forgot password** - reset your password from the sign-in screen with a link sent to your email
+
 ## 09-10-2026 · Campaigns and small fixes
 
 **Campaigns**

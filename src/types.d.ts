@@ -287,6 +287,7 @@ interface DaggerheartCharacter {
 interface UserStore {
     user: import('@supabase/supabase-js').User | null;
     setUser: (string, string) => Promise<void>;
+    setSessionUser: (user: import('@supabase/supabase-js').User) => void;
     removeUser: () => void;
 }
 

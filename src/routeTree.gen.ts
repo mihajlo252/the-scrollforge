@@ -18,6 +18,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const TicketsLazyImport = createFileRoute('/tickets')()
 const ThanksLazyImport = createFileRoute('/thanks')()
+const ResetPasswordLazyImport = createFileRoute('/reset-password')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const ChatLazyImport = createFileRoute('/chat')()
 const IndexLazyImport = createFileRoute('/')()
@@ -52,6 +53,14 @@ const ThanksLazyRoute = ThanksLazyImport.update({
   path: '/thanks',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/thanks.lazy').then((d) => d.Route))
+
+const ResetPasswordLazyRoute = ResetPasswordLazyImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/reset-password.lazy').then((d) => d.Route),
+)
 
 const ProfileLazyRoute = ProfileLazyImport.update({
   id: '/profile',
@@ -190,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/thanks': {
       id: '/thanks'
       path: '/thanks'
@@ -304,6 +320,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/chat': typeof ChatLazyRoute
   '/profile': typeof ProfileLazyRoute
+  '/reset-password': typeof ResetPasswordLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/campaigns/detail': typeof CampaignsDetailLazyRoute
@@ -325,6 +342,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/chat': typeof ChatLazyRoute
   '/profile': typeof ProfileLazyRoute
+  '/reset-password': typeof ResetPasswordLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/campaigns/detail': typeof CampaignsDetailLazyRoute
@@ -347,6 +365,7 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/chat': typeof ChatLazyRoute
   '/profile': typeof ProfileLazyRoute
+  '/reset-password': typeof ResetPasswordLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
   '/campaigns/detail': typeof CampaignsDetailLazyRoute
@@ -370,6 +389,7 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/profile'
+    | '/reset-password'
     | '/thanks'
     | '/tickets'
     | '/campaigns/detail'
@@ -390,6 +410,7 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/profile'
+    | '/reset-password'
     | '/thanks'
     | '/tickets'
     | '/campaigns/detail'
@@ -410,6 +431,7 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/profile'
+    | '/reset-password'
     | '/thanks'
     | '/tickets'
     | '/campaigns/detail'
@@ -432,6 +454,7 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   ChatLazyRoute: typeof ChatLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
+  ResetPasswordLazyRoute: typeof ResetPasswordLazyRoute
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
   CampaignsDetailLazyRoute: typeof CampaignsDetailLazyRoute
@@ -453,6 +476,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   ChatLazyRoute: ChatLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
+  ResetPasswordLazyRoute: ResetPasswordLazyRoute,
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
   CampaignsDetailLazyRoute: CampaignsDetailLazyRoute,
@@ -483,6 +507,7 @@ export const routeTree = rootRoute
         "/",
         "/chat",
         "/profile",
+        "/reset-password",
         "/thanks",
         "/tickets",
         "/campaigns/detail",
@@ -508,6 +533,9 @@ export const routeTree = rootRoute
     },
     "/profile": {
       "filePath": "profile.lazy.tsx"
+    },
+    "/reset-password": {
+      "filePath": "reset-password.lazy.tsx"
     },
     "/thanks": {
       "filePath": "thanks.lazy.tsx"

@@ -6,6 +6,7 @@ import { ErrComp } from "../components/ErrComp/ErrComp";
 import { Toaster } from "sonner";
 import styles from "../routeStyles/root.module.css";
 import { useUserStore } from "../zustand/stores";
+import { RESET_PASSWORD_PATH } from "../utilities/passwordReset";
 
 export const Route = createRootRoute({
 	component: Root,
@@ -49,7 +50,7 @@ function Root() {
 				    with TanStack's shared Outlet.) */}
 				<motion.div
 					key={pathname}
-					className={`${styles.pageWrap} ${pathname === "/" && styles.loginPageWrap}`}
+					className={`${styles.pageWrap} ${(pathname === "/" || pathname === RESET_PASSWORD_PATH) && styles.loginPageWrap}`}
 					initial={{ opacity: 0, y: 12 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}

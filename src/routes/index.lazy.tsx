@@ -8,6 +8,7 @@ import { Icon, RuneDivider } from "../components/Primitives";
 
 import styles from "../routeStyles/index.module.css";
 import { signUp } from "../utilities/signUp";
+import { requestPasswordReset } from "../utilities/passwordReset";
 import { useMutation } from "@tanstack/react-query";
 import { Load } from "../components/Load";
 import { AnimatePresence, motion } from "framer-motion";
@@ -87,7 +88,8 @@ function Index() {
 								Create Account
 							</button>
 						</div>
-						{currentForm == "login" && <LoginForm />}
+						{currentForm == "login" && <LoginForm onForgotPassword={() => setCurrentForm("forgotpassword")} />}
+						{currentForm == "forgotpassword" && <ForgotPasswordForm onBack={() => setCurrentForm("login")} />}
 						{currentForm == "createaccount" && <CreateAccountForm setForm={setForm} />}
 					</div>
 				</section>
@@ -96,7 +98,7 @@ function Index() {
 	);
 }
 
-const LoginForm = () => {
+const LoginForm = ({ onForgotPassword }: { onForgotPassword: () => void }) => {
 	const { setUser } = useUserStore();
 
 	const [email, setEmail] = useState("");
@@ -142,9 +144,73 @@ const LoginForm = () => {
 					onChange={(e) => setPassword(e.target.value)}
 					className="input text-content"
 				/>
+				<button type="button" className={`${styles.textLink} ${styles.forgotLink}`} onClick={onForgotPassword}>
+					Forgot password?
+				</button>
 			</div>
 			<button type="submit" className="button button-primary">
 				<Icon name="scroll" size={16} /> Unroll My Scroll
+			</button>
+		</motion.form>
+	);
+};
+
+const ForgotPasswordForm = ({ onBack }: { onBack: () => void }) => {
+	const [email, setEmail] = useState("");
+
+	const { mutate, isPending, isSuccess } = useMutation({
+		mutationFn: requestPasswordReset,
+	});
+
+	const sendResetLink = (e: React.FormEvent) => {
+		e.preventDefault();
+		mutate(email);
+	};
+
+	return (
+		<motion.form
+			className="form column-direction"
+			onSubmit={sendResetLink}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
+		>
+			{isSuccess ? (
+				<p className={`text-content ${styles.formIntro}`}>
+					If an account exists for <strong>{email}</strong>, a password reset link is on its way. Check your inbox and follow the link to
+					forge a new password.
+				</p>
+			) : (
+				<>
+					<p className={`text-content ${styles.formIntro}`}>Enter your account's email and we'll send you a link to reset your password.</p>
+					<div className="inputWrapper">
+						<label className="text-content" htmlFor="reset-email">
+							Email
+						</label>
+						<input
+							type="email"
+							placeholder="Enter your email..."
+							id="reset-email"
+							required
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							className="input text-content"
+						/>
+					</div>
+					<button type="submit" className="button button-primary" disabled={isPending}>
+						{isPending ? (
+							<Load />
+						) : (
+							<>
+								<Icon name="fwd" size={16} /> Send Reset Link
+							</>
+						)}
+					</button>
+				</>
+			)}
+			<button type="button" className={styles.textLink} onClick={onBack}>
+				Back to sign in
 			</button>
 		</motion.form>
 	);

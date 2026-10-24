@@ -58,6 +58,8 @@ export const useUserStore = create<UserStore>()(
                 const data = await signIn(email, password);
                 set({ user: data.user });
             },
+            // For sessions supabase already holds (e.g. after a password reset).
+            setSessionUser: (user) => set({ user }),
             removeUser: () => set({ user: null }),
         }),
         {
