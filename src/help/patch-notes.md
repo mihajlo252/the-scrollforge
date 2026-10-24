@@ -4,6 +4,14 @@
 
 - **Forgot password** - reset your password from the sign-in screen with a link sent to your email
 
+**Campaigns**
+
+- **Campaign Acts** - Game Masters can plan their story ahead of play. Each act is built from Story, Option, Adversary, Encounter, Environment and Event modules, and options can point to the act each path leads to
+- **Reveal the story** - acts stay hidden from players until the GM reveals them, along with the story modules the GM chooses
+- **Adversary pool** - start a new adversary as a copy of any adversary already in the campaign, with its whole stat block filled in
+- **Encounter trackers** - mark HP and Stress for each adversary in an encounter separately
+- **Environment and Event modules** - plan places with their features and hazards, and events with outcomes and a countdown
+
 ## 09-10-2026 · Campaigns and small fixes
 
 **Campaigns**

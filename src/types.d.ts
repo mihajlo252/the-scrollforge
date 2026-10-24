@@ -328,9 +328,145 @@ interface CampaignCharacter {
     created_at: string;
 }
 
+// A chapter of the GM's prepared story (sql/add-campaign-acts.sql). Players
+// only ever receive revealed acts, with `modules` cut down to revealed stories.
+interface CampaignAct {
+    id: string;
+    campaignID: string;
+    title: string;
+    summary?: string | null;
+    sortOrder?: number | null;
+    revealed: boolean;
+    modules: ActModule[];
+    created_at: string;
+    updated_at?: string;
+}
+
+type ActModuleType = "story" | "option" | "adversary" | "encounter" | "environment" | "event";
+type ActModule = StoryModule | OptionModule | AdversaryModule | EncounterModule | EnvironmentModule | EventModule;
+
+interface StoryModule {
+    id: string;
+    type: "story";
+    title: string;
+    body: string;
+    revealed?: boolean;          // shown to players once the act is revealed
+}
+
+interface OptionChoice {
+    id: string;
+    label: string;
+    notes?: string;
+    leadsTo?: string | null;     // id of the act this path leads to
+}
+
+interface OptionModule {
+    id: string;
+    type: "option";
+    prompt: string;
+    choices: OptionChoice[];
+}
+
+interface AdversaryModule {
+    id: string;
+    type: "adversary";
+    name: string;
+    description?: string;
+    notes?: string;
+    stats: DhAdversaryStats | DndAdversaryStats;
+}
+
+interface DhAdversaryStats {
+    system: "daggerheart";
+    tier: number;                // 1–4
+    role: string;                // Bruiser, Horde, Leader, Minion, …
+    difficulty: number | null;
+    thresholds: { major: number | null; severe: number | null };
+    hp: number | null;
+    stress: number | null;
+    attack: { modifier: number | null; name: string; range: string; damage: string };
+    experiences?: string;
+    motives?: string;
+    features: { id: string; name: string; kind: string; text: string }[];
+}
+
+interface DndAdversaryStats {
+    system: "dnd";
+    meta?: string;               // "Medium humanoid, neutral evil"
+    ac: number | null;
+    hp: number | null;
+    hitDice?: string;
+    speed?: string;
+    abilities: Record<"str" | "dex" | "con" | "int" | "wis" | "cha", number | null>;
+    cr?: string;
+    skills?: string;
+    senses?: string;
+    languages?: string;
+    traits: { id: string; name: string; text: string }[];
+    actions: { id: string; name: string; text: string }[];
+}
+
+interface EncounterModule {
+    id: string;
+    type: "encounter";
+    title: string;
+    setting?: string;
+    objective?: string;
+    adversaries: EncounterFoe[];
+    notes?: string;
+}
+
+// An adversary module (from any act) in an encounter, and how many of it.
+interface EncounterFoe {
+    moduleID: string;
+    count: number;
+    // Marks for each individual (index 0 = the first of `count`). `hp` is HP
+    // marked (Daggerheart) or damage taken (D&D). Missing entries = unmarked.
+    tracks?: { hp: number; stress: number }[];
+}
+
+interface EnvironmentModule {
+    id: string;
+    type: "environment";
+    name: string;
+    description?: string;
+    adversaries: string[];       // potential adversaries: adversary module ids
+    notes?: string;
+    stats: DhEnvironmentStats | DndEnvironmentStats;
+}
+
+interface DhEnvironmentStats {
+    system: "daggerheart";
+    tier: number;                // 1–4
+    kind: string;                // Exploration, Social, Traversal, Event
+    difficulty: number | null;
+    impulses?: string;
+    features: { id: string; name: string; kind: string; text: string }[];
+}
+
+interface DndEnvironmentStats {
+    system: "dnd";
+    terrain?: string;
+    hazards: { id: string; name: string; dc: number | null; text: string }[];
+    features: { id: string; name: string; text: string }[];
+}
+
+interface EventModule {
+    id: string;
+    type: "event";
+    title: string;
+    trigger?: string;
+    happens?: string;
+    outcomes: { id: string; label: string; text: string }[];
+    countdown: { label: string; start: number; current: number } | null;
+    notes?: string;
+}
+
 interface CampaignStore {
     campaign: Campaign | null;
     setCampaign: (campaign: Campaign) => void;
+    actID: string | null;        // act open on /campaigns/act
+    setActID: (actID: string) => void;
 }
 
 // Last-fetched campaign data, so the Campaigns screens render instantly on

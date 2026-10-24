@@ -1,0 +1,985 @@
+/* Campaign Acts: the Story section on the campaign page, the Act screen, its
+   module cards and the module editors. Builds on the campaign screens' look
+   (routeStyles/campaigns.module.css) and the global .frame / .chip / .button. */
+
+/* ── The Story (campaign page) ──────────────────────────────── */
+.storySection {
+	margin-top: 40px;
+}
+.acts {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 16px;
+}
+.actItem {
+	display: flex;
+}
+.actItem > article {
+	flex: 1;
+	min-width: 0;
+}
+.actCard {
+	flex-direction: column;
+	gap: 0;
+	padding: 0;
+	height: auto;
+}
+.actOpen {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	flex: 1;
+	padding: 18px 18px 16px;
+	background: none;
+	border: 0;
+	text-align: left;
+	color: inherit;
+	cursor: pointer;
+	border-radius: 6px;
+	transition: background 0.15s ease;
+}
+.actCard[data-sortable] .actOpen {
+	padding-left: 52px; /* room for the drag grip */
+}
+.actOpen:hover,
+.actOpen:focus-visible {
+	background: rgba(201, 162, 74, 0.05);
+}
+.actNum {
+	font-size: 14px;
+	color: var(--gold);
+}
+.actTitle {
+	font-size: 24px;
+	line-height: 1.1;
+	color: var(--text);
+	overflow-wrap: anywhere;
+}
+.actSummary {
+	font-size: 14px;
+	line-height: 1.45;
+	color: var(--ink-dim);
+	font-style: italic;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.actFoot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 10px 18px 14px;
+	border-top: 1px dashed var(--rule);
+}
+.actCounts {
+	display: flex;
+	gap: 12px;
+	font-size: 13px;
+	color: var(--ink-faint);
+	font-style: italic;
+}
+.actCounts > span {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-style: normal;
+	color: var(--ink-dim);
+}
+
+/* Revealed / Hidden pill, on cards and as a toggle. */
+.revealChip {
+	cursor: default;
+	color: var(--ink-faint);
+}
+button.revealChip {
+	cursor: pointer;
+}
+button.revealChip:hover {
+	border-color: var(--gold-deep);
+	color: var(--ink-dim);
+}
+.revealChip[data-on] {
+	color: var(--emerald);
+	border-color: var(--emerald);
+	background: rgba(91, 143, 92, 0.1);
+}
+
+/* ── Act screen ─────────────────────────────────────────────── */
+.actHead {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24px;
+	padding-bottom: 24px;
+	margin-bottom: 24px;
+	border-bottom: 1px solid var(--rule);
+}
+.actHeadMain {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	min-width: 0;
+}
+.actH1 {
+	font-size: 44px;
+	margin: 0;
+	line-height: 1.05;
+	color: var(--gold-2);
+	font-weight: 500;
+	overflow-wrap: anywhere;
+	text-wrap: balance;
+}
+.actLead {
+	white-space: pre-line;
+	margin: 0;
+	max-width: 70ch;
+	font-size: 16px;
+	line-height: 1.5;
+	color: var(--ink-dim);
+	font-style: italic;
+}
+.revealRow {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 4px;
+}
+.revealHint {
+	font-size: 13px;
+	color: var(--ink-faint);
+	font-style: italic;
+}
+.actActions {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	flex-shrink: 0;
+}
+
+.modules {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+.moduleItem {
+	display: flex;
+}
+.moduleItem > article {
+	flex: 1;
+	min-width: 0;
+}
+
+/* ── Module card ────────────────────────────────────────────── */
+.module {
+	--_type: var(--gold-deep);
+	flex-direction: column;
+	gap: 0;
+	padding: 0;
+	height: auto;
+	border-left: 3px solid var(--_type);
+}
+.module[data-type="option"] {
+	--_type: var(--arcane);
+}
+.module[data-type="adversary"] {
+	--_type: var(--ember);
+}
+.module[data-type="encounter"] {
+	--_type: var(--ink-faint);
+}
+.modHd {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 12px 14px;
+}
+.module[data-sortable] .modHd {
+	padding-left: 52px; /* room for the drag grip */
+}
+.modTitleWrap {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px 12px;
+	min-width: 0;
+}
+.modChip {
+	flex-shrink: 0;
+}
+.modTitle {
+	margin: 0;
+	font-size: 22px;
+	line-height: 1.15;
+	color: var(--text);
+	font-weight: 500;
+	overflow-wrap: anywhere;
+}
+.modTools {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-shrink: 0;
+}
+.collapse :global(svg) {
+	transition: transform 0.2s ease;
+}
+.collapse[data-open] :global(svg) {
+	transform: rotate(90deg);
+}
+.modBd {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 14px 18px 18px;
+	border-top: 1px dashed var(--rule);
+}
+.prose {
+	white-space: pre-line; /* keep the GM's line breaks */
+	margin: 0;
+	font-size: 15.5px;
+	line-height: 1.55;
+	color: var(--text);
+	text-wrap: pretty;
+}
+.empty {
+	margin: 0;
+	font-style: italic;
+	color: var(--ink-faint);
+}
+.line {
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--ink-dim);
+}
+.line b {
+	color: var(--text);
+	font-weight: 600;
+}
+.missing {
+	font-style: italic;
+	color: var(--ember-2);
+}
+
+/* Option paths */
+.paths {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	counter-reset: path;
+}
+.path {
+	counter-increment: path;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 10px 12px 10px 40px;
+	position: relative;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--paper-tint);
+}
+.path::before {
+	content: counter(path);
+	position: absolute;
+	left: 12px;
+	top: 11px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 1px solid var(--arcane);
+	color: var(--arcane);
+	font-family: var(--mono), monospace;
+	font-size: 11px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.pathHd {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px 12px;
+}
+.pathLabel {
+	font-weight: 600;
+	color: var(--text);
+}
+.pathLink,
+button.foeAct {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: none;
+	border: 0;
+	padding: 0;
+	font: inherit;
+	font-size: 14px;
+	color: var(--gold);
+	cursor: pointer;
+	text-decoration: underline;
+	text-decoration-color: var(--gold-deep);
+	text-underline-offset: 3px;
+}
+.pathLink:hover,
+button.foeAct:hover {
+	color: var(--gold-2);
+}
+
+/* Encounter adversaries */
+.foes {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.foe {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 12px;
+	border: 1px solid #6a2a18;
+	border-radius: 999px;
+	background: rgba(180, 69, 42, 0.08);
+	color: var(--text);
+	font-size: 14px;
+}
+.foe > .mono {
+	color: var(--ember-2);
+}
+.foeAct {
+	font-size: 12.5px;
+	color: var(--ink-faint);
+}
+button.foeAct {
+	font-size: 12.5px;
+}
+
+.notes {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 10px 12px;
+	border-left: 2px solid var(--gold-deep);
+	background: var(--paper-tint);
+}
+.notes .prose {
+	font-size: 14.5px;
+	color: var(--ink-dim);
+}
+
+/* ── Adversary stat block ───────────────────────────────────── */
+.statBlock {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.meta {
+	font-style: italic;
+	color: var(--ink-dim);
+}
+.statStrip {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+	gap: 8px;
+}
+.stat {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 8px 6px;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--bg-2);
+	text-align: center;
+}
+.statVal {
+	font-size: 20px;
+	color: var(--text);
+}
+.statSub {
+	font-size: 11.5px;
+	color: var(--ink-faint);
+}
+.abilities {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: 6px;
+}
+.ability {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 6px 4px;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	color: var(--text);
+}
+.entries {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.entriesHd {
+	padding-bottom: 4px;
+	border-bottom: 1px solid var(--rule);
+	color: var(--ember-2);
+}
+.entry {
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--ink-dim);
+	white-space: pre-line;
+}
+.entry b {
+	color: var(--text);
+	font-style: italic;
+}
+.entryKind {
+	color: var(--ink-faint);
+}
+
+/* ── Add bar ────────────────────────────────────────────────── */
+.addBar {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: 28px;
+}
+.addTiles {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+	gap: 12px;
+}
+.addTile {
+	--_type: var(--gold);
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	height: auto;
+	padding: 14px 16px;
+	text-align: left;
+	color: var(--text);
+	cursor: pointer;
+	border-style: dashed;
+	transition:
+		border-color 0.15s ease,
+		background 0.15s ease;
+}
+.addTile[data-type="option"] {
+	--_type: #aea1e0;
+}
+.addTile[data-type="adversary"] {
+	--_type: var(--ember-2);
+}
+.addTile[data-type="encounter"] {
+	--_type: var(--ink-dim);
+}
+.addTile:hover,
+.addTile:focus-visible {
+	border-color: var(--_type);
+	background: linear-gradient(180deg, var(--panel-2), var(--bg-3));
+}
+.addTile :global(.display) {
+	font-size: 20px;
+}
+.addIcon {
+	color: var(--_type);
+}
+.addBlurb {
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--ink-faint);
+}
+
+/* ── Previous / next act ────────────────────────────────────── */
+.actNav {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 32px;
+	padding-top: 20px;
+	border-top: 1px solid var(--rule);
+}
+.actNavBtn {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	max-width: 48%;
+	background: none;
+	border: 0;
+	padding: 6px 4px;
+	color: var(--ink-dim);
+	cursor: pointer;
+	text-align: left;
+}
+.actNavBtn > span {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+.actNavBtn :global(.display) {
+	font-size: 19px;
+	color: var(--text);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.actNavBtn:hover :global(.display) {
+	color: var(--gold-2);
+}
+.actNavNext {
+	text-align: right;
+}
+
+/* ── Module editor fields ───────────────────────────────────── */
+.group {
+	margin: 4px 0 18px;
+	padding: 0;
+	border: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.groupHd {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	width: 100%;
+	padding: 0 0 6px;
+	border-bottom: 1px solid var(--rule);
+	margin-bottom: 4px;
+}
+.addBtn {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	height: 30px;
+	padding: 0 10px;
+	font-size: 13px;
+}
+.groupEmpty {
+	margin: 0;
+	font-size: 13.5px;
+	font-style: italic;
+	color: var(--ink-faint);
+}
+.listRow {
+	display: flex;
+	gap: 10px;
+	padding: 12px 12px 0;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--paper-tint);
+}
+.listRowBody {
+	flex: 1;
+	min-width: 0;
+}
+.listRowTools {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding-top: 26px;
+}
+.arrowUp,
+.arrowDown {
+	display: inline-flex;
+}
+.arrowUp {
+	transform: rotate(-90deg);
+}
+.arrowDown {
+	transform: rotate(90deg);
+}
+.row2,
+.row3,
+.row4,
+.row6 {
+	display: grid;
+	gap: 0 12px;
+}
+.row2 {
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.row3 {
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+.row4 {
+	grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+}
+.row6 {
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.row6 :global(.input) {
+	padding-inline: 8px;
+	text-align: center;
+}
+
+.foeRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--paper-tint);
+}
+.foeName {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 4px 10px;
+	color: var(--text);
+}
+.stepper {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+.stepper .mono {
+	min-width: 2.5ch;
+	text-align: center;
+}
+.foePick {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+.foePick :global(.select) {
+	flex: 1;
+	min-width: 0;
+}
+.foePick :global(.button) {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	flex-shrink: 0;
+}
+
+/* ── Environment & event colours ────────────────────────────── */
+.module[data-type="environment"] {
+	--_type: var(--emerald);
+}
+.module[data-type="event"] {
+	--_type: #c9873a;
+}
+.module[data-type="environment"] .modChip,
+.module[data-type="event"] .modChip {
+	color: var(--_type);
+	border-color: var(--_type);
+	background: color-mix(in srgb, var(--_type) 12%, transparent);
+}
+.addTile[data-type="environment"] {
+	--_type: var(--emerald);
+}
+.addTile[data-type="event"] {
+	--_type: #c9873a;
+}
+.chipRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+/* ── Editor extras ──────────────────────────────────────────── */
+.poolPick {
+	padding: 12px 14px;
+	border: 1px dashed var(--gold-deep);
+	border-radius: 6px;
+	background: var(--paper-tint);
+}
+.check {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	color: var(--text);
+}
+.check input {
+	width: 16px;
+	height: 16px;
+	accent-color: var(--gold);
+}
+
+/* ── Encounter trackers ─────────────────────────────────────── */
+.trackers {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.trackersHd {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding-bottom: 4px;
+	border-bottom: 1px solid var(--rule);
+}
+.trackersHd .caps {
+	color: var(--ember-2);
+}
+.foeGroup {
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	background: var(--paper-tint);
+	padding: 0 12px;
+}
+.foeGroupHd {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 4px 10px;
+	padding: 10px 0;
+	cursor: pointer;
+	list-style: none;
+}
+.foeGroupHd::-webkit-details-marker {
+	display: none;
+}
+.foeGroupHd::before {
+	content: "▸";
+	color: var(--ink-faint);
+	transition: transform 0.15s ease;
+	display: inline-block;
+}
+.foeGroup[open] > .foeGroupHd::before {
+	transform: rotate(90deg);
+}
+.foeGroupName {
+	font-size: 19px;
+	color: var(--text);
+}
+.foeGroupHd > .mono {
+	color: var(--ember-2);
+}
+.downCount {
+	font-size: 13px;
+	font-style: italic;
+	color: var(--ink-faint);
+}
+.foeStats {
+	margin-bottom: 10px;
+}
+.foeStats > summary {
+	cursor: pointer;
+	width: max-content;
+	margin-bottom: 8px;
+}
+.foeStats > summary:hover {
+	color: var(--gold-2);
+}
+.individuals {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	gap: 8px;
+	padding-bottom: 12px;
+}
+.individual {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 10px 12px;
+	border: 1px solid var(--rule-2);
+	border-radius: 6px;
+	background: var(--bg-2);
+	transition: opacity 0.2s ease;
+}
+.individual[data-defeated] {
+	opacity: 0.55;
+	border-style: dashed;
+}
+.indName {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 8px;
+	font-weight: 600;
+	color: var(--text);
+}
+.defeated {
+	font-size: 12px;
+	font-weight: 400;
+	font-style: italic;
+	color: var(--ember-2);
+}
+.slotRow {
+	display: grid;
+	grid-template-columns: 52px 1fr;
+	align-items: center;
+	gap: 6px 8px;
+}
+.slots {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+}
+.slot {
+	width: 18px;
+	height: 18px;
+	padding: 0;
+	border: 1px solid var(--rule-2);
+	border-radius: 3px;
+	background: var(--panel);
+	cursor: pointer;
+	transition:
+		background 0.12s ease,
+		border-color 0.12s ease;
+}
+.slot:hover {
+	border-color: var(--gold-deep);
+}
+.slot[data-kind="hp"][data-on] {
+	background: var(--ember);
+	border-color: var(--ember-2);
+}
+.slot[data-kind="stress"][data-on] {
+	background: var(--arcane);
+	border-color: #aea1e0;
+}
+.slotCount {
+	margin-left: 4px;
+	font-size: 12px;
+	color: var(--ink-faint);
+}
+.slotNone {
+	font-size: 13px;
+	font-style: italic;
+	color: var(--ink-faint);
+}
+.hpStep {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+.hpNow {
+	min-width: 5ch;
+	text-align: center;
+	font-size: 17px;
+	color: var(--text);
+}
+.hpBar {
+	grid-column: 2;
+	display: block;
+	height: 4px;
+	border-radius: 2px;
+	background: var(--rule);
+	overflow: hidden;
+}
+.hpBar > span {
+	display: block;
+	height: 100%;
+	background: var(--ember-2);
+	transition: width 0.2s ease;
+}
+
+/* ── Event countdown ────────────────────────────────────────── */
+.countdown {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 10px 12px;
+	border: 1px solid #6b4a20;
+	border-radius: 6px;
+	background: rgba(201, 135, 58, 0.07);
+}
+.countdown[data-done] {
+	border-color: var(--ember-2);
+	background: rgba(180, 69, 42, 0.12);
+}
+.countdownHd {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 4px 12px;
+}
+.countdownHd .caps {
+	color: #c9873a;
+}
+.countdownLabel {
+	color: var(--text);
+	font-weight: 600;
+}
+.countdown[data-done] .countdownLabel {
+	color: var(--ember-2);
+}
+.countdownRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+.pips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+.pip {
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	border: 1px solid #c9873a;
+	background: transparent;
+}
+.pip[data-on] {
+	background: #c9873a;
+}
+.countdownTools {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* ── Narrow layouts ─────────────────────────────────────────── */
+@media (max-width: 720px) {
+	.actHead {
+		flex-direction: column-reverse;
+		gap: 16px;
+	}
+	.actActions {
+		justify-content: flex-start;
+	}
+	.actH1 {
+		font-size: 30px;
+	}
+	.modTitle {
+		font-size: 19px;
+	}
+	.modHd {
+		align-items: flex-start;
+	}
+	.modBd {
+		padding: 12px 14px 16px;
+	}
+	.abilities,
+	.row6 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+	.actNavBtn {
+		max-width: 100%;
+	}
+	.actNav {
+		flex-direction: column;
+	}
+	.actNavNext {
+		align-self: flex-end;
+	}
+}

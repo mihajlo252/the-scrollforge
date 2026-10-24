@@ -43,6 +43,8 @@ export const useCampaignStore = create<CampaignStore>()(
         (set) => ({
             campaign: null,
             setCampaign: (campaign: Campaign) => set({ campaign }),
+            actID: null,
+            setActID: (actID: string) => set({ actID }),
         }),
         {
             name: "campaign",

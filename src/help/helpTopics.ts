@@ -41,6 +41,7 @@ export const helpGroups: HelpGroup[] = [
 			topic("general-profile-hub", "The profile hub", "general", "./guide/getting-started/the-profile-hub.md"),
 			topic("general-navigating-a-sheet", "Navigating a sheet", "general", "./guide/getting-started/navigating-a-sheet.md"),
 			topic("general-chat-support-themes", "Chat, support & themes", "general", "./guide/getting-started/chat-support-themes.md"),
+			topic("general-campaign-acts", "Campaign acts", "general", "./guide/getting-started/campaign-acts.md"),
 		],
 	},
 	{

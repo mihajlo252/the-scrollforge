@@ -33,6 +33,7 @@ import {
 	sysOf,
 	timeAgo,
 } from "../../sections/Campaigns/CampaignParts";
+import { ActsSection } from "../../sections/Campaigns/Acts/ActsSection";
 import styles from "../../routeStyles/campaigns.module.css";
 
 export const Route = createLazyFileRoute("/campaigns/detail")({
@@ -488,6 +489,7 @@ function CampaignDetail() {
 								}
 							/>
 						)}
+						<ActsSection campaign={campaign} isDM={isDM} canRead={role === "dm" || role === "player"} />
 					</section>
 				</div>
 			</div>

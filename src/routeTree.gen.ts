@@ -39,6 +39,7 @@ const DaggerheartCharacterLazyImport = createFileRoute(
   '/daggerheart/character',
 )()
 const CampaignsDetailLazyImport = createFileRoute('/campaigns/detail')()
+const CampaignsActLazyImport = createFileRoute('/campaigns/act')()
 
 // Create/Update Routes
 
@@ -174,6 +175,12 @@ const CampaignsDetailLazyRoute = CampaignsDetailLazyImport.update({
   import('./routes/campaigns/detail.lazy').then((d) => d.Route),
 )
 
+const CampaignsActLazyRoute = CampaignsActLazyImport.update({
+  id: '/campaigns/act',
+  path: '/campaigns/act',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/campaigns/act.lazy').then((d) => d.Route))
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -218,6 +225,13 @@ declare module '@tanstack/react-router' {
       path: '/tickets'
       fullPath: '/tickets'
       preLoaderRoute: typeof TicketsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/campaigns/act': {
+      id: '/campaigns/act'
+      path: '/campaigns/act'
+      fullPath: '/campaigns/act'
+      preLoaderRoute: typeof CampaignsActLazyImport
       parentRoute: typeof rootRoute
     }
     '/campaigns/detail': {
@@ -323,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
+  '/campaigns/act': typeof CampaignsActLazyRoute
   '/campaigns/detail': typeof CampaignsDetailLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
   '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
@@ -345,6 +360,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
+  '/campaigns/act': typeof CampaignsActLazyRoute
   '/campaigns/detail': typeof CampaignsDetailLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
   '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
@@ -368,6 +384,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordLazyRoute
   '/thanks': typeof ThanksLazyRoute
   '/tickets': typeof TicketsLazyRoute
+  '/campaigns/act': typeof CampaignsActLazyRoute
   '/campaigns/detail': typeof CampaignsDetailLazyRoute
   '/daggerheart/character': typeof DaggerheartCharacterLazyRoute
   '/daggerheart/domains': typeof DaggerheartDomainsLazyRoute
@@ -392,6 +409,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/thanks'
     | '/tickets'
+    | '/campaigns/act'
     | '/campaigns/detail'
     | '/daggerheart/character'
     | '/daggerheart/domains'
@@ -413,6 +431,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/thanks'
     | '/tickets'
+    | '/campaigns/act'
     | '/campaigns/detail'
     | '/daggerheart/character'
     | '/daggerheart/domains'
@@ -434,6 +453,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/thanks'
     | '/tickets'
+    | '/campaigns/act'
     | '/campaigns/detail'
     | '/daggerheart/character'
     | '/daggerheart/domains'
@@ -457,6 +477,7 @@ export interface RootRouteChildren {
   ResetPasswordLazyRoute: typeof ResetPasswordLazyRoute
   ThanksLazyRoute: typeof ThanksLazyRoute
   TicketsLazyRoute: typeof TicketsLazyRoute
+  CampaignsActLazyRoute: typeof CampaignsActLazyRoute
   CampaignsDetailLazyRoute: typeof CampaignsDetailLazyRoute
   DaggerheartCharacterLazyRoute: typeof DaggerheartCharacterLazyRoute
   DaggerheartDomainsLazyRoute: typeof DaggerheartDomainsLazyRoute
@@ -479,6 +500,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordLazyRoute: ResetPasswordLazyRoute,
   ThanksLazyRoute: ThanksLazyRoute,
   TicketsLazyRoute: TicketsLazyRoute,
+  CampaignsActLazyRoute: CampaignsActLazyRoute,
   CampaignsDetailLazyRoute: CampaignsDetailLazyRoute,
   DaggerheartCharacterLazyRoute: DaggerheartCharacterLazyRoute,
   DaggerheartDomainsLazyRoute: DaggerheartDomainsLazyRoute,
@@ -510,6 +532,7 @@ export const routeTree = rootRoute
         "/reset-password",
         "/thanks",
         "/tickets",
+        "/campaigns/act",
         "/campaigns/detail",
         "/daggerheart/character",
         "/daggerheart/domains",
@@ -542,6 +565,9 @@ export const routeTree = rootRoute
     },
     "/tickets": {
       "filePath": "tickets.lazy.tsx"
+    },
+    "/campaigns/act": {
+      "filePath": "campaigns/act.lazy.tsx"
     },
     "/campaigns/detail": {
       "filePath": "campaigns/detail.lazy.tsx"
